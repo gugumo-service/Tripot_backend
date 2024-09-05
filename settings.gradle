@@ -1,1 +1,3 @@
 rootProject.name = 'photolog_clone_backend'
+
+include 'module-api'
