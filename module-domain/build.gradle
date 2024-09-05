@@ -1,0 +1,23 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.3'
+    id 'io.spring.dependency-management' version '1.1.6'
+}
+
+bootJar {enabled = false}
+jar {enabled = true}
+
+
+
+
+dependencies {
+
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    //api->간접 참조하고 있는 모듈도 참조 가능, implementation->직접 참조하고 있는 모듈만 참조 가능
+    api 'org.springframework.boot:spring-boot-starter-data-jpa'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
