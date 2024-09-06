@@ -44,8 +44,6 @@ subprojects{
 	dependencies {
 
 
-		//시큐리티
-//		implementation 'org.springframework.boot:spring-boot-starter-security'
 
 
 		//검증
