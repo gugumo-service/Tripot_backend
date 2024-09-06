@@ -20,6 +20,7 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     implementation project(':module-domain')
+    implementation project(':module-common')
 }
 
 tasks.named('test') {
