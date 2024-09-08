@@ -1,4 +1,4 @@
-package com.junior.moduleapi;
+package com.junior;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
