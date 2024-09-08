@@ -1,3 +1,14 @@
 spring:
   application:
     name: module-domain
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/photo
+    username: root
+    password: root
+  jpa:
+    database: mysql
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
