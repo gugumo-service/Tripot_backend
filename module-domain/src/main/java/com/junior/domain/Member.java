@@ -18,10 +18,12 @@ public class Member {
     @Column(name = "member_id")
     private Long id;
 
-
+    @Column(length = 25)
     private String nickname;
 
+    @Column(length = 40)
     private String loginId;
+    @Column(length = 25)
     private String password;
 
     @Enumerated(EnumType.STRING)
