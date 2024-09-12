@@ -23,7 +23,6 @@ public class Member {
 
     @Column(length = 40)
     private String loginId;
-    @Column(length = 25)
     private String password;
 
     @Enumerated(EnumType.STRING)
