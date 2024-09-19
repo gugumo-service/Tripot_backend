@@ -25,6 +25,9 @@ public class Member {
     private String loginId;
     private String password;
 
+    //이미지 저장 방식에 따라 내용이 달라질 수 있음
+    private String profileImagePath;
+
     @Enumerated(EnumType.STRING)
     private MemberRole role;
 
