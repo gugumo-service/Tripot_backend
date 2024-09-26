@@ -1,6 +1,6 @@
 package com.junior.service;
 
-import com.junior.domain.MemberRole;
+import com.junior.domain.member.MemberRole;
 import com.junior.repository.MemberRepository;
 import com.junior.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;

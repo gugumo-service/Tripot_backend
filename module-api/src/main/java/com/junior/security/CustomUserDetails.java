@@ -1,7 +1,7 @@
 package com.junior.security;
 
 
-import com.junior.domain.MemberRole;
+import com.junior.domain.member.MemberRole;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;

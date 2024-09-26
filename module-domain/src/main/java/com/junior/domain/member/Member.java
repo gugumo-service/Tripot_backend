@@ -1,4 +1,4 @@
-package com.junior.domain;
+package com.junior.domain.member;
 
 
 import jakarta.persistence.*;
@@ -31,5 +31,15 @@ public class Member {
 
     @Enumerated(EnumType.STRING)
     private MemberStatus status;
+
+    // 서비스 이용 약관 동의 여부
+    private Boolean isAgreeTermsUse;
+    // 개인정보 수집 및 이용 동의
+    private Boolean isAgreeCollectingUsingPersonalInformation;
+    // 마케팅 수신 동의
+    private Boolean isAgreeMarketing;
+
+
+    private SignUpType signUpType;
 
 }
