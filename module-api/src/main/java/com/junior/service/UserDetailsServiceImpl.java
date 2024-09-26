@@ -19,7 +19,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String memberId) throws UsernameNotFoundException {
         //TODO: UsernameNotFoundException 커스텀 예외 처리
         return memberRepository.findById(Long.parseLong(memberId))
-                .map(member -> new CustomUserDetails(member.getId(), MemberRole.USER))
+                .map(member -> new CustomUserDetails(member))
                 .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
     }
 }
