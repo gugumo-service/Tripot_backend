@@ -20,7 +20,7 @@ public class Member {
     private String nickname;
 
     @Column(length = 40)
-    private String loginId;
+    private String username;
     private String password;
 
     //이미지 저장 방식에 따라 내용이 달라질 수 있음
@@ -41,5 +41,8 @@ public class Member {
 
 
     private SignUpType signUpType;
+
+    //추천 여행 지역 -> 추후 추가예정
+    private String recommendLocation;
 
 }

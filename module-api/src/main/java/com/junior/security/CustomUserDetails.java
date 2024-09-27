@@ -2,8 +2,6 @@ package com.junior.security;
 
 
 import com.junior.domain.member.Member;
-import com.junior.domain.member.MemberRole;
-import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -42,7 +40,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return member.getLoginId();
+        return member.getUsername();
     }
 
     /**
