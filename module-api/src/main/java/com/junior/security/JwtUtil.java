@@ -16,7 +16,6 @@ public class JwtUtil {
 
     // JWT에서는 String 키를 사용하는 방식에서 SecretKey라는 객체를 키로 사용하는 방식으로 변경됨.
     private final SecretKey secretKey;
-    private Long expiredMs;
 
     public JwtUtil(@Value("${spring.jwt.secret}") String secret) {
         secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
