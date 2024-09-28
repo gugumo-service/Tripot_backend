@@ -1,5 +1,6 @@
-package com.junior.util;
+package com.junior.security;
 
+import com.junior.dto.LoginCreateJwtDto;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -17,9 +18,8 @@ public class JwtUtil {
     private final SecretKey secretKey;
     private Long expiredMs;
 
-    public JwtUtil(@Value("${spring.jwt.secret}") String secret, @Value("${spring.jwt.expiration_time}") String expiredMs) {
+    public JwtUtil(@Value("${spring.jwt.secret}") String secret) {
         secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
-        this.expiredMs = Long.parseLong(expiredMs);
     }
 
     public Long getId(String token) {
@@ -34,16 +34,22 @@ public class JwtUtil {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("role", String.class);
     }
 
+    //access or refresh
+    public String getCategory(String token) {
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("category", String.class);
+    }
+
     public Boolean isExpired(String token) {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
     }
 
-/*    public String createJwt(LoginCreateJwtDto loginCreateJwtDto) {
+    public String createJwt(LoginCreateJwtDto loginCreateJwtDto, String category, Long expiredMs) {
 
         Date requestDate = Timestamp.valueOf(loginCreateJwtDto.getRequestTimeMs());
         Date expireDate = Timestamp.valueOf(loginCreateJwtDto.getRequestTimeMs().plusSeconds(expiredMs/1000));
 
         return Jwts.builder()
+                .claim("category", category)
                 .claim("id", loginCreateJwtDto.getId())
                 .claim("username", loginCreateJwtDto.getUsername())
                 .claim("role", loginCreateJwtDto.getRole())
@@ -51,5 +57,5 @@ public class JwtUtil {
                 .expiration(expireDate)
                 .signWith(secretKey)
                 .compact();
-    }*/
+    }
 }
