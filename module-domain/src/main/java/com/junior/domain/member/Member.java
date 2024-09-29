@@ -1,6 +1,7 @@
 package com.junior.domain.member;
 
 
+import com.junior.dto.OAuth2UserInfo;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -31,7 +32,8 @@ public class Member {
 
     @Column(length = 15)
     @Enumerated(EnumType.STRING)
-    private MemberStatus status;
+    @Builder.Default
+    private MemberStatus status = MemberStatus.ACTIVE;
 
     // 서비스 이용 약관 동의 여부
     private Boolean isAgreeTermsUse;
@@ -46,5 +48,10 @@ public class Member {
 
     //추천 여행 지역 -> 추후 추가예정
     private String recommendLocation;
+
+    public void updateOAuth2Member(OAuth2UserInfo oAuth2UserInfo) {
+        nickname= oAuth2UserInfo.getNickname();
+        profileImage= oAuth2UserInfo.getProfileImageUrl();
+    }
 
 }

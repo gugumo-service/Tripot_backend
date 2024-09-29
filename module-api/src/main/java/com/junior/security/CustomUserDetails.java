@@ -1,22 +1,25 @@
 package com.junior.security;
 
 
-import com.junior.domain.member.Member;
+import com.junior.dto.UserInfoDto;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 @Getter
-public class CustomUserDetails implements UserDetails {
+public class CustomUserDetails implements OAuth2User, UserDetails {
 
-    private final Member member;
+    private final UserInfoDto userInfoDto;
+    private Map<String, Object> attributes;
 
-    public CustomUserDetails(Member member) {
-        this.member = member;
+    public CustomUserDetails(UserInfoDto userInfoDto) {
+        this.userInfoDto = userInfoDto;
     }
 
     @Override
@@ -26,7 +29,7 @@ public class CustomUserDetails implements UserDetails {
         collection.add(new GrantedAuthority() {
             @Override
             public String getAuthority() {
-                return member.getRole().name();
+                return userInfoDto.getRole().name();
             }
         });
 
@@ -35,12 +38,13 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return member.getPassword();
+        return userInfoDto.getPassword();
     }
+
 
     @Override
     public String getUsername() {
-        return member.getUsername();
+        return userInfoDto.getUsername();
     }
 
     /**
@@ -73,5 +77,10 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return UserDetails.super.isEnabled();
+    }
+
+    @Override
+    public String getName() {
+        return null;
     }
 }
