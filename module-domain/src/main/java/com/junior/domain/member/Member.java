@@ -20,8 +20,8 @@ public class Member {
     @Column(length = 25)
     private String nickname;
 
-    @Column(length = 100)
     private String username;
+    private String password;
 
     //이미지 저장 방식에 따라 내용이 달라질 수 있음
     private String profileImage;
