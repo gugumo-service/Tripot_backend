@@ -1,6 +1,39 @@
 spring:
   application:
     name: module-domain
+  profiles:
+    group:
+      local: local, common
+      prod: prod, common
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:tcp://localhost/~/tripot
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        jdbc:
+          lob:
+            non_contextual_creation: true
+  logging:
+    level:
+      org.hibernate.SQL: debug
+      org.hibernate.type: trace
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/photo
@@ -8,7 +41,12 @@ spring:
     password: root
   jpa:
     database: mysql
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
-        format_sql: true
+        format_sql: false
+---
+spring:
+  config:
+    activate:
+      on-profile: common
