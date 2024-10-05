@@ -31,7 +31,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         OAuth2UserInfo oAuth2UserInfo = null;
-        if (registrationId.equals("kakao")) {
+        if (registrationId.equals("Kakao")) {
             oAuth2UserInfo = new KakaoOAuth2UserInfo(userRequest.getAccessToken().getTokenValue(), oAuth2User.getAttributes());
         }
         else {
@@ -56,7 +56,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
             memberRepository.save(member);
         } else {
-
             Member updateMember = memberRepository.findByUsername(username);
             updateMember.updateOAuth2Member(oAuth2UserInfo);
 
@@ -66,6 +65,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .username(username)
                 .role(MemberRole.USER)
                 .build();
+
 
         return new CustomUserDetails(userInfoDto);
     }
