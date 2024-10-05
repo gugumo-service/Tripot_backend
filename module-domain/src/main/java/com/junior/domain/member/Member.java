@@ -50,7 +50,6 @@ public class Member {
     private String recommendLocation;
 
     public void updateOAuth2Member(OAuth2UserInfo oAuth2UserInfo) {
-        nickname= oAuth2UserInfo.getNickname();
         profileImage= oAuth2UserInfo.getProfileImageUrl();
     }
 
