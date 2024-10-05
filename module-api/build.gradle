@@ -5,8 +5,13 @@
 dependencies {
     //웹->api
     implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    //webflux
     implementation 'org.springframework:spring-webflux'
+
+    //security
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
     //jwt
     implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
