@@ -30,10 +30,11 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private MemberRole role;
 
+    //추가정보 입력 후 ACTIVE로 변경
     @Column(length = 15)
     @Enumerated(EnumType.STRING)
     @Builder.Default
-    private MemberStatus status = MemberStatus.ACTIVE;
+    private MemberStatus status = MemberStatus.PREACTIVE;
 
     // 서비스 이용 약관 동의 여부
     private Boolean isAgreeTermsUse;
@@ -50,7 +51,7 @@ public class Member {
     private String recommendLocation;
 
     public void updateOAuth2Member(OAuth2UserInfo oAuth2UserInfo) {
-        profileImage= oAuth2UserInfo.getProfileImageUrl();
+        profileImage = oAuth2UserInfo.getProfileImageUrl();
     }
 
 }
