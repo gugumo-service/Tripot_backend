@@ -1,12 +1,12 @@
 package com.junior.security;
 
 
-import com.junior.dto.UserInfoDto;
+import com.junior.domain.member.Member;
+import com.junior.dto.OAuth2UserInfo;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,13 +15,18 @@ import java.util.Map;
 @Getter
 public class UserPrincipal implements OAuth2User, UserDetails {
 
-    private final UserInfoDto userInfoDto;
-    private Map<String, Object> attributes;
+    private Member member;
+    private OAuth2UserInfo oAuth2UserInfo;
 
-    public UserPrincipal(UserInfoDto userInfoDto) {
-        this.userInfoDto = userInfoDto;
+    //default user
+    public UserPrincipal(Member member) {
+        this.member = member;
     }
 
+    //oauth2 user
+    public UserPrincipal(Member member, OAuth2UserInfo oAuth2UserInfo) {
+        this.oAuth2UserInfo = oAuth2UserInfo;
+    }
 
 
     @Override
@@ -31,7 +36,7 @@ public class UserPrincipal implements OAuth2User, UserDetails {
         collection.add(new GrantedAuthority() {
             @Override
             public String getAuthority() {
-                return userInfoDto.getRole().name();
+                return member.getRole().name();
             }
         });
 
@@ -40,13 +45,13 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 
     @Override
     public String getPassword() {
-        return userInfoDto.getPassword();
+        return member.getPassword();
     }
 
 
     @Override
     public String getUsername() {
-        return userInfoDto.getUsername();
+        return member.getUsername();
     }
 
     /**
@@ -81,8 +86,14 @@ public class UserPrincipal implements OAuth2User, UserDetails {
         return UserDetails.super.isEnabled();
     }
 
+    //여기부터 oauth2user override
+    @Override
+    public Map<String, Object> getAttributes() {
+        return oAuth2UserInfo.getAttributes();
+    }
+
     @Override
     public String getName() {
-        return userInfoDto.getUsername();
+        return member.getUsername();
     }
 }

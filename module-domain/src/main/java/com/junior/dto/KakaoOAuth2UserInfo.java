@@ -23,12 +23,8 @@ public class KakaoOAuth2UserInfo implements OAuth2UserInfo {
 
         this.id = ((Long) attributes.get("id")).toString();
         this.email = (String) kakaoAccount.get("email");
-
-
         this.nickname = (String) attributes.get("nickname");
-
         this.profileImageUrl = (String) attributes.get("profile_image_url");
-
         this.attributes.put("id", id);
         this.attributes.put("email", this.email);
     }
