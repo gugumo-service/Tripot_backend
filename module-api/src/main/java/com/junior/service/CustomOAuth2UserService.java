@@ -45,6 +45,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         Member member;
 
         if (!existMember) {
+            //PREACTIVE 상태 회원 생성
+
             member = Member.builder()
                     .nickname(oAuth2UserInfo.getNickname())         //일단 전송 후 수정하는 방식
                     .username(username)

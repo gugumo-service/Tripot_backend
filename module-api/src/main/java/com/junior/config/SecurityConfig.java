@@ -1,16 +1,18 @@
 package com.junior.config;
 
+import com.junior.security.JwtUtil;
+import com.junior.security.filter.JWTFilter;
+import com.junior.security.oauth2.CustomSuccessHandler;
 import com.junior.service.CustomOAuth2UserService;
+import com.junior.service.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 
 
@@ -20,6 +22,9 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final CustomOAuth2UserService customOauth2UserService;
+    private final CustomSuccessHandler customSuccessHandler;
+    private final JwtUtil jwtUtil;
+    private final UserDetailsServiceImpl userDetailsService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -29,15 +34,23 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
 
                 //oauth2
-                .oauth2Login((oauth2) -> oauth2.userInfoEndpoint((userInfoEndpointConfig) ->
-                        userInfoEndpointConfig.userService(customOauth2UserService)))
+                .oauth2Login((oauth2) -> oauth2.userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig
+                                .userService(customOauth2UserService))
+                        .successHandler(customSuccessHandler)
+                        .loginProcessingUrl("api/v1/login/oauth2/**")
+                )
+
 
                 .sessionManagement((session) -> session.
                         sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
+                //filter
+                .addFilterAfter(new JWTFilter(jwtUtil, userDetailsService), OAuth2LoginAuthenticationFilter.class)
+
+                //uri 권한 설정
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/admin").hasRole("ADMIN")
-                        .anyRequest().permitAll());
+                        .requestMatchers("/api/v1/login/**").permitAll()
+                        .anyRequest().authenticated());
 
 
         return httpSecurity.build();
