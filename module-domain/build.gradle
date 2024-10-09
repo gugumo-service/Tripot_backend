@@ -10,6 +10,7 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
     //api->간접 참조하고 있는 모듈도 참조 가능, implementation->직접 참조하고 있는 모듈만 참조 가능
     api 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
     //Querydsl 추가
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
