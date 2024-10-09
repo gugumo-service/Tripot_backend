@@ -29,7 +29,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
-        OAuth2UserInfo oAuth2UserInfo = null;
+        OAuth2UserInfo oAuth2UserInfo;
         if (registrationId.equals("Kakao")) {
             oAuth2UserInfo = new KakaoOAuth2UserInfo(userRequest.getAccessToken().getTokenValue(), oAuth2User.getAttributes());
         } else {
@@ -52,7 +52,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                     .username(username)
                     .profileImage(oAuth2UserInfo.getProfileImageUrl())
                     .role(MemberRole.USER)
-                    //사용자 동의 정보: 따로 추가할 것
+                    //사용자 동의 정보: activeMember 기능에 추가
                     .signUpType(SignUpType.valueOf(registrationId.toUpperCase()))
                     .build();
 

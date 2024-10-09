@@ -64,4 +64,9 @@ public class Member {
         status = MemberStatus.ACTIVE;
     }
 
+    public void deleteMember() {
+        status = MemberStatus.DELETE;
+
+
+    }
 }

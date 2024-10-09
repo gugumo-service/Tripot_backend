@@ -33,4 +33,12 @@ public class MemberService {
         log.debug("[checkDuplicateNickname] target nickname: " + nickname);
         return memberRepository.existsByNickname(nickname);
     }
+
+    public void deleteMember(UserPrincipal principal) {
+
+        Member member = principal.getMember();
+        log.info("[deleteMember] target: " + member.getUsername());
+        member.deleteMember();
+
+    }
 }
