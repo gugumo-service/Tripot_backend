@@ -6,10 +6,7 @@ import com.junior.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,7 +21,7 @@ public class MemberController {
      * @return 회원 활성화 완료
      */
     @PatchMapping("/api/v1/members/activate")
-    public ResponseEntity<String> activeMember(@AuthenticationPrincipal UserPrincipal userPrincipal, ActivateMemberDto activateMemberDto) {
+    public ResponseEntity<String> activeMember(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody ActivateMemberDto activateMemberDto) {
         memberService.activateMember(userPrincipal, activateMemberDto);
 
         //TODO: 응답 양식에 따른 수정 필요
