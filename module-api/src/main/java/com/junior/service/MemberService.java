@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class MemberService {
 
-    private final UserDetailsServiceImpl userDetailsService;
     private final MemberRepository memberRepository;
 
     @Transactional
@@ -26,5 +25,12 @@ public class MemberService {
         log.debug("[activateMember] target: " + member.getUsername());
         member.activateMember(activateMemberDto);
 
+    }
+
+
+    public Boolean checkDuplicateNickname(String nickname){
+
+        log.debug("[checkDuplicateNickname] target nickname: " + nickname);
+        return memberRepository.existsByNickname(nickname);
     }
 }
