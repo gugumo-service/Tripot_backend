@@ -38,4 +38,11 @@ public class MemberController {
     public ResponseEntity<Boolean> checkNicknameValid(@RequestParam String nickname) {
         return ResponseEntity.ok(!memberService.checkDuplicateNickname(nickname));
     }
+
+    @DeleteMapping("/api/v1/members")
+    public ResponseEntity<String> deleteMember(@AuthenticationPrincipal UserPrincipal principal) {
+        memberService.deleteMember(principal);
+
+        return ResponseEntity.ok("회원 삭제 완료");
+    }
 }
