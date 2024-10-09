@@ -7,6 +7,7 @@ import com.junior.dto.CheckAdditionMemberInfoDto;
 import com.junior.dto.LoginCreateJwtDto;
 import com.junior.security.UserPrincipal;
 import com.junior.security.JwtUtil;
+import com.junior.util.RedisUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,6 +29,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     private final JwtUtil jwtUtil;
     private final ObjectMapper objectMapper;
+    private final RedisUtil redisUtil;
 
     //oauth 로그인 성공 시 로직
     @Override
@@ -74,7 +76,8 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         response.getWriter().write(objectMapper.writeValueAsString(checkAdditionMemberInfoDto));
 
-        //TODO: redis에 refreshToken 저장하기
+        //redis에 refreshToken 저장하기((key, value): (token, username))
+        redisUtil.setDataExpire(refreshToken, username, 8640_0000L);
 
     }
 
