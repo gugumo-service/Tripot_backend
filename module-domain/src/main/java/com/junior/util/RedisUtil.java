@@ -3,9 +3,11 @@ package com.junior.util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 
+@Component
 @RequiredArgsConstructor
 public class RedisUtil {
 
