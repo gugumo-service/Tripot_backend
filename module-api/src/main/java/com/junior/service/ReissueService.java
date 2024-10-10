@@ -30,7 +30,7 @@ public class ReissueService {
         try {
             jwtUtil.isExpired(oldRefreshToken);
         } catch (ExpiredJwtException e) {
-            //예외 처리
+            //예외 처리: 만료된 refreshToken
             throw new JwtErrorException(ErrorCode.EXPIRED_TOKEN);
         }
 

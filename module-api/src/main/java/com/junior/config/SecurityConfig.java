@@ -5,6 +5,7 @@ import com.junior.security.filter.JWTFilter;
 import com.junior.security.oauth2.CustomSuccessHandler;
 import com.junior.service.CustomOAuth2UserService;
 import com.junior.service.UserDetailsServiceImpl;
+import com.junior.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

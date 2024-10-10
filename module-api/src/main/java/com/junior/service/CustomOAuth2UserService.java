@@ -50,7 +50,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             member = Member.builder()
                     .nickname(oAuth2UserInfo.getNickname())         //일단 전송 후 수정하는 방식
                     .username(username)
-                    .profileImage(oAuth2UserInfo.getProfileImageUrl())
                     .role(MemberRole.USER)
                     //사용자 동의 정보: activeMember 기능에 추가
                     .signUpType(SignUpType.valueOf(registrationId.toUpperCase()))
@@ -61,7 +60,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         } else {
             //조건문에서 있는지 검증했음
             member = memberRepository.findByUsername(username).get();
-            member.updateOAuth2Member(oAuth2UserInfo);
 
         }
 

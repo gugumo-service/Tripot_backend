@@ -25,6 +25,7 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 
     //oauth2 user
     public UserPrincipal(Member member, OAuth2UserInfo oAuth2UserInfo) {
+        this.member = member;
         this.oAuth2UserInfo = oAuth2UserInfo;
     }
 
