@@ -5,7 +5,7 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 
-@Getter
+
 public record LoginCreateJwtDto (
         Long id,
         String username,
