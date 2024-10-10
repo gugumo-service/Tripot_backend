@@ -44,14 +44,14 @@ public class JwtUtil {
 
     public String createJwt(LoginCreateJwtDto loginCreateJwtDto, String category, Long expiredMs) {
 
-        Date requestDate = Timestamp.valueOf(loginCreateJwtDto.getRequestTimeMs());
-        Date expireDate = Timestamp.valueOf(loginCreateJwtDto.getRequestTimeMs().plusSeconds(expiredMs/1000));
+        Date requestDate = Timestamp.valueOf(loginCreateJwtDto.requestTimeMs());
+        Date expireDate = Timestamp.valueOf(loginCreateJwtDto.requestTimeMs().plusSeconds(expiredMs/1000));
 
         return Jwts.builder()
                 .claim("category", category)
-                .claim("id", loginCreateJwtDto.getId())
-                .claim("username", loginCreateJwtDto.getUsername())
-                .claim("role", loginCreateJwtDto.getRole())
+                .claim("id", loginCreateJwtDto.id())
+                .claim("username", loginCreateJwtDto.username())
+                .claim("role", loginCreateJwtDto.role())
                 .issuedAt(requestDate)
                 .expiration(expireDate)
                 .signWith(secretKey)

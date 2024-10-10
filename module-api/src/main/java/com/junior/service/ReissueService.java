@@ -49,9 +49,10 @@ public class ReissueService {
         String username = redisUtil.getData(oldRefreshToken);
 
         LoginCreateJwtDto loginCreateJwtDto = LoginCreateJwtDto.builder()
-                .requestTimeMs(LocalDateTime.now())
+                .id(jwtUtil.getId(oldRefreshToken))
                 .username(jwtUtil.getUsername(oldRefreshToken))
                 .role(jwtUtil.getRole(oldRefreshToken))
+                .requestTimeMs(LocalDateTime.now())
                 .build();
 
         String newAccessToken = jwtUtil.createJwt(loginCreateJwtDto, "access", 60 * 60 * 60L);

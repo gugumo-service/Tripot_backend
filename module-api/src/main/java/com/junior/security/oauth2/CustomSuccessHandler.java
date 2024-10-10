@@ -66,12 +66,12 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
 
-        CheckActiveMemberDto checkActiveMemberDto = new CheckActiveMemberDto(member.getNickname());
+        CheckActiveMemberDto checkActiveMemberDto;
 
         if (member.getStatus() == MemberStatus.PREACTIVE) {
-            checkActiveMemberDto.setHasToAdd(true);
+            checkActiveMemberDto = new CheckActiveMemberDto(member.getNickname(), true);
         }else{
-            checkActiveMemberDto.setHasToAdd(false);
+            checkActiveMemberDto = new CheckActiveMemberDto(member.getNickname(), false);
         }
 
         response.getWriter().write(objectMapper.writeValueAsString(checkActiveMemberDto));
