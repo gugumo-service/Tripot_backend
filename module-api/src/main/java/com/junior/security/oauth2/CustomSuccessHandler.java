@@ -3,7 +3,7 @@ package com.junior.security.oauth2;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.junior.domain.member.Member;
 import com.junior.domain.member.MemberStatus;
-import com.junior.dto.CheckAdditionMemberInfoDto;
+import com.junior.dto.CheckActiveMemberDto;
 import com.junior.dto.LoginCreateJwtDto;
 import com.junior.security.UserPrincipal;
 import com.junior.security.JwtUtil;
@@ -66,15 +66,15 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
 
-        CheckAdditionMemberInfoDto checkAdditionMemberInfoDto = new CheckAdditionMemberInfoDto(member.getNickname());
+        CheckActiveMemberDto checkActiveMemberDto = new CheckActiveMemberDto(member.getNickname());
 
         if (member.getStatus() == MemberStatus.PREACTIVE) {
-            checkAdditionMemberInfoDto.setHasToAdd(true);
+            checkActiveMemberDto.setHasToAdd(true);
         }else{
-            checkAdditionMemberInfoDto.setHasToAdd(false);
+            checkActiveMemberDto.setHasToAdd(false);
         }
 
-        response.getWriter().write(objectMapper.writeValueAsString(checkAdditionMemberInfoDto));
+        response.getWriter().write(objectMapper.writeValueAsString(checkActiveMemberDto));
 
         //redis에 refreshToken 저장하기((key, value): (token, username))
         redisUtil.setDataExpire(refreshToken, username, 8640_0000L);

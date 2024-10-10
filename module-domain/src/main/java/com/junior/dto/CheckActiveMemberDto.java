@@ -4,12 +4,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-public class CheckAdditionMemberInfoDto {
+public class CheckActiveMemberDto {
     private String nickname;
     @Setter
     private Boolean hasToAdd;
 
-    public CheckAdditionMemberInfoDto(String nickname) {
+    public CheckActiveMemberDto(String nickname) {
         this.nickname = nickname;
     }
 
