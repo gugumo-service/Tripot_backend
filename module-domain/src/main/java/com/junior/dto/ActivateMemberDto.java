@@ -10,7 +10,8 @@ public record ActivateMemberDto(
         // 개인정보 수집 및 이용 동의
         Boolean isAgreeCollectingUsingPersonalInformation,
         // 마케팅 수신 동의
-        Boolean isAgreeMarketing
+        Boolean isAgreeMarketing,
+        String recommendLocation
 
 ) {
 

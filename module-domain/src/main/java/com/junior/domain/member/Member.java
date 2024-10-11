@@ -51,16 +51,12 @@ public class Member {
     //추천 여행 지역 -> 추후 추가예정
     private String recommendLocation;
 
-    //sns에서 프로필 사진 업데이트 시 마다 해주어야 하나? 자체 서비스에서 관리하게 되면 오히려 불편할 수도 있을거 같음
-    public void updateOAuth2Member(OAuth2UserInfo oAuth2UserInfo) {
-        profileImage = oAuth2UserInfo.getProfileImageUrl();
-    }
-
     public void activateMember(ActivateMemberDto activateMemberDto) {
         nickname = activateMemberDto.nickname();
         isAgreeTermsUse = activateMemberDto.isAgreeTermsUse();
         isAgreeCollectingUsingPersonalInformation = activateMemberDto.isAgreeCollectingUsingPersonalInformation();
         isAgreeMarketing = activateMemberDto.isAgreeMarketing();
+        recommendLocation= activateMemberDto.recommendLocation();
         status = MemberStatus.ACTIVE;
     }
 
