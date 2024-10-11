@@ -34,6 +34,7 @@ public class MemberService {
         return memberRepository.existsByNickname(nickname);
     }
 
+    @Transactional
     public void deleteMember(UserPrincipal principal) {
 
         Member member = principal.getMember();
