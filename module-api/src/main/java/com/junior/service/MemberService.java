@@ -22,7 +22,7 @@ public class MemberService {
 
         Member member = principal.getMember();
 
-        log.info("[activateMember] target: " + member.getUsername());
+        log.info("[activateMember] target: {}", member.getUsername());
         member.activateMember(activateMemberDto);
 
     }
@@ -30,14 +30,14 @@ public class MemberService {
 
     public Boolean checkDuplicateNickname(String nickname){
 
-        log.info("[checkDuplicateNickname] target nickname: " + nickname);
+        log.info("[checkDuplicateNickname] target nickname: {}", nickname);
         return memberRepository.existsByNickname(nickname);
     }
 
     public void deleteMember(UserPrincipal principal) {
 
         Member member = principal.getMember();
-        log.info("[deleteMember] target: " + member.getUsername());
+        log.info("[deleteMember] target: {}", member.getUsername());
         member.deleteMember();
 
     }
