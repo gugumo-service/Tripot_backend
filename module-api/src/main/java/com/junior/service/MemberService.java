@@ -1,7 +1,10 @@
 package com.junior.service;
 
 import com.junior.domain.member.Member;
+import com.junior.domain.member.MemberStatus;
 import com.junior.dto.ActivateMemberDto;
+import com.junior.exception.ErrorCode;
+import com.junior.exception.NotValidMemberException;
 import com.junior.repository.MemberRepository;
 import com.junior.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
@@ -22,14 +25,17 @@ public class MemberService {
 
         Member member = principal.getMember();
 
+        if (member.getStatus() != MemberStatus.PREACTIVE) {
+            log.warn("[activateMember] Invalid member = {} member.status = {}", member.getUsername(), member.getStatus());
+            throw new NotValidMemberException(ErrorCode.INVALID_MEMBER);
+        }
+
         log.info("[activateMember] target: {}", member.getUsername());
         member.activateMember(activateMemberDto);
 
     }
 
-
     public Boolean checkDuplicateNickname(String nickname){
-
         log.info("[checkDuplicateNickname] target nickname: {}", nickname);
         return memberRepository.existsByNickname(nickname);
     }
@@ -38,6 +44,12 @@ public class MemberService {
     public void deleteMember(UserPrincipal principal) {
 
         Member member = principal.getMember();
+
+        if (member.getStatus() != MemberStatus.ACTIVE) {
+            log.warn("[deleteMember] Invalid member = {} member.status = {}", member.getUsername(), member.getStatus());
+            throw new NotValidMemberException(ErrorCode.INVALID_MEMBER);
+        }
+
         log.info("[deleteMember] target: {}", member.getUsername());
         member.deleteMember();
 
