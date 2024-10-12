@@ -1,6 +1,7 @@
 spring:
-  application:
-    name: module-domain
+  config:
+    activate:
+      on-profile: prod
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/photo
@@ -8,7 +9,7 @@ spring:
     password: root
   jpa:
     database: mysql
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
-        format_sql: true
+        format_sql: false
