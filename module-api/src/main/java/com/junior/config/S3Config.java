@@ -1,4 +1,4 @@
-package com.junior.s3;
+package com.junior.config;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class S3Config {
+
     @Value("${cloud.aws.s3.credentials.accessKey}")
     private String accessKey;
     @Value("${cloud.aws.s3.credentials.secretKey}")
