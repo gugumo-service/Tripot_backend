@@ -63,6 +63,18 @@ public class Member {
     public void deleteMember() {
         status = MemberStatus.DELETE;
 
+        this.nickname = null;
+        this.username = null;
+        this.password = null;
+        this.profileImage = null;
+        this.role = null;
+        this.isAgreeTermsUse = null;
+        this.isAgreeCollectingUsingPersonalInformation = null;
+        this.isAgreeMarketing = null;
+
+        this.signUpType = null;
+        this.recommendLocation = null;
+
 
     }
 }
