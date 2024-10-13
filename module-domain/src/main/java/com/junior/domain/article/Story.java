@@ -10,12 +10,15 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Article {
+public class Story {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "article_id")
     private Long id;
+
+    @Column(length = 255)
+    private String title;
 
     @Column(length = 65535)
     private String content;
@@ -28,6 +31,11 @@ public class Article {
     private double latitude;
     private double longitude;
 
+    // 조회 수
     private Long viewCnt;
+    // 좋아요 수
     private Long likeCnt;
+
+    // 나만 보기
+    boolean isHidden;
 }
