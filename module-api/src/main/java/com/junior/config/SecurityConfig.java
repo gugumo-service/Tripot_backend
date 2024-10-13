@@ -38,7 +38,7 @@ public class SecurityConfig {
                 .oauth2Login((oauth2) -> oauth2.userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig
                                 .userService(customOauth2UserService))
                         .successHandler(customSuccessHandler)
-                        .loginProcessingUrl("api/v1/login/oauth2/**")
+                        .loginProcessingUrl("/login/oauth2/**")
                 )
 
 
@@ -50,7 +50,7 @@ public class SecurityConfig {
 
                 //uri 권한 설정
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/api/v1/login/**").permitAll()
+                        .requestMatchers("/login/**").permitAll()
                         //닉네임 중복 여부 확인
                         .requestMatchers("/api/v1/members/nicknames/check-valid").permitAll()
                         .anyRequest().authenticated());
