@@ -51,6 +51,8 @@ public class SecurityConfig {
                 //uri 권한 설정
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/api/v1/login/**").permitAll()
+                        //닉네임 중복 여부 확인
+                        .requestMatchers("/api/v1/members/nicknames/check-valid").permitAll()
                         .anyRequest().authenticated());
 
 
