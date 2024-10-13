@@ -1,19 +1,19 @@
 package com.junior.response;
 
-import com.junior.exception.ErrorCode;
+import com.junior.exception.StatusCode;
 import lombok.Builder;
 
 @Builder
 public record ErrorResponse(
-        int status,
+        String status,
         String errorCode,
         String message
 ) {
-    public static ErrorResponse of(int status, ErrorCode errorCode) {
+    public static ErrorResponse of(StatusCode statusCode) {
         return ErrorResponse.builder()
-                .status(status)
-                .errorCode(errorCode.getErrorCode())
-                .message(errorCode.getMessage())
+                .status("error")
+                .errorCode(statusCode.getCode())
+                .message(statusCode.getMessage())
                 .build();
     }
 }

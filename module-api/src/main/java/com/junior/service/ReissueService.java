@@ -2,12 +2,11 @@ package com.junior.service;
 
 import com.junior.dto.LoginCreateJwtDto;
 import com.junior.dto.ReissueDto;
-import com.junior.exception.ErrorCode;
+import com.junior.exception.StatusCode;
 import com.junior.exception.JwtErrorException;
 import com.junior.security.JwtUtil;
 import com.junior.util.RedisUtil;
 import io.jsonwebtoken.ExpiredJwtException;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,19 +30,19 @@ public class ReissueService {
             jwtUtil.isExpired(oldRefreshToken);
         } catch (ExpiredJwtException e) {
             //예외 처리: 만료된 refreshToken
-            throw new JwtErrorException(ErrorCode.EXPIRED_TOKEN);
+            throw new JwtErrorException(StatusCode.EXPIRED_TOKEN);
         }
 
         //refresh 토큰인지 확인
         if (!jwtUtil.getCategory(oldRefreshToken).equals("refresh")) {
             //예외 처리: refresh 토큰이 아님
-            throw new JwtErrorException(ErrorCode.INVALID_REFRESH_TOKEN);
+            throw new JwtErrorException(StatusCode.INVALID_REFRESH_TOKEN);
         }
 
         //oldRefreshToken 존재 여부 확인
         if (!redisUtil.existsByKey(oldRefreshToken)) {
             //예외 처리: 존재하지 않는 토큰
-            throw new JwtErrorException(ErrorCode.TOKEN_NOT_EXIST);
+            throw new JwtErrorException(StatusCode.TOKEN_NOT_EXIST);
         }
 
         String username = redisUtil.getData(oldRefreshToken);

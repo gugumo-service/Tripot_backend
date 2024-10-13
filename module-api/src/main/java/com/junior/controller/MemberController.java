@@ -1,12 +1,16 @@
 package com.junior.controller;
 
 import com.junior.dto.ActivateMemberDto;
+import com.junior.exception.StatusCode;
+import com.junior.response.CommonResponse;
 import com.junior.security.UserPrincipal;
 import com.junior.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import static com.junior.exception.StatusCode.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,11 +25,11 @@ public class MemberController {
      * @return 회원 활성화 완료
      */
     @PatchMapping("/api/v1/members/activate")
-    public ResponseEntity<String> activeMember(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody ActivateMemberDto activateMemberDto) {
+    public CommonResponse<String> activeMember(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody ActivateMemberDto activateMemberDto) {
         memberService.activateMember(userPrincipal, activateMemberDto);
 
-        //TODO: 응답 양식에 따른 수정 필요
-        return ResponseEntity.ok("회원 활성화 완료");
+
+        return CommonResponse.of(ACTIVATE_MEMBER.getCode(), ACTIVATE_MEMBER.getMessage(), null);
     }
 
     /**
@@ -35,14 +39,15 @@ public class MemberController {
      * @return false: valid하지 않은 닉네임(중복 닉네임이 존재함)
      */
     @GetMapping("/api/v1/members/nicknames/check-valid")
-    public ResponseEntity<Boolean> checkNicknameValid(@RequestParam String nickname) {
-        return ResponseEntity.ok(!memberService.checkDuplicateNickname(nickname));
+    public CommonResponse<Boolean> checkNicknameValid(@RequestParam("nickname") String nickname) {
+
+        return CommonResponse.of(CHECK_NICKNAME_MEMBER.getCode(), CHECK_NICKNAME_MEMBER.getMessage(), !memberService.checkDuplicateNickname(nickname));
     }
 
     @DeleteMapping("/api/v1/members")
-    public ResponseEntity<String> deleteMember(@AuthenticationPrincipal UserPrincipal principal) {
+    public CommonResponse<String> deleteMember(@AuthenticationPrincipal UserPrincipal principal) {
         memberService.deleteMember(principal);
 
-        return ResponseEntity.ok("회원 삭제 완료");
+        return CommonResponse.of(DELETE_MEMBER.getCode(), DELETE_MEMBER.getMessage(), null);
     }
 }

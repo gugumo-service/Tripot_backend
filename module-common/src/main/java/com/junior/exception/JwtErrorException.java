@@ -5,11 +5,11 @@ import lombok.Getter;
 @Getter
 public class JwtErrorException extends RuntimeException {
 
-  private ErrorCode errorCode;
+  private StatusCode statusCode;
 
-  public JwtErrorException(ErrorCode errorCode) {
-    super(errorCode.getMessage());
-    this.errorCode = errorCode;
+  public JwtErrorException(StatusCode statusCode) {
+    super(statusCode.getMessage());
+    this.statusCode = statusCode;
 
   }
 }

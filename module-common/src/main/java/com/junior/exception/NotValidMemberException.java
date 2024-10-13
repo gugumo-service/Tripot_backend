@@ -5,10 +5,10 @@ import lombok.Getter;
 @Getter
 public class NotValidMemberException extends RuntimeException {
 
-    private ErrorCode errorCode;
+    private StatusCode statusCode;
 
-    public NotValidMemberException(ErrorCode errorCode) {
-        super(errorCode.getMessage());
-        this.errorCode = errorCode;
+    public NotValidMemberException(StatusCode statusCode) {
+        super(statusCode.getMessage());
+        this.statusCode = statusCode;
     }
 }
