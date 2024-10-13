@@ -35,7 +35,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         log.debug("[CustomOAuth2UserService] 소셜로그인 등록ID: {}", registrationId);
         OAuth2UserInfo oAuth2UserInfo;
-        if (registrationId.equals("Kakao")) {
+        if (registrationId.equals("kakao")) {
             oAuth2UserInfo = new KakaoOAuth2UserInfo(userRequest.getAccessToken().getTokenValue(), oAuth2User.getAttributes());
         } else {
             return null;
