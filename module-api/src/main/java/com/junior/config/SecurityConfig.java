@@ -52,6 +52,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/login/**").permitAll()
                         .requestMatchers("/oauth2/**").permitAll()
+                        .requestMatchers("/api/v1/reissue").permitAll()
                         //닉네임 중복 여부 확인
                         .requestMatchers("/api/v1/members/nicknames/check-valid").permitAll()
                         .anyRequest().authenticated());
