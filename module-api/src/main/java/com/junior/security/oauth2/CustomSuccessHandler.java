@@ -63,8 +63,8 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 
         //응답에 JWT 추가
-        response.addHeader("Authorization", accessToken);
-        response.addHeader("refresh_token", refreshToken);
+        response.addHeader("Authorization", "Bearer " + accessToken);
+        response.addHeader("Refresh_token", "Bearer " + refreshToken);
         log.info("[{}} 응답 헤더에 토큰 담기", getClass().getName());
 
         //응답에 해당 회원의 추가정보 기입 여부 추가
@@ -83,6 +83,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         response.getWriter().write(objectMapper.writeValueAsString(checkActiveMemberDto));
 
         //redis에 refreshToken 저장하기((key, value): (token, username))
+        //Bearer을 포함하지 않음
         redisUtil.setDataExpire(refreshToken, username, 8640_0000L);
 
     }

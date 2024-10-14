@@ -21,10 +21,9 @@ public class ReissueService {
     private final RedisUtil redisUtil;
 
 
-    //여기서 처리한 response를 컨트롤러로 옮겨야 하지 않나
     public void reissue(ReissueDto reissueDto, HttpServletResponse response) {
 
-        String oldRefreshToken = reissueDto.refreshToken();
+        String oldRefreshToken = reissueDto.refreshToken().split(" ")[1];
 
         try {
             jwtUtil.isExpired(oldRefreshToken);
@@ -63,8 +62,8 @@ public class ReissueService {
         redisUtil.setDataExpire(newRefreshToken, username, 8640_0000L);
 
         //새 토큰을 응답에 추가
-        response.addHeader("Authorization", newAccessToken);
-        response.addHeader("refresh_token", newRefreshToken);
+        response.addHeader("Authorization", "Bearer " + newAccessToken);
+        response.addHeader("Refresh_token", "Bearer " + newRefreshToken);
 
 
     }

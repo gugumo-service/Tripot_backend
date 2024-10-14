@@ -41,6 +41,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             return null;
         }
 
+        //카카오 공식문서: 인증되지 않은 이메일 주소는 서비스에서 발송한 이메일을 전달받지 못할 수 있습니다. 또한 이메일은 사용자 요청에 따라 변경될 수 있으므로, ID 또는 동일 사용자 여부 판단 기준으로 사용하는 것을 권장하지 않습니다.
         String username = oAuth2UserInfo.getProvider() + " " + oAuth2UserInfo.getId();
 
 
