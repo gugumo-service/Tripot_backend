@@ -9,6 +9,11 @@ dependencies {
     //webflux
     implementation 'org.springframework:spring-webflux'
 
+    // Spring Cloud AWS
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+
+
     //security
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
@@ -21,6 +26,3 @@ dependencies {
     implementation project(':module-domain')
     implementation project(':module-common')
 }
-
-
-

@@ -10,5 +10,4 @@ public class ModuleApiApplication {
         System.setProperty("spring.config.name", "application-api,application-domain,application-common");
         SpringApplication.run(ModuleApiApplication.class, args);
     }
-
 }
