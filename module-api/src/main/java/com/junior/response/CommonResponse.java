@@ -1,7 +1,7 @@
 package com.junior.response;
 
-import lombok.*;
 
+import lombok.*;
 
 
 @Getter
