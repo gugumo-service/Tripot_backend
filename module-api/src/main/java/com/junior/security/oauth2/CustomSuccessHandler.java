@@ -84,7 +84,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         //redis에 refreshToken 저장하기((key, value): (token, username))
         //Bearer을 포함하지 않음
-        redisUtil.setDataExpire(refreshToken, username, 8640_0000L);
+        redisUtil.setDataExpire(refreshToken, username, 8640_0000L * 30 * 6);
 
     }
 
