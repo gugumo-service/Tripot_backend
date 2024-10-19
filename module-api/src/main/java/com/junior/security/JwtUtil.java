@@ -42,10 +42,18 @@ public class JwtUtil {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
     }
 
-    public String createJwt(LoginCreateJwtDto loginCreateJwtDto, String category, Long expiredMs) {
+    public String createJwt(LoginCreateJwtDto loginCreateJwtDto, String category) {
 
-        Date requestDate = Timestamp.valueOf(loginCreateJwtDto.requestTimeMs());
-        Date expireDate = Timestamp.valueOf(loginCreateJwtDto.requestTimeMs().plusSeconds(expiredMs/1000));
+        Date requestDate = Timestamp.valueOf(loginCreateJwtDto.requestTimeMs());;
+        Date expireDate = Timestamp.valueOf(loginCreateJwtDto.requestTimeMs());
+
+
+        if(category.equals("access")){
+            expireDate=Timestamp.valueOf(loginCreateJwtDto.requestTimeMs().plusMinutes(5));
+        } else if (category.equals("refresh")) {
+            expireDate=Timestamp.valueOf(loginCreateJwtDto.requestTimeMs().plusMonths(6));
+        }
+
 
         return Jwts.builder()
                 .claim("category", category)

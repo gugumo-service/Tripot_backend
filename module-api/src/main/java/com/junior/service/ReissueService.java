@@ -53,8 +53,8 @@ public class ReissueService {
                 .requestTimeMs(LocalDateTime.now())
                 .build();
 
-        String newAccessToken = jwtUtil.createJwt(loginCreateJwtDto, "access", 60 * 60 * 60L);
-        String newRefreshToken = jwtUtil.createJwt(loginCreateJwtDto, "refresh", 8640_0000L);
+        String newAccessToken = jwtUtil.createJwt(loginCreateJwtDto, "access");
+        String newRefreshToken = jwtUtil.createJwt(loginCreateJwtDto, "refresh");
 
 
         //이전 토큰을 삭제하고 새 토큰 생성

@@ -57,8 +57,8 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 .requestTimeMs(LocalDateTime.now())
                 .build();
 
-        String accessToken = jwtUtil.createJwt(loginCreateJwtDto, "access", 60 * 60 * 60L);
-        String refreshToken = jwtUtil.createJwt(loginCreateJwtDto, "refresh", 8640_0000L);
+        String accessToken = jwtUtil.createJwt(loginCreateJwtDto, "access");
+        String refreshToken = jwtUtil.createJwt(loginCreateJwtDto, "refresh");
         log.info("[{}} JWT 토큰 생성 access: {}, refresh: {}", getClass().getName(), accessToken, refreshToken);
 
 
@@ -75,9 +75,9 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         CheckActiveMemberDto checkActiveMemberDto;
 
         if (member.getStatus() == MemberStatus.PREACTIVE) {
-            checkActiveMemberDto = new CheckActiveMemberDto(member.getNickname(), true);
-        }else{
             checkActiveMemberDto = new CheckActiveMemberDto(member.getNickname(), false);
+        }else{
+            checkActiveMemberDto = new CheckActiveMemberDto(member.getNickname(), true);
         }
 
         response.getWriter().write(objectMapper.writeValueAsString(checkActiveMemberDto));
