@@ -1,7 +1,0 @@
-spring:
-  application:
-    name: module-api
-  jwt:
-    secret: 5eb5ca3b91fd363c90e138107ed4e4945719b195fb6ac1ee1a8bcc7ea2a9ac949e2511163f1a05131048e39007ef3a3fc074df019f4816e04caa6839bba870f1
-
-

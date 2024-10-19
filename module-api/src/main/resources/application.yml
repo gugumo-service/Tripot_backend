@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: module-api
+  profiles:
+    group:
+      "local": "local"
+      "prod": "prod"
