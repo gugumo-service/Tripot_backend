@@ -1,4 +1,4 @@
-package com.junior.domain;
+package com.junior.domain.member;
 
 
 public enum MemberRole {
