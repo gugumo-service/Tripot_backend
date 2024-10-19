@@ -23,7 +23,10 @@ public class MemberService {
     @Transactional
     public void activateMember(UserPrincipal principal, ActivateMemberDto activateMemberDto) {
 
-        Member member = principal.getMember();
+        Member member = memberRepository.findById(principal.getMember().getId()).orElseThrow(
+                () -> new NotValidMemberException(StatusCode.INVALID_MEMBER)
+        );
+
 
         if (member.getStatus() != MemberStatus.PREACTIVE) {
             log.warn("[activateMember] Invalid member = {} member.status = {}", member.getUsername(), member.getStatus());
@@ -43,7 +46,9 @@ public class MemberService {
     @Transactional
     public void deleteMember(UserPrincipal principal) {
 
-        Member member = principal.getMember();
+        Member member = memberRepository.findById(principal.getMember().getId()).orElseThrow(
+                () -> new NotValidMemberException(StatusCode.INVALID_MEMBER)
+        );
 
         if (member.getStatus() != MemberStatus.ACTIVE) {
             log.warn("[deleteMember] Invalid member = {} member.status = {}", member.getUsername(), member.getStatus());
