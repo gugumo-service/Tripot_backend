@@ -5,8 +5,6 @@ plugins {
 }
 
 
-bootJar { enabled = false }
-jar { enabled = true }
 
 java {
 	toolchain {
