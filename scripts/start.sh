@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ROOT_PATH="/home/ubuntu/tripot_cicd"
-JAR=$(ls $ROOT_PATH/module-api/build/libs/ | grep '.jar' | tail -n 1)
+JAR=$(ls $ROOT_PATH/build/libs/ | grep '.jar' | tail -n 1)
 
 APP_LOG="$ROOT_PATH/application.log"
 ERROR_LOG="$ROOT_PATH/error.log"
@@ -13,7 +13,7 @@ echo "[$NOW] $JAR 복사" >> $START_LOG
 cp $ROOT_PATH/build/libs/*.jar $JAR
 
 echo "[$NOW] > $JAR 실행" >> $START_LOG
-nohup java -jar -Dspring.profiles.active=prod $JAR > $APP_LOG 2> $ERROR_LOG &
+nohup java -jar $JAR > $APP_LOG 2> $ERROR_LOG &
 
 SERVICE_PID=$(pgrep -f $JAR)
 
