@@ -13,7 +13,7 @@ echo "[$NOW] $JAR 복사" >> $START_LOG
 cp $ROOT_PATH/build/libs/*.jar $JAR
 
 echo "[$NOW] > $JAR 실행" >> $START_LOG
-nohup java -jar $JAR > $APP_LOG 2> $ERROR_LOG &
+nohup java -jar $JAR -spring.profiles.active=prod > $APP_LOG 2> $ERROR_LOG &
 
 SERVICE_PID=$(pgrep -f $JAR)
 
