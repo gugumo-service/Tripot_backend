@@ -10,7 +10,7 @@ API_START_LOG="$ROOT_PATH/api_start.log"
 NOW=$(date +%c)
 
 echo "[$NOW] $API_JAR 복사" >> $API_START_LOG
-cp $ROOT_PATH/build/libs/*.jar $API_JAR
+cp $ROOT_PATH/module-api/build/libs/*.jar $API_JAR
 
 echo "[$NOW] > $API_JAR 실행" >> $API_START_LOG
 nohup java -jar -Dspring.profiles.active=prod $API_JAR > $API_APP_LOG 2> $API_ERR_LOG &
