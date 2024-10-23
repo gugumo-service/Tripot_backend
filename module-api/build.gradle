@@ -1,6 +1,6 @@
 
 
-
+jar{enabled=false}
 
 dependencies {
     //웹->api
