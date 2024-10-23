@@ -22,7 +22,7 @@ spring:
             authorization-grant-type: authorization_code
             scope: # https://developers.kakao.com/docs/latest/ko/kakaologin/common#user-info
               - profile_nickname
-            redirect-uri: "http://localhost:8080/login/oauth2/code/kakao"
+            redirect-uri: "http://54.180.139.123:8080/login/oauth2/code/kakao"
         provider:
           kakao:
             authorization-uri: https://kauth.kakao.com/oauth/authorize
