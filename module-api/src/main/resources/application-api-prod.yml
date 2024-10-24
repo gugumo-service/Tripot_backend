@@ -53,3 +53,10 @@ cloud:
         accessKey: ${AWS_S3_ACCESS_KEY_ID}
         secretKey: ${AWS_S3_SECRET_ACCESS_KEY}
 
+aws:
+  paramstore:
+    enabled: true
+    prefix: /config
+    profile-separator: _
+    name: tripot
+
