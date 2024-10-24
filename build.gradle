@@ -42,8 +42,13 @@ subprojects{
 	}
 
 	dependencies {
+
+
+
+
 		//검증
 		implementation 'org.springframework.boot:spring-boot-starter-validation'
+
 
 		//루트
 		compileOnly 'org.projectlombok:lombok'

@@ -171,4 +171,9 @@ gradle-app.setting
 # Java heap dump
 *.hprof
 
+
+## Qfile ###
+/module-domain/src/main/generated/
+=======
 # End of https://www.toptal.com/developers/gitignore/api/intellij,gradle,java
+

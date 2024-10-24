@@ -2,11 +2,22 @@ dependencies {
     //웹->api
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
+    //webflux
+    implementation 'org.springframework:spring-webflux'
+
     // Spring Cloud AWS
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
 
-//    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    //security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+    //jwt
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.3'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.3'
 
     implementation project(':module-domain')
     implementation project(':module-common')
