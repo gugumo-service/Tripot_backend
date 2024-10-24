@@ -1,0 +1,49 @@
+package com.junior.controller;
+
+import com.junior.domain.story.dto.CreateStoryDto;
+import com.junior.domain.story.dto.ResponseStoryDto;
+import com.junior.exception.StatusCode;
+import com.junior.response.CommonResponse;
+import com.junior.service.story.StoryService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/v1/story")
+public class StoryController {
+
+    private final StoryService storyService;
+
+    @PostMapping("/new")
+    public CommonResponse save(@RequestBody CreateStoryDto createStoryDto) {
+
+        storyService.createStory(createStoryDto);
+
+        return CommonResponse.builder()
+                .returnCode(StatusCode.STORY_CREATE_SUCCESS.getCode())
+                .returnMessage(StatusCode.STORY_CREATE_SUCCESS.getMessage())
+                .info(null)
+                .build();
+    }
+
+    @GetMapping("/list")
+    public CommonResponse<Object> getStories(
+            @RequestParam Long cursorId,
+            @RequestParam int size) {
+
+//        Page<ResponseStoryDto> stories = storyService.getStories(sort, category, page, size);
+        Slice<ResponseStoryDto> allStories = storyService.findAllStories(cursorId, size);
+        return CommonResponse.builder()
+                .returnCode("200")
+                .returnMessage("성공")
+                .info(allStories)
+                .build();
+    }
+}
