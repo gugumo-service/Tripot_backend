@@ -1,3 +1,5 @@
 spring:
   application:
     name: module-common
+  config:
+    import: 'aws-parameterstore:/config/tripot_prod/'
