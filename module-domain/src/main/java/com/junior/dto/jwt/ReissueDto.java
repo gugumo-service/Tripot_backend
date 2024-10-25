@@ -1,4 +1,4 @@
-package com.junior.dto;
+package com.junior.dto.jwt;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

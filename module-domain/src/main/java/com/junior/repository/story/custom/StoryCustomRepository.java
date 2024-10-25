@@ -1,6 +1,6 @@
-package com.junior.domain.repository.story.custom;
+package com.junior.repository.story.custom;
 
-import com.junior.domain.story.dto.ResponseStoryDto;
+import com.junior.dto.story.ResponseStoryDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;

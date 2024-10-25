@@ -1,8 +1,7 @@
 package com.junior.domain.member;
 
 
-import com.junior.dto.ActivateMemberDto;
-import com.junior.dto.OAuth2UserInfo;
+import com.junior.dto.member.ActivateMemberDto;
 import jakarta.persistence.*;
 import lombok.*;
 

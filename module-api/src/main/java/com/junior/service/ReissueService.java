@@ -1,7 +1,7 @@
 package com.junior.service;
 
-import com.junior.dto.LoginCreateJwtDto;
-import com.junior.dto.ReissueDto;
+import com.junior.dto.jwt.LoginCreateJwtDto;
+import com.junior.dto.jwt.ReissueDto;
 import com.junior.exception.StatusCode;
 import com.junior.exception.JwtErrorException;
 import com.junior.security.JwtUtil;

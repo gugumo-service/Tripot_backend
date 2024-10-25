@@ -1,4 +1,4 @@
-package com.junior.dto;
+package com.junior.dto.oauth2;
 
 import lombok.Getter;
 

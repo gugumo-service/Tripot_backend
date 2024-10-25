@@ -2,10 +2,10 @@ package com.junior.service;
 
 import com.junior.domain.member.Member;
 import com.junior.domain.member.MemberStatus;
-import com.junior.dto.ActivateMemberDto;
+import com.junior.dto.member.ActivateMemberDto;
 import com.junior.exception.StatusCode;
 import com.junior.exception.NotValidMemberException;
-import com.junior.repository.MemberRepository;
+import com.junior.repository.member.MemberRepository;
 import com.junior.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.junior.exceptionHandler;
+package com.junior.handler;
 
 import com.junior.exception.CustomException;
 import com.junior.response.CommonResponse;

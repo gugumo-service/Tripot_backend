@@ -1,4 +1,4 @@
-package com.junior.dto;
+package com.junior.dto.jwt;
 
 import lombok.Builder;
 import lombok.Getter;

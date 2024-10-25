@@ -1,7 +1,7 @@
-package com.junior.domain.repository.story.custom;
+package com.junior.repository.story.custom;
 
-import com.junior.domain.story.dto.QResponseStoryDto;
-import com.junior.domain.story.dto.ResponseStoryDto;
+import com.junior.dto.story.QResponseStoryDto;
+import com.junior.dto.story.ResponseStoryDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;

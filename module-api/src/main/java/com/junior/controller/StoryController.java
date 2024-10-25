@@ -1,18 +1,13 @@
 package com.junior.controller;
 
-import com.junior.domain.story.dto.CreateStoryDto;
-import com.junior.domain.story.dto.ResponseStoryDto;
+import com.junior.dto.story.CreateStoryDto;
+import com.junior.dto.story.ResponseStoryDto;
 import com.junior.exception.StatusCode;
 import com.junior.response.CommonResponse;
 import com.junior.service.story.StoryService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor

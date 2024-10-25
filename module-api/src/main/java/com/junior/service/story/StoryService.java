@@ -1,9 +1,9 @@
 package com.junior.service.story;
 
-import com.junior.domain.repository.story.StoryRepository;
+import com.junior.repository.story.StoryRepository;
 import com.junior.domain.story.Story;
-import com.junior.domain.story.dto.CreateStoryDto;
-import com.junior.domain.story.dto.ResponseStoryDto;
+import com.junior.dto.story.CreateStoryDto;
+import com.junior.dto.story.ResponseStoryDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

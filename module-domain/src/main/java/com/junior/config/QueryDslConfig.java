@@ -1,4 +1,4 @@
-package com.junior.domain.config;
+package com.junior.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;

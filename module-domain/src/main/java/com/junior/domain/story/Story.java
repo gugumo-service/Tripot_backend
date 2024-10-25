@@ -1,6 +1,6 @@
 package com.junior.domain.story;
 
-import com.junior.domain.Member;
+import com.junior.domain.member.Member;
 import com.junior.domain.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

@@ -1,4 +1,4 @@
-package com.junior.domain.story.dto;
+package com.junior.dto.story;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
@@ -19,7 +19,6 @@ public class ResponseStoryDto {
 
 
     @QueryProjection
-
     public ResponseStoryDto(Long id, String title, String content, double latitude, double longitude, String city, Long likeCnt, boolean isHidden) {
         this.id = id;
         this.title = title;

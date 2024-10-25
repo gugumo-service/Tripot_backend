@@ -1,4 +1,4 @@
-package com.junior.domain.story.dto;
+package com.junior.dto.story;
 
 import jakarta.persistence.Column;
 import lombok.*;
