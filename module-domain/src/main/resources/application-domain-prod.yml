@@ -2,7 +2,7 @@ spring:
   config:
     activate:
       on-profile: prod
-    import: aws-parameterstore:/config/tripot-prod/
+    import: 'aws-parameterstore:'
   application:
     name: module-domain
   datasource:
