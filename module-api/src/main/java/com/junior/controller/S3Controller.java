@@ -13,21 +13,21 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/s3")
 public class S3Controller {
 
     private final S3Service s3Service;
 
-    @PostMapping("/s3UploadImage")
+    @PostMapping("/new")
     public CommonResponse<String> fileUpload(
             @RequestPart MultipartFile img) {
 
         String url = s3Service.saveFile(img);
 
         return CommonResponse.<String>builder()
-                .returnCode(StatusCode.S3_UPLOAD_SUCCESS.getCode())
-                .returnMessage(StatusCode.S3_UPLOAD_SUCCESS.getMessage())
-                .info(url)
+                .customCode(StatusCode.S3_UPLOAD_SUCCESS.getCustomCode())
+                .customMessage(StatusCode.S3_UPLOAD_SUCCESS.getCustomMessage())
+                .data(url)
                 .build();
     }
 }

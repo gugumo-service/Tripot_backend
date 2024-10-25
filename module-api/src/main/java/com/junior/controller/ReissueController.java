@@ -1,9 +1,8 @@
 package com.junior.controller;
 
-import com.junior.dto.ReissueDto;
+import com.junior.dto.jwt.ReissueDto;
 import com.junior.service.ReissueService;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

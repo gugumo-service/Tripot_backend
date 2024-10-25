@@ -1,6 +1,6 @@
 package com.junior.service;
 
-import com.junior.repository.MemberRepository;
+import com.junior.repository.member.MemberRepository;
 import com.junior.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -2,7 +2,7 @@ package com.junior.security;
 
 
 import com.junior.domain.member.Member;
-import com.junior.dto.OAuth2UserInfo;
+import com.junior.dto.oauth2.OAuth2UserInfo;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

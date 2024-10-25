@@ -1,12 +1,10 @@
 package com.junior.controller;
 
-import com.junior.dto.ActivateMemberDto;
-import com.junior.exception.StatusCode;
+import com.junior.dto.member.ActivateMemberDto;
 import com.junior.response.CommonResponse;
 import com.junior.security.UserPrincipal;
 import com.junior.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,8 +26,8 @@ public class MemberController {
     public CommonResponse<String> activeMember(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody ActivateMemberDto activateMemberDto) {
         memberService.activateMember(userPrincipal, activateMemberDto);
 
-
-        return CommonResponse.of(ACTIVATE_MEMBER.getCode(), ACTIVATE_MEMBER.getMessage(), null);
+//        return CommonResponse.of(ACTIVATE_MEMBER.getCustomCode(), ACTIVATE_MEMBER.getCustomMessage(), null);
+        return CommonResponse.success(ACTIVATE_MEMBER, null);
     }
 
     /**
@@ -41,13 +39,15 @@ public class MemberController {
     @GetMapping("/api/v1/members/nicknames/check-valid")
     public CommonResponse<Boolean> checkNicknameValid(@RequestParam("nickname") String nickname) {
 
-        return CommonResponse.of(CHECK_NICKNAME_MEMBER.getCode(), CHECK_NICKNAME_MEMBER.getMessage(), !memberService.checkDuplicateNickname(nickname));
+//        return CommonResponse.of(CHECK_NICKNAME_MEMBER.getCustomCode(), CHECK_NICKNAME_MEMBER.getCustomMessage(), !memberService.checkDuplicateNickname(nickname));
+        return CommonResponse.success(CHECK_NICKNAME_MEMBER, !memberService.checkDuplicateNickname(nickname));
     }
 
     @DeleteMapping("/api/v1/members")
     public CommonResponse<String> deleteMember(@AuthenticationPrincipal UserPrincipal principal) {
         memberService.deleteMember(principal);
 
-        return CommonResponse.of(DELETE_MEMBER.getCode(), DELETE_MEMBER.getMessage(), null);
+//        return CommonResponse.of(DELETE_MEMBER.getCustomCode(), DELETE_MEMBER.getCustomMessage(), null);
+        return CommonResponse.success(DELETE_MEMBER, null);
     }
 }
