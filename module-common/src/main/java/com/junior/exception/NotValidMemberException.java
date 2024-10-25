@@ -8,7 +8,7 @@ public class NotValidMemberException extends RuntimeException {
     private StatusCode statusCode;
 
     public NotValidMemberException(StatusCode statusCode) {
-        super(statusCode.getMessage());
+        super(statusCode.getCustomMessage());
         this.statusCode = statusCode;
     }
 }

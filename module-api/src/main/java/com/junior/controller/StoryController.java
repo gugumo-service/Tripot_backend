@@ -22,9 +22,9 @@ public class StoryController {
         storyService.createStory(createStoryDto);
 
         return CommonResponse.builder()
-                .returnCode(StatusCode.STORY_CREATE_SUCCESS.getCode())
-                .returnMessage(StatusCode.STORY_CREATE_SUCCESS.getMessage())
-                .info(null)
+                .customCode(StatusCode.STORY_CREATE_SUCCESS.getCustomCode())
+                .customMessage(StatusCode.STORY_CREATE_SUCCESS.getCustomMessage())
+                .data(null)
                 .build();
     }
 
@@ -36,9 +36,9 @@ public class StoryController {
 //        Page<ResponseStoryDto> stories = storyService.getStories(sort, category, page, size);
         Slice<ResponseStoryDto> allStories = storyService.findAllStories(cursorId, size);
         return CommonResponse.builder()
-                .returnCode("200")
-                .returnMessage("성공")
-                .info(allStories)
+                .customCode("200")
+                .customMessage("성공")
+                .data(allStories)
                 .build();
     }
 }

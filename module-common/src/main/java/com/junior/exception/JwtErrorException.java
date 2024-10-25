@@ -8,7 +8,7 @@ public class JwtErrorException extends RuntimeException {
   private StatusCode statusCode;
 
   public JwtErrorException(StatusCode statusCode) {
-    super(statusCode.getMessage());
+    super(statusCode.getCustomMessage());
     this.statusCode = statusCode;
 
   }

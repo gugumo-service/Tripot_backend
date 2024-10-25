@@ -25,9 +25,9 @@ public class S3Controller {
         String url = s3Service.saveFile(img);
 
         return CommonResponse.<String>builder()
-                .returnCode(StatusCode.S3_UPLOAD_SUCCESS.getCode())
-                .returnMessage(StatusCode.S3_UPLOAD_SUCCESS.getMessage())
-                .info(url)
+                .customCode(StatusCode.S3_UPLOAD_SUCCESS.getCustomCode())
+                .customMessage(StatusCode.S3_UPLOAD_SUCCESS.getCustomMessage())
+                .data(url)
                 .build();
     }
 }
