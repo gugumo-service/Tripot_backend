@@ -6,8 +6,8 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
-@EntityScan("com.junior.domain")
-@EnableJpaRepositories("com.junior.repository")
+@EntityScan(basePackages = {"com.junior.domain"})
+@EnableJpaRepositories(basePackages = {"com.junior.repository"})
 @PropertySource(ignoreResourceNotFound = true,
         value = {
                 "classpath:application-domain-${spring.profiles.active}.yml",

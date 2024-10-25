@@ -1,9 +1,9 @@
 #!/bin/bash
 
 ROOT_PATH="/home/ubuntu/tripot_cicd"
-JAR=$(ls $ROOT_PATH/build/libs/ | grep '.jar' | tail -n 1)
-STOP_LOG="$ROOT_PATH/stop.log"
-SERVICE_PID=$(pgrep -f $JAR) # 실행중인 Spring 서버의 PID
+API_JAR="$ROOT_PATH/api_application.jar"
+STOP_LOG="$ROOT_PATH/api_stop.log"
+SERVICE_PID=$(pgrep -f $API_JAR) # 실행중인 Spring 서버의 PID
 
 NOW=$(date +%c)
 
