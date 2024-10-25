@@ -1,15 +1,15 @@
 package com.junior.domain.repository.story;
 
-import com.junior.domain.config.QueryDslConfig;
+import com.junior.config.QueryDslConfig;
 import com.junior.domain.story.Story;
-import com.junior.domain.story.dto.ResponseStoryDto;
+import com.junior.dto.story.ResponseStoryDto;
+import com.junior.repository.story.StoryRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
