@@ -2,11 +2,10 @@ spring:
   application:
     name: module-common
   config:
-    import: 'aws-parameterstore:/config/tripot_prod/'
+    import: 'aws-parameterstore:/config/tripot-prod/'
 
 aws:
   paramstore:
     enabled: true
     prefix: /config
-    profile-separator: _
     name: tripot

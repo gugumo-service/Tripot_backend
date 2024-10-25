@@ -2,7 +2,7 @@ spring:
   config:
     activate:
       on-profile: prod
-    import: 'aws-parameterstore:/config/tripot_prod/'
+    import: 'aws-parameterstore:/config/tripot-prod/'
   application:
     name: module-domain
   datasource:
@@ -27,5 +27,4 @@ aws:
   paramstore:
     enabled: true
     prefix: /config
-    profile-separator: _
     name: tripot
