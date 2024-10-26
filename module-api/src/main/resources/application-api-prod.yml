@@ -30,12 +30,12 @@ spring:
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
 
-  config:
-    import: aws-parameterstore:/config/tripot-prod/
+
 
 logging:
   level:
     root: info
+
 
 
 cloud:
