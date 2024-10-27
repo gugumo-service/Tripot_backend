@@ -1,8 +1,5 @@
 package com.junior.dto.member;
 
-import lombok.Getter;
-
-
 public record ActivateMemberDto(
         String nickname,
         // 서비스 이용 약관 동의 여부
