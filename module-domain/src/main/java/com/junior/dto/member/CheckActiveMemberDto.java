@@ -5,8 +5,6 @@ public record CheckActiveMemberDto (
         String nickname,
         Boolean isActivate
 
-)
-{
-
+) {
 
 }

@@ -1,32 +1,31 @@
 package com.junior.dto.story;
 
 import com.querydsl.core.annotations.QueryProjection;
-import lombok.Builder;
-import lombok.Getter;
+import java.time.LocalDateTime;
 
-@Getter
-@Builder
-public class ResponseStoryDto {
-
-    private Long id;            // pk
-    private String title;       // 제목
-    private String content;     // 내용
-    private double latitude;
-    private double longitude;
-    private String city;        // 위도, 경도가 속하는 지역
-    private Long likeCnt;
-    boolean isHidden;
-
-
+public record ResponseStoryDto(
+        Long id,
+        String title,
+        String content,
+        String thumbnailImg,
+        double latitude,
+        double longitude,
+        String city,
+        Long likeCnt,
+        boolean isHidden,
+        LocalDateTime createDate
+) {
     @QueryProjection
-    public ResponseStoryDto(Long id, String title, String content, double latitude, double longitude, String city, Long likeCnt, boolean isHidden) {
+    public ResponseStoryDto(Long id, String title, String content, String thumbnailImg, double latitude, double longitude, String city, Long likeCnt, boolean isHidden, LocalDateTime createDate) {
         this.id = id;
         this.title = title;
         this.content = content;
+        this.thumbnailImg = thumbnailImg;
         this.latitude = latitude;
         this.longitude = longitude;
         this.city = city;
         this.likeCnt = likeCnt;
         this.isHidden = isHidden;
+        this.createDate = createDate;
     }
 }

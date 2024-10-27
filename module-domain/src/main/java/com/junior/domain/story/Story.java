@@ -1,7 +1,7 @@
 package com.junior.domain.story;
 
-import com.junior.domain.member.Member;
 import com.junior.domain.base.BaseEntity;
+import com.junior.domain.member.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -50,7 +50,8 @@ public class Story extends BaseEntity {
     boolean isHidden;
 
     @Builder(builderMethodName = "createStory", builderClassName = "CreateStory")
-    public Story(String title, String content, String city, String thumbnailImg, double latitude, double longitude, boolean isHidden) {
+    public Story(Member member, String title, String content, String city, String thumbnailImg, double latitude, double longitude, boolean isHidden) {
+        this.member = member;
         this.title = title;
         this.content = content;
         this.city = city;

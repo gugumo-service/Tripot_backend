@@ -1,11 +1,12 @@
 package com.junior.service.story;
 
+import com.junior.domain.member.Member;
 import com.junior.repository.story.StoryRepository;
 import com.junior.domain.story.Story;
 import com.junior.dto.story.CreateStoryDto;
 import com.junior.dto.story.ResponseStoryDto;
+import com.junior.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -20,30 +21,38 @@ public class StoryService {
     private final StoryRepository storyRepository;
 
     @Transactional
-    public void createStory(CreateStoryDto createStoryDto) {
+    public void createStory(UserPrincipal userPrincipal, CreateStoryDto createStoryDto) {
+
+        Member member = userPrincipal.getMember();
+
         Story story = Story.createStory()
-                .title(createStoryDto.getTitle())
-                .content(createStoryDto.getContent())
-                .city(createStoryDto.getCity())
-                .thumbnailImg(createStoryDto.getThumbnailImg())
-                .latitude(createStoryDto.getLatitude())
-                .longitude(createStoryDto.getLongitude())
+                .member(member)
+                .title(createStoryDto.title())
+                .content(createStoryDto.content())
+                .city(createStoryDto.city())
+                .thumbnailImg(createStoryDto.thumbnailImg())
+                .latitude(createStoryDto.latitude())
+                .longitude(createStoryDto.longitude())
                 .isHidden(createStoryDto.isHidden())
                 .build();
 
         storyRepository.save(story);
     }
 
-    public Page<ResponseStoryDto> getStories(String sort, String category, int page, int size) {
-
-        Pageable pageable = PageRequest.of(page, size);
-
-        return storyRepository.findAllStories(sort, category, pageable);
-    }
 
     public Slice<ResponseStoryDto> findAllStories(Long cursorId, int size) {
         Pageable pageable = PageRequest.of(0, size);
 
         return storyRepository.findAllStories(cursorId, pageable);
     }
+
+    public Slice<ResponseStoryDto> findStoriesByMemberAndCity(UserPrincipal userPrincipal, Long cursorId, int size, String city) {
+
+        Member member = userPrincipal.getMember();
+
+        Pageable pageable = PageRequest.of(0, size);
+
+        return storyRepository.findStoriesByMemberAndCity(cursorId, pageable, city, member);
+    }
+
 }

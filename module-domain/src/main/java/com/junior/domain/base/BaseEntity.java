@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
 @Getter
-public class BaseEntity {
+public abstract class BaseEntity {
 
     @CreatedDate
     @Column(updatable = false)
@@ -24,10 +24,11 @@ public class BaseEntity {
     @LastModifiedDate
     private LocalDateTime lastModifiedDate;
 
+    // createdBy, lastModifiedBy는 pk값을 저장 
     @CreatedBy
     @Column(updatable = false)
-    private String createBy;
+    private Long createdBy;
 
     @LastModifiedBy
-    private String lastModifiedBy;
+    private Long lastModifiedBy;
 }
