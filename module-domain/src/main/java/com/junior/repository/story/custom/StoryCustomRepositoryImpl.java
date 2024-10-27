@@ -1,5 +1,6 @@
 package com.junior.repository.story.custom;
 
+import com.junior.domain.member.Member;
 import com.junior.dto.story.QResponseStoryDto;
 import com.junior.dto.story.ResponseStoryDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -20,26 +21,7 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
     private final JPAQueryFactory query;
 
     QResponseStoryDto createQResponseStoryDto() {
-        return new QResponseStoryDto(story.id, story.title, story.content, story.latitude, story.longitude, story.city, story.likeCnt, story.isHidden);
-    }
-
-    @Override
-    public List<ResponseStoryDto> findStoryByTitleDevTest(String title) {
-
-        return query.select(createQResponseStoryDto())
-                .from(story)
-                .where(story.title.eq(title))
-                .fetch();
-    }
-
-    @Override
-    public Page<ResponseStoryDto> findAllStories(String sort, String category, Pageable pageable) {
-
-        List<ResponseStoryDto> stories = query.select(createQResponseStoryDto())
-                .from(story)
-                .fetch();
-
-        return new PageImpl<>(stories, pageable, stories.size());
+        return new QResponseStoryDto(story.id, story.title, story.content, story.thumbnailImg, story.latitude, story.longitude, story.city, story.likeCnt, story.isHidden, story.createdDate);
     }
 
     public Slice<ResponseStoryDto> findAllStories(Long cursorId, Pageable pageable) {
@@ -47,22 +29,51 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
                 .from(story)
                 .where(eqCursorId(cursorId))
                 .limit(pageable.getPageSize() + 1)
-                .orderBy(story.id.asc())
+                .orderBy(story.createdDate.desc())
                 .fetch();
 
-        boolean hasNext = false;
-        if(stories.size() == pageable.getPageSize()+1) {
-            stories.remove(pageable.getPageSize());
-            hasNext = true;
-        }
+        boolean hasNext = isHaveNextStoryList(stories, pageable);
 
         return new SliceImpl<>(stories, pageable, hasNext);
     }
 
+    @Override
+    public Slice<ResponseStoryDto> findStoriesByMemberAndCity(Long cursorId, Pageable pageable, String city, Member member) {
+        List<ResponseStoryDto> stories = query.select(createQResponseStoryDto())
+                .from(story)
+                .where(story.city.eq(city),
+                        story.member.eq(member),
+                        eqCursorId(cursorId))
+                .limit(pageable.getPageSize() + 1)
+                .orderBy(story.createdDate.desc())
+                .fetch();
+
+        boolean hasNext = isHaveNextStoryList(stories, pageable);
+
+        return new SliceImpl<>(stories, pageable, hasNext);
+    }
+
+    private boolean isHaveNextStoryList(List<ResponseStoryDto> stories, Pageable pageable) {
+
+        boolean hasNext;
+
+        if(stories.size() == pageable.getPageSize() + 1) {
+            stories.remove(pageable.getPageSize());
+            hasNext = true;
+        }
+        else {
+            hasNext = false;
+        }
+
+        return hasNext;
+    }
+
     private BooleanExpression eqCursorId(Long cursorId) {
         if(cursorId != null) {
-            return story.id.gt(cursorId);
+            return story.id.lt(cursorId);
         }
         return null;
     }
+
+
 }
