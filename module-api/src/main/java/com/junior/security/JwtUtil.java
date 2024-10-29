@@ -49,7 +49,7 @@ public class JwtUtil {
 
 
         if(category.equals("access")){
-            expireDate=Timestamp.valueOf(loginCreateJwtDto.requestTimeMs().plusMinutes(5));
+            expireDate=Timestamp.valueOf(loginCreateJwtDto.requestTimeMs().plusMonths(3));
         } else if (category.equals("refresh")) {
             expireDate=Timestamp.valueOf(loginCreateJwtDto.requestTimeMs().plusMonths(6));
         }
