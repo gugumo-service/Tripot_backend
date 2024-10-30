@@ -1,6 +1,7 @@
 package com.junior.service.story;
 
 import com.junior.domain.member.Member;
+import com.junior.dto.story.GeoPointDto;
 import com.junior.repository.story.StoryRepository;
 import com.junior.domain.story.Story;
 import com.junior.dto.story.CreateStoryDto;
@@ -55,4 +56,23 @@ public class StoryService {
         return storyRepository.findStoriesByMemberAndCity(cursorId, pageable, city, member);
     }
 
+    @Transactional
+    public void editStory(UserPrincipal userPrincipal, Long storyId, CreateStoryDto createStoryDto) {
+
+        Member findMember = userPrincipal.getMember();
+
+        Story findStory = storyRepository.findStoryByIdAndMember(storyId, findMember);
+        
+        // 더티 체킹을 통해 수정쿼리가 자동으로 발생
+        findStory.updateStory(createStoryDto);
+    }
+
+    public Slice<ResponseStoryDto> findStoriesByMemberAndMap(UserPrincipal userPrincipal, Long cursorId, int size, GeoPointDto geoPointLt, GeoPointDto geoPointRb) {
+
+        Member findMember = userPrincipal.getMember();
+
+        Pageable pageable = PageRequest.of(0, size);
+
+        return storyRepository.findStoriesByMemberAndMap(cursorId, pageable, geoPointLt, geoPointRb, findMember);
+    }
 }

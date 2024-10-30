@@ -1,8 +1,11 @@
 package com.junior.repository.story.custom;
 
 import com.junior.domain.member.Member;
+import com.junior.domain.story.QStory;
+import com.junior.domain.story.Story;
 import com.junior.dto.story.QResponseStoryDto;
 import com.junior.dto.story.ResponseStoryDto;
+import com.junior.dto.story.GeoPointDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +47,42 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
                 .where(story.city.eq(city),
                         story.member.eq(member),
                         eqCursorId(cursorId))
+                .limit(pageable.getPageSize() + 1)
+                .orderBy(story.createdDate.desc())
+                .fetch();
+
+        boolean hasNext = isHaveNextStoryList(stories, pageable);
+
+        return new SliceImpl<>(stories, pageable, hasNext);
+    }
+
+    @Override
+    public Story findStoryByIdAndMember(Long storyId, Member member) {
+
+        List<Story> stories = query.select(QStory.story)
+                .from(story)
+                .where(QStory.story.member.eq(member),
+                        QStory.story.id.eq(storyId))
+                .fetch();
+
+        return stories.get(0);
+    }
+
+    @Override
+    public Slice<ResponseStoryDto> findStoriesByMemberAndMap(Long cursorId, Pageable pageable, GeoPointDto geoPointLt, GeoPointDto geoPointRb, Member findMember) {
+
+        List<ResponseStoryDto> stories = query.select(createQResponseStoryDto())
+                .from(story)
+                .where(story.latitude.between(
+                                Math.min(geoPointLt.latitude(), geoPointRb.latitude()),
+                                Math.max(geoPointLt.latitude(), geoPointRb.latitude())
+                        ),
+                        story.longitude.between(
+                                Math.min(geoPointLt.longitude(), geoPointRb.longitude()),
+                                Math.max(geoPointLt.longitude(), geoPointRb.longitude())
+                        ),
+                        eqCursorId(cursorId)
+                )
                 .limit(pageable.getPageSize() + 1)
                 .orderBy(story.createdDate.desc())
                 .fetch();
