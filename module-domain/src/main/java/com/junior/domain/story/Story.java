@@ -2,6 +2,7 @@ package com.junior.domain.story;
 
 import com.junior.domain.base.BaseEntity;
 import com.junior.domain.member.Member;
+import com.junior.dto.story.CreateStoryDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -62,5 +63,14 @@ public class Story extends BaseEntity {
 
         this.viewCnt = 0L;
         this.likeCnt = 0L;
+    }
+
+    public void updateStory(CreateStoryDto createStoryDto) {
+        this.title = createStoryDto.title();
+        this.content = createStoryDto.content();
+        this.city = createStoryDto.city();
+        this.latitude = createStoryDto.latitude();
+        this.longitude = createStoryDto.longitude();
+        this.thumbnailImg = createStoryDto.thumbnailImg();
     }
 }

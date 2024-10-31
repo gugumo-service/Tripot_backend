@@ -7,6 +7,7 @@ import com.junior.domain.member.MemberStatus;
 import com.junior.domain.member.SignUpType;
 import com.junior.domain.story.Story;
 import com.junior.dto.story.ResponseStoryDto;
+import com.junior.dto.story.GeoPointDto;
 import com.junior.repository.member.MemberRepository;
 import com.junior.repository.story.StoryRepository;
 import org.assertj.core.api.Assertions;
@@ -59,7 +60,7 @@ class StoryCustomRepositoryImplTest {
     }
 
     @Test
-    @DisplayName("Story를 저장할 수 있다.")
+    @DisplayName("Story를 저장할 때 아무런 예외가 발생하지 않는다.")
     public void saveStoryTest() {
 
         Member member = createMember("nickname");
@@ -70,7 +71,7 @@ class StoryCustomRepositoryImplTest {
     }
 
     @Test
-    @DisplayName("Story를 원하는 수만큼 조회할 수 있다.")
+    @DisplayName("Story를 원하는 수만큼 가져올 수 있으며, 최신 순으로 가져와야 한다.")
     public void findAllStoriesTest() {
         Member member = createMember("nickname");
         memberRepository.save(member);
@@ -108,7 +109,7 @@ class StoryCustomRepositoryImplTest {
     }
 
     @Test
-    @DisplayName("회원과 도시를 필터링할 수 있다.")
+    @DisplayName("회원 별 특정 도시로 작성된 story를 최신 순으로 가져올 수 있다.")
     public void findStoriesByMemberAndCityTest() {
         Member member1 = createMember("nickname1");
         Member member2 = createMember("nickname2");
@@ -147,5 +148,81 @@ class StoryCustomRepositoryImplTest {
 
         Assertions.assertThat(contents2.size()).isEqualTo(1);
         Assertions.assertThat(contents2.get(0).title()).isEqualTo("member1 title3");
+    }
+
+    @Test
+    @DisplayName("회원이 보고 있는 지도를 기준으로 그 회원이 작성한 story를 최신 순으로 가져올 수 있다.")
+    public void findStoriesByMemberAndMapTest() {
+        Member member = createMember("nickname1");
+        memberRepository.save(member);
+
+        GeoPointDto geoPointLt = GeoPointDto.builder()
+                .latitude(0.0)
+                .longitude(10.0)
+                .build();
+
+        GeoPointDto geoPointRb = GeoPointDto.builder()
+                .latitude(10.0)
+                .longitude(0.0)
+                .build();
+
+        Story inside1 = Story.builder()
+                .title("inside1")
+                .member(member)
+                .content("content")
+                .longitude(5.0)
+                .latitude(5.0)
+                .city("city")
+                .isHidden(true)
+                .thumbnailImg("thumbURL")
+                .build();
+
+        Story inside2 = Story.builder()
+                .title("inside2")
+                .member(member)
+                .content("content")
+                .longitude(5.0)
+                .latitude(5.0)
+                .city("city")
+                .isHidden(true)
+                .thumbnailImg("thumbURL")
+                .build();
+
+        Story outside1 = Story.builder()
+                .title("outside1")
+                .member(member)
+                .content("content")
+                .longitude(-10.0)
+                .latitude(-10.0)
+                .city("city")
+                .isHidden(true)
+                .thumbnailImg("thumbURL")
+                .build();
+
+        Story outside2 = Story.builder()
+                .title("outside2")
+                .member(member)
+                .content("content")
+                .longitude(20.0)
+                .latitude(20.0)
+                .city("city")
+                .isHidden(true)
+                .thumbnailImg("thumbURL")
+                .build();
+
+        storyRepository.save(inside1);
+        storyRepository.save(inside2);
+        storyRepository.save(outside1);
+        storyRepository.save(outside2);
+
+        Pageable pageable = PageRequest.of(0, 3);
+
+        Slice<ResponseStoryDto> stories = storyRepository.findStoriesByMemberAndMap(null, pageable, geoPointLt, geoPointRb, member);
+        List<ResponseStoryDto> contents = stories.getContent();
+
+        Assertions.assertThat(contents.size()).isEqualTo(2);
+        Assertions.assertThat(contents.get(0).title()).isEqualTo("inside2");
+        Assertions.assertThat(contents.get(1).title()).isEqualTo("inside1");
+
     }
 }

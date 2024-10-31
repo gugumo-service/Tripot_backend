@@ -10,6 +10,5 @@ public class JwtErrorException extends RuntimeException {
   public JwtErrorException(StatusCode statusCode) {
     super(statusCode.getCustomMessage());
     this.statusCode = statusCode;
-
   }
 }
