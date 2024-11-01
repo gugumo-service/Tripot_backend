@@ -52,9 +52,9 @@ public class Member {
 
     public void activateMember(ActivateMemberDto activateMemberDto) {
         nickname = activateMemberDto.nickname();
-        isAgreeTermsUse = activateMemberDto.isAgreeTermsUse();
-        isAgreeCollectingUsingPersonalInformation = activateMemberDto.isAgreeCollectingUsingPersonalInformation();
-        isAgreeMarketing = activateMemberDto.isAgreeMarketing();
+//        isAgreeTermsUse = activateMemberDto.isAgreeTermsUse();
+//        isAgreeCollectingUsingPersonalInformation = activateMemberDto.isAgreeCollectingUsingPersonalInformation();
+//        isAgreeMarketing = activateMemberDto.isAgreeMarketing();
         recommendLocation= activateMemberDto.recommendLocation();
         status = MemberStatus.ACTIVE;
     }

@@ -78,7 +78,6 @@ public class KakaoOAuth2LoginStrategy implements OAuth2MemberStrategy {
 
         log.info("[{}] Auth ID ---> {} ", getClass().getSimpleName(), userInfo.getId());
         log.info("[{}] NickName ---> {} ", getClass().getSimpleName(), userInfo.getKakaoAccount().getProfile().getNickName());
-        log.info("[{}] ProfileImageUrl ---> {} ", getClass().getSimpleName(), userInfo.getKakaoAccount().getProfile().getProfileImageUrl());
 
         return userInfo;
     }

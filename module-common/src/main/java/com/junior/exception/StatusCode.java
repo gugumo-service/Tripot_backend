@@ -36,10 +36,10 @@ public enum StatusCode {
     OAUTH2_LOGIN_SUCCESS(200, "MEMBER-SUCCESS-004", "소셜 로그인 성공"),
 
     // JWT 관련 예외
-    EXPIRED_TOKEN(400, "JWT-ERR-001", "만료된 토큰입니다."),
-    TOKEN_NOT_EXIST(400, "JWT-ERR-002", "존재하지 않는 토큰입니다."),
-    INVALID_REFRESH_TOKEN(400, "JWT-ERR-003", "Refresh token이 아닙니다."),
-    INVALID_MEMBER(400, "MEMBER-ERR-001", "유효하지 않은 회원입니다."),
+    EXPIRED_TOKEN(400, "JWT-ERR-001", "만료된 토큰"),
+    TOKEN_NOT_EXIST(400, "JWT-ERR-002", "존재하지 않는 토큰"),
+    INVALID_REFRESH_TOKEN(400, "JWT-ERR-003", "Refresh token이 아님"),
+    INVALID_MEMBER(400, "MEMBER-ERR-001", "유효하지 않은 회원"),
 
     // 공통 예외
     UNKNOWN_ERROR(9999, "UNKNOWN-ERROR", "정의되지 않은 예외");
