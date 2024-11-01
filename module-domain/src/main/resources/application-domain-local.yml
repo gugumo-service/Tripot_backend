@@ -26,8 +26,5 @@ spring:
     level:
       org.hibernate.SQL: info
       org.hibernate.type: trace
-  data:
-    redis:
-      host: localhost
-      port: 6379
+
 

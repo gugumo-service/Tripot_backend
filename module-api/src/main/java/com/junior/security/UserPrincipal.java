@@ -2,31 +2,21 @@ package com.junior.security;
 
 
 import com.junior.domain.member.Member;
-import com.junior.dto.oauth2.OAuth2UserInfo;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
 
 @Getter
-public class UserPrincipal implements OAuth2User, UserDetails {
+public class UserPrincipal implements UserDetails {
 
-    private Member member;
-    private OAuth2UserInfo oAuth2UserInfo;
+    private Member member;          //dirty checking 불가능
 
     //default user
     public UserPrincipal(Member member) {
         this.member = member;
-    }
-
-    //oauth2 user
-    public UserPrincipal(Member member, OAuth2UserInfo oAuth2UserInfo) {
-        this.member = member;
-        this.oAuth2UserInfo = oAuth2UserInfo;
     }
 
 
@@ -87,14 +77,5 @@ public class UserPrincipal implements OAuth2User, UserDetails {
         return UserDetails.super.isEnabled();
     }
 
-    //여기부터 oauth2user override
-    @Override
-    public Map<String, Object> getAttributes() {
-        return oAuth2UserInfo.getAttributes();
-    }
 
-    @Override
-    public String getName() {
-        return member.getUsername();
-    }
 }

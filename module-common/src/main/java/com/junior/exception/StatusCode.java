@@ -28,11 +28,12 @@ public enum StatusCode {
     S3_DUPLICATE_FILE(500, "S3-0002", "파일 중복"),
     S3_NOT_ALLOWED_EXTENSION(500, "S3-0003", "알 수 없는 이미지 확장자"),
     S3_BIGGER_THAN_MAX_SIZE(500, "S3-FAIL-0004", "사진 용량이 너무 큼"),
-    
+
     // USER 관련 예외
     ACTIVATE_MEMBER(200, "MEMBER-SUCCESS-001", "회원 활성화 성공"),
     CHECK_NICKNAME_MEMBER(200, "MEMBER-SUCCESS-002", "닉네임 사용가능 여부"),
     DELETE_MEMBER(200, "MEMBER-SUCCESS-003", "회원 삭제 성공"),
+    OAUTH2_LOGIN_SUCCESS(200, "MEMBER-SUCCESS-004", "소셜 로그인 성공"),
 
     // JWT 관련 예외
     EXPIRED_TOKEN(400, "JWT-ERR-001", "만료된 토큰입니다."),
@@ -41,8 +42,7 @@ public enum StatusCode {
     INVALID_MEMBER(400, "MEMBER-ERR-001", "유효하지 않은 회원입니다."),
 
     // 공통 예외
-    UNKNOWN_ERROR(9999, "UNKNOWN-ERROR", "정의되지 않은 예외")
-    ;
+    UNKNOWN_ERROR(9999, "UNKNOWN-ERROR", "정의되지 않은 예외");
 
     private final int httpCode;
     private final String customCode;

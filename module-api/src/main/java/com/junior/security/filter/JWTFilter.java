@@ -1,6 +1,5 @@
 package com.junior.security.filter;
 
-import com.junior.service.CustomOAuth2UserService;
 import com.junior.service.UserDetailsServiceImpl;
 import com.junior.security.JwtUtil;
 import io.jsonwebtoken.ExpiredJwtException;
