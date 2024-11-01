@@ -5,12 +5,12 @@ spring:
     group:
       "local": "local"
       "prod": "prod"
-#  config:
-#    import: aws-parameterstore:/config/tripot-prod/
-#
-#aws:
-#  paramstore:
-#    enabled: true
-#    prefix: /config
-#    name: tripot
-#    profile-separator: '-'
+  config:
+    import: aws-parameterstore:/config/tripot-prod/
+
+aws:
+  paramstore:
+    enabled: true
+    prefix: /config
+    name: tripot
+    profile-separator: '-'
