@@ -1,6 +1,7 @@
 package com.junior.controller;
 
 import com.junior.dto.member.ActivateMemberDto;
+import com.junior.dto.member.UpdateNicknameDto;
 import com.junior.response.CommonResponse;
 import com.junior.security.UserPrincipal;
 import com.junior.service.MemberService;
@@ -43,7 +44,21 @@ public class MemberController {
         return CommonResponse.success(CHECK_NICKNAME_MEMBER, !memberService.checkDuplicateNickname(nickname));
     }
 
-    @DeleteMapping("/api/v1/members")
+    @PatchMapping("/api/v1/members/nicknames")
+    public CommonResponse<String> changeNickname(@AuthenticationPrincipal UserPrincipal principal, @RequestBody UpdateNicknameDto updateNicknameDto){
+
+        memberService.updateNickname(principal, updateNicknameDto);
+
+
+        return CommonResponse.success(UPDATE_NICKNAME_MEMBER, null);
+    }
+
+     /**
+     * 회원 탈퇴 기능
+     * @param principal
+     * @return 회원 탈퇴 완료
+     */
+                                                 @DeleteMapping("/api/v1/members")
     public CommonResponse<String> deleteMember(@AuthenticationPrincipal UserPrincipal principal) {
         memberService.deleteMember(principal);
 
