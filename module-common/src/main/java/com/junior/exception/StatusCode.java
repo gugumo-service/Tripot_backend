@@ -34,6 +34,7 @@ public enum StatusCode {
     CHECK_NICKNAME_MEMBER(200, "MEMBER-SUCCESS-002", "닉네임 사용가능 여부"),
     DELETE_MEMBER(200, "MEMBER-SUCCESS-003", "회원 삭제 성공"),
     OAUTH2_LOGIN_SUCCESS(200, "MEMBER-SUCCESS-004", "소셜 로그인 성공"),
+    UPDATE_NICKNAME_MEMBER(200, "MEMBER-SUCCESS-005", "회원 닉네임 변경 성공"),
 
     // JWT 관련 예외
     EXPIRED_TOKEN(400, "JWT-ERR-001", "만료된 토큰"),

@@ -38,7 +38,7 @@ public class SecurityConfig {
 
                 //uri 권한 설정
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/login/**").permitAll()
+                        .requestMatchers("/api/v1/login/**").permitAll()
                         .requestMatchers("/api/v1/reissue").permitAll()
                         .requestMatchers("/api/v1/story/list").permitAll()
                         //닉네임 중복 여부 확인

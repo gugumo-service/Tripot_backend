@@ -2,6 +2,7 @@ package com.junior.domain.member;
 
 
 import com.junior.dto.member.ActivateMemberDto;
+import com.junior.dto.member.UpdateNicknameDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -75,5 +76,9 @@ public class Member {
         this.recommendLocation = null;
 
 
+    }
+
+    public void updateNickname(UpdateNicknameDto updateNicknameDto) {
+        this.nickname = updateNicknameDto.getNickname();
     }
 }

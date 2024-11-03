@@ -3,6 +3,7 @@ package com.junior.service;
 import com.junior.domain.member.Member;
 import com.junior.domain.member.MemberStatus;
 import com.junior.dto.member.ActivateMemberDto;
+import com.junior.dto.member.UpdateNicknameDto;
 import com.junior.exception.StatusCode;
 import com.junior.exception.NotValidMemberException;
 import com.junior.repository.member.MemberRepository;
@@ -58,5 +59,20 @@ public class MemberService {
         log.info("[deleteMember] target: {}", member.getUsername());
         member.deleteMember();
 
+    }
+
+    @Transactional
+    public void updateNickname(UserPrincipal principal, UpdateNicknameDto updateNicknameDto) {
+
+        Member member = memberRepository.findById(principal.getMember().getId()).orElseThrow(
+                () -> new NotValidMemberException(StatusCode.INVALID_MEMBER)
+        );
+
+        if (member.getStatus() != MemberStatus.ACTIVE) {
+            log.warn("[{}] Invalid member = {} member.status = {}", getClass().getEnclosingMethod().getName(), member.getUsername(), member.getStatus());
+            throw new NotValidMemberException(StatusCode.INVALID_MEMBER);
+        }
+
+        member.updateNickname(updateNicknameDto);
     }
 }
