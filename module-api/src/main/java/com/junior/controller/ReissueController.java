@@ -1,6 +1,8 @@
 package com.junior.controller;
 
 import com.junior.dto.jwt.ReissueDto;
+import com.junior.exception.StatusCode;
+import com.junior.response.CommonResponse;
 import com.junior.service.ReissueService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.junior.exception.StatusCode.REISSUE_SUCCESS;
+
 @RestController
 @RequiredArgsConstructor
 public class ReissueController {
@@ -16,11 +20,11 @@ public class ReissueController {
     private final ReissueService reissueService;
 
     @PostMapping("/api/v1/reissue")
-    public ResponseEntity<String> reissue(@RequestBody ReissueDto reissueDto, HttpServletResponse response) {
+    public CommonResponse<String> reissue(@RequestBody ReissueDto reissueDto, HttpServletResponse response) {
 
         reissueService.reissue(reissueDto, response);
 
-        return ResponseEntity.ok("AccessToken 재발급 완료");
+        return CommonResponse.success(REISSUE_SUCCESS, null);
 
     }
 
