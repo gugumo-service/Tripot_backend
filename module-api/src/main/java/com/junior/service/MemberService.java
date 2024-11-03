@@ -4,14 +4,15 @@ import com.junior.domain.member.Member;
 import com.junior.domain.member.MemberStatus;
 import com.junior.dto.member.ActivateMemberDto;
 import com.junior.dto.member.UpdateNicknameDto;
-import com.junior.exception.StatusCode;
 import com.junior.exception.NotValidMemberException;
+import com.junior.exception.StatusCode;
 import com.junior.repository.member.MemberRepository;
 import com.junior.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -30,16 +31,16 @@ public class MemberService {
 
 
         if (member.getStatus() != MemberStatus.PREACTIVE) {
-            log.warn("[activateMember] Invalid member = {} member.status = {}", member.getUsername(), member.getStatus());
+            log.warn("[{}] Invalid member = {} member.status = {}", Thread.currentThread().getStackTrace()[1].getMethodName(), member.getUsername(), member.getStatus());
             throw new NotValidMemberException(StatusCode.INVALID_MEMBER);
         }
 
-        log.info("[activateMember] target: {}", member.getUsername());
+        log.info("[{}}] target: {}", Thread.currentThread().getStackTrace()[1].getMethodName(), member.getUsername());
         member.activateMember(activateMemberDto);
 
     }
 
-    public Boolean checkDuplicateNickname(String nickname){
+    public Boolean checkDuplicateNickname(String nickname) {
         log.info("[checkDuplicateNickname] target nickname: {}", nickname);
         return memberRepository.existsByNickname(nickname);
     }
@@ -52,11 +53,11 @@ public class MemberService {
         );
 
         if (member.getStatus() != MemberStatus.ACTIVE) {
-            log.warn("[deleteMember] Invalid member = {} member.status = {}", member.getUsername(), member.getStatus());
+            log.warn("[{}] Invalid member = {} member.status = {}", Thread.currentThread().getStackTrace()[1].getMethodName(), member.getUsername(), member.getStatus());
             throw new NotValidMemberException(StatusCode.INVALID_MEMBER);
         }
 
-        log.info("[deleteMember] target: {}", member.getUsername());
+        log.info("[{}] target: {}", Thread.currentThread().getStackTrace()[1].getMethodName(), member.getUsername());
         member.deleteMember();
 
     }
