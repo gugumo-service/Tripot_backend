@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 public class OAuth2Service {
 
     private final OAuth2UserGenerator oAuth2UserGenerator;
+    private final KakaoOAuth2LoginStrategy kakaoOAuth2LoginStrategy;
     private final MemberRepository memberRepository;
     private final JwtUtil jwtUtil;
     private final RedisUtil redisUtil;
@@ -50,7 +51,7 @@ public class OAuth2Service {
     private OAuth2UserInfo generateOAuth2UserInfo(String code, OAuth2Provider provider) {
         //소셜 로그인 전략 설정
         if (provider == OAuth2Provider.KAKAO) {
-            oAuth2UserGenerator.setOAuth2MemberStrategy(new KakaoOAuth2LoginStrategy());
+            oAuth2UserGenerator.setOAuth2MemberStrategy(kakaoOAuth2LoginStrategy);
         }
 
         //OAuth2 과정 진행 후 사용자 정보 받아오기
