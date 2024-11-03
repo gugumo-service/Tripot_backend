@@ -19,8 +19,9 @@ public class KakaoOAuth2LoginStrategy implements OAuth2MemberStrategy {
     private String clientId;
     @Value("${kakao.client-secret}")
     private String secretKey;
-    private String KAUTH_TOKEN_URL_HOST = "https://kauth.kakao.com";
-    private String KAUTH_USER_URL_HOST = "https://kapi.kakao.com";
+    private final String KAKAO_REDIRECT_URI = "http://54.180.139.123:8080/api/v1/login/oauth2/kakao";
+    private final String KAUTH_TOKEN_URL_HOST = "https://kauth.kakao.com";
+    private final String KAUTH_USER_URL_HOST = "https://kapi.kakao.com";
 
     @Override
     public OAuth2UserInfo signUpOauth2(String code) {
@@ -45,13 +46,14 @@ public class KakaoOAuth2LoginStrategy implements OAuth2MemberStrategy {
                         .path("/oauth/token")
                         .queryParam("grant_type", "authorization_code")
                         .queryParam("client_id", clientId)
+                        .queryParam("redirect_uri", KAKAO_REDIRECT_URI)
                         .queryParam("code", code)
                         .queryParam("client_secret", secretKey)
                         .build(true))
                 .header(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded")
                 .retrieve()
-                .onStatus(HttpStatusCode::is4xxClientError, ClientResponse-> Mono.error(new RuntimeException("Invalid Parameter")))
-                .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> Mono.error(new RuntimeException("Internal Server Error")))
+//                .onStatus(HttpStatusCode::is4xxClientError, ClientResponse -> Mono.error(new RuntimeException("Invalid Parameter")))
+//                .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> Mono.error(new RuntimeException("Internal Server Error")))
                 .bodyToMono(KakaoTokenResponseDto.class)
                 .block();
 
@@ -76,8 +78,8 @@ public class KakaoOAuth2LoginStrategy implements OAuth2MemberStrategy {
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken) // access token 인가
                 .header(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded")
                 .retrieve()
-                .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> Mono.error(new RuntimeException("Invalid Parameter")))
-                .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> Mono.error(new RuntimeException("Internal Server Error")))
+//                .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> Mono.error(new RuntimeException("Invalid Parameter")))
+//                .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> Mono.error(new RuntimeException("Internal Server Error")))
                 .bodyToMono(KakaoUserInfoResponseDto.class)
                 .block();
 
