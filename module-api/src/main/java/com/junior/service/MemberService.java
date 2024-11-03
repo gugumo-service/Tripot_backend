@@ -69,7 +69,7 @@ public class MemberService {
         );
 
         if (member.getStatus() != MemberStatus.ACTIVE) {
-            log.warn("[{}] Invalid member = {} member.status = {}", getClass().getEnclosingMethod().getName(), member.getUsername(), member.getStatus());
+            log.warn("[{}] Invalid member = {} member.status = {}", Thread.currentThread().getStackTrace()[1].getMethodName(), member.getUsername(), member.getStatus());
             throw new NotValidMemberException(StatusCode.INVALID_MEMBER);
         }
 

@@ -37,6 +37,7 @@ public enum StatusCode {
     UPDATE_NICKNAME_MEMBER(200, "MEMBER-SUCCESS-005", "회원 닉네임 변경 성공"),
 
     // JWT 관련 예외
+    REISSUE_SUCCESS(200, "JWT-SUCCESS-001", "JWT 재발급 완료"),
     EXPIRED_TOKEN(400, "JWT-ERR-001", "만료된 토큰"),
     TOKEN_NOT_EXIST(400, "JWT-ERR-002", "존재하지 않는 토큰"),
     INVALID_REFRESH_TOKEN(400, "JWT-ERR-003", "Refresh token이 아님"),

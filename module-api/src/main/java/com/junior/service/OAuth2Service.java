@@ -69,7 +69,7 @@ public class OAuth2Service {
 
         String accessToken = jwtUtil.createJwt(loginCreateJwtDto, "access");
         String refreshToken = jwtUtil.createJwt(loginCreateJwtDto, "refresh");
-        log.info("[{}} JWT 토큰 생성 access: {}, refresh: {}", getClass().getName(), accessToken, refreshToken);
+        log.info("[{}} JWT 토큰 생성 access: {}, refresh: {}", Thread.currentThread().getStackTrace()[1].getClassName(), accessToken, refreshToken);
 
         //redis에 refreshToken 저장하기((key, value): (token, username))
         //Bearer을 포함하지 않음
@@ -79,7 +79,7 @@ public class OAuth2Service {
         //응답에 JWT 추가
         response.addHeader("Authorization", "Bearer " + accessToken);
         response.addHeader("Refresh_token", "Bearer " + refreshToken);
-        log.info("[{}} 응답 헤더에 토큰 담기", getClass().getName());
+        log.info("[{}} 응답 헤더에 토큰 담기", Thread.currentThread().getStackTrace()[1].getClassName());
     }
 
     private Member createMember(OAuth2Provider provider, boolean existMember, String username, OAuth2UserInfo userInfo) {
@@ -87,7 +87,7 @@ public class OAuth2Service {
 
         if (!existMember) {
             //PREACTIVE 상태 회원 생성
-            log.info("[{}}] 신규 회원 생성 username: {}", getClass().getSimpleName(), username, MemberStatus.PREACTIVE);
+            log.info("[{}}] 신규 회원 생성 username: {}", Thread.currentThread().getStackTrace()[1].getClassName(), username, MemberStatus.PREACTIVE);
 
             member = Member.builder()
                     .nickname(userInfo.nickname())         //일단 전송 후 수정하는 방식
@@ -102,14 +102,14 @@ public class OAuth2Service {
         } else {
             //조건문에서 있는지 검증했음
             member = memberRepository.findByUsername(username).get();
-            log.info("[{}}] 기존 회원 username: {}, status: {}", getClass().getSimpleName(), username, member.getStatus());
+            log.info("[{}}] 기존 회원 username: {}, status: {}", Thread.currentThread().getStackTrace()[1].getClassName(), username, member.getStatus());
         }
         return member;
     }
 
     private CheckActiveMemberDto createResponse(HttpServletResponse response, Member member) {
         //응답에 해당 회원의 추가정보 기입 여부 추가
-        log.info("[{}} 응답에 해당 회원의 추가정보 기입 여부 추가", getClass().getName());
+        log.info("[{}} 응답에 해당 회원의 추가정보 기입 여부 추가", Thread.currentThread().getStackTrace()[1].getClassName());
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
 
