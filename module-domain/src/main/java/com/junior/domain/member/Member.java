@@ -81,4 +81,12 @@ public class Member {
     public void updateNickname(UpdateNicknameDto updateNicknameDto) {
         this.nickname = updateNicknameDto.getNickname();
     }
+
+    public void updateProfile(String profileUrl) {
+        this.profileImage = profileUrl;
+    }
+
+    public void deleteProfile(String profileUrl) {
+        this.profileImage = null;
+    }
 }

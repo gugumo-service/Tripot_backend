@@ -8,6 +8,7 @@ import com.junior.exception.NotValidMemberException;
 import com.junior.exception.StatusCode;
 import com.junior.repository.member.MemberRepository;
 import com.junior.security.UserPrincipal;
+import com.junior.service.s3.S3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final S3Service s3Service;
 
     @Transactional
     public void activateMember(UserPrincipal principal, ActivateMemberDto activateMemberDto) {
@@ -35,7 +37,7 @@ public class MemberService {
             throw new NotValidMemberException(StatusCode.INVALID_MEMBER);
         }
 
-        log.info("[{}}] target: {}", Thread.currentThread().getStackTrace()[1].getMethodName(), member.getUsername());
+        log.info("[{}}] target: {} nickname: {}, location: {}", Thread.currentThread().getStackTrace()[1].getMethodName(), member.getUsername(), activateMemberDto.nickname(), activateMemberDto.recommendLocation());
         member.activateMember(activateMemberDto);
 
     }
@@ -43,6 +45,52 @@ public class MemberService {
     public Boolean checkDuplicateNickname(String nickname) {
         log.info("[checkDuplicateNickname] target nickname: {}", nickname);
         return memberRepository.existsByNickname(nickname);
+    }
+
+    @Transactional
+    public void updateProfileImage(UserPrincipal principal, MultipartFile profileImage) {
+        Member member = memberRepository.findById(principal.getMember().getId()).orElseThrow(
+                () -> new NotValidMemberException(StatusCode.INVALID_MEMBER)
+        );
+
+        if (member.getStatus() != MemberStatus.ACTIVE) {
+            log.warn("[{}] Invalid member = {} member.status = {}", Thread.currentThread().getStackTrace()[1].getMethodName(), member.getUsername(), member.getStatus());
+            throw new NotValidMemberException(StatusCode.INVALID_MEMBER);
+        }
+
+
+        log.info("[{}] target: {}", Thread.currentThread().getStackTrace()[1].getMethodName(), member.getUsername());
+
+        if (member.getProfileImage() != null) {
+            log.info("[{}] delete profile image target: {}", Thread.currentThread().getStackTrace()[1].getMethodName(), member.getUsername());
+            s3Service.deleteProfileImage(member.getProfileImage());
+
+        }
+
+        if (!profileImage.isEmpty()) {
+            String profileUrl = s3Service.saveProfileImage(profileImage);
+            member.updateProfile(profileUrl);
+        }
+
+
+
+
+
+    }
+
+    @Transactional
+    public void updateNickname(UserPrincipal principal, UpdateNicknameDto updateNicknameDto) {
+
+        Member member = memberRepository.findById(principal.getMember().getId()).orElseThrow(
+                () -> new NotValidMemberException(StatusCode.INVALID_MEMBER)
+        );
+
+        if (member.getStatus() != MemberStatus.ACTIVE) {
+            log.warn("[{}] Invalid member = {} member.status = {}", Thread.currentThread().getStackTrace()[1].getMethodName(), member.getUsername(), member.getStatus());
+            throw new NotValidMemberException(StatusCode.INVALID_MEMBER);
+        }
+
+        member.updateNickname(updateNicknameDto);
     }
 
     @Transactional
@@ -60,20 +108,5 @@ public class MemberService {
         log.info("[{}] target: {}", Thread.currentThread().getStackTrace()[1].getMethodName(), member.getUsername());
         member.deleteMember();
 
-    }
-
-    @Transactional
-    public void updateNickname(UserPrincipal principal, UpdateNicknameDto updateNicknameDto) {
-
-        Member member = memberRepository.findById(principal.getMember().getId()).orElseThrow(
-                () -> new NotValidMemberException(StatusCode.INVALID_MEMBER)
-        );
-
-        if (member.getStatus() != MemberStatus.ACTIVE) {
-            log.warn("[{}] Invalid member = {} member.status = {}", Thread.currentThread().getStackTrace()[1].getMethodName(), member.getUsername(), member.getStatus());
-            throw new NotValidMemberException(StatusCode.INVALID_MEMBER);
-        }
-
-        member.updateNickname(updateNicknameDto);
     }
 }
