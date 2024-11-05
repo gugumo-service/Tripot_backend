@@ -36,6 +36,7 @@ public enum StatusCode {
     OAUTH2_LOGIN_SUCCESS(200, "MEMBER-SUCCESS-004", "소셜 로그인 성공"),
     UPDATE_NICKNAME_MEMBER(200, "MEMBER-SUCCESS-005", "회원 닉네임 변경 성공"),
     UPDATE_PROFILE_IMAGE_MEMBER(200, "MEMBER-SUCCESS-006", "회원 프로필 사진 변경 성공"),
+    GET_MEMBER_INFO(200, "MEMBER-SUCCESS-007", "회원 정보 조회 성공"),
 
     // JWT 관련 예외
     REISSUE_SUCCESS(200, "JWT-SUCCESS-001", "JWT 재발급 완료"),

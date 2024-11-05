@@ -1,6 +1,7 @@
 package com.junior.controller;
 
 import com.junior.dto.member.ActivateMemberDto;
+import com.junior.dto.member.MemberInfoDto;
 import com.junior.dto.member.UpdateNicknameDto;
 import com.junior.response.CommonResponse;
 import com.junior.security.UserPrincipal;
@@ -43,6 +44,12 @@ public class MemberController {
 
 //        return CommonResponse.of(CHECK_NICKNAME_MEMBER.getCustomCode(), CHECK_NICKNAME_MEMBER.getCustomMessage(), !memberService.checkDuplicateNickname(nickname));
         return CommonResponse.success(CHECK_NICKNAME_MEMBER, !memberService.checkDuplicateNickname(nickname));
+    }
+
+    @GetMapping("/api/v1/members")
+    public CommonResponse<MemberInfoDto> getMemberInfo(@AuthenticationPrincipal UserPrincipal principal) {
+
+        return CommonResponse.success(GET_MEMBER_INFO, memberService.getMemberInfo(principal));
     }
 
     /**
