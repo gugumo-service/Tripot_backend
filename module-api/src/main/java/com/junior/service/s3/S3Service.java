@@ -62,7 +62,7 @@ public class S3Service {
 
     //프로필 사진 업로드
     public String saveProfileImage(MultipartFile file) {
-        String randomFilename = profilePath + "/" + generateRandomFilename(file);
+        String randomFilename = profilePath + generateRandomFilename(file);
 
         log.info("File upload started: {}", randomFilename);
 

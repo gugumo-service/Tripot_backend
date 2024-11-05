@@ -86,7 +86,7 @@ public class Member {
         this.profileImage = profileUrl;
     }
 
-    public void deleteProfile(String profileUrl) {
+    public void deleteProfile() {
         this.profileImage = null;
     }
 }

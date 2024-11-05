@@ -61,16 +61,19 @@ public class MemberService {
 
         log.info("[{}] target: {}", Thread.currentThread().getStackTrace()[1].getMethodName(), member.getUsername());
 
+        //프로필 사진을 업데이트 하기 위해 기존 이미지를 삭제
         if (member.getProfileImage() != null) {
             log.info("[{}] delete profile image target: {}", Thread.currentThread().getStackTrace()[1].getMethodName(), member.getUsername());
             s3Service.deleteProfileImage(member.getProfileImage());
-
+            member.deleteProfile();
         }
 
         if (!profileImage.isEmpty()) {
             String profileUrl = s3Service.saveProfileImage(profileImage);
             member.updateProfile(profileUrl);
         }
+
+    }
 
 
 
