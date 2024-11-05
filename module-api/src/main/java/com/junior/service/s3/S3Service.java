@@ -3,6 +3,7 @@ package com.junior.service.s3;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.junior.exception.CustomException;
 import com.junior.exception.StatusCode;
@@ -23,6 +24,9 @@ public class S3Service {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
+    @Value("${cloud.aws.s3.path.profile}")
+    private String profilePath;
+
     private final AmazonS3Client amazonS3Client;
     private Set<String> uploadedFileNames = new HashSet<>();
     private Set<Long> uploadedFileSizes = new HashSet<>();
@@ -33,6 +37,34 @@ public class S3Service {
         String randomFilename = generateRandomFilename(file);
 
         log.info("File upload started: " + randomFilename);
+
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentLength(file.getSize());
+        metadata.setContentType(file.getContentType());
+
+        try {
+            amazonS3Client.putObject(bucket, randomFilename, file.getInputStream(), metadata);
+        } catch (AmazonS3Exception e) {
+            log.error("Amazon S3 error while uploading file: " + e.getMessage());
+            throw new CustomException(StatusCode.S3_UPLOAD_FAIL);
+        } catch (SdkClientException e) {
+            log.error("AWS SDK client error while uploading file: " + e.getMessage());
+            throw new CustomException(StatusCode.S3_UPLOAD_FAIL);
+        } catch (IOException e) {
+            log.error("IO error while uploading file: " + e.getMessage());
+            throw new CustomException(StatusCode.S3_UPLOAD_FAIL);
+        }
+
+        log.info("File upload completed: " + randomFilename);
+
+        return amazonS3Client.getUrl(bucket, randomFilename).toString();
+    }
+
+    //프로필 사진 업로드
+    public String saveProfileImage(MultipartFile file) {
+        String randomFilename = profilePath + generateRandomFilename(file);
+
+        log.info("File upload started: {}", randomFilename);
 
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(file.getSize());
@@ -107,5 +139,13 @@ public class S3Service {
             throw new CustomException(StatusCode.S3_NOT_ALLOWED_EXTENSION);
         }
         return fileExtension;
+    }
+
+    public void deleteProfileImage(String profileImageUrl) {
+        String splitStr = ".com/";
+        //https://"bucket-name"."region".amazonaws.com/"파일 이름.확장자"에서 파일 이름.확장자만 자르기
+        String fileName = profileImageUrl.substring(profileImageUrl.lastIndexOf(splitStr) + splitStr.length());
+
+        amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, fileName));
     }
 }

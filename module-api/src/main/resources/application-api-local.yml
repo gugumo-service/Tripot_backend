@@ -23,7 +23,7 @@ cloud:
     s3:
       bucket: tripot
       path:
-        profile: user/profile
+        profile: user/profile/
         story: story/image
       region:
         static: eu-north-1

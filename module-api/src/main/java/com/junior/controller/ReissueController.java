@@ -19,6 +19,13 @@ public class ReissueController {
 
     private final ReissueService reissueService;
 
+    /**
+     * JWT 재발급 기능
+     * @param reissueDto: 재발급을 위한 refresh 토큰이 담긴 body
+     * @param response
+     * @return header: access, refresh token
+     *         body: JWT 재발급 완료
+     */
     @PostMapping("/api/v1/reissue")
     public CommonResponse<String> reissue(@RequestBody ReissueDto reissueDto, HttpServletResponse response) {
 

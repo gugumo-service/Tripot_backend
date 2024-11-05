@@ -35,13 +35,17 @@ public enum StatusCode {
     DELETE_MEMBER(200, "MEMBER-SUCCESS-003", "회원 삭제 성공"),
     OAUTH2_LOGIN_SUCCESS(200, "MEMBER-SUCCESS-004", "소셜 로그인 성공"),
     UPDATE_NICKNAME_MEMBER(200, "MEMBER-SUCCESS-005", "회원 닉네임 변경 성공"),
+    UPDATE_PROFILE_IMAGE_MEMBER(200, "MEMBER-SUCCESS-006", "회원 프로필 사진 변경 성공"),
+    GET_MEMBER_INFO(200, "MEMBER-SUCCESS-007", "회원 정보 조회 성공"),
+    INVALID_MEMBER(400, "MEMBER-ERR-001", "유효하지 않은 회원"),
 
     // JWT 관련 예외
     REISSUE_SUCCESS(200, "JWT-SUCCESS-001", "JWT 재발급 완료"),
-    EXPIRED_TOKEN(400, "JWT-ERR-001", "만료된 토큰"),
+    EXPIRED_ACCESS_TOKEN(401, "JWT-ERR-001", "만료된 Access 토큰"),
     TOKEN_NOT_EXIST(400, "JWT-ERR-002", "존재하지 않는 토큰"),
     INVALID_REFRESH_TOKEN(400, "JWT-ERR-003", "Refresh token이 아님"),
-    INVALID_MEMBER(400, "MEMBER-ERR-001", "유효하지 않은 회원"),
+    EXPIRED_REFRESH_TOKEN(401, "JWT-ERR-004", "만료된 Refresh 토큰"),
+
 
     // 공통 예외
     UNKNOWN_ERROR(9999, "UNKNOWN-ERROR", "정의되지 않은 예외");
