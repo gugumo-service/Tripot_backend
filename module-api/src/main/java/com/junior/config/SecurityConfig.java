@@ -1,6 +1,7 @@
 package com.junior.config;
 
 import com.junior.security.JwtUtil;
+import com.junior.security.filter.JwtValidExceptionHandlerFilter;
 import com.junior.security.filter.JWTFilter;
 import com.junior.service.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,7 @@ public class SecurityConfig {
 
                 //filter
                 .addFilterAfter(new JWTFilter(jwtUtil, userDetailsService), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtValidExceptionHandlerFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
 
                 //uri 권한 설정
                 .authorizeHttpRequests((auth) -> auth

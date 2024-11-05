@@ -43,8 +43,9 @@ public enum StatusCode {
     REISSUE_SUCCESS(200, "JWT-SUCCESS-001", "JWT 재발급 완료"),
     EXPIRED_ACCESS_TOKEN(401, "JWT-ERR-001", "만료된 Access 토큰"),
     TOKEN_NOT_EXIST(400, "JWT-ERR-002", "존재하지 않는 토큰"),
-    INVALID_REFRESH_TOKEN(400, "JWT-ERR-003", "Refresh token이 아님"),
+    NOT_REFRESH_TOKEN(401, "JWT-ERR-003", "Refresh token이 아님"),
     EXPIRED_REFRESH_TOKEN(401, "JWT-ERR-004", "만료된 Refresh 토큰"),
+    NOT_ACCESS_TOKEN(401, "JWT-ERR-005", "Access token이 아님"),
 
 
     // 공통 예외

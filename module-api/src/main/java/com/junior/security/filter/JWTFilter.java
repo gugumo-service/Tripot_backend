@@ -4,6 +4,7 @@ import com.junior.exception.JwtErrorException;
 import com.junior.exception.StatusCode;
 import com.junior.service.UserDetailsServiceImpl;
 import com.junior.security.JwtUtil;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,33 +36,14 @@ public class JWTFilter extends OncePerRequestFilter {
 
         // 토큰이 없거나 유효하지 않다면 다음 필터로 넘김
         if (preAccessToken == null || !preAccessToken.startsWith("Bearer ")) {
-
             filterChain.doFilter(request, response);
-
             return;
         }
 
         String accessToken = preAccessToken.split(" ")[1];
 
-        // 토큰 만료 여부 확인, 만료시 다음 필터로 넘기지 않음
-        if (jwtUtil.isExpired(accessToken)) {
-            throw new JwtErrorException(StatusCode.EXPIRED_ACCESS_TOKEN);
-        }
 
 
-        // 토큰이 access인지 확인 (발급시 페이로드에 명시)
-        String category = jwtUtil.getCategory(accessToken);
-
-        if (!category.equals("access")) {
-
-            //response body
-            PrintWriter writer = response.getWriter();
-            writer.print("invalid access token");
-
-            //response status code
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return;
-        }
 
         // username, role 값을 획득
         Long id = jwtUtil.getId(accessToken);
