@@ -36,8 +36,7 @@ public class ReissueService {
             throw new JwtErrorException(StatusCode.TOKEN_NOT_EXIST);
         }
 
-        //이전 토큰 삭제: 만료된 refresh 토큰도 제거되어야 함
-        redisUtil.deleteData(oldRefreshToken);
+
 
         if (jwtUtil.isExpired(oldRefreshToken)) {
             //예외 처리: 만료된 refreshToken
@@ -45,7 +44,7 @@ public class ReissueService {
         }
 
 
-        String username = redisUtil.getData(oldRefreshToken);
+        String username = jwtUtil.getUsername(oldRefreshToken);
 
         LoginCreateJwtDto loginCreateJwtDto = LoginCreateJwtDto.builder()
                 .id(jwtUtil.getId(oldRefreshToken))
@@ -59,7 +58,8 @@ public class ReissueService {
 
 
         //이전 토큰을 삭제하고 새 토큰 생성
-        redisUtil.setDataExpire(newRefreshToken, username, 8640_0000L);
+        redisUtil.deleteData(oldRefreshToken);
+        redisUtil.setDataExpire(newRefreshToken, username, 15778800);
 
         //새 토큰을 응답에 추가
         response.addHeader("Authorization", "Bearer " + newAccessToken);

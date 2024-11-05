@@ -74,7 +74,7 @@ public class OAuth2Service {
 
         //redis에 refreshToken 저장하기((key, value): (token, username))
         //Bearer을 포함하지 않음
-        redisUtil.setDataExpire(refreshToken, member.getUsername(), 8640_0000L * 30 * 6);
+        redisUtil.setDataExpire(refreshToken, member.getUsername(), 15778800);
 
 
         //응답에 JWT 추가
