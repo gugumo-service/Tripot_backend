@@ -4,7 +4,6 @@ import com.junior.exception.JwtErrorException;
 import com.junior.exception.StatusCode;
 import com.junior.service.UserDetailsServiceImpl;
 import com.junior.security.JwtUtil;
-import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -46,7 +45,7 @@ public class JWTFilter extends OncePerRequestFilter {
 
         // 토큰 만료 여부 확인, 만료시 다음 필터로 넘기지 않음
         if (jwtUtil.isExpired(accessToken)) {
-            throw new JwtErrorException(StatusCode.EXPIRED_TOKEN);
+            throw new JwtErrorException(StatusCode.EXPIRED_ACCESS_TOKEN);
         }
 
 

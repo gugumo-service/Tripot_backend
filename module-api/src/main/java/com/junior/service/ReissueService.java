@@ -27,7 +27,7 @@ public class ReissueService {
 
         if (jwtUtil.isExpired(oldRefreshToken)) {
             //예외 처리: 만료된 refreshToken
-            throw new JwtErrorException(StatusCode.EXPIRED_TOKEN);
+            throw new JwtErrorException(StatusCode.EXPIRED_REFRESH_TOKEN);
         }
 
         //refresh 토큰인지 확인
