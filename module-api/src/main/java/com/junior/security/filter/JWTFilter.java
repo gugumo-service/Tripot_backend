@@ -1,5 +1,7 @@
 package com.junior.security.filter;
 
+import com.junior.exception.JwtErrorException;
+import com.junior.exception.StatusCode;
 import com.junior.service.UserDetailsServiceImpl;
 import com.junior.security.JwtUtil;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -43,18 +45,10 @@ public class JWTFilter extends OncePerRequestFilter {
         String accessToken = preAccessToken.split(" ")[1];
 
         // 토큰 만료 여부 확인, 만료시 다음 필터로 넘기지 않음
-        try {
-            jwtUtil.isExpired(accessToken);
-        } catch (ExpiredJwtException e) {
-
-            //response body
-            PrintWriter writer = response.getWriter();
-            writer.print("access token expired");
-
-            //TODO: access 토큰 만료 시의 약속을 프론트와 지정하기 -> 프론트에서 만료가 확인되면 reissue
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return;
+        if (jwtUtil.isExpired(accessToken)) {
+            throw new JwtErrorException(StatusCode.EXPIRED_TOKEN);
         }
+
 
         // 토큰이 access인지 확인 (발급시 페이로드에 명시)
         String category = jwtUtil.getCategory(accessToken);

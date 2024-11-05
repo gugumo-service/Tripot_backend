@@ -25,9 +25,7 @@ public class ReissueService {
 
         String oldRefreshToken = reissueDto.refreshToken().split(" ")[1];
 
-        try {
-            jwtUtil.isExpired(oldRefreshToken);
-        } catch (ExpiredJwtException e) {
+        if (jwtUtil.isExpired(oldRefreshToken)) {
             //예외 처리: 만료된 refreshToken
             throw new JwtErrorException(StatusCode.EXPIRED_TOKEN);
         }
