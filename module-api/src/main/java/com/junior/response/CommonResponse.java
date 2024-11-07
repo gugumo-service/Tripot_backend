@@ -10,17 +10,15 @@ import lombok.*;
 public class CommonResponse<T> {
     private String customCode;
     private String customMessage;
+    private boolean status;
     private T data;
 
-    public static <T> CommonResponse<T> of(String code, String message, T info) {
-        return new CommonResponse<>(code, message, info);
-    }
 
     public static<T> CommonResponse<T> success(StatusCode statusCode, T data) {
-        return new CommonResponse<>(statusCode.getCustomCode(), statusCode.getCustomMessage(), data);
+        return new CommonResponse<>(statusCode.getCustomCode(), statusCode.getCustomMessage(), true, data);
     }
 
     public static<T> CommonResponse<T> fail(StatusCode statusCode) {
-        return new CommonResponse<>(statusCode.getCustomCode(), statusCode.getCustomMessage(), null);
+        return new CommonResponse<>(statusCode.getCustomCode(), statusCode.getCustomMessage(), false, null);
     }
 }
