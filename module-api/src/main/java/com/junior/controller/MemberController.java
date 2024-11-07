@@ -46,6 +46,12 @@ public class MemberController {
         return CommonResponse.success(CHECK_NICKNAME_MEMBER, !memberService.checkDuplicateNickname(nickname));
     }
 
+    /**
+     *
+     * @param principal
+     * @return true: valid한 닉네임
+     * @return false: valid하지 않은 닉네임(중복 닉네임이 존재함)
+     */
     @GetMapping("/api/v1/members")
     public CommonResponse<MemberInfoDto> getMemberInfo(@AuthenticationPrincipal UserPrincipal principal) {
 
