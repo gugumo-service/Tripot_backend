@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * url: http://localhost:8080/swagger-ui/index.html#/
+ * uri: /swagger-ui/index.html#/
  */
 @Configuration
 public class SwaggerConfig {
