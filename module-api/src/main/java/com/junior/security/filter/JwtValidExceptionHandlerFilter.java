@@ -41,15 +41,19 @@ public class JwtValidExceptionHandlerFilter extends OncePerRequestFilter {
 
         String accessToken = preAccessToken.split(" ")[1];
 
-        // 토큰이 access인지 확인 (발급시 페이로드에 명시)
-        String category = jwtUtil.getCategory(accessToken);
 
-        if (!category.equals("access")) {
-            setErrorResponse(response, StatusCode.NOT_ACCESS_TOKEN);
-            return;
-        }
+
+
 
         try {
+            // 토큰이 access인지 확인 (발급시 페이로드에 명시)
+            String category = jwtUtil.getCategory(accessToken);
+
+            if (!category.equals("access")) {
+                setErrorResponse(response, StatusCode.NOT_ACCESS_TOKEN);
+                return;
+            }
+
             filterChain.doFilter(request, response);
         } catch (ExpiredJwtException e) {
             // 토큰 만료 여부 확인, 만료시 다음 필터로 넘기지 않음
@@ -58,7 +62,6 @@ public class JwtValidExceptionHandlerFilter extends OncePerRequestFilter {
             //유효하지 않은 토큰
             setErrorResponse(response, StatusCode.NOT_ACCESS_TOKEN);
         }
-
 
 
 
