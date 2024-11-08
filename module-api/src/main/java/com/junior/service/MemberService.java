@@ -35,7 +35,7 @@ public class MemberService {
 
         if (member.getStatus() != MemberStatus.PREACTIVE) {
             log.warn("[{}] Invalid member = {} member.status = {}", Thread.currentThread().getStackTrace()[1].getMethodName(), member.getUsername(), member.getStatus());
-            throw new NotValidMemberException(StatusCode.INVALID_MEMBER);
+            throw new NotValidMemberException(StatusCode.INVALID_MEMBER_STATUS);
         }
 
         log.info("[{}}] target: {} nickname: {}, location: {}", Thread.currentThread().getStackTrace()[1].getMethodName(), member.getUsername(), activateMemberDto.nickname(), activateMemberDto.recommendLocation());
@@ -56,7 +56,7 @@ public class MemberService {
 
         if (member.getStatus() != MemberStatus.ACTIVE) {
             log.warn("[{}] Invalid member = {} member.status = {}", Thread.currentThread().getStackTrace()[1].getMethodName(), member.getUsername(), member.getStatus());
-            throw new NotValidMemberException(StatusCode.INVALID_MEMBER);
+            throw new NotValidMemberException(StatusCode.INVALID_MEMBER_STATUS);
         }
 
 
@@ -84,7 +84,7 @@ public class MemberService {
 
         if (member.getStatus() != MemberStatus.ACTIVE) {
             log.warn("[{}] Invalid member = {} member.status = {}", Thread.currentThread().getStackTrace()[1].getMethodName(), member.getUsername(), member.getStatus());
-            throw new NotValidMemberException(StatusCode.INVALID_MEMBER);
+            throw new NotValidMemberException(StatusCode.INVALID_MEMBER_STATUS);
         }
 
         return MemberInfoDto.builder()
@@ -103,7 +103,7 @@ public class MemberService {
 
         if (member.getStatus() != MemberStatus.ACTIVE) {
             log.warn("[{}] Invalid member = {} member.status = {}", Thread.currentThread().getStackTrace()[1].getMethodName(), member.getUsername(), member.getStatus());
-            throw new NotValidMemberException(StatusCode.INVALID_MEMBER);
+            throw new NotValidMemberException(StatusCode.INVALID_MEMBER_STATUS);
         }
 
         member.updateNickname(updateNicknameDto);
@@ -118,7 +118,7 @@ public class MemberService {
 
         if (member.getStatus() != MemberStatus.ACTIVE) {
             log.warn("[{}] Invalid member = {} member.status = {}", Thread.currentThread().getStackTrace()[1].getMethodName(), member.getUsername(), member.getStatus());
-            throw new NotValidMemberException(StatusCode.INVALID_MEMBER);
+            throw new NotValidMemberException(StatusCode.INVALID_MEMBER_STATUS);
         }
 
         log.info("[{}] target: {}", Thread.currentThread().getStackTrace()[1].getMethodName(), member.getUsername());
