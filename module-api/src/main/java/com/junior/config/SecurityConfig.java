@@ -1,5 +1,6 @@
 package com.junior.config;
 
+import com.junior.security.exceptionhandler.CustomAuthenticationEntryPoint;
 import com.junior.security.JwtUtil;
 import com.junior.security.filter.JwtValidExceptionHandlerFilter;
 import com.junior.security.filter.JWTFilter;
@@ -22,6 +23,7 @@ public class SecurityConfig {
 
     private final JwtUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -37,6 +39,10 @@ public class SecurityConfig {
                 //filter
                 .addFilterAfter(new JWTFilter(jwtUtil, userDetailsService), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JwtValidExceptionHandlerFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
+
+                //403 예외 처리
+                .exceptionHandling((authenticationManager) -> authenticationManager
+                        .authenticationEntryPoint(customAuthenticationEntryPoint))
 
                 //uri 권한 설정
                 .authorizeHttpRequests((auth) -> auth
