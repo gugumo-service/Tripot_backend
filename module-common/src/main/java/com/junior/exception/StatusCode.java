@@ -17,10 +17,15 @@ public enum StatusCode {
 
     // STORY 관련 예외
     STORY_CREATE_SUCCESS(200, "STORY-SUCCESS-0000", "스토리 생성 성공"),
+    STORY_NOT_FOUND(400, "STORY-ERR-0002", "스토리 불러오기 실패"),
     STORY_EDIT_SUCCESS(200, "STORY-SUCCESS-0001", "스토리 수정 성공"),
     STORY_CREATE_FAIL(500, "STORY-ERR-0001", "스토리 생성 실패"),
     STORY_BAD_REQUEST(500, "STORY-ERR-0002", "잘못된 파라미터"),
     STORY_READ_SUCCESS(200, "STORY-SUCCESS-0001", "스토리 불러오기 성공"),
+
+    // comment 관련 예외
+    COMMENT_CREATE_SUCCESS(200, "COMMENT-SUCCESS-0001", "댓글 저장 성공"),
+    COMMENT_NOT_FOUND(400, "COMMENT-ERR-0001", "댓글 불러오기 실패"),
 
     //s3 관련 예외
     S3_UPLOAD_SUCCESS(200, "S3-0000", "이미지 업로드 성공"),
