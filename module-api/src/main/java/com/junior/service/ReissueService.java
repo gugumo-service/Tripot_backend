@@ -1,7 +1,7 @@
 package com.junior.service;
 
 import com.junior.dto.jwt.LoginCreateJwtDto;
-import com.junior.dto.jwt.ReissueDto;
+import com.junior.dto.jwt.RefreshTokenDto;
 import com.junior.exception.StatusCode;
 import com.junior.exception.JwtErrorException;
 import com.junior.security.JwtUtil;
@@ -20,9 +20,9 @@ public class ReissueService {
     private final RedisUtil redisUtil;
 
 
-    public void reissue(ReissueDto reissueDto, HttpServletResponse response) {
+    public void reissue(RefreshTokenDto refreshTokenDto, HttpServletResponse response) {
 
-        String oldRefreshToken = reissueDto.refreshToken().split(" ")[1];
+        String oldRefreshToken = refreshTokenDto.refreshToken().split(" ")[1];
 
         if (jwtUtil.isExpired(oldRefreshToken)) {
             //예외 처리: 만료된 refreshToken
