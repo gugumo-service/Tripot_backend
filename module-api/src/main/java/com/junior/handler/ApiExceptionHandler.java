@@ -48,17 +48,17 @@ public class ApiExceptionHandler {
     }
 
 
-//    /**
-//     * 랩핑하지 못한 예외가 발생하는 경우
-//     * 만약 랩핑하지 못한 예외가 발생하는 경우 아래 handlerException 메서드에서 캐치.
-//     * 이 메서드는 항상 맨 아래에 둘 것.
-//     */
-//    @ExceptionHandler(Exception.class)
-//    public CommonResponse handlerException(Exception e) {
-//        e.printStackTrace();
-//        return CommonResponse.builder()
-//                .customCode("500")
-//                .customMessage(e.getMessage())
-//                .build();
-//    }
+    /**
+     * 랩핑하지 못한 예외가 발생하는 경우
+     * 만약 랩핑하지 못한 예외가 발생하는 경우 아래 handlerException 메서드에서 캐치.
+     * 이 메서드는 항상 맨 아래에 둘 것.
+     */
+    @ExceptionHandler(Exception.class)
+    public CommonResponse handlerException(Exception e) {
+        log.error("[{}] : {}, {}", Thread.currentThread().getStackTrace()[1].getMethodName(), e.getCause(), e.getMessage());
+        return CommonResponse.builder()
+                .customCode("500")
+                .customMessage(e.getMessage())
+                .build();
+    }
 }
