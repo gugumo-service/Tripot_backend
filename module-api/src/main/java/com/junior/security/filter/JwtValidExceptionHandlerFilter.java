@@ -56,7 +56,7 @@ public class JwtValidExceptionHandlerFilter extends OncePerRequestFilter {
 
             filterChain.doFilter(request, response);
         } catch (ExpiredJwtException e) {
-            // 토큰 만료 여부 확인, 만료시 다음 필터로 넘기지 않음
+            // 토큰 만료 여부 확인
             setErrorResponse(response, StatusCode.EXPIRED_ACCESS_TOKEN);
         } catch (JwtException | IllegalArgumentException e) {
             //유효하지 않은 토큰
@@ -80,7 +80,7 @@ public class JwtValidExceptionHandlerFilter extends OncePerRequestFilter {
         response.setCharacterEncoding("UTF-8");
         CommonResponse errorResponse = CommonResponse.fail(statusCode);
         try {
-            log.info("[{}] JWT fail", Thread.currentThread().getStackTrace()[1].getMethodName());
+            log.error("[{}] JWT fail, code: {}", Thread.currentThread().getStackTrace()[1].getMethodName(), statusCode);
             response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
         } catch (IOException e) {
             e.printStackTrace();
