@@ -2,6 +2,7 @@ package com.junior.service.story;
 
 import com.junior.domain.member.Member;
 import com.junior.dto.story.GeoPointDto;
+import com.junior.dto.story.ResponseStoryCntByCityDto;
 import com.junior.repository.story.StoryRepository;
 import com.junior.domain.story.Story;
 import com.junior.dto.story.CreateStoryDto;
@@ -13,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -67,12 +70,33 @@ public class StoryService {
         findStory.updateStory(createStoryDto);
     }
 
-    public Slice<ResponseStoryDto> findStoriesByMemberAndMap(UserPrincipal userPrincipal, Long cursorId, int size, GeoPointDto geoPointLt, GeoPointDto geoPointRb) {
+    public Slice<ResponseStoryDto> findStoriesByMemberAndMapWithPaging(UserPrincipal userPrincipal, Long cursorId, int size, GeoPointDto geoPointLt, GeoPointDto geoPointRb) {
 
         Member findMember = userPrincipal.getMember();
 
         Pageable pageable = PageRequest.of(0, size);
 
-        return storyRepository.findStoriesByMemberAndMap(cursorId, pageable, geoPointLt, geoPointRb, findMember);
+        return storyRepository.findStoriesByMemberAndMapWithPaging(cursorId, pageable, geoPointLt, geoPointRb, findMember);
+    }
+
+    public Slice<ResponseStoryDto> findStoriesByMemberAndCityAndSearch(UserPrincipal userPrincipal, Long cursorId, int size, String city, String search) {
+
+        Member findMember = userPrincipal.getMember();
+
+        Pageable pageable = PageRequest.of(0, size);
+
+        return storyRepository.findStoriesByMemberAndCityAndSearch(cursorId, pageable, findMember, city, search);
+    }
+
+    public List<ResponseStoryCntByCityDto> getStoryCntByCity(UserPrincipal userPrincipal) {
+        Member findMember = userPrincipal.getMember();
+
+        return storyRepository.getStoryCntByCity(findMember);
+    }
+
+    public List<ResponseStoryDto> findStoriesByMemberAndMap(UserPrincipal userPrincipal, GeoPointDto geoPointLt, GeoPointDto geoPointRb) {
+        Member findMember = userPrincipal.getMember();
+
+        return storyRepository.findStoryByMap(findMember, geoPointLt, geoPointRb);
     }
 }

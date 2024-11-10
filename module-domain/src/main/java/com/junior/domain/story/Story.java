@@ -4,13 +4,13 @@ import com.junior.domain.base.BaseEntity;
 import com.junior.domain.member.Member;
 import com.junior.dto.story.CreateStoryDto;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Builder
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Story extends BaseEntity {
@@ -21,14 +21,17 @@ public class Story extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @Column(length = 255)
+    @Column(length = 255, nullable = false)
     private String title;
 
-    @Column(length = 65535)
+    @Column(length = 65535, nullable = false)
     private String content;
+
+    @Column(nullable = false)
+    private Boolean isDeleted;
 
     /// string 형식으로 작성했지만 추후 관심지역 방식에 따라 바뀔 수 있음.
     @Column(length = 255)
@@ -48,6 +51,7 @@ public class Story extends BaseEntity {
     private Long likeCnt;
 
     // 나만 보기
+    @Column(nullable = false)
     boolean isHidden;
 
     @Builder(builderMethodName = "createStory", builderClassName = "CreateStory")
@@ -61,6 +65,7 @@ public class Story extends BaseEntity {
         this.longitude = longitude;
         this.isHidden = isHidden;
 
+        this.isDeleted = false;
         this.viewCnt = 0L;
         this.likeCnt = 0L;
     }
