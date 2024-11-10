@@ -1,4 +1,4 @@
-package com.junior.service;
+package com.junior.service.member;
 
 import com.junior.domain.member.Member;
 import com.junior.domain.member.MemberRole;
@@ -9,8 +9,6 @@ import com.junior.dto.jwt.RefreshTokenDto;
 import com.junior.dto.member.CheckActiveMemberDto;
 import com.junior.dto.oauth2.OAuth2Provider;
 import com.junior.dto.oauth2.OAuth2UserInfo;
-import com.junior.exception.JwtErrorException;
-import com.junior.exception.StatusCode;
 import com.junior.repository.member.MemberRepository;
 import com.junior.security.JwtUtil;
 import com.junior.strategy.oauth2.KakaoOAuth2LoginStrategy;

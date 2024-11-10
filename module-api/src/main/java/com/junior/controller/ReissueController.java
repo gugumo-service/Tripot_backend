@@ -2,7 +2,7 @@ package com.junior.controller;
 
 import com.junior.dto.jwt.RefreshTokenDto;
 import com.junior.response.CommonResponse;
-import com.junior.service.ReissueService;
+import com.junior.service.member.ReissueService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
