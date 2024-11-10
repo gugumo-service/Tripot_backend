@@ -5,9 +5,12 @@ import com.junior.domain.member.MemberRole;
 import com.junior.domain.member.MemberStatus;
 import com.junior.domain.member.SignUpType;
 import com.junior.dto.jwt.LoginCreateJwtDto;
+import com.junior.dto.jwt.RefreshTokenDto;
 import com.junior.dto.member.CheckActiveMemberDto;
 import com.junior.dto.oauth2.OAuth2Provider;
 import com.junior.dto.oauth2.OAuth2UserInfo;
+import com.junior.exception.JwtErrorException;
+import com.junior.exception.StatusCode;
 import com.junior.repository.member.MemberRepository;
 import com.junior.security.JwtUtil;
 import com.junior.strategy.oauth2.KakaoOAuth2LoginStrategy;
@@ -47,6 +50,15 @@ public class OAuth2Service {
 
         return createResponse(response, member);
     }
+
+    public void logout(RefreshTokenDto refreshTokenDto) {
+
+        String refreshToken = refreshTokenDto.refreshToken().split(" ")[1];
+
+        redisUtil.deleteData(refreshToken);
+
+    }
+
 
     private OAuth2UserInfo generateOAuth2UserInfo(String code, OAuth2Provider provider) {
         //소셜 로그인 전략 설정
