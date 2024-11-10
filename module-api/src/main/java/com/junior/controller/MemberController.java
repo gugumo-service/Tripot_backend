@@ -49,8 +49,8 @@ public class MemberController {
     /**
      *
      * @param principal
-     * @return true: valid한 닉네임
-     * @return false: valid하지 않은 닉네임(중복 닉네임이 존재함)
+     * @return nickname: 사용자의 닉네임
+     *         profileImageUrl: 사용자의 프로필 사진 s3 url 경로
      */
     @GetMapping("/api/v1/members")
     public CommonResponse<MemberInfoDto> getMemberInfo(@AuthenticationPrincipal UserPrincipal principal) {
@@ -61,7 +61,7 @@ public class MemberController {
     /**
      * 회원 닉네임 변경 기능
      * @param principal
-     * @param updateNicknameDto
+     * @param updateNicknameDto: 사용자의 닉네임
      * @return 회원 닉네임 변경 성공
      */
     @PatchMapping("/api/v1/members/nicknames")
