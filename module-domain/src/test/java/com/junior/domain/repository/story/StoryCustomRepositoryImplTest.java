@@ -6,8 +6,10 @@ import com.junior.domain.member.MemberRole;
 import com.junior.domain.member.MemberStatus;
 import com.junior.domain.member.SignUpType;
 import com.junior.domain.story.Story;
-import com.junior.dto.story.ResponseStoryDto;
+import com.junior.dto.story.CreateStoryDto;
 import com.junior.dto.story.GeoPointDto;
+import com.junior.dto.story.ResponseStoryCntByCityDto;
+import com.junior.dto.story.ResponseStoryDto;
 import com.junior.repository.member.MemberRepository;
 import com.junior.repository.story.StoryRepository;
 import org.assertj.core.api.Assertions;
@@ -19,11 +21,20 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.List;
 
+/*
+    @DirtiesContext
+    테스트가 끝날 때마다 context 를 초기화하는 어노테이션
+    AFTER_EACH_TEST_METHOD : 테스트가 끝난 후 context 를 초기화
+    BEFORE, AFTER 등 다양하게 있음
+ */
+
 @DataJpaTest
 @Import(TestConfig.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class StoryCustomRepositoryImplTest {
     @Autowired
     StoryRepository storyRepository;
@@ -38,7 +49,7 @@ class StoryCustomRepositoryImplTest {
                 .longitude(1.0)
                 .latitude(1.0)
                 .city(city)
-                .isHidden(true)
+                .isHidden(false)
                 .thumbnailImg("thumbURL")
                 .build();
     }
@@ -68,6 +79,36 @@ class StoryCustomRepositoryImplTest {
 
         memberRepository.save(member);
         Assertions.assertThatCode(() -> storyRepository.save(story)).doesNotThrowAnyException();
+    }
+
+    @Test
+    @DisplayName("story를 수정할 수 있다.")
+    public void editStoryTest() {
+        Member member = createMember("nickname");
+        Story story = createStory(member, "title1", "DAEJEON");
+
+        memberRepository.save(member);
+        storyRepository.save(story);
+
+        CreateStoryDto createStoryDto = CreateStoryDto.builder()
+                .title("editStory")
+                .content("editContent")
+                .city("seoul")
+                .thumbnailImg("editThumb")
+                .latitude(1.0)
+                .longitude(1.0)
+                .isHidden(true)
+                .build();
+
+        Story findStory = storyRepository.findStoryByIdAndMember(1L, member);
+
+        findStory.updateStory(createStoryDto);
+
+        Story editStory = storyRepository.findStoryByIdAndMember(1L, member);
+
+        Assertions.assertThat(story.getTitle()).isEqualTo("editStory");
+        Assertions.assertThat(story.getContent()).isEqualTo("editContent");
+        Assertions.assertThat(story.getCity()).isEqualTo("seoul");
     }
 
     @Test
@@ -151,8 +192,8 @@ class StoryCustomRepositoryImplTest {
     }
 
     @Test
-    @DisplayName("회원이 보고 있는 지도를 기준으로 그 회원이 작성한 story를 최신 순으로 가져올 수 있다.")
-    public void findStoriesByMemberAndMapTest() {
+    @DisplayName("회원이 보고 있는 지도를 기준으로 그 회원이 작성한 story를 최신 순으로 pageable 하게 가져올 수 있다.")
+    public void findStoriesByMemberAndMapWithPagingTest() {
         Member member = createMember("nickname1");
         memberRepository.save(member);
 
@@ -166,7 +207,7 @@ class StoryCustomRepositoryImplTest {
                 .longitude(0.0)
                 .build();
 
-        Story inside1 = Story.builder()
+        Story inside1 = Story.createStory()
                 .title("inside1")
                 .member(member)
                 .content("content")
@@ -177,7 +218,7 @@ class StoryCustomRepositoryImplTest {
                 .thumbnailImg("thumbURL")
                 .build();
 
-        Story inside2 = Story.builder()
+        Story inside2 = Story.createStory()
                 .title("inside2")
                 .member(member)
                 .content("content")
@@ -188,7 +229,7 @@ class StoryCustomRepositoryImplTest {
                 .thumbnailImg("thumbURL")
                 .build();
 
-        Story outside1 = Story.builder()
+        Story outside1 = Story.createStory()
                 .title("outside1")
                 .member(member)
                 .content("content")
@@ -199,7 +240,7 @@ class StoryCustomRepositoryImplTest {
                 .thumbnailImg("thumbURL")
                 .build();
 
-        Story outside2 = Story.builder()
+        Story outside2 = Story.createStory()
                 .title("outside2")
                 .member(member)
                 .content("content")
@@ -217,12 +258,220 @@ class StoryCustomRepositoryImplTest {
 
         Pageable pageable = PageRequest.of(0, 3);
 
-        Slice<ResponseStoryDto> stories = storyRepository.findStoriesByMemberAndMap(null, pageable, geoPointLt, geoPointRb, member);
+        Slice<ResponseStoryDto> stories = storyRepository.findStoriesByMemberAndMapWithPaging(null, pageable, geoPointLt, geoPointRb, member);
         List<ResponseStoryDto> contents = stories.getContent();
 
         Assertions.assertThat(contents.size()).isEqualTo(2);
         Assertions.assertThat(contents.get(0).title()).isEqualTo("inside2");
         Assertions.assertThat(contents.get(1).title()).isEqualTo("inside1");
 
+    }
+
+    @Test
+    @DisplayName("회원이 보고 있는 지도를 기준으로 그 회원이 작성한 story를 최신 순으로 가져올 수 있다.")
+    public void findStoriesByMemberAndMap() {
+        Member member = createMember("nickname1");
+        memberRepository.save(member);
+
+        GeoPointDto geoPointLt = GeoPointDto.builder()
+                .latitude(0.0)
+                .longitude(10.0)
+                .build();
+
+        GeoPointDto geoPointRb = GeoPointDto.builder()
+                .latitude(10.0)
+                .longitude(0.0)
+                .build();
+
+        Story inside1 = Story.createStory()
+                .title("inside1")
+                .member(member)
+                .content("content")
+                .longitude(5.0)
+                .latitude(5.0)
+                .city("city")
+                .isHidden(true)
+                .thumbnailImg("thumbURL")
+                .build();
+
+        Story inside2 = Story.createStory()
+                .title("inside2")
+                .member(member)
+                .content("content")
+                .longitude(5.0)
+                .latitude(5.0)
+                .city("city")
+                .isHidden(true)
+                .thumbnailImg("thumbURL")
+                .build();
+
+        Story outside1 = Story.createStory()
+                .title("outside1")
+                .member(member)
+                .content("content")
+                .longitude(-10.0)
+                .latitude(-10.0)
+                .city("city")
+                .isHidden(true)
+                .thumbnailImg("thumbURL")
+                .build();
+
+        Story outside2 = Story.createStory()
+                .title("outside2")
+                .member(member)
+                .content("content")
+                .longitude(20.0)
+                .latitude(20.0)
+                .city("city")
+                .isHidden(true)
+                .thumbnailImg("thumbURL")
+                .build();
+
+        storyRepository.save(inside1);
+        storyRepository.save(inside2);
+        storyRepository.save(outside1);
+        storyRepository.save(outside2);
+
+        List<ResponseStoryDto> stories = storyRepository.findStoryByMap(member, geoPointLt, geoPointRb);
+
+        Assertions.assertThat(stories.size()).isEqualTo(2);
+    }
+
+    @Test
+    @DisplayName("회원이 지역과 검색어를 기반으로 스토리를 조회할 수 있다.")
+    public void findStoriesByMemberAndCityAndSearch() {
+        Member member = createMember("nickname1");
+        memberRepository.save(member);
+
+        Story hasSearchStory = Story.createStory()
+                .title("filterTitle")
+                .member(member)
+                .content("filterContent")
+                .longitude(-10.0)
+                .latitude(-10.0)
+                .city("city")
+                .isHidden(true)
+                .thumbnailImg("thumbURL")
+                .build();
+
+        Story hasNotSearchStory = Story.createStory()
+                .title("title")
+                .member(member)
+                .content("content")
+                .longitude(-10.0)
+                .latitude(-10.0)
+                .city("city")
+                .isHidden(true)
+                .thumbnailImg("thumbURL")
+                .build();
+
+        storyRepository.save(hasSearchStory);
+        storyRepository.save(hasNotSearchStory);
+
+        Pageable pageable = PageRequest.of(0, 3);
+
+        Slice<ResponseStoryDto> stories = storyRepository.findStoriesByMemberAndCityAndSearch(null, pageable, member, null, "filter");
+        List<ResponseStoryDto> contents = stories.getContent();
+
+        Assertions.assertThat(contents.size()).isEqualTo(1);
+        Assertions.assertThat(contents.get(0).title()).isEqualTo("filterTitle");
+    }
+
+    @Test
+    @DisplayName("지역별 스토리 수를 사전 순으로 정렬해서 얻을 수 있다.")
+    public void getStoryCntByCityTest() {
+        Member member = createMember("nickname");
+        memberRepository.save(member);
+
+        Story story1 = Story.createStory()
+                .title("filterTitle")
+                .member(member)
+                .content("filterContent")
+                .longitude(-10.0)
+                .latitude(-10.0)
+                .city("서울")
+                .isHidden(true)
+                .thumbnailImg("thumbURL")
+                .build();
+
+        Story story2 = Story.createStory()
+                .title("filterTitle")
+                .member(member)
+                .content("filterContent")
+                .longitude(-10.0)
+                .latitude(-10.0)
+                .city("대전")
+                .isHidden(true)
+                .thumbnailImg("thumbURL")
+                .build();
+
+        Story story3 = Story.createStory()
+                .title("filterTitle")
+                .member(member)
+                .content("filterContent")
+                .longitude(-10.0)
+                .latitude(-10.0)
+                .city("대구")
+                .isHidden(true)
+                .thumbnailImg("thumbURL")
+                .build();
+
+        Story story4 = Story.createStory()
+                .title("filterTitle")
+                .member(member)
+                .content("filterContent")
+                .longitude(-10.0)
+                .latitude(-10.0)
+                .city("부산")
+                .isHidden(true)
+                .thumbnailImg("thumbURL")
+                .build();
+
+        Story story5 = Story.createStory()
+                .title("filterTitle")
+                .member(member)
+                .content("filterContent")
+                .longitude(-10.0)
+                .latitude(-10.0)
+                .city("서울")
+                .isHidden(true)
+                .thumbnailImg("thumbURL")
+                .build();
+
+        Story story6 = Story.createStory()
+                .title("filterTitle")
+                .member(member)
+                .content("filterContent")
+                .longitude(-10.0)
+                .latitude(-10.0)
+                .city("대전")
+                .isHidden(true)
+                .thumbnailImg("thumbURL")
+                .build();
+
+        storyRepository.save(story1);
+        storyRepository.save(story2);
+        storyRepository.save(story3);
+        storyRepository.save(story4);
+        storyRepository.save(story5);
+        storyRepository.save(story6);
+
+        List<ResponseStoryCntByCityDto> storyCntByCity = storyRepository.getStoryCntByCity(member);
+
+        System.out.println("storyCntByCity = " + storyCntByCity);
+
+        Assertions.assertThat(storyCntByCity.size()).isEqualTo(4);
+
+        Assertions.assertThat(storyCntByCity.get(0).city()).isEqualTo("대구");
+        Assertions.assertThat(storyCntByCity.get(0).cnt()).isEqualTo(1);
+
+        Assertions.assertThat(storyCntByCity.get(1).city()).isEqualTo("대전");
+        Assertions.assertThat(storyCntByCity.get(1).cnt()).isEqualTo(2);
+
+        Assertions.assertThat(storyCntByCity.get(2).city()).isEqualTo("부산");
+        Assertions.assertThat(storyCntByCity.get(2).cnt()).isEqualTo(1);
+
+        Assertions.assertThat(storyCntByCity.get(3).city()).isEqualTo("서울");
+        Assertions.assertThat(storyCntByCity.get(3).cnt()).isEqualTo(2);
     }
 }

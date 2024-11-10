@@ -1,9 +1,6 @@
 package com.junior.controller;
 
-import com.junior.dto.story.CreateStoryDto;
-import com.junior.dto.story.GeoRect;
-import com.junior.dto.story.ResponseStoryDto;
-import com.junior.dto.story.GeoPointDto;
+import com.junior.dto.story.*;
 import com.junior.exception.StatusCode;
 import com.junior.response.CommonResponse;
 import com.junior.security.UserPrincipal;
@@ -12,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,7 +40,7 @@ public class StoryController {
         return CommonResponse.success(StatusCode.STORY_EDIT_SUCCESS, null);
     }
 
-    @GetMapping("/list")
+    @GetMapping("/all")
     public CommonResponse<Object> getStories(
             @RequestParam(name = "cursorId", required = false) Long cursorId,
             @RequestParam("size") int size) {
@@ -63,15 +62,46 @@ public class StoryController {
         return CommonResponse.success(StatusCode.STORY_READ_SUCCESS, storiesByCity);
     }
 
-    @PostMapping("/listByMap")
-    public CommonResponse<Object> getStoriesByMemberAndMap(
+    @PostMapping("/listByFiltering")
+    public CommonResponse<Object> getStoriesByMemberAndCityAndSearch(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @RequestParam(name = "cursorId", required = false) Long cursorId,
+            @RequestParam("size") int size,
+            @RequestBody SearchAndCityDto searchAndCityDto
+    ) {
+        Slice<ResponseStoryDto> storiesByFiltering = storyService.findStoriesByMemberAndCityAndSearch(userPrincipal, cursorId, size, searchAndCityDto.city(), searchAndCityDto.search());
+
+        return CommonResponse.success(StatusCode.STORY_READ_SUCCESS, storiesByFiltering);
+    }
+
+    @PostMapping("/listByMapWithPaging")
+    public CommonResponse<Object> getStoriesByMemberAndMapWithPaging(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @RequestBody GeoRect geoRect,
             @RequestParam(name = "cursorId", required = false) Long cursorId,
             @RequestParam(name = "size") int size
     ) {
-        Slice<ResponseStoryDto> storiesByMap = storyService.findStoriesByMemberAndMap(userPrincipal, cursorId, size, geoRect.geoPointLt(), geoRect.geoPointRb());
+        Slice<ResponseStoryDto> storiesByMap = storyService.findStoriesByMemberAndMapWithPaging(userPrincipal, cursorId, size, geoRect.geoPointLt(), geoRect.geoPointRb());
 
         return CommonResponse.success(StatusCode.STORY_READ_SUCCESS, storiesByMap);
+    }
+
+    @PostMapping("/listByMap")
+    public CommonResponse<Object> getStoriesByMemberAndMap(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @RequestBody GeoRect geoRect
+    ) {
+        List<ResponseStoryDto> stories = storyService.findStoriesByMemberAndMap(userPrincipal, geoRect.geoPointLt(), geoRect.geoPointRb());
+
+        return CommonResponse.success(StatusCode.STORY_READ_SUCCESS, stories);
+    }
+
+    @GetMapping("/countByCity")
+    public CommonResponse<Object> getStoryCntByCity(
+            @AuthenticationPrincipal UserPrincipal userPrincipal
+    ) {
+        List<ResponseStoryCntByCityDto> storyCntByCity = storyService.getStoryCntByCity(userPrincipal);
+
+        return CommonResponse.success(StatusCode.STORY_READ_SUCCESS, storyCntByCity);
     }
 }
