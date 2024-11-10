@@ -51,6 +51,9 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/story/list").permitAll()
                         //닉네임 중복 여부 확인
                         .requestMatchers("/api/v1/members/nicknames/check-valid").permitAll()
+                        .requestMatchers("/swagger-ui/**",
+                                "/swagger-resources/**",
+                                "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated());
 
 
