@@ -1,5 +1,6 @@
 package com.junior.controller;
 
+import com.junior.controller.api.OAuth2Api;
 import com.junior.dto.jwt.RefreshTokenDto;
 import com.junior.dto.member.CheckActiveMemberDto;
 import com.junior.dto.oauth2.OAuth2Provider;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-public class OAuth2Controller {
+public class OAuth2Controller implements OAuth2Api {
 
     private final OAuth2Service oAuth2Service;
 
