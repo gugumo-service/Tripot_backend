@@ -7,12 +7,14 @@ import com.junior.dto.oauth2.OAuth2Provider;
 import com.junior.exception.StatusCode;
 import com.junior.response.CommonResponse;
 import com.junior.service.member.OAuth2Service;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "OAuth2")
 public class OAuth2Controller implements OAuth2Api {
 
     private final OAuth2Service oAuth2Service;

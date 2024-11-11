@@ -15,7 +15,7 @@ public interface ReissueApi {
 
     @Operation(summary = "JWT Reissue", description = "토큰을 재발급합니다.",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "댓글 등록 완료",
+                    @ApiResponse(responseCode = "200", description = "토큰 재발급 완료",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = CommonResponse.class),
                                     examples = @ExampleObject(
                                             value = """
