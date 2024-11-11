@@ -35,7 +35,7 @@ public interface OAuth2Api {
 
     @Operation(summary = "로그 아웃", description = "로그 아웃을 진행합니다.",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "소셜 로그인 성공",
+                    @ApiResponse(responseCode = "200", description = "로그아웃 완료",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = CommonResponse.class),
                                     examples = @ExampleObject(
                                             value = """
