@@ -47,6 +47,7 @@ public enum StatusCode {
 
     // JWT 관련 예외
     REISSUE_SUCCESS(200, "JWT-SUCCESS-001", "JWT 재발급 완료"),
+    LOGOUT(200, "JWT-SUCCESS-002", "로그아웃 완료"),
     EXPIRED_ACCESS_TOKEN(401, "JWT-ERR-001", "만료된 Access 토큰"),
     TOKEN_NOT_EXIST(400, "JWT-ERR-002", "존재하지 않는 토큰"),
     NOT_REFRESH_TOKEN(401, "JWT-ERR-003", "Refresh token이 아님"),

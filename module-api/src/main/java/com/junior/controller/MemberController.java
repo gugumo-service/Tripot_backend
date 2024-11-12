@@ -1,11 +1,13 @@
 package com.junior.controller;
 
+import com.junior.controller.api.MemberApi;
 import com.junior.dto.member.ActivateMemberDto;
 import com.junior.dto.member.MemberInfoDto;
 import com.junior.dto.member.UpdateNicknameDto;
 import com.junior.response.CommonResponse;
 import com.junior.security.UserPrincipal;
-import com.junior.service.MemberService;
+import com.junior.service.member.MemberService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +17,8 @@ import static com.junior.exception.StatusCode.*;
 
 @RestController
 @RequiredArgsConstructor
-public class MemberController {
+@Tag(name = "Member")
+public class MemberController implements MemberApi {
 
     private final MemberService memberService;
 

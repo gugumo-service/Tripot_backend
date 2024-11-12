@@ -4,7 +4,7 @@ import com.junior.security.exceptionhandler.CustomAuthenticationEntryPoint;
 import com.junior.security.JwtUtil;
 import com.junior.security.filter.JwtValidExceptionHandlerFilter;
 import com.junior.security.filter.JWTFilter;
-import com.junior.service.UserDetailsServiceImpl;
+import com.junior.service.security.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -51,6 +51,9 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/story/list").permitAll()
                         //닉네임 중복 여부 확인
                         .requestMatchers("/api/v1/members/nicknames/check-valid").permitAll()
+                        .requestMatchers("/swagger-ui/**",
+                                "/swagger-resources/**",
+                                "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated());
 
 

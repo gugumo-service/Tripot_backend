@@ -1,10 +1,7 @@
 package com.junior.security.filter;
 
-import com.junior.exception.JwtErrorException;
-import com.junior.exception.StatusCode;
-import com.junior.service.UserDetailsServiceImpl;
+import com.junior.service.security.UserDetailsServiceImpl;
 import com.junior.security.JwtUtil;
-import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,7 +15,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 @Slf4j
 @RequiredArgsConstructor

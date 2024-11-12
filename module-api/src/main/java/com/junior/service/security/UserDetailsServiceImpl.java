@@ -1,4 +1,4 @@
-package com.junior.service;
+package com.junior.service.security;
 
 import com.junior.repository.member.MemberRepository;
 import com.junior.security.UserPrincipal;

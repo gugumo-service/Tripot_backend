@@ -1,6 +1,6 @@
 package com.junior.domain.repository.story;
 
-import com.junior.domain.TestConfig;
+import com.junior.TestConfig;
 import com.junior.domain.member.Member;
 import com.junior.domain.member.MemberRole;
 import com.junior.domain.member.MemberStatus;
