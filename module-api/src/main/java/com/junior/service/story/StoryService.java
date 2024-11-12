@@ -1,12 +1,14 @@
 package com.junior.service.story;
 
 import com.junior.domain.member.Member;
-import com.junior.dto.story.GeoPointDto;
-import com.junior.dto.story.ResponseStoryCntByCityDto;
-import com.junior.repository.story.StoryRepository;
 import com.junior.domain.story.Story;
 import com.junior.dto.story.CreateStoryDto;
+import com.junior.dto.story.GeoPointDto;
+import com.junior.dto.story.ResponseStoryCntByCityDto;
 import com.junior.dto.story.ResponseStoryDto;
+import com.junior.exception.StatusCode;
+import com.junior.exception.StoryNotFoundException;
+import com.junior.repository.story.StoryRepository;
 import com.junior.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -98,5 +100,12 @@ public class StoryService {
         Member findMember = userPrincipal.getMember();
 
         return storyRepository.findStoryByMap(findMember, geoPointLt, geoPointRb);
+    }
+
+    public ResponseStoryDto findStoryById(Long storyId) {
+        Story findStory = storyRepository.findById(storyId)
+                .orElseThrow(()->new StoryNotFoundException(StatusCode.STORY_NOT_FOUND));
+
+        return ResponseStoryDto.from(findStory);
     }
 }

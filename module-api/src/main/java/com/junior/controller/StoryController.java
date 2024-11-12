@@ -1,5 +1,6 @@
 package com.junior.controller;
 
+import com.junior.domain.story.Story;
 import com.junior.dto.story.*;
 import com.junior.exception.StatusCode;
 import com.junior.response.CommonResponse;
@@ -27,6 +28,20 @@ public class StoryController {
         storyService.createStory(userPrincipal, createStoryDto);
 
         return CommonResponse.success(StatusCode.STORY_CREATE_SUCCESS, null);
+    }
+
+    @GetMapping("/{storyId}")
+    public CommonResponse<Object> findStoryById(
+            @PathVariable("storyId") Long storyId
+    ) {
+        ResponseStoryDto findStory = storyService.findStoryById(storyId);
+
+        if(findStory != null) {
+            return CommonResponse.success(StatusCode.STORY_READ_SUCCESS, findStory);
+        }
+        else {
+            return CommonResponse.fail(StatusCode.STORY_NOT_FOUND);
+        }
     }
 
     @PatchMapping("/{storyId}")
