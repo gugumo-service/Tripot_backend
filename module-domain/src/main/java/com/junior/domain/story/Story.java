@@ -70,6 +70,19 @@ public class Story extends BaseEntity {
         this.likeCnt = 0L;
     }
 
+    public static Story from(Member member, CreateStoryDto createStoryDto) {
+        return Story.createStory()
+                .member(member)
+                .title(createStoryDto.title())
+                .content(createStoryDto.content())
+                .city(createStoryDto.city())
+                .thumbnailImg(createStoryDto.thumbnailImg())
+                .latitude(createStoryDto.latitude())
+                .longitude(createStoryDto.longitude())
+                .isHidden(createStoryDto.isHidden())
+                .build();
+    }
+
     public void updateStory(CreateStoryDto createStoryDto) {
         this.title = createStoryDto.title();
         this.content = createStoryDto.content();

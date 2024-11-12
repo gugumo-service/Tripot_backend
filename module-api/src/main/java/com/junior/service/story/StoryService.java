@@ -31,16 +31,7 @@ public class StoryService {
 
         Member member = userPrincipal.getMember();
 
-        Story story = Story.createStory()
-                .member(member)
-                .title(createStoryDto.title())
-                .content(createStoryDto.content())
-                .city(createStoryDto.city())
-                .thumbnailImg(createStoryDto.thumbnailImg())
-                .latitude(createStoryDto.latitude())
-                .longitude(createStoryDto.longitude())
-                .isHidden(createStoryDto.isHidden())
-                .build();
+        Story story = Story.from(member, createStoryDto);
 
         storyRepository.save(story);
     }
