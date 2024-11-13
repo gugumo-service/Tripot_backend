@@ -119,7 +119,42 @@ class MemberServiceTest {
     }
 
     @Test
+    @DisplayName("삭제된 회원은 DELETE 상태가 되어야 함")
     void deleteMember() {
+
+        //given
+        Member testMember = createActiveTestMember();
+        UserPrincipal principal = new UserPrincipal(testMember);
+        given(memberRepository.findById(2L)).willReturn(Optional.ofNullable(testMember));
+
+        //when
+        memberService.deleteMember(principal);
+
+        //then
+
+        Member deletedMember = memberRepository.findById(2L).get();
+
+        Assertions.assertThat(deletedMember.getStatus()).isEqualTo(MemberStatus.DELETE);
+
+    }
+
+    @Test
+    @DisplayName("활성화되지 않은 회원에 대한 탈퇴는 예외를 발생시킴")
+    void deleteMember_fail() {
+
+
+        //given
+
+        //비활성화된 회원 생성 및 저장
+        Member testMember = createPreactiveTestMember();
+        UserPrincipal principal = new UserPrincipal(testMember);
+        given(memberRepository.findById(1L)).willReturn(Optional.ofNullable(testMember));
+        
+
+        //when, then
+        Assertions.assertThatThrownBy(() -> memberService.deleteMember(principal)).isInstanceOf(NotValidMemberException.class);
+
+
     }
 
     Member createPreactiveTestMember() {
