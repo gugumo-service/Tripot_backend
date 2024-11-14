@@ -5,6 +5,7 @@ import com.junior.domain.member.MemberRole;
 import com.junior.domain.member.MemberStatus;
 import com.junior.domain.member.SignUpType;
 import com.junior.dto.member.ActivateMemberDto;
+import com.junior.dto.member.MemberInfoDto;
 import com.junior.exception.NotValidMemberException;
 import com.junior.exception.StatusCode;
 import com.junior.repository.member.MemberRepository;
@@ -25,6 +26,7 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import java.util.Objects;
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
@@ -111,7 +113,41 @@ class MemberServiceTest {
     }
 
     @Test
-    void getMemberInfo() {
+    @DisplayName("회원정보 조회 기능에서 해당 회원의 닉네임과 프로필 사진 url을 정상적으로 불러올 것")
+    void getMemberInfo_success() {
+
+        //given
+        Member testMember = createActiveTestMember();
+
+        given(memberRepository.findById(anyLong())).willReturn(Optional.ofNullable(testMember));
+        UserPrincipal principal = new UserPrincipal(testMember);
+
+        //when
+        MemberInfoDto memberInfo = memberService.getMemberInfo(principal);
+
+        //then
+        Assertions.assertThat(memberInfo.nickname()).isEqualTo("테스트닉");
+        Assertions.assertThat(memberInfo.profileImageUrl()).isEqualTo("s3.com/testProfile");
+
+
+    }
+
+    @Test
+    @DisplayName("ACTIVE 상태가 아닌 회원은 정보 조회를 할 수 없음")
+    void getMemberInfo_fail() {
+
+
+        //given
+        Member testMember = createPreactiveTestMember();
+        UserPrincipal principal = new UserPrincipal(testMember);
+        given(memberRepository.findById(1L)).willReturn(Optional.ofNullable(testMember));
+
+
+
+        //when, then
+        Assertions.assertThatThrownBy(() -> memberService.getMemberInfo(principal)).isInstanceOf(NotValidMemberException.class);
+
+
     }
 
     @Test
@@ -157,6 +193,7 @@ class MemberServiceTest {
 
     }
 
+
     Member createPreactiveTestMember() {
         return Member.builder()
                 .id(1L)
@@ -164,6 +201,7 @@ class MemberServiceTest {
                 .username("KAKAO 3748293466")
                 .role(MemberRole.USER)
                 .signUpType(SignUpType.KAKAO)
+                .profileImage("s3.com/testProfile")
                 .recommendLocation("서울")
                 .build();
     }
@@ -175,6 +213,7 @@ class MemberServiceTest {
                 .username("KAKAO 3748293465")
                 .role(MemberRole.USER)
                 .signUpType(SignUpType.KAKAO)
+                .profileImage("s3.com/testProfile")
                 .recommendLocation("서울")
                 .status(MemberStatus.ACTIVE)
                 .build();
