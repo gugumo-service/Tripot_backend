@@ -21,8 +21,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -110,7 +113,42 @@ class MemberServiceTest {
     }
 
     @Test
-    void updateProfileImage() {
+    @DisplayName("프로필 사진 변경이 정상적으로 이루어져야 함")
+    void updateProfileImage_success() {
+
+        //given
+        Member testMember = createActiveTestMember();
+        UserPrincipal principal = new UserPrincipal(testMember);
+        MultipartFile profileImage = createMockMultipartFile();
+
+        given(memberRepository.findById(2L)).willReturn(Optional.ofNullable(testMember));
+        given(s3Service.saveProfileImage(profileImage)).willReturn("s3.com/newProfile");
+
+        //when
+        memberService.updateProfileImage(principal, profileImage);
+
+        //then
+        Member updatedMember = memberRepository.findById(2L).get();
+        Assertions.assertThat(updatedMember.getProfileImage()).isEqualTo("s3.com/newProfile");
+    }
+
+    @Test
+    @DisplayName("ACTIVE 상태가 아닌 회원은 정보 조회를 할 수 없음")
+    void updateProfileImage_fail() {
+
+
+        //given
+        Member testMember = createPreactiveTestMember();
+        UserPrincipal principal = new UserPrincipal(testMember);
+        given(memberRepository.findById(1L)).willReturn(Optional.ofNullable(testMember));
+        MultipartFile profileImage = createMockMultipartFile();
+
+
+
+        //when, then
+        Assertions.assertThatThrownBy(() -> memberService.updateProfileImage(principal, profileImage)).isInstanceOf(NotValidMemberException.class);
+
+
     }
 
     @Test
@@ -255,5 +293,17 @@ class MemberServiceTest {
                 .recommendLocation("서울")
                 .status(MemberStatus.ACTIVE)
                 .build();
+    }
+
+    MockMultipartFile createMockMultipartFile(){
+        MockMultipartFile profileImg = new MockMultipartFile(
+                "프로필 사진",
+                "profiles.png",
+                MediaType.IMAGE_PNG_VALUE,
+                "thumbnail".getBytes()
+        );
+
+        return profileImg;
+
     }
 }
