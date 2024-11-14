@@ -6,6 +6,7 @@ import com.junior.domain.member.MemberStatus;
 import com.junior.domain.member.SignUpType;
 import com.junior.dto.member.ActivateMemberDto;
 import com.junior.dto.member.MemberInfoDto;
+import com.junior.dto.member.UpdateNicknameDto;
 import com.junior.exception.NotValidMemberException;
 import com.junior.exception.StatusCode;
 import com.junior.repository.member.MemberRepository;
@@ -151,7 +152,44 @@ class MemberServiceTest {
     }
 
     @Test
-    void updateNickname() {
+    @DisplayName("회원의 닉네임 수정이 정상적으로 이루어져야 함")
+    void updateNickname_success() {
+
+        //given
+        Member testMember = createActiveTestMember();
+
+        given(memberRepository.findById(2L)).willReturn(Optional.ofNullable(testMember));
+        UserPrincipal principal = new UserPrincipal(testMember);
+
+        UpdateNicknameDto updateNicknameDto = new UpdateNicknameDto("updatenick");
+
+        //when
+        memberService.updateNickname(principal, updateNicknameDto);
+
+        //then
+        Member updatedMember = memberRepository.findById(2L).get();
+
+        Assertions.assertThat(updatedMember.getNickname()).isEqualTo("updatenick");
+
+    }
+
+    @Test
+    @DisplayName("ACTIVE 상태가 아닌 회원은 닉네임 수정을 할 수 없음")
+    void updateNickname_fail() {
+
+
+        //given
+        Member testMember = createPreactiveTestMember();
+        UserPrincipal principal = new UserPrincipal(testMember);
+        given(memberRepository.findById(1L)).willReturn(Optional.ofNullable(testMember));
+
+        UpdateNicknameDto updateNicknameDto = new UpdateNicknameDto("updatenick");
+
+
+        //when, then
+        Assertions.assertThatThrownBy(() -> memberService.updateNickname(principal, updateNicknameDto)).isInstanceOf(NotValidMemberException.class);
+
+
     }
 
     @Test
