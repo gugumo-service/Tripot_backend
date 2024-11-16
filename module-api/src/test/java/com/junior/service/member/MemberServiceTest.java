@@ -30,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Objects;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
@@ -73,11 +74,11 @@ class MemberServiceTest {
         Member modifiedMember = memberRepository.findById(1L).get();
 
         //닉네임이 updatenick으로 변경되어야 함
-        Assertions.assertThat(modifiedMember.getNickname()).isEqualTo("updatenick");
+        assertThat(modifiedMember.getNickname()).isEqualTo("updatenick");
         //recommendLocation이 강원이어야 함
-        Assertions.assertThat(modifiedMember.getRecommendLocation()).isEqualTo("강원");
+        assertThat(modifiedMember.getRecommendLocation()).isEqualTo("강원");
         //testMember의 status가 ACTIVE여야 함
-        Assertions.assertThat(modifiedMember.getStatus()).isEqualTo(MemberStatus.ACTIVE);
+        assertThat(modifiedMember.getStatus()).isEqualTo(MemberStatus.ACTIVE);
     }
 
     @Test
@@ -107,8 +108,8 @@ class MemberServiceTest {
 
         given(memberRepository.existsByNickname("테스트닉")).willReturn(true);          //테스트닉이라는 닉네임을 가진 사용자가 존재할 때
 
-        Assertions.assertThat(memberService.checkDuplicateNickname("테스트닉")).isTrue();
-        Assertions.assertThat(memberService.checkDuplicateNickname("테스트")).isFalse();
+        assertThat(memberService.checkDuplicateNickname("테스트닉")).isTrue();
+        assertThat(memberService.checkDuplicateNickname("테스트")).isFalse();
 
     }
 
@@ -129,7 +130,7 @@ class MemberServiceTest {
 
         //then
         Member updatedMember = memberRepository.findById(2L).get();
-        Assertions.assertThat(updatedMember.getProfileImage()).isEqualTo("s3.com/newProfile");
+        assertThat(updatedMember.getProfileImage()).isEqualTo("s3.com/newProfile");
     }
 
     @Test
@@ -165,8 +166,8 @@ class MemberServiceTest {
         MemberInfoDto memberInfo = memberService.getMemberInfo(principal);
 
         //then
-        Assertions.assertThat(memberInfo.nickname()).isEqualTo("테스트닉");
-        Assertions.assertThat(memberInfo.profileImageUrl()).isEqualTo("s3.com/testProfile");
+        assertThat(memberInfo.nickname()).isEqualTo("테스트닉");
+        assertThat(memberInfo.profileImageUrl()).isEqualTo("s3.com/testProfile");
 
 
     }
@@ -207,7 +208,7 @@ class MemberServiceTest {
         //then
         Member updatedMember = memberRepository.findById(2L).get();
 
-        Assertions.assertThat(updatedMember.getNickname()).isEqualTo("updatenick");
+        assertThat(updatedMember.getNickname()).isEqualTo("updatenick");
 
     }
 
@@ -246,7 +247,7 @@ class MemberServiceTest {
 
         Member deletedMember = memberRepository.findById(2L).get();
 
-        Assertions.assertThat(deletedMember.getStatus()).isEqualTo(MemberStatus.DELETE);
+        assertThat(deletedMember.getStatus()).isEqualTo(MemberStatus.DELETE);
 
     }
 
