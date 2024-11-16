@@ -1,9 +1,12 @@
 package com.junior.domain.member;
 
 
+import com.junior.domain.like.Like;
 import com.junior.dto.member.ActivateMemberDto;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -49,6 +52,9 @@ public class Member {
 
     //추천 여행 지역 -> 추후 추가예정
     private String recommendLocation;
+
+    @OneToMany(mappedBy = "story", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Like> likeStories;
 
     public void activateMember(ActivateMemberDto activateMemberDto) {
         nickname = activateMemberDto.nickname();

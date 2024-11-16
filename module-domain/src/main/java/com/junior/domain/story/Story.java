@@ -1,6 +1,7 @@
 package com.junior.domain.story;
 
 import com.junior.domain.base.BaseEntity;
+import com.junior.domain.like.Like;
 import com.junior.domain.member.Member;
 import com.junior.dto.story.CreateStoryDto;
 import jakarta.persistence.*;
@@ -53,6 +54,9 @@ public class Story extends BaseEntity {
     // 나만 보기
     @Column(nullable = false)
     boolean isHidden;
+
+    @OneToMany(mappedBy = "story", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Like> likeStories;
 
     @Builder(builderMethodName = "createStory", builderClassName = "CreateStory")
     public Story(Member member, String title, String content, String city, String thumbnailImg, double latitude, double longitude, boolean isHidden) {
