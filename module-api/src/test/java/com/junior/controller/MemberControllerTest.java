@@ -2,7 +2,6 @@ package com.junior.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.junior.controller.security.WithMockCustomUser;
-import com.junior.domain.member.Member;
 import com.junior.dto.member.ActivateMemberDto;
 import com.junior.dto.member.MemberInfoDto;
 import com.junior.dto.member.UpdateNicknameDto;
@@ -127,8 +126,6 @@ class MemberControllerTest {
                 .andExpect(jsonPath("$.data.profileImageUrl").value("s3.com/profileImage"));
 
 
-
-
     }
 
     @Test
@@ -213,7 +210,7 @@ class MemberControllerTest {
     }
 
 
-    MockMultipartFile createMockMultipartFile(String name){
+    MockMultipartFile createMockMultipartFile(String name) {
         MockMultipartFile profileImg = new MockMultipartFile(
                 name,
                 "profiles.png",
@@ -224,7 +221,6 @@ class MemberControllerTest {
         return profileImg;
 
     }
-
 
 
 }

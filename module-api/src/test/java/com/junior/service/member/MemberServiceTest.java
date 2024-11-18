@@ -8,13 +8,10 @@ import com.junior.dto.member.ActivateMemberDto;
 import com.junior.dto.member.MemberInfoDto;
 import com.junior.dto.member.UpdateNicknameDto;
 import com.junior.exception.NotValidMemberException;
-import com.junior.exception.StatusCode;
 import com.junior.repository.member.MemberRepository;
 import com.junior.security.UserPrincipal;
 import com.junior.service.s3.S3Service;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,16 +20,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.security.test.context.support.TestExecutionEvent;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Objects;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -95,7 +88,6 @@ class MemberServiceTest {
         given(memberRepository.findById(2L)).willReturn(Optional.ofNullable(testMember));
 
 
-
         //when, then
         Assertions.assertThatThrownBy(() -> memberService.activateMember(principal, activateMemberDto)).isInstanceOf(NotValidMemberException.class);
 
@@ -145,7 +137,6 @@ class MemberServiceTest {
         MultipartFile profileImage = createMockMultipartFile();
 
 
-
         //when, then
         Assertions.assertThatThrownBy(() -> memberService.updateProfileImage(principal, profileImage)).isInstanceOf(NotValidMemberException.class);
 
@@ -181,7 +172,6 @@ class MemberServiceTest {
         Member testMember = createPreactiveTestMember();
         UserPrincipal principal = new UserPrincipal(testMember);
         given(memberRepository.findById(1L)).willReturn(Optional.ofNullable(testMember));
-
 
 
         //when, then
@@ -262,7 +252,7 @@ class MemberServiceTest {
         Member testMember = createPreactiveTestMember();
         UserPrincipal principal = new UserPrincipal(testMember);
         given(memberRepository.findById(1L)).willReturn(Optional.ofNullable(testMember));
-        
+
 
         //when, then
         Assertions.assertThatThrownBy(() -> memberService.deleteMember(principal)).isInstanceOf(NotValidMemberException.class);
@@ -296,7 +286,7 @@ class MemberServiceTest {
                 .build();
     }
 
-    MockMultipartFile createMockMultipartFile(){
+    MockMultipartFile createMockMultipartFile() {
         MockMultipartFile profileImg = new MockMultipartFile(
                 "프로필 사진",
                 "profiles.png",
