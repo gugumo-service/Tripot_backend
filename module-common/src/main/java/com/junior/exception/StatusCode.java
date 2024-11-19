@@ -54,6 +54,7 @@ public enum StatusCode {
     EXPIRED_REFRESH_TOKEN(401, "JWT-ERR-004", "만료된 Refresh 토큰"),
     NOT_ACCESS_TOKEN(401, "JWT-ERR-005", "Access token이 아님"),
     ACCESS_DENIED(403, "JWT-ERR-006", "접근이 거부됨"),
+    INVALID_TOKEN(401, "JWT-ERR-007", "유효하지 않은 토큰"),
 
 
     // 공통 예외
