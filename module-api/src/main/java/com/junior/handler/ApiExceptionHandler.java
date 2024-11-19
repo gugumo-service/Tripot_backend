@@ -1,9 +1,6 @@
 package com.junior.handler;
 
-import com.junior.exception.CustomException;
-import com.junior.exception.JwtErrorException;
-import com.junior.exception.NotValidMemberException;
-import com.junior.exception.StatusCode;
+import com.junior.exception.*;
 import com.junior.response.CommonResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +38,16 @@ public class ApiExceptionHandler {
     @ExceptionHandler(NotValidMemberException.class)
     protected ResponseEntity<CommonResponse<Object>> handleNotValidMemberException(NotValidMemberException e) {
         log.warn("handleNotValidMemberException : {}", e.getMessage());
+//        final ErrorResponse response = ErrorResponse.of(e.getStatusCode());
+//        return ResponseEntity.status(e.getStatusCode().getHttpCode()).body(response);
+        StatusCode statusCode = e.getStatusCode();
+        return ResponseEntity.status(statusCode.getHttpCode()).body(CommonResponse.fail(statusCode));
+    }
+
+
+    @ExceptionHandler(NoticeException.class)
+    protected ResponseEntity<CommonResponse<Object>> handleNoticeException(NoticeException e) {
+        log.warn("{} : {}", Thread.currentThread().getStackTrace()[1].getMethodName(), e.getMessage());
 //        final ErrorResponse response = ErrorResponse.of(e.getStatusCode());
 //        return ResponseEntity.status(e.getStatusCode().getHttpCode()).body(response);
         StatusCode statusCode = e.getStatusCode();

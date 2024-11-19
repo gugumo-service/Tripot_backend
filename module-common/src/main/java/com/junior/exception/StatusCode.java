@@ -56,6 +56,12 @@ public enum StatusCode {
     ACCESS_DENIED(403, "JWT-ERR-006", "접근이 거부됨"),
     INVALID_TOKEN(401, "JWT-ERR-007", "유효하지 않은 토큰"),
 
+    // 공지사항 관련 상태코드
+    NOTICE_CREATE_SUCCESS(201, "NOTICE-SUCCESS-001", "공지사항 업로드 성공"),
+    NOTICE_NOT_FOUND(400, "NOTICE-ERR-001", "해당 공지사항을 찾을 수 없음"),
+    NOTICE_DELETE_SUCCESS(200, "NOTICE-SUCCESS-002", "공지사항 삭제 성공"),
+    NOTICE_UPDATE_SUCCESS(200, "NOTICE-SUCCESS-003", "공지사항 수정 성공"),
+
 
     // 공통 예외
     UNKNOWN_ERROR(9999, "UNKNOWN-ERROR", "정의되지 않은 예외");
