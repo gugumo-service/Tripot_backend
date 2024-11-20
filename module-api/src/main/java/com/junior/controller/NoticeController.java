@@ -6,6 +6,7 @@ import com.junior.exception.StatusCode;
 import com.junior.response.CommonResponse;
 import com.junior.service.admin.NoticeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,6 +16,7 @@ public class NoticeController {
     private final NoticeService noticeService;
 
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/api/v1/admin/notice")
     public CommonResponse<Object> saveNotice(@RequestBody CreateNoticeDto createNoticeDto) {
 
