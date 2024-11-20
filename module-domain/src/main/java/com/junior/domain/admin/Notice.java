@@ -3,15 +3,13 @@ package com.junior.domain.admin;
 import com.junior.domain.base.BaseEntity;
 import com.junior.dto.admin.notice.UpdateNoticeDto;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Getter
 public class Notice extends BaseEntity {
 
     @Id
@@ -31,7 +29,7 @@ public class Notice extends BaseEntity {
     }
 
     public void update(UpdateNoticeDto updateNoticeDto) {
-        this.title = title;
-        this.content = content;
+        this.title = updateNoticeDto.title();
+        this.content = updateNoticeDto.content();
     }
 }
