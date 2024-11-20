@@ -1,5 +1,6 @@
 package com.junior.config;
 
+import com.junior.domain.member.MemberRole;
 import com.junior.security.exceptionhandler.CustomAuthenticationEntryPoint;
 import com.junior.security.JwtUtil;
 import com.junior.security.filter.JwtValidExceptionHandlerFilter;
@@ -54,7 +55,7 @@ public class SecurityConfig {
                         .requestMatchers("/swagger-ui/**",
                                 "/swagger-resources/**",
                                 "/v3/api-docs/**").permitAll()
-                        .requestMatchers("/api/v1/admin/**").hasAnyAuthority("ADMIN")
+                        .requestMatchers("/api/v1/admin/**").hasRole(MemberRole.ADMIN.name())
                         .anyRequest().authenticated());
 
 
