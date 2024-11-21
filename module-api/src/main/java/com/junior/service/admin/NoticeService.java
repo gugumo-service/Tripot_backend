@@ -41,7 +41,7 @@ public class NoticeService {
                 .content(createNoticeDto.content())
                 .build();
 
-        log.info("[{}] 공지사항 저장 - id: {}", Thread.currentThread().getStackTrace()[1].getMethodName(), notice.getId());
+        log.info("[{}] 공지사항 저장", Thread.currentThread().getStackTrace()[1].getMethodName());
         noticeRepository.save(notice);
 
     }
@@ -63,6 +63,11 @@ public class NoticeService {
         log.info("[{}] 공지사항 세부정보 조회", Thread.currentThread().getStackTrace()[1].getMethodName());
         Notice notice = noticeRepository.findById(noticeId)
                 .orElseThrow(() -> new NoticeException(StatusCode.NOTICE_NOT_FOUND));
+
+        if (notice.getIsDeleted()) {
+            log.error("[{}] 삭제된 공지사항 조회 - id: {}", Thread.currentThread().getStackTrace()[1].getMethodName(), notice.getId());
+            throw new NoticeException(StatusCode.NOTICE_NOT_FOUND);
+        }
 
         log.info("[{}] 공지사항 작성자 조회", Thread.currentThread().getStackTrace()[1].getMethodName());
         Member author = memberRepository.findById(notice.getCreatedBy())

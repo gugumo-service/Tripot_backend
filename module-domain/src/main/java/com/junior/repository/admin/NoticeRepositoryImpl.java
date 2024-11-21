@@ -34,8 +34,9 @@ public class NoticeRepositoryImpl implements NoticeRepositoryCustom{
                 )
                 .from(notice)
                 .where(
-                        queryContains(q)
+                        queryContains(q), notice.isDeleted.isFalse()
                 )
+                .orderBy(notice.createdDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
