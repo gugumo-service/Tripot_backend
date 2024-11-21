@@ -61,6 +61,7 @@ public enum StatusCode {
     NOTICE_NOT_FOUND(400, "NOTICE-ERR-001", "해당 공지사항을 찾을 수 없음"),
     NOTICE_DELETE_SUCCESS(200, "NOTICE-SUCCESS-002", "공지사항 삭제 성공"),
     NOTICE_UPDATE_SUCCESS(200, "NOTICE-SUCCESS-003", "공지사항 수정 성공"),
+    NOTICE_FIND_SUCCESS(200, "NOTICE-SUCCESS-004", "공지사항 조회 성공"),
 
 
     // 공통 예외

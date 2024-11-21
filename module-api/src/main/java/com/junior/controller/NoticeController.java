@@ -2,11 +2,15 @@ package com.junior.controller;
 
 import com.junior.controller.api.NoticeApi;
 import com.junior.dto.admin.notice.CreateNoticeDto;
+import com.junior.dto.admin.notice.NoticeDto;
 import com.junior.dto.admin.notice.UpdateNoticeDto;
 import com.junior.exception.StatusCode;
+import com.junior.page.PageCustom;
 import com.junior.response.CommonResponse;
 import com.junior.service.admin.NoticeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +32,19 @@ public class NoticeController implements NoticeApi {
         noticeService.saveNotice(createNoticeDto);
 
         return CommonResponse.success(StatusCode.NOTICE_CREATE_SUCCESS, null);
+    }
+
+    /**
+     * 공지사항 조회 기능
+     * @param pageable  (page: 조회하고자 하는 페이지)
+     * @param q 공지사항 검색어
+     * @return
+     */
+    @GetMapping("/api/v1/admin/notice")
+    public CommonResponse<PageCustom<NoticeDto>> findNotice(@PageableDefault(size = 15) Pageable pageable,
+                                                            @RequestParam(required = false, value = "q") String q) {
+
+        return CommonResponse.success(StatusCode.NOTICE_FIND_SUCCESS, noticeService.findNotice(q, pageable));
     }
 
     /**
