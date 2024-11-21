@@ -42,8 +42,8 @@ public class NoticeController implements NoticeApi {
      * @return 공지사항 목록
      */
     @GetMapping("/api/v1/admin/notice")
-    public CommonResponse<PageCustom<NoticeDto>> findNotice(@PageableDefault(size = 15) Pageable pageable,
-                                                            @RequestParam(required = false, value = "q") String q) {
+    public CommonResponse<PageCustom<NoticeDto>> findNotice(@PageableDefault(size = 15, page = 1) Pageable pageable,
+                                                            @RequestParam(required = false, value = "q", defaultValue = "") String q) {
 
         return CommonResponse.success(StatusCode.NOTICE_FIND_SUCCESS, noticeService.findNotice(q, pageable));
     }

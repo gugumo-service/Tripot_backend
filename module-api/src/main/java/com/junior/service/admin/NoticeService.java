@@ -10,11 +10,13 @@ import com.junior.exception.NotValidMemberException;
 import com.junior.exception.NoticeException;
 import com.junior.exception.StatusCode;
 import com.junior.page.PageCustom;
+import com.junior.page.PageableCustom;
 import com.junior.repository.admin.NoticeRepository;
 import com.junior.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,10 +49,11 @@ public class NoticeService {
 
     public PageCustom<NoticeDto> findNotice(String q, Pageable pageable) {
 
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber() - 1, pageable.getPageSize());
 
-        Page<NoticeDto> page = noticeRepository.findNotice(q, pageable);
+        Page<NoticeDto> page = noticeRepository.findNotice(q, pageRequest);
 
-        log.info("[{}] 공지사항 조회 결과 리턴 page: {}", Thread.currentThread().getStackTrace()[1].getMethodName(), pageable.getPageNumber() + 1);
+        log.info("[{}] 공지사항 조회 결과 리턴 page: {}", Thread.currentThread().getStackTrace()[1].getMethodName(), pageable.getPageNumber());
         return new PageCustom<>(page.getContent(), page.getPageable(), page.getTotalElements());
 
     }
