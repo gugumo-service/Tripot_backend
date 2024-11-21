@@ -66,7 +66,7 @@ public class NoticeService {
 
         log.info("[{}] 공지사항 작성자 조회", Thread.currentThread().getStackTrace()[1].getMethodName());
         Member author = memberRepository.findById(notice.getCreatedBy())
-                .orElseThrow(() -> new NotValidMemberException(StatusCode.INVALID_MEMBER));
+                .orElseThrow(() -> new NotValidMemberException(StatusCode.MEMBER_NOT_FOUND));
 
         NoticeDetailDto noticeDetailDto = NoticeDetailDto.builder()
                 .title(notice.getTitle())
