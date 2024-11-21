@@ -62,6 +62,7 @@ public enum StatusCode {
     NOTICE_DELETE_SUCCESS(200, "NOTICE-SUCCESS-002", "공지사항 삭제 성공"),
     NOTICE_UPDATE_SUCCESS(200, "NOTICE-SUCCESS-003", "공지사항 수정 성공"),
     NOTICE_FIND_SUCCESS(200, "NOTICE-SUCCESS-004", "공지사항 조회 성공"),
+    NOTICE_FIND_DETAIL_SUCCESS(200, "NOTICE-SUCCESS-005", "공지사항 세부정보 조회 성공"),
 
 
     // 공통 예외

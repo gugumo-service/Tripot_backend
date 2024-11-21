@@ -2,6 +2,7 @@ package com.junior.controller;
 
 import com.junior.controller.api.NoticeApi;
 import com.junior.dto.admin.notice.CreateNoticeDto;
+import com.junior.dto.admin.notice.NoticeDetailDto;
 import com.junior.dto.admin.notice.NoticeDto;
 import com.junior.dto.admin.notice.UpdateNoticeDto;
 import com.junior.exception.StatusCode;
@@ -38,13 +39,24 @@ public class NoticeController implements NoticeApi {
      * 공지사항 조회 기능
      * @param pageable  (page: 조회하고자 하는 페이지)
      * @param q 공지사항 검색어
-     * @return
+     * @return 공지사항 목록
      */
     @GetMapping("/api/v1/admin/notice")
     public CommonResponse<PageCustom<NoticeDto>> findNotice(@PageableDefault(size = 15) Pageable pageable,
                                                             @RequestParam(required = false, value = "q") String q) {
 
         return CommonResponse.success(StatusCode.NOTICE_FIND_SUCCESS, noticeService.findNotice(q, pageable));
+    }
+
+    /**
+     * 공지사항 내용 조회 기능
+     * @param noticeId 공지사항 id
+     * @return 공지사항 내용
+     */
+    @GetMapping("/api/v1/admin/notice/{notice_id}")
+    public CommonResponse<NoticeDetailDto> findNoticeDetail(@PathVariable("notice_id") Long noticeId) {
+
+        return CommonResponse.success(StatusCode.NOTICE_FIND_DETAIL_SUCCESS, noticeService.findNoticeDetail(noticeId));
     }
 
     /**
