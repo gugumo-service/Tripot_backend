@@ -43,7 +43,11 @@ subprojects{
 
 	dependencies {
 
+		implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.14.2'
 
+		//AWS Parameter Store
+		implementation platform("io.awspring.cloud:spring-cloud-aws-dependencies:3.2.0")
+		implementation 'io.awspring.cloud:spring-cloud-aws-starter-parameter-store'
 
 
 		//검증

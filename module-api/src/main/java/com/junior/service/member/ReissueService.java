@@ -1,12 +1,11 @@
-package com.junior.service;
+package com.junior.service.member;
 
 import com.junior.dto.jwt.LoginCreateJwtDto;
-import com.junior.dto.jwt.ReissueDto;
+import com.junior.dto.jwt.RefreshTokenDto;
 import com.junior.exception.StatusCode;
 import com.junior.exception.JwtErrorException;
 import com.junior.security.JwtUtil;
 import com.junior.util.RedisUtil;
-import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,21 +20,19 @@ public class ReissueService {
     private final RedisUtil redisUtil;
 
 
-    public void reissue(ReissueDto reissueDto, HttpServletResponse response) {
+    public void reissue(RefreshTokenDto refreshTokenDto, HttpServletResponse response) {
 
-        String oldRefreshToken = reissueDto.refreshToken().split(" ")[1];
+        String oldRefreshToken = refreshTokenDto.refreshToken().split(" ")[1];
 
-        try {
-            jwtUtil.isExpired(oldRefreshToken);
-        } catch (ExpiredJwtException e) {
+        if (jwtUtil.isExpired(oldRefreshToken)) {
             //예외 처리: 만료된 refreshToken
-            throw new JwtErrorException(StatusCode.EXPIRED_TOKEN);
+            throw new JwtErrorException(StatusCode.EXPIRED_REFRESH_TOKEN);
         }
 
         //refresh 토큰인지 확인
         if (!jwtUtil.getCategory(oldRefreshToken).equals("refresh")) {
             //예외 처리: refresh 토큰이 아님
-            throw new JwtErrorException(StatusCode.INVALID_REFRESH_TOKEN);
+            throw new JwtErrorException(StatusCode.NOT_REFRESH_TOKEN);
         }
 
         //oldRefreshToken 존재 여부 확인
@@ -44,7 +41,9 @@ public class ReissueService {
             throw new JwtErrorException(StatusCode.TOKEN_NOT_EXIST);
         }
 
-        String username = redisUtil.getData(oldRefreshToken);
+
+
+        String username = jwtUtil.getUsername(oldRefreshToken);
 
         LoginCreateJwtDto loginCreateJwtDto = LoginCreateJwtDto.builder()
                 .id(jwtUtil.getId(oldRefreshToken))
@@ -59,7 +58,7 @@ public class ReissueService {
 
         //이전 토큰을 삭제하고 새 토큰 생성
         redisUtil.deleteData(oldRefreshToken);
-        redisUtil.setDataExpire(newRefreshToken, username, 8640_0000L);
+        redisUtil.setDataExpire(newRefreshToken, username, 15778800);
 
         //새 토큰을 응답에 추가
         response.addHeader("Authorization", "Bearer " + newAccessToken);

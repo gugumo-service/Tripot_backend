@@ -55,6 +55,7 @@ public class ApiExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public CommonResponse handlerException(Exception e) {
+        log.error("[{}] : {}, {}", Thread.currentThread().getStackTrace()[1].getMethodName(), e.getCause(), e.getMessage());
         return CommonResponse.builder()
                 .customCode("500")
                 .customMessage(e.getMessage())

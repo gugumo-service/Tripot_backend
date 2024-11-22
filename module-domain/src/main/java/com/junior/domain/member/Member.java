@@ -3,6 +3,7 @@ package com.junior.domain.member;
 
 import com.junior.domain.like.Like;
 import com.junior.dto.member.ActivateMemberDto;
+import com.junior.dto.member.UpdateNicknameDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -60,9 +61,9 @@ public class Member {
 
     public void activateMember(ActivateMemberDto activateMemberDto) {
         nickname = activateMemberDto.nickname();
-        isAgreeTermsUse = activateMemberDto.isAgreeTermsUse();
-        isAgreeCollectingUsingPersonalInformation = activateMemberDto.isAgreeCollectingUsingPersonalInformation();
-        isAgreeMarketing = activateMemberDto.isAgreeMarketing();
+//        isAgreeTermsUse = activateMemberDto.isAgreeTermsUse();
+//        isAgreeCollectingUsingPersonalInformation = activateMemberDto.isAgreeCollectingUsingPersonalInformation();
+//        isAgreeMarketing = activateMemberDto.isAgreeMarketing();
         recommendLocation= activateMemberDto.recommendLocation();
         status = MemberStatus.ACTIVE;
     }
@@ -81,5 +82,17 @@ public class Member {
 
         this.signUpType = null;
         this.recommendLocation = null;
+    }
+
+    public void updateNickname(UpdateNicknameDto updateNicknameDto) {
+        this.nickname = updateNicknameDto.getNickname();
+    }
+
+    public void updateProfile(String profileUrl) {
+        this.profileImage = profileUrl;
+    }
+
+    public void deleteProfile() {
+        this.profileImage = null;
     }
 }

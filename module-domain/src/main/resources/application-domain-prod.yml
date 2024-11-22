@@ -2,6 +2,7 @@ spring:
   config:
     activate:
       on-profile: prod
+    import: aws-parameterstore:/config/tripot-prod/
   application:
     name: module-domain
   datasource:
@@ -10,6 +11,8 @@ spring:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
   jpa:
+    hibernate:
+      ddl-auto: update
     database: mysql
     show-sql: false
     properties:
@@ -19,3 +22,6 @@ spring:
     redis:
       host: localhost
       port: 6379
+
+
+

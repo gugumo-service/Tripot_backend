@@ -1,19 +1,19 @@
 package com.junior.dto.oauth2;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
 import java.util.Map;
 
-public interface OAuth2UserInfo {
 
-    OAuth2Provider getProvider();
+@Builder
+public record OAuth2UserInfo (
+        Long id,
+        String nickname,
+        OAuth2Provider provider
+){}
 
-    String getAccessToken();
 
-    Map<String, Object> getAttributes();
 
-    String getId();
 
-    String getEmail();
-
-    String getNickname();
-
-}

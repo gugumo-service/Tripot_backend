@@ -18,12 +18,13 @@ spring:
         jdbc:
           lob:
             non_contextual_creation: true
-  logging:
-    level:
-      org.hibernate.SQL: info
-      org.hibernate.type: trace
   data:
     redis:
       host: localhost
       port: 6379
+  logging:
+    level:
+      org.hibernate.SQL: info
+      org.hibernate.type: trace
+
 
