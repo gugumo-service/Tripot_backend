@@ -8,7 +8,7 @@ import com.junior.dto.admin.notice.UpdateNoticeDto;
 import com.junior.exception.StatusCode;
 import com.junior.page.PageCustom;
 import com.junior.response.CommonResponse;
-import com.junior.service.admin.NoticeService;
+import com.junior.service.admin.NoticeAdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-public class NoticeController implements NoticeApi {
+public class NoticeAdminController implements NoticeApi {
 
-    private final NoticeService noticeService;
+    private final NoticeAdminService noticeAdminService;
 
     /**
      * 공지사항 작성 기능
@@ -30,7 +30,7 @@ public class NoticeController implements NoticeApi {
     @PostMapping("/api/v1/admin/notices")
     public CommonResponse<Object> saveNotice(@RequestBody CreateNoticeDto createNoticeDto) {
 
-        noticeService.saveNotice(createNoticeDto);
+        noticeAdminService.saveNotice(createNoticeDto);
 
         return CommonResponse.success(StatusCode.NOTICE_CREATE_SUCCESS, null);
     }
@@ -45,7 +45,7 @@ public class NoticeController implements NoticeApi {
     public CommonResponse<PageCustom<NoticeDto>> findNotice(@PageableDefault(size = 15, page = 1) Pageable pageable,
                                                             @RequestParam(required = false, value = "q", defaultValue = "") String q) {
 
-        return CommonResponse.success(StatusCode.NOTICE_FIND_SUCCESS, noticeService.findNotice(q, pageable));
+        return CommonResponse.success(StatusCode.NOTICE_FIND_SUCCESS, noticeAdminService.findNotice(q, pageable));
     }
 
     /**
@@ -56,7 +56,7 @@ public class NoticeController implements NoticeApi {
     @GetMapping("/api/v1/admin/notices/{notice_id}")
     public CommonResponse<NoticeDetailDto> findNoticeDetail(@PathVariable("notice_id") Long noticeId) {
 
-        return CommonResponse.success(StatusCode.NOTICE_FIND_DETAIL_SUCCESS, noticeService.findNoticeDetail(noticeId));
+        return CommonResponse.success(StatusCode.NOTICE_FIND_DETAIL_SUCCESS, noticeAdminService.findNoticeDetail(noticeId));
     }
 
     /**
@@ -68,7 +68,7 @@ public class NoticeController implements NoticeApi {
     @PatchMapping("/api/v1/admin/notices/{notice_id}")
     public CommonResponse<Object> updateNotice(@PathVariable(name = "notice_id") Long noticeId, @RequestBody UpdateNoticeDto updateNoticeDto) {
 
-        noticeService.updateNotice(noticeId, updateNoticeDto);
+        noticeAdminService.updateNotice(noticeId, updateNoticeDto);
 
         return CommonResponse.success(StatusCode.NOTICE_UPDATE_SUCCESS, null);
     }
@@ -81,7 +81,7 @@ public class NoticeController implements NoticeApi {
     @DeleteMapping("/api/v1/admin/notices/{notice_id}")
     public CommonResponse<Object> deleteNotice(@PathVariable(name = "notice_id") Long noticeId) {
 
-        noticeService.deleteNotice(noticeId);
+        noticeAdminService.deleteNotice(noticeId);
 
         return CommonResponse.success(StatusCode.NOTICE_DELETE_SUCCESS, null);
     }

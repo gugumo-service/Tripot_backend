@@ -1,15 +1,13 @@
 package com.junior.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.junior.controller.security.WithMockCustomAdmin;
-import com.junior.controller.security.WithMockCustomUser;
 import com.junior.dto.admin.notice.CreateNoticeDto;
 import com.junior.dto.admin.notice.NoticeDetailDto;
 import com.junior.dto.admin.notice.NoticeDto;
 import com.junior.dto.admin.notice.UpdateNoticeDto;
 import com.junior.page.PageCustom;
-import com.junior.service.admin.NoticeService;
+import com.junior.service.admin.NoticeAdminService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -27,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -37,9 +34,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@WebMvcTest(NoticeController.class)
+@WebMvcTest(NoticeAdminController.class)
 @MockBean(JpaMetamodelMappingContext.class)     //JPA 관련 빈들을 mock으로 등록
-class NoticeControllerTest {
+class NoticeAdminControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -48,10 +45,10 @@ class NoticeControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private NoticeService noticeService;
+    private NoticeAdminService noticeAdminService;
 
     @InjectMocks
-    private NoticeController noticeController;
+    private NoticeAdminController noticeAdminController;
 
     @Test
     @DisplayName("공지 저장 응답이 반환되어야 함")
@@ -98,7 +95,7 @@ class NoticeControllerTest {
         result.add(new NoticeDto(1L, "title"));
 
 
-        given(noticeService.findNotice(anyString(), any(Pageable.class))).willReturn(new PageCustom<>(result, resultPageable, result.size()));
+        given(noticeAdminService.findNotice(anyString(), any(Pageable.class))).willReturn(new PageCustom<>(result, resultPageable, result.size()));
 
         //when
         ResultActions actions = mockMvc.perform(
@@ -135,7 +132,7 @@ class NoticeControllerTest {
                 .authorNick("nickname")
                 .build();
 
-        given(noticeService.findNoticeDetail(anyLong())).willReturn(noticeDetailDto);
+        given(noticeAdminService.findNoticeDetail(anyLong())).willReturn(noticeDetailDto);
 
         //when
         ResultActions actions = mockMvc.perform(
