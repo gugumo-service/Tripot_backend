@@ -22,6 +22,11 @@ public enum StatusCode {
     STORY_CREATE_FAIL(500, "STORY-ERR-0001", "스토리 생성 실패"),
     STORY_BAD_REQUEST(500, "STORY-ERR-0002", "잘못된 파라미터"),
     STORY_READ_SUCCESS(200, "STORY-SUCCESS-0001", "스토리 불러오기 성공"),
+    STORY_NOT_PERMISSION(400, "STORY-ERR-0003", "권한이 없는 스토리"),
+
+    // like 관련 예외
+    LIKE_NOT_FOUND(400, "LIKE-ERR-0001", "좋아요 조회 실패"),
+    LIKE_CHANGE_SUCCESS(200, "LIKE-CHANGE-SUCCESS-0000", "좋아요 전환 성공"),
 
     // comment 관련 예외
     COMMENT_CREATE_SUCCESS(200, "COMMENT-SUCCESS-0001", "댓글 저장 성공"),

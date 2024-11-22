@@ -8,8 +8,6 @@ spring:
       max-file-size: 5MB
       max-request-size: 50MB
 
-
-
   security:
     oauth2:
       client:
@@ -33,7 +31,6 @@ spring:
 logging:
   level:
     root: info
-
 
 cloud:
   aws:

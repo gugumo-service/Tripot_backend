@@ -12,7 +12,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaAuditing
 @TestConfiguration
 @EnableJpaRepositories(basePackages = "com.junior")
-//@EntityScan(basePackages = "com.junior.dto")
 public class TestConfig {
 
     @PersistenceContext

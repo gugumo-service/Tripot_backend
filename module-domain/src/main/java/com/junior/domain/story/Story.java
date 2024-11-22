@@ -7,6 +7,7 @@ import com.junior.dto.story.CreateStoryDto;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -31,8 +32,9 @@ public class Story extends BaseEntity {
     @Column(length = 65535, nullable = false)
     private String content;
 
+    @Builder.Default
     @Column(nullable = false)
-    private Boolean isDeleted;
+    private Boolean isDeleted = false;
 
     /// string 형식으로 작성했지만 추후 관심지역 방식에 따라 바뀔 수 있음.
     @Column(length = 255)
@@ -47,19 +49,28 @@ public class Story extends BaseEntity {
     private String thumbnailImg;
 
     // 조회 수
-    private Long viewCnt;
+    @Builder.Default
+    private Long viewCnt = 0L;
     // 좋아요 수
-    private Long likeCnt;
+    @Builder.Default
+    private Long likeCnt = 0L;
 
     // 나만 보기
     @Column(nullable = false)
     boolean isHidden;
 
+    @Builder.Default
     @OneToMany(mappedBy = "story", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Like> likeStories;
+    private List<Like> likeMembers = new ArrayList<>();
 
+    @ElementCollection
+    @CollectionTable(name = "story_images", joinColumns = @JoinColumn(name = "story_id"))
+    @Column(name = "image_url")
+    private List<String> imgUrls;
+
+    //FIXME: custom builder 삭제(기본 builder 사용하도록 수정하기, createStoryDto와 from함수를 사용하도록)
     @Builder(builderMethodName = "createStory", builderClassName = "CreateStory")
-    public Story(Member member, String title, String content, String city, String thumbnailImg, double latitude, double longitude, boolean isHidden) {
+    public Story(Member member, String title, String content, String city, String thumbnailImg, double latitude, double longitude, boolean isHidden, List<String> imgUrls) {
         this.member = member;
         this.title = title;
         this.content = content;
@@ -68,14 +79,16 @@ public class Story extends BaseEntity {
         this.latitude = latitude;
         this.longitude = longitude;
         this.isHidden = isHidden;
+        this.imgUrls = imgUrls;
 
+        this.likeMembers = new ArrayList<>();
         this.isDeleted = false;
         this.viewCnt = 0L;
         this.likeCnt = 0L;
     }
 
     public static Story from(Member member, CreateStoryDto createStoryDto) {
-        return Story.createStory()
+        return Story.builder()
                 .member(member)
                 .title(createStoryDto.title())
                 .content(createStoryDto.content())
@@ -84,6 +97,7 @@ public class Story extends BaseEntity {
                 .latitude(createStoryDto.latitude())
                 .longitude(createStoryDto.longitude())
                 .isHidden(createStoryDto.isHidden())
+                .imgUrls(createStoryDto.imgUrls())
                 .build();
     }
 
@@ -91,8 +105,28 @@ public class Story extends BaseEntity {
         this.title = createStoryDto.title();
         this.content = createStoryDto.content();
         this.city = createStoryDto.city();
+        this.thumbnailImg = createStoryDto.thumbnailImg();
         this.latitude = createStoryDto.latitude();
         this.longitude = createStoryDto.longitude();
-        this.thumbnailImg = createStoryDto.thumbnailImg();
+        this.isHidden = createStoryDto.isHidden();
+        this.imgUrls = createStoryDto.imgUrls();
+    }
+
+    public void addLikeMember(Like like) {
+        likeMembers.add(like);
+
+        Member member = like.getMember();
+        member.getLikeStories().add(like);
+    }
+
+    public void removeLikeMember(Like like) {
+        this.likeMembers.remove(like);
+
+        Member member = like.getMember();
+        member.getLikeStories().remove(like);
+    }
+
+    public void increaseViewCnt() {
+        this.viewCnt+=1;
     }
 }

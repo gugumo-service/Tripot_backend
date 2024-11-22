@@ -5,6 +5,7 @@ import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Builder
 public record ResponseStoryDto(
@@ -17,10 +18,12 @@ public record ResponseStoryDto(
         String city,
         Long likeCnt,
         boolean isHidden,
-        LocalDateTime createDate
+        LocalDateTime createDate,
+        List<String> imgUrls
 ) {
+
     @QueryProjection
-    public ResponseStoryDto(Long id, String title, String content, String thumbnailImg, double latitude, double longitude, String city, Long likeCnt, boolean isHidden, LocalDateTime createDate) {
+    public ResponseStoryDto(Long id, String title, String content, String thumbnailImg, double latitude, double longitude, String city, Long likeCnt, boolean isHidden, LocalDateTime createDate, List<String> imgUrls) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -31,6 +34,7 @@ public record ResponseStoryDto(
         this.likeCnt = likeCnt;
         this.isHidden = isHidden;
         this.createDate = createDate;
+        this.imgUrls = imgUrls;
     }
 
     public static ResponseStoryDto from(Story story) {
@@ -44,6 +48,8 @@ public record ResponseStoryDto(
                 .city(story.getCity())
                 .likeCnt(story.getLikeCnt())
                 .isHidden(story.isHidden())
+                .imgUrls(story.getImgUrls())
+                .createDate(story.getCreatedDate())
                 .build();
     }
 }
