@@ -27,7 +27,7 @@ public class NoticeController implements NoticeApi {
      * @return 공지사항 업로드 성공
      */
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/api/v1/admin/notice")
+    @PostMapping("/api/v1/admin/notices")
     public CommonResponse<Object> saveNotice(@RequestBody CreateNoticeDto createNoticeDto) {
 
         noticeService.saveNotice(createNoticeDto);
@@ -41,7 +41,7 @@ public class NoticeController implements NoticeApi {
      * @param q 공지사항 검색어
      * @return 공지사항 목록
      */
-    @GetMapping("/api/v1/admin/notice")
+    @GetMapping("/api/v1/admin/notices")
     public CommonResponse<PageCustom<NoticeDto>> findNotice(@PageableDefault(size = 15, page = 1) Pageable pageable,
                                                             @RequestParam(required = false, value = "q", defaultValue = "") String q) {
 
@@ -53,7 +53,7 @@ public class NoticeController implements NoticeApi {
      * @param noticeId 공지사항 id
      * @return 공지사항 내용
      */
-    @GetMapping("/api/v1/admin/notice/{notice_id}")
+    @GetMapping("/api/v1/admin/notices/{notice_id}")
     public CommonResponse<NoticeDetailDto> findNoticeDetail(@PathVariable("notice_id") Long noticeId) {
 
         return CommonResponse.success(StatusCode.NOTICE_FIND_DETAIL_SUCCESS, noticeService.findNoticeDetail(noticeId));
@@ -65,7 +65,7 @@ public class NoticeController implements NoticeApi {
      * @param updateNoticeDto
      * @return 공지사항 수정 성공
      */
-    @PatchMapping("/api/v1/admin/notice/{notice_id}")
+    @PatchMapping("/api/v1/admin/notices/{notice_id}")
     public CommonResponse<Object> updateNotice(@PathVariable(name = "notice_id") Long noticeId, @RequestBody UpdateNoticeDto updateNoticeDto) {
 
         noticeService.updateNotice(noticeId, updateNoticeDto);
@@ -78,7 +78,7 @@ public class NoticeController implements NoticeApi {
      * @param noticeId
      * @return 공지사항 삭제 성공
      */
-    @DeleteMapping("/api/v1/admin/notice/{notice_id}")
+    @DeleteMapping("/api/v1/admin/notices/{notice_id}")
     public CommonResponse<Object> deleteNotice(@PathVariable(name = "notice_id") Long noticeId) {
 
         noticeService.deleteNotice(noticeId);

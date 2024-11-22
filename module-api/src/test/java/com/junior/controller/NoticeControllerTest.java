@@ -64,7 +64,7 @@ class NoticeControllerTest {
 
         //when
         ResultActions actions = mockMvc.perform(
-                post("/api/v1/admin/notice")
+                post("/api/v1/admin/notices")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content)
@@ -102,7 +102,7 @@ class NoticeControllerTest {
 
         //when
         ResultActions actions = mockMvc.perform(
-                get("/api/v1/admin/notice")
+                get("/api/v1/admin/notices")
                         .accept(MediaType.APPLICATION_JSON)
                         .with(csrf())
         );
@@ -139,7 +139,7 @@ class NoticeControllerTest {
 
         //when
         ResultActions actions = mockMvc.perform(
-                get("/api/v1/admin/notice/{notice_id}", 1L)
+                get("/api/v1/admin/notices/{notice_id}", 1L)
                         .accept(MediaType.APPLICATION_JSON)
                         .with(csrf())
         );
@@ -175,7 +175,7 @@ class NoticeControllerTest {
 
         //when
         ResultActions actions = mockMvc.perform(
-                patch("/api/v1/admin/notice/{notice_id}", noticeId)
+                patch("/api/v1/admin/notices/{notice_id}", noticeId)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content)
@@ -202,7 +202,7 @@ class NoticeControllerTest {
 
         //when
         ResultActions actions = mockMvc.perform(
-                delete("/api/v1/admin/notice/{notice_id}", noticeId)
+                delete("/api/v1/admin/notices/{notice_id}", noticeId)
                         .accept(MediaType.APPLICATION_JSON)
                         .with(csrf())
         );
