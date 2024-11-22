@@ -1,4 +1,4 @@
-package com.junior.repository.admin;
+package com.junior.repository.notice;
 
 import com.junior.dto.admin.notice.NoticeDto;
 import com.junior.dto.admin.notice.QNoticeDto;

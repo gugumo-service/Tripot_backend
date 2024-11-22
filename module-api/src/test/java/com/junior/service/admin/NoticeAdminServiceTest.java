@@ -9,8 +9,9 @@ import com.junior.dto.admin.notice.UpdateNoticeDto;
 import com.junior.exception.NotValidMemberException;
 import com.junior.exception.NoticeException;
 import com.junior.page.PageCustom;
-import com.junior.repository.admin.NoticeRepository;
+import com.junior.repository.notice.NoticeRepository;
 import com.junior.repository.member.MemberRepository;
+import com.junior.service.notice.NoticeAdminService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,13 +29,12 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class NoticeServiceTest {
+class NoticeAdminServiceTest {
 
     @Mock
     private MemberRepository memberRepository;
@@ -43,7 +43,7 @@ class NoticeServiceTest {
     private NoticeRepository noticeRepository;
 
     @InjectMocks
-    private NoticeService noticeService;
+    private NoticeAdminService noticeAdminService;
 
     @Test
     @DisplayName("공지사항 저장 로직이 정상적으로 실행되어야 함")
@@ -53,7 +53,7 @@ class NoticeServiceTest {
         CreateNoticeDto createNoticeDto = new CreateNoticeDto("title", "content");
 
         //when
-        noticeService.saveNotice(createNoticeDto);
+        noticeAdminService.saveNotice(createNoticeDto);
 
         //then
         verify(noticeRepository).save(any(Notice.class));
@@ -86,7 +86,7 @@ class NoticeServiceTest {
 
         //when
 
-        PageCustom<NoticeDto> notice = noticeService.findNotice(q, requestPageable);
+        PageCustom<NoticeDto> notice = noticeAdminService.findNotice(q, requestPageable);
 
         //then
 
@@ -116,7 +116,7 @@ class NoticeServiceTest {
 
 
         //when
-        NoticeDetailDto noticeDetail = noticeService.findNoticeDetail(noticeId);
+        NoticeDetailDto noticeDetail = noticeAdminService.findNoticeDetail(noticeId);
 
         //then
         assertThat(noticeDetail.title()).isEqualTo("title");
@@ -139,7 +139,7 @@ class NoticeServiceTest {
         given(noticeRepository.findById(1L)).willReturn(Optional.empty());
 
         //when, then
-        assertThatThrownBy(() -> noticeService.findNoticeDetail(noticeId))
+        assertThatThrownBy(() -> noticeAdminService.findNoticeDetail(noticeId))
                 .isInstanceOf(NoticeException.class)
                 .hasMessageContaining("해당 공지사항을 찾을 수 없음");
 
@@ -158,7 +158,7 @@ class NoticeServiceTest {
         given(noticeRepository.findById(1L)).willReturn(Optional.ofNullable(notice));
 
         //when, then
-        assertThatThrownBy(() -> noticeService.findNoticeDetail(noticeId))
+        assertThatThrownBy(() -> noticeAdminService.findNoticeDetail(noticeId))
                 .isInstanceOf(NoticeException.class)
                 .hasMessageContaining("해당 공지사항을 찾을 수 없음");
 
@@ -179,7 +179,7 @@ class NoticeServiceTest {
 
 
         //when, then
-        assertThatThrownBy(() -> noticeService.findNoticeDetail(noticeId))
+        assertThatThrownBy(() -> noticeAdminService.findNoticeDetail(noticeId))
                 .isInstanceOf(NotValidMemberException.class)
                 .hasMessageContaining("해당 회원을 찾을 수 없음");
 
@@ -200,7 +200,7 @@ class NoticeServiceTest {
         given(noticeRepository.findById(updateNoticeId)).willReturn(Optional.ofNullable(notice));
 
         //when
-        noticeService.updateNotice(updateNoticeId, updateNoticeDto);
+        noticeAdminService.updateNotice(updateNoticeId, updateNoticeDto);
 
         //then
         Notice updatedNotice = noticeRepository.findById(1L).get();
@@ -221,7 +221,7 @@ class NoticeServiceTest {
 
 
         //when, then
-        Assertions.assertThatThrownBy(() -> noticeService.updateNotice(updateNoticeId, updateNoticeDto))
+        Assertions.assertThatThrownBy(() -> noticeAdminService.updateNotice(updateNoticeId, updateNoticeDto))
                 .isInstanceOf(NoticeException.class)
                 .hasMessageContaining("해당 공지사항을 찾을 수 없음");
 
@@ -241,7 +241,7 @@ class NoticeServiceTest {
         given(noticeRepository.findById(deleteNoticeId)).willReturn(Optional.ofNullable(notice));
 
         //when
-        noticeService.deleteNotice(deleteNoticeId);
+        noticeAdminService.deleteNotice(deleteNoticeId);
 
         //then
         assertThat(notice.getIsDeleted()).isTrue();
@@ -256,7 +256,7 @@ class NoticeServiceTest {
 
 
         //when, then
-        Assertions.assertThatThrownBy(() -> noticeService.deleteNotice(deleteNoticeId))
+        Assertions.assertThatThrownBy(() -> noticeAdminService.deleteNotice(deleteNoticeId))
                 .isInstanceOf(NoticeException.class)
                 .hasMessageContaining("해당 공지사항을 찾을 수 없음");
 

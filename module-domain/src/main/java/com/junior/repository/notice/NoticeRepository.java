@@ -1,4 +1,4 @@
-package com.junior.repository.admin;
+package com.junior.repository.notice;
 
 
 import com.junior.domain.admin.Notice;

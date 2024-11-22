@@ -1,4 +1,4 @@
-package com.junior.service.admin;
+package com.junior.service.notice;
 
 import com.junior.domain.admin.Notice;
 import com.junior.domain.member.Member;
@@ -10,8 +10,7 @@ import com.junior.exception.NotValidMemberException;
 import com.junior.exception.NoticeException;
 import com.junior.exception.StatusCode;
 import com.junior.page.PageCustom;
-import com.junior.page.PageableCustom;
-import com.junior.repository.admin.NoticeRepository;
+import com.junior.repository.notice.NoticeRepository;
 import com.junior.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,14 +20,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-import java.util.List;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class NoticeService {
+public class NoticeAdminService {
 
     private final MemberRepository memberRepository;
     private final NoticeRepository noticeRepository;

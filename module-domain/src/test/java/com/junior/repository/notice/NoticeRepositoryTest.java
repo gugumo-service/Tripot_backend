@@ -1,9 +1,8 @@
-package com.junior.repository.admin;
+package com.junior.repository.notice;
 
 import com.junior.TestConfig;
 import com.junior.domain.admin.Notice;
 import com.junior.dto.admin.notice.NoticeDto;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
