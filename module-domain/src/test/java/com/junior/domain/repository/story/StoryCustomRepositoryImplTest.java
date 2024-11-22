@@ -6,10 +6,7 @@ import com.junior.domain.member.MemberRole;
 import com.junior.domain.member.MemberStatus;
 import com.junior.domain.member.SignUpType;
 import com.junior.domain.story.Story;
-import com.junior.dto.story.CreateStoryDto;
-import com.junior.dto.story.GeoPointDto;
-import com.junior.dto.story.ResponseStoryCntByCityDto;
-import com.junior.dto.story.ResponseStoryDto;
+import com.junior.dto.story.*;
 import com.junior.repository.member.MemberRepository;
 import com.junior.repository.story.StoryRepository;
 import org.assertj.core.api.Assertions;
@@ -23,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.test.annotation.DirtiesContext;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -42,16 +40,24 @@ class StoryCustomRepositoryImplTest {
     MemberRepository memberRepository;
 
     public Story createStory(Member member, String title, String city) {
-        return Story.createStory()
+
+        List<String> imgUrls = new ArrayList<>();
+        imgUrls.add("imgUrl1");
+        imgUrls.add("imgUrl2");
+        imgUrls.add("imgUrl3");
+
+        CreateStoryDto createStoryDto = CreateStoryDto.builder()
                 .title(title)
-                .member(member)
                 .content("content")
                 .longitude(1.0)
                 .latitude(1.0)
                 .city(city)
                 .isHidden(false)
                 .thumbnailImg("thumbURL")
+                .imgUrls(imgUrls)
                 .build();
+
+        return Story.from(member, createStoryDto);
     }
 
     public Member createMember(String nickname) {
@@ -75,10 +81,27 @@ class StoryCustomRepositoryImplTest {
     public void saveStoryTest() {
 
         Member member = createMember("nickname");
+
+        Story story = createStory(member, "title", "city");
+
+        memberRepository.save(member);
+
+        Assertions.assertThatCode(() -> storyRepository.save(story)).doesNotThrowAnyException();
+    }
+
+    @Test
+    @DisplayName("단일 story를 조회할 수 있다.")
+    public void getStoryByIdTest() {
+        Member member = createMember("nickname");
         Story story = createStory(member, "title1", "DAEJEON");
 
         memberRepository.save(member);
-        Assertions.assertThatCode(() -> storyRepository.save(story)).doesNotThrowAnyException();
+        storyRepository.save(story);
+
+        Story findStory = storyRepository.findById(1L).orElseThrow(RuntimeException::new);
+        Assertions.assertThat(findStory.getImgUrls().get(0)).isEqualTo("imgUrl1");
+        Assertions.assertThat(findStory.getImgUrls().get(1)).isEqualTo("imgUrl2");
+        Assertions.assertThat(findStory.getImgUrls().get(2)).isEqualTo("imgUrl3");
     }
 
     @Test
@@ -106,165 +129,9 @@ class StoryCustomRepositoryImplTest {
 
         Story editStory = storyRepository.findStoryByIdAndMember(1L, member);
 
-        Assertions.assertThat(story.getTitle()).isEqualTo("editStory");
-        Assertions.assertThat(story.getContent()).isEqualTo("editContent");
-        Assertions.assertThat(story.getCity()).isEqualTo("seoul");
-    }
-
-    @Test
-    @DisplayName("Story를 원하는 수만큼 가져올 수 있으며, 최신 순으로 가져와야 한다.")
-    public void findAllStoriesTest() {
-        Member member = createMember("nickname");
-        memberRepository.save(member);
-
-        Story story1 = createStory(member, "title1","DAEJEON");
-        Story story2 = createStory(member, "title2","DAEJEON");
-        Story story3 = createStory(member, "title3","DAEJEON");
-        Story story4 = createStory(member, "title4","DAEJEON");
-        Story story5 = createStory(member, "title5","DAEJEON");
-
-        storyRepository.save(story1);
-        storyRepository.save(story2);
-        storyRepository.save(story3);
-        storyRepository.save(story4);
-        storyRepository.save(story5);
-
-        Pageable pageable1 = PageRequest.of(0, 3);
-
-        Slice<ResponseStoryDto> allStories1 = storyRepository.findAllStories(null, pageable1);
-        List<ResponseStoryDto> contents1 = allStories1.getContent();
-
-        Assertions.assertThat(contents1.size()).isEqualTo(3);
-        Assertions.assertThat(contents1.get(0).title()).isEqualTo("title5");
-        Assertions.assertThat(contents1.get(1).title()).isEqualTo("title4");
-        Assertions.assertThat(contents1.get(2).title()).isEqualTo("title3");
-
-        Long lastId = contents1.get(2).id();
-
-        Slice<ResponseStoryDto> stories2 = storyRepository.findAllStories(lastId, pageable1);
-        List<ResponseStoryDto> contents2 = stories2.getContent();
-
-        Assertions.assertThat(contents2.size()).isEqualTo(2);
-        Assertions.assertThat(contents2.get(0).title()).isEqualTo("title2");
-        Assertions.assertThat(contents2.get(1).title()).isEqualTo("title1");
-    }
-
-    @Test
-    @DisplayName("회원 별 특정 도시로 작성된 story를 최신 순으로 가져올 수 있다.")
-    public void findStoriesByMemberAndCityTest() {
-        Member member1 = createMember("nickname1");
-        Member member2 = createMember("nickname2");
-
-        memberRepository.save(member1);
-        memberRepository.save(member2);
-
-        Story story1 = createStory(member1, "member1 title1","DAEJEON");
-        Story story2 = createStory(member1, "member1 title2","DAEJEON");
-        Story story3 = createStory(member1, "member1 title3","SEOUL");
-
-        storyRepository.save(story1);
-        storyRepository.save(story2);
-        storyRepository.save(story3);
-
-        Story story4 = createStory(member2, "member2 title4","SEOUL");
-        Story story5 = createStory(member2, "member2 title5","SEOUL");
-        Story story6 = createStory(member2, "member2 title6","DAEJEON");
-
-        storyRepository.save(story4);
-        storyRepository.save(story5);
-        storyRepository.save(story6);
-
-
-        Pageable pageable = PageRequest.of(0, 3);
-
-        Slice<ResponseStoryDto> stories1 = storyRepository.findStoriesByMemberAndCity(null, pageable, "DAEJEON", member1);
-        List<ResponseStoryDto> contents1 = stories1.getContent();
-
-        Assertions.assertThat(contents1.size()).isEqualTo(2);
-        Assertions.assertThat(contents1.get(0).title()).isEqualTo("member1 title2");
-        Assertions.assertThat(contents1.get(1).title()).isEqualTo("member1 title1");
-
-        Slice<ResponseStoryDto> stories2 = storyRepository.findStoriesByMemberAndCity(null, pageable, "SEOUL", member1);
-        List<ResponseStoryDto> contents2 = stories2.getContent();
-
-        Assertions.assertThat(contents2.size()).isEqualTo(1);
-        Assertions.assertThat(contents2.get(0).title()).isEqualTo("member1 title3");
-    }
-
-    @Test
-    @DisplayName("회원이 보고 있는 지도를 기준으로 그 회원이 작성한 story를 최신 순으로 pageable 하게 가져올 수 있다.")
-    public void findStoriesByMemberAndMapWithPagingTest() {
-        Member member = createMember("nickname1");
-        memberRepository.save(member);
-
-        GeoPointDto geoPointLt = GeoPointDto.builder()
-                .latitude(0.0)
-                .longitude(10.0)
-                .build();
-
-        GeoPointDto geoPointRb = GeoPointDto.builder()
-                .latitude(10.0)
-                .longitude(0.0)
-                .build();
-
-        Story inside1 = Story.createStory()
-                .title("inside1")
-                .member(member)
-                .content("content")
-                .longitude(5.0)
-                .latitude(5.0)
-                .city("city")
-                .isHidden(true)
-                .thumbnailImg("thumbURL")
-                .build();
-
-        Story inside2 = Story.createStory()
-                .title("inside2")
-                .member(member)
-                .content("content")
-                .longitude(5.0)
-                .latitude(5.0)
-                .city("city")
-                .isHidden(true)
-                .thumbnailImg("thumbURL")
-                .build();
-
-        Story outside1 = Story.createStory()
-                .title("outside1")
-                .member(member)
-                .content("content")
-                .longitude(-10.0)
-                .latitude(-10.0)
-                .city("city")
-                .isHidden(true)
-                .thumbnailImg("thumbURL")
-                .build();
-
-        Story outside2 = Story.createStory()
-                .title("outside2")
-                .member(member)
-                .content("content")
-                .longitude(20.0)
-                .latitude(20.0)
-                .city("city")
-                .isHidden(true)
-                .thumbnailImg("thumbURL")
-                .build();
-
-        storyRepository.save(inside1);
-        storyRepository.save(inside2);
-        storyRepository.save(outside1);
-        storyRepository.save(outside2);
-
-        Pageable pageable = PageRequest.of(0, 3);
-
-        Slice<ResponseStoryDto> stories = storyRepository.findStoriesByMemberAndMapWithPaging(null, pageable, geoPointLt, geoPointRb, member);
-        List<ResponseStoryDto> contents = stories.getContent();
-
-        Assertions.assertThat(contents.size()).isEqualTo(2);
-        Assertions.assertThat(contents.get(0).title()).isEqualTo("inside2");
-        Assertions.assertThat(contents.get(1).title()).isEqualTo("inside1");
-
+        Assertions.assertThat(editStory.getTitle()).isEqualTo("editStory");
+        Assertions.assertThat(editStory.getContent()).isEqualTo("editContent");
+        Assertions.assertThat(editStory.getCity()).isEqualTo("seoul");
     }
 
     @Test
@@ -332,7 +199,7 @@ class StoryCustomRepositoryImplTest {
         storyRepository.save(outside1);
         storyRepository.save(outside2);
 
-        List<ResponseStoryDto> stories = storyRepository.findStoryByMap(member, geoPointLt, geoPointRb);
+        List<ResponseStoryListDto> stories = storyRepository.findStoryByMap(member, geoPointLt, geoPointRb);
 
         Assertions.assertThat(stories.size()).isEqualTo(2);
     }
@@ -370,8 +237,8 @@ class StoryCustomRepositoryImplTest {
 
         Pageable pageable = PageRequest.of(0, 3);
 
-        Slice<ResponseStoryDto> stories = storyRepository.findStoriesByMemberAndCityAndSearch(null, pageable, member, null, "filter");
-        List<ResponseStoryDto> contents = stories.getContent();
+        Slice<ResponseStoryListDto> stories = storyRepository.findStoriesByMemberAndCityAndSearch(null, pageable, member, null, "filter");
+        List<ResponseStoryListDto> contents = stories.getContent();
 
         Assertions.assertThat(contents.size()).isEqualTo(1);
         Assertions.assertThat(contents.get(0).title()).isEqualTo("filterTitle");

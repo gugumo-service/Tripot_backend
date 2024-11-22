@@ -2,6 +2,8 @@ package com.junior.dto.story;
 
 import lombok.Builder;
 
+import java.util.List;
+
 @Builder
 public record CreateStoryDto(
         String title,
@@ -10,7 +12,8 @@ public record CreateStoryDto(
         String thumbnailImg,
         double latitude,
         double longitude,
-        boolean isHidden
+        boolean isHidden,
+        List<String> imgUrls
 ) {
 
 }
