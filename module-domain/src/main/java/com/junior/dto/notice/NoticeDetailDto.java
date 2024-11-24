@@ -1,4 +1,4 @@
-package com.junior.dto.admin.notice;
+package com.junior.dto.notice;
 
 import lombok.Builder;
 

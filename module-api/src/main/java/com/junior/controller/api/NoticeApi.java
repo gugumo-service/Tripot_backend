@@ -1,9 +1,9 @@
 package com.junior.controller.api;
 
-import com.junior.dto.admin.notice.CreateNoticeDto;
-import com.junior.dto.admin.notice.NoticeDetailDto;
-import com.junior.dto.admin.notice.NoticeDto;
-import com.junior.dto.admin.notice.UpdateNoticeDto;
+import com.junior.dto.notice.CreateNoticeDto;
+import com.junior.dto.notice.NoticeAdminDto;
+import com.junior.dto.notice.NoticeDetailDto;
+import com.junior.dto.notice.UpdateNoticeDto;
 import com.junior.page.PageCustom;
 import com.junior.response.CommonResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -83,8 +83,8 @@ public interface NoticeApi {
                                                     """
                                     )))
             })
-    public CommonResponse<PageCustom<NoticeDto>> findNotice(@PageableDefault(size = 15) Pageable pageable,
-                                                            @RequestParam(required = false, value = "q") String q);
+    public CommonResponse<PageCustom<NoticeAdminDto>> findNotice(@PageableDefault(size = 15) Pageable pageable,
+                                                                 @RequestParam(required = false, value = "q") String q);
 
 
     @Operation(summary = "공지사항 세부 조회", description = "공지사항 세부 내용을 조회합니다.",

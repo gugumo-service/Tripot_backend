@@ -1,7 +1,7 @@
 package com.junior.domain.admin;
 
 import com.junior.domain.base.BaseEntity;
-import com.junior.dto.admin.notice.UpdateNoticeDto;
+import com.junior.dto.notice.UpdateNoticeDto;
 import jakarta.persistence.*;
 import lombok.*;
 

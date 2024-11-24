@@ -2,7 +2,7 @@ package com.junior.repository.notice;
 
 import com.junior.TestConfig;
 import com.junior.domain.admin.Notice;
-import com.junior.dto.admin.notice.NoticeDto;
+import com.junior.dto.notice.NoticeAdminDto;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -60,8 +60,8 @@ class NoticeRepositoryTest {
 
 
         //when
-        Page<NoticeDto> page = noticeRepository.findNotice(q, pageRequest);
-        List<NoticeDto> content = page.getContent();
+        Page<NoticeAdminDto> page = noticeRepository.findNotice(q, pageRequest);
+        List<NoticeAdminDto> content = page.getContent();
 
         //then
 
@@ -87,8 +87,8 @@ class NoticeRepositoryTest {
 
 
         //when
-        Page<NoticeDto> page = noticeRepository.findNotice(q, pageRequest);
-        List<NoticeDto> content = page.getContent();
+        Page<NoticeAdminDto> page = noticeRepository.findNotice(q, pageRequest);
+        List<NoticeAdminDto> content = page.getContent();
 
         //then
 
@@ -118,8 +118,8 @@ class NoticeRepositoryTest {
 
 
         //when
-        Page<NoticeDto> page = noticeRepository.findNotice(q, pageRequest);
-        List<NoticeDto> content = page.getContent();
+        Page<NoticeAdminDto> page = noticeRepository.findNotice(q, pageRequest);
+        List<NoticeAdminDto> content = page.getContent();
 
         //then
 

@@ -2,10 +2,10 @@ package com.junior.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.junior.controller.security.WithMockCustomAdmin;
-import com.junior.dto.admin.notice.CreateNoticeDto;
-import com.junior.dto.admin.notice.NoticeDetailDto;
-import com.junior.dto.admin.notice.NoticeDto;
-import com.junior.dto.admin.notice.UpdateNoticeDto;
+import com.junior.dto.notice.CreateNoticeDto;
+import com.junior.dto.notice.NoticeAdminDto;
+import com.junior.dto.notice.NoticeDetailDto;
+import com.junior.dto.notice.UpdateNoticeDto;
 import com.junior.page.PageCustom;
 import com.junior.service.notice.NoticeAdminService;
 
@@ -91,9 +91,9 @@ class NoticeAdminControllerTest {
         Pageable resultPageable = PageRequest.of(0, 15);
         String q = "";
 
-        List<NoticeDto> result = new ArrayList<>();
+        List<NoticeAdminDto> result = new ArrayList<>();
 
-        result.add(new NoticeDto(1L, "title"));
+        result.add(new NoticeAdminDto(1L, "title"));
 
 
         given(noticeAdminService.findNotice(anyString(), any(Pageable.class))).willReturn(new PageCustom<>(result, resultPageable, result.size()));

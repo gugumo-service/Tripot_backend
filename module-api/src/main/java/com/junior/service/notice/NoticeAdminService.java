@@ -2,10 +2,10 @@ package com.junior.service.notice;
 
 import com.junior.domain.admin.Notice;
 import com.junior.domain.member.Member;
-import com.junior.dto.admin.notice.CreateNoticeDto;
-import com.junior.dto.admin.notice.NoticeDetailDto;
-import com.junior.dto.admin.notice.NoticeDto;
-import com.junior.dto.admin.notice.UpdateNoticeDto;
+import com.junior.dto.notice.CreateNoticeDto;
+import com.junior.dto.notice.NoticeDetailDto;
+import com.junior.dto.notice.NoticeAdminDto;
+import com.junior.dto.notice.UpdateNoticeDto;
 import com.junior.exception.NotValidMemberException;
 import com.junior.exception.NoticeException;
 import com.junior.exception.StatusCode;
@@ -44,11 +44,11 @@ public class NoticeAdminService {
     }
 
 
-    public PageCustom<NoticeDto> findNotice(String q, Pageable pageable) {
+    public PageCustom<NoticeAdminDto> findNotice(String q, Pageable pageable) {
 
         PageRequest pageRequest = PageRequest.of(pageable.getPageNumber() - 1, pageable.getPageSize());
 
-        Page<NoticeDto> page = noticeRepository.findNotice(q, pageRequest);
+        Page<NoticeAdminDto> page = noticeRepository.findNotice(q, pageRequest);
 
         log.info("[{}] 공지사항 조회 결과 리턴 page: {}", Thread.currentThread().getStackTrace()[1].getMethodName(), pageable.getPageNumber());
         return new PageCustom<>(page.getContent(), page.getPageable(), page.getTotalElements());

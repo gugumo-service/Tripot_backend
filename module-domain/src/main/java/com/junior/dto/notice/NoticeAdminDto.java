@@ -1,14 +1,16 @@
-package com.junior.dto.admin.notice;
+package com.junior.dto.notice;
 
 import com.querydsl.core.annotations.QueryProjection;
+import lombok.Builder;
 
-public record NoticeDto(
+@Builder
+public record NoticeAdminDto(
         Long id,
         String title
 ) {
 
     @QueryProjection
-    public NoticeDto(Long id, String title) {
+    public NoticeAdminDto(Long id, String title) {
         this.id = id;
         this.title = title;
     }

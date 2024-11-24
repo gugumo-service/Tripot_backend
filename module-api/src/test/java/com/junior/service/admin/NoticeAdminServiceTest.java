@@ -2,10 +2,10 @@ package com.junior.service.admin;
 
 import com.junior.domain.admin.Notice;
 import com.junior.domain.member.Member;
-import com.junior.dto.admin.notice.CreateNoticeDto;
-import com.junior.dto.admin.notice.NoticeDetailDto;
-import com.junior.dto.admin.notice.NoticeDto;
-import com.junior.dto.admin.notice.UpdateNoticeDto;
+import com.junior.dto.notice.CreateNoticeDto;
+import com.junior.dto.notice.NoticeAdminDto;
+import com.junior.dto.notice.NoticeDetailDto;
+import com.junior.dto.notice.UpdateNoticeDto;
 import com.junior.exception.NotValidMemberException;
 import com.junior.exception.NoticeException;
 import com.junior.page.PageCustom;
@@ -72,21 +72,21 @@ class NoticeAdminServiceTest {
 
         entityList.add(createNotice());
 
-        List<NoticeDto> dtoList = new ArrayList<>();
+        List<NoticeAdminDto> dtoList = new ArrayList<>();
 
-        dtoList.add(new NoticeDto(1L, "title"));
+        dtoList.add(new NoticeAdminDto(1L, "title"));
 
         String q = "";
         Pageable requestPageable = PageRequest.of(1, 15);
         Pageable pageableAfterFind = PageRequest.of(0, 15);
 
-        PageImpl<NoticeDto> pageList = new PageImpl<>(dtoList, pageableAfterFind, 0);
+        PageImpl<NoticeAdminDto> pageList = new PageImpl<>(dtoList, pageableAfterFind, 0);
 
         given(noticeRepository.findNotice(anyString(), any(Pageable.class))).willReturn(pageList);
 
         //when
 
-        PageCustom<NoticeDto> notice = noticeAdminService.findNotice(q, requestPageable);
+        PageCustom<NoticeAdminDto> notice = noticeAdminService.findNotice(q, requestPageable);
 
         //then
 

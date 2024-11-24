@@ -1,10 +1,10 @@
 package com.junior.controller;
 
 import com.junior.controller.api.NoticeApi;
-import com.junior.dto.admin.notice.CreateNoticeDto;
-import com.junior.dto.admin.notice.NoticeDetailDto;
-import com.junior.dto.admin.notice.NoticeDto;
-import com.junior.dto.admin.notice.UpdateNoticeDto;
+import com.junior.dto.notice.CreateNoticeDto;
+import com.junior.dto.notice.NoticeDetailDto;
+import com.junior.dto.notice.NoticeAdminDto;
+import com.junior.dto.notice.UpdateNoticeDto;
 import com.junior.exception.StatusCode;
 import com.junior.page.PageCustom;
 import com.junior.response.CommonResponse;
@@ -42,8 +42,8 @@ public class NoticeAdminController implements NoticeApi {
      * @return 공지사항 목록
      */
     @GetMapping("/api/v1/admin/notices")
-    public CommonResponse<PageCustom<NoticeDto>> findNotice(@PageableDefault(size = 15, page = 1) Pageable pageable,
-                                                            @RequestParam(required = false, value = "q", defaultValue = "") String q) {
+    public CommonResponse<PageCustom<NoticeAdminDto>> findNotice(@PageableDefault(size = 15, page = 1) Pageable pageable,
+                                                                 @RequestParam(required = false, value = "q", defaultValue = "") String q) {
 
         return CommonResponse.success(StatusCode.NOTICE_FIND_SUCCESS, noticeAdminService.findNotice(q, pageable));
     }
