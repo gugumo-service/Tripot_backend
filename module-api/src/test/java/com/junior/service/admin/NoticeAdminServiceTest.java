@@ -147,9 +147,10 @@ class NoticeAdminServiceTest {
         NoticeDetailDto noticeDetail = noticeAdminService.findNoticeDetail(noticeId);
 
         //then
+        assertThat(noticeDetail.id()).isEqualTo(1L);
         assertThat(noticeDetail.title()).isEqualTo("title");
         assertThat(noticeDetail.content()).isEqualTo("content");
-        assertThat(noticeDetail.authorNick()).isEqualTo("nickname");
+
 
     }
 
@@ -295,6 +296,7 @@ class NoticeAdminServiceTest {
 
     private static Notice createNotice() {
         Notice notice = Notice.builder()
+                .id(1L)
                 .title("title")
                 .content("content")
                 .build();

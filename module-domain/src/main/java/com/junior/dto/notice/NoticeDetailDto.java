@@ -4,10 +4,9 @@ import lombok.Builder;
 
 @Builder
 public record NoticeDetailDto(
+        Long id,
         String title,
-        String content,
-
-        String authorNick
+        String content
 ) {
 
 }

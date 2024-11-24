@@ -128,9 +128,9 @@ class NoticeAdminControllerTest {
         //given
 
         NoticeDetailDto noticeDetailDto = NoticeDetailDto.builder()
+                .id(1L)
                 .title("title")
                 .content("content")
-                .authorNick("nickname")
                 .build();
 
         given(noticeAdminService.findNoticeDetail(anyLong())).willReturn(noticeDetailDto);

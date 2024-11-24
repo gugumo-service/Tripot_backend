@@ -77,9 +77,10 @@ public class NoticeAdminService {
                 .orElseThrow(() -> new NotValidMemberException(StatusCode.MEMBER_NOT_FOUND));
 
         NoticeDetailDto noticeDetailDto = NoticeDetailDto.builder()
+                .id(notice.getId())
                 .title(notice.getTitle())
                 .content(notice.getContent())
-                .authorNick(author.getNickname()).build();
+                .build();
 
         return noticeDetailDto;
 
