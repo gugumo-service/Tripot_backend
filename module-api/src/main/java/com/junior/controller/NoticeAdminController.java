@@ -1,6 +1,6 @@
 package com.junior.controller;
 
-import com.junior.controller.api.NoticeApi;
+import com.junior.controller.api.NoticeAdminApi;
 import com.junior.dto.notice.CreateNoticeDto;
 import com.junior.dto.notice.NoticeDetailDto;
 import com.junior.dto.notice.NoticeAdminDto;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-public class NoticeAdminController implements NoticeApi {
+public class NoticeAdminController implements NoticeAdminApi {
 
     private final NoticeAdminService noticeAdminService;
 

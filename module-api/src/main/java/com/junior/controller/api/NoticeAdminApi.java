@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-public interface NoticeApi {
+public interface NoticeAdminApi {
 
     @Operation(summary = "공지사항 업로드", description = "공지사항을 업로드합니다.",
             responses = {
