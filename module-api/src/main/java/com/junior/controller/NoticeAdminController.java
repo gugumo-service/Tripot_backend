@@ -8,11 +8,13 @@ import com.junior.dto.notice.UpdateNoticeDto;
 import com.junior.exception.StatusCode;
 import com.junior.page.PageCustom;
 import com.junior.response.CommonResponse;
+import com.junior.security.UserPrincipal;
 import com.junior.service.notice.NoticeAdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,9 +30,9 @@ public class NoticeAdminController implements NoticeApi {
      */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/api/v1/admin/notices")
-    public CommonResponse<Object> saveNotice(@RequestBody CreateNoticeDto createNoticeDto) {
+    public CommonResponse<Object> saveNotice(@AuthenticationPrincipal UserPrincipal principal, @RequestBody CreateNoticeDto createNoticeDto) {
 
-        noticeAdminService.saveNotice(createNoticeDto);
+        noticeAdminService.saveNotice(principal, createNoticeDto);
 
         return CommonResponse.success(StatusCode.NOTICE_CREATE_SUCCESS, null);
     }

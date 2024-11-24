@@ -13,6 +13,7 @@ import com.junior.page.PageCustom;
 import com.junior.repository.notice.NoticeRepository;
 
 import com.junior.repository.member.MemberRepository;
+import com.junior.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -31,11 +32,16 @@ public class NoticeAdminService {
     private final NoticeRepository noticeRepository;
 
     @Transactional
-    public void saveNotice(CreateNoticeDto createNoticeDto) {
+    public void saveNotice(UserPrincipal principal, CreateNoticeDto createNoticeDto) {
+
+        Member author = memberRepository.findById(principal.getMember().getId()).orElseThrow(
+                () -> new NotValidMemberException(StatusCode.INVALID_MEMBER)
+        );
 
         Notice notice = Notice.builder()
                 .title(createNoticeDto.title())
                 .content(createNoticeDto.content())
+                .member(author)
                 .build();
 
         log.info("[{}] 공지사항 저장", Thread.currentThread().getStackTrace()[1].getMethodName());

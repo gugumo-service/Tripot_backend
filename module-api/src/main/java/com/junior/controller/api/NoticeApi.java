@@ -6,6 +6,7 @@ import com.junior.dto.notice.NoticeDetailDto;
 import com.junior.dto.notice.UpdateNoticeDto;
 import com.junior.page.PageCustom;
 import com.junior.response.CommonResponse;
+import com.junior.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -13,6 +14,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,7 +36,7 @@ public interface NoticeApi {
                                                     """
                                     )))
             })
-    public CommonResponse<Object> saveNotice(@RequestBody CreateNoticeDto createNoticeDto);
+    public CommonResponse<Object> saveNotice(@AuthenticationPrincipal UserPrincipal principal, @RequestBody CreateNoticeDto createNoticeDto);
 
 
     @Operation(summary = "공지사항 조회", description = "공지사항을 조회합니다.",

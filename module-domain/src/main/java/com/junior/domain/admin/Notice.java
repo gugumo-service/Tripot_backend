@@ -1,6 +1,7 @@
 package com.junior.domain.admin;
 
 import com.junior.domain.base.BaseEntity;
+import com.junior.domain.member.Member;
 import com.junior.dto.notice.UpdateNoticeDto;
 import jakarta.persistence.*;
 import lombok.*;
@@ -24,6 +25,10 @@ public class Notice extends BaseEntity {
 
     @Builder.Default
     private Boolean isDeleted = false;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     public void softDelete() {
         this.isDeleted = true;

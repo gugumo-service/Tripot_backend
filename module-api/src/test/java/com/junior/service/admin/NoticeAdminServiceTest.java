@@ -2,6 +2,9 @@ package com.junior.service.admin;
 
 import com.junior.domain.admin.Notice;
 import com.junior.domain.member.Member;
+import com.junior.domain.member.MemberRole;
+import com.junior.domain.member.MemberStatus;
+import com.junior.domain.member.SignUpType;
 import com.junior.dto.notice.CreateNoticeDto;
 import com.junior.dto.notice.NoticeAdminDto;
 import com.junior.dto.notice.NoticeDetailDto;
@@ -11,6 +14,7 @@ import com.junior.exception.NoticeException;
 import com.junior.page.PageCustom;
 import com.junior.repository.notice.NoticeRepository;
 import com.junior.repository.member.MemberRepository;
+import com.junior.security.UserPrincipal;
 import com.junior.service.notice.NoticeAdminService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -51,12 +55,36 @@ class NoticeAdminServiceTest {
 
         //given
         CreateNoticeDto createNoticeDto = new CreateNoticeDto("title", "content");
+        Member testMember = createActiveTestMember();
+        UserPrincipal principal = new UserPrincipal(testMember);
+
+        given(memberRepository.findById(anyLong())).willReturn(Optional.ofNullable(testMember));
 
         //when
-        noticeAdminService.saveNotice(createNoticeDto);
+        noticeAdminService.saveNotice(principal, createNoticeDto);
 
         //then
         verify(noticeRepository).save(any(Notice.class));
+
+
+    }
+
+    @Test
+    @DisplayName("회원을 찾지 못했을 때 관련 예외처리를 해야 함")
+    void saveNotice_not_valid_member() {
+
+        //given
+        CreateNoticeDto createNoticeDto = new CreateNoticeDto("title", "content");
+        Member testMember = createActiveTestMember();
+        UserPrincipal principal = new UserPrincipal(testMember);
+
+        given(memberRepository.findById(anyLong())).willReturn(Optional.empty());
+
+        //when, then
+        assertThatThrownBy(() -> noticeAdminService.saveNotice(principal, createNoticeDto))
+                .isInstanceOf(NotValidMemberException.class)
+                .withFailMessage("유효하지 않은 회원");
+
 
 
     }
@@ -271,5 +299,18 @@ class NoticeAdminServiceTest {
                 .content("content")
                 .build();
         return notice;
+    }
+
+    Member createActiveTestMember() {
+        return Member.builder()
+                .id(2L)
+                .nickname("테스트닉")
+                .username("KAKAO 3748293465")
+                .role(MemberRole.USER)
+                .signUpType(SignUpType.KAKAO)
+                .profileImage("s3.com/testProfile")
+                .recommendLocation("서울")
+                .status(MemberStatus.ACTIVE)
+                .build();
     }
 }
