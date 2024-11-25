@@ -3,6 +3,7 @@ package com.junior.repository.notice;
 import com.junior.TestConfig;
 import com.junior.domain.admin.Notice;
 import com.junior.dto.notice.NoticeAdminDto;
+import com.junior.dto.notice.NoticeUserDto;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 
 import java.util.List;
 
@@ -158,4 +160,26 @@ class NoticeRepositoryTest {
         assertThat(page.getTotalElements()).isEqualTo(100);
 
     }
+
+    @Test
+    @DisplayName("공지사항 무한스크롤 구현이 정상적으로 동작해야 함")
+    public void findNotice_slice_success() throws Exception {
+        //given
+        Long cursorId = 92L;
+        int size = 5;
+
+
+        PageRequest pageRequest = PageRequest.of(0, size);
+        //when
+        Slice<NoticeUserDto> notice = noticeRepository.findNotice(cursorId, pageRequest);
+        List<NoticeUserDto> content = notice.getContent();
+
+        //then
+        assertThat(content.size()).isEqualTo(5);
+        assertThat(content.get(0).title()).isEqualTo("title 91");
+
+
+    }
+
+
 }
