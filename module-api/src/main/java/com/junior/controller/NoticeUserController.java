@@ -1,5 +1,6 @@
 package com.junior.controller;
 
+import com.junior.controller.api.NoticeUserApi;
 import com.junior.dto.notice.NoticeUserDto;
 import com.junior.exception.StatusCode;
 import com.junior.response.CommonResponse;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class NoticeUserController {
+public class NoticeUserController implements NoticeUserApi {
 
     private final NoticeUserService noticeUserService;
 
