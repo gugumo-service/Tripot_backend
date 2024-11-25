@@ -35,7 +35,7 @@ class NoticeRepositoryTest {
                     .build();
 
             //생성일자 정렬을 위해 잠시 sleep
-            Thread.sleep(25);
+            Thread.sleep(5);
 
             noticeRepository.save(notice);
 
@@ -100,6 +100,33 @@ class NoticeRepositoryTest {
 
         //요소의 총 개수 100개를 정상적으로 조회할 수 있어야 함
         assertThat(page.getTotalElements()).isEqualTo(100);
+    }
+
+    @Test
+    @DisplayName("공지사항의 검색이 정상적으로 동작해야 함")
+    void findNotice_search_success() {
+
+        //given
+        String q = "15";
+
+        //해당 테스트는 0-indexed 로 진행
+        PageRequest pageRequest = PageRequest.of(0, 15);
+
+
+        //when
+        Page<NoticeAdminDto> page = noticeRepository.findNotice(q, pageRequest);
+        List<NoticeAdminDto> content = page.getContent();
+
+        //then
+
+        //100개의 페이지를 페이지 크기 15로 잘랐을 때 마지막 페이지의 크기는 (100%15) 10이다.
+        assertThat(content.size()).isEqualTo(1);
+
+        //가장 마지막 페이지의 첫 요소는 title 10이어야 함
+        assertThat(content.get(0).title()).isEqualTo("title 15");
+
+        //요소의 총 개수 100개를 정상적으로 조회할 수 있어야 함
+        assertThat(page.getTotalElements()).isEqualTo(1);
     }
 
     @Test
