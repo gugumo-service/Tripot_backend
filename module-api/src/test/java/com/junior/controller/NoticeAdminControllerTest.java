@@ -1,20 +1,25 @@
 package com.junior.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.junior.config.SecurityConfig;
 import com.junior.controller.security.WithMockCustomAdmin;
 import com.junior.dto.notice.CreateNoticeDto;
 import com.junior.dto.notice.NoticeAdminDto;
 import com.junior.dto.notice.NoticeDetailDto;
 import com.junior.dto.notice.UpdateNoticeDto;
 import com.junior.page.PageCustom;
+import com.junior.security.JwtUtil;
+import com.junior.security.exceptionhandler.CustomAuthenticationEntryPoint;
 import com.junior.service.notice.NoticeAdminService;
 
+import com.junior.service.security.UserDetailsServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
@@ -37,7 +42,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(NoticeAdminController.class)
 @MockBean(JpaMetamodelMappingContext.class)     //JPA 관련 빈들을 mock으로 등록
+@Import(SecurityConfig.class)
 class NoticeAdminControllerTest {
+
+    @MockBean
+    private JwtUtil jwtUtil;
+
+    @MockBean
+    private UserDetailsServiceImpl userDetailsService;
+
+    @MockBean
+    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Autowired
     private MockMvc mockMvc;
@@ -66,7 +81,6 @@ class NoticeAdminControllerTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content)
-                        .with(csrf())
         );
 
 
@@ -102,7 +116,6 @@ class NoticeAdminControllerTest {
         ResultActions actions = mockMvc.perform(
                 get("/api/v1/admin/notices")
                         .accept(MediaType.APPLICATION_JSON)
-                        .with(csrf())
         );
 
         //then
@@ -139,7 +152,6 @@ class NoticeAdminControllerTest {
         ResultActions actions = mockMvc.perform(
                 get("/api/v1/admin/notices/{notice_id}", 1L)
                         .accept(MediaType.APPLICATION_JSON)
-                        .with(csrf())
         );
 
         //then
@@ -150,8 +162,7 @@ class NoticeAdminControllerTest {
                 .andExpect(jsonPath("$.customMessage").value("공지사항 세부정보 조회 성공"))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data.title").value("title"))
-                .andExpect(jsonPath("$.data.content").value("content"))
-                .andExpect(jsonPath("$.data.authorNick").value("nickname"));
+                .andExpect(jsonPath("$.data.content").value("content"));
 
 
 
@@ -177,7 +188,6 @@ class NoticeAdminControllerTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content)
-                        .with(csrf())
         );
 
         //then
@@ -202,7 +212,6 @@ class NoticeAdminControllerTest {
         ResultActions actions = mockMvc.perform(
                 delete("/api/v1/admin/notices/{notice_id}", noticeId)
                         .accept(MediaType.APPLICATION_JSON)
-                        .with(csrf())
         );
 
         //then

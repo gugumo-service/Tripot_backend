@@ -1,16 +1,21 @@
 package com.junior.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.junior.config.SecurityConfig;
 import com.junior.controller.security.WithMockCustomUser;
 import com.junior.dto.notice.NoticeAdminDto;
 import com.junior.dto.notice.NoticeUserDto;
+import com.junior.security.JwtUtil;
+import com.junior.security.exceptionhandler.CustomAuthenticationEntryPoint;
 import com.junior.service.notice.NoticeUserService;
+import com.junior.service.security.UserDetailsServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
@@ -22,7 +27,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -33,8 +38,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(NoticeUserController.class)
 @MockBean(JpaMetamodelMappingContext.class)     //JPA 관련 빈들을 mock으로 등록
+@Import(SecurityConfig.class)
 class NoticeUserControllerTest {
 
+    @MockBean
+    private JwtUtil jwtUtil;
+
+    @MockBean
+    private UserDetailsServiceImpl userDetailsService;
+
+    @MockBean
+    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Autowired
     private MockMvc mockMvc;
@@ -73,7 +87,6 @@ class NoticeUserControllerTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .param("cursorId", cursorId.toString())
                         .param("size", size.toString())
-                        .with(csrf())
         );
 
 

@@ -1,17 +1,22 @@
 package com.junior.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.junior.config.SecurityConfig;
 import com.junior.controller.security.WithMockCustomUser;
 import com.junior.dto.jwt.RefreshTokenDto;
 import com.junior.dto.member.CheckActiveMemberDto;
 import com.junior.dto.oauth2.OAuth2Provider;
+import com.junior.security.JwtUtil;
+import com.junior.security.exceptionhandler.CustomAuthenticationEntryPoint;
 import com.junior.service.member.OAuth2Service;
+import com.junior.service.security.UserDetailsServiceImpl;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -31,7 +36,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(OAuth2Controller.class)
 @MockBean(JpaMetamodelMappingContext.class)
+@Import(SecurityConfig.class)
 class OAuth2ControllerTest {
+
+    @MockBean
+    private JwtUtil jwtUtil;
+
+    @MockBean
+    private UserDetailsServiceImpl userDetailsService;
+
+    @MockBean
+    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @MockBean
     OAuth2Service oAuth2Service;
@@ -63,7 +78,6 @@ class OAuth2ControllerTest {
                         .queryParam("code", code)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .with(csrf())
         );
 
         //then
@@ -95,7 +109,6 @@ class OAuth2ControllerTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content)
-                        .with(csrf())
         );
 
         //then

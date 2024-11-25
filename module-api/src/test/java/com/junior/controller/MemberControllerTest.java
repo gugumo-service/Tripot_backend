@@ -1,18 +1,23 @@
 package com.junior.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.junior.config.SecurityConfig;
 import com.junior.controller.security.WithMockCustomUser;
 import com.junior.dto.member.ActivateMemberDto;
 import com.junior.dto.member.MemberInfoDto;
 import com.junior.dto.member.UpdateNicknameDto;
+import com.junior.security.JwtUtil;
 import com.junior.security.UserPrincipal;
+import com.junior.security.exceptionhandler.CustomAuthenticationEntryPoint;
 import com.junior.service.member.MemberService;
+import com.junior.service.security.UserDetailsServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -30,8 +35,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(MemberController.class)
 @MockBean(JpaMetamodelMappingContext.class)     //JPA 관련 빈들을 mock으로 등록
+@Import(SecurityConfig.class)
 class MemberControllerTest {
 
+    @MockBean
+    private JwtUtil jwtUtil;
+
+    @MockBean
+    private UserDetailsServiceImpl userDetailsService;
+
+    @MockBean
+    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Autowired
     MockMvc mockMvc;
@@ -59,7 +73,6 @@ class MemberControllerTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content)
-                        .with(csrf())
         );
 
 
@@ -74,7 +87,6 @@ class MemberControllerTest {
 
     @Test
     @DisplayName("닉네임 사용가능 여부 응답이 반환되어야 함")
-    @WithMockCustomUser
     void checkNicknameValid() throws Exception {
 
         //given
@@ -144,7 +156,6 @@ class MemberControllerTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content)
-                        .with(csrf())
         );
 
         //then
@@ -169,7 +180,6 @@ class MemberControllerTest {
         ResultActions actions = mockMvc.perform(
                 delete("/api/v1/members")
                         .accept(MediaType.APPLICATION_JSON)
-                        .with(csrf())
         );
 
         //then
@@ -197,7 +207,6 @@ class MemberControllerTest {
                         .file(profileImg)
                         .contentType(MediaType.MULTIPART_FORM_DATA)
                         .accept(MediaType.APPLICATION_JSON)
-                        .with(csrf())
         );
 
         //then
