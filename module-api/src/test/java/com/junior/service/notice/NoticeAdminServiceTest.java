@@ -1,4 +1,4 @@
-package com.junior.service.admin;
+package com.junior.service.notice;
 
 import com.junior.domain.admin.Notice;
 import com.junior.domain.member.Member;
@@ -15,7 +15,6 @@ import com.junior.page.PageCustom;
 import com.junior.repository.notice.NoticeRepository;
 import com.junior.repository.member.MemberRepository;
 import com.junior.security.UserPrincipal;
-import com.junior.service.notice.NoticeAdminService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
