@@ -1,7 +1,7 @@
 package com.junior.security.filter;
 
-import com.junior.service.security.UserDetailsServiceImpl;
 import com.junior.security.JwtUtil;
+import com.junior.service.security.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -39,17 +39,13 @@ public class JWTFilter extends OncePerRequestFilter {
         String accessToken = preAccessToken.split(" ")[1];
 
 
-
-
         // username, role 값을 획득
-        Long id = jwtUtil.getId(accessToken);
         String username = jwtUtil.getUsername(accessToken);
-        String role = jwtUtil.getRole(accessToken);
 
 
         //username->member->userDetails(userPrincipal)으로, userDetailsService에서 꺼내도 무방
         //attributes 내용들은 회원가입 시점에 저장되므로 신경 안써도 될듯?
-        UserDetails customUserDetails = userDetailsService.loadUserByUsername(id.toString());
+        UserDetails customUserDetails = userDetailsService.loadUserByUsername(username);
 
         //JWT 방식이므로 여기서 1회용 회원 세션 저장
         Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
