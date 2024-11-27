@@ -114,12 +114,12 @@ public class StoryService {
         Member findMember = userPrincipal.getMember();
 
         Story findStory = storyRepository.findById(storyId)
-                .orElseThrow(()->new StoryNotFoundException(StatusCode.STORY_NOT_PERMISSION));
+                .orElseThrow(()->new StoryNotFoundException(StatusCode.STORY_NOT_FOUND));
 
         boolean isAuthor = findStory.isHidden() && !findStory.getMember().equals(findMember);
 
         if(!isAuthor) {
-            throw new StoryNotFoundException(StatusCode.STORY_NOT_FOUND);
+            throw new StoryNotFoundException(StatusCode.STORY_NOT_PERMISSION);
         }
 
         findStory.increaseViewCnt();
