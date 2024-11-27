@@ -19,6 +19,11 @@ public class OAuth2Controller implements OAuth2Api {
 
     private final OAuth2Service oAuth2Service;
 
+    @GetMapping("/createTestMember")
+    public CommonResponse<String> testCreateMember() {
+        String code = oAuth2Service.testCreateMember();
+        return CommonResponse.success(StatusCode.OAUTH2_LOGIN_SUCCESS, code);
+    }
     @PostMapping("/api/v1/login/oauth2/{provider}")
     public CommonResponse<CheckActiveMemberDto> oauth2Login(HttpServletResponse response, @RequestParam("code") String code, @PathVariable("provider") String provider) {
 

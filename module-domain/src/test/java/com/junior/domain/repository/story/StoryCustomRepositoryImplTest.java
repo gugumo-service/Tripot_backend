@@ -99,6 +99,8 @@ class StoryCustomRepositoryImplTest {
         storyRepository.save(story);
 
         Story findStory = storyRepository.findById(1L).orElseThrow(RuntimeException::new);
+
+        Assertions.assertThat(findStory).isEqualTo(story);
         Assertions.assertThat(findStory.getImgUrls().get(0)).isEqualTo("imgUrl1");
         Assertions.assertThat(findStory.getImgUrls().get(1)).isEqualTo("imgUrl2");
         Assertions.assertThat(findStory.getImgUrls().get(2)).isEqualTo("imgUrl3");
@@ -237,11 +239,18 @@ class StoryCustomRepositoryImplTest {
 
         Pageable pageable = PageRequest.of(0, 3);
 
-        Slice<ResponseStoryListDto> stories = storyRepository.findStoriesByMemberAndCityAndSearch(null, pageable, member, null, "filter");
+        Slice<ResponseStoryListDto> stories = storyRepository.findStoriesByMemberAndCityAndSearch(null, pageable, member, "city", "title");
         List<ResponseStoryListDto> contents = stories.getContent();
 
         Assertions.assertThat(contents.size()).isEqualTo(1);
-        Assertions.assertThat(contents.get(0).title()).isEqualTo("filterTitle");
+        Assertions.assertThat(contents.get(0).title()).isEqualTo("title");
+
+        Slice<ResponseStoryListDto> stories1 = storyRepository.findStoriesByMemberAndCityAndSearch(null, pageable, member, "city", null);
+        List<ResponseStoryListDto> contents1 = stories1.getContent();
+
+        Assertions.assertThat(contents1.size()).isEqualTo(2);
+        Assertions.assertThat(contents1.get(0).title()).isEqualTo("title");
+        Assertions.assertThat(contents1.get(1).title()).isEqualTo("filterTitle");
     }
 
     @Test
