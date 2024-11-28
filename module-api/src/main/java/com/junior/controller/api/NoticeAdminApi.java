@@ -100,9 +100,9 @@ public interface NoticeAdminApi {
                                                         "customMessage": "공지사항 세부정보 조회 성공",
                                                         "status": true,
                                                         "data": {
+                                                            "id": 1
                                                             "title": "타이틀",
                                                             "content": "내용",
-                                                            "authorNick": "테스트닉"
                                                         }
                                                     }
                                                     """
