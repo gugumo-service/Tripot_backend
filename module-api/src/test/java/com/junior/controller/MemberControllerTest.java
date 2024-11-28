@@ -11,6 +11,7 @@ import com.junior.security.UserPrincipal;
 import com.junior.security.exceptionhandler.CustomAuthenticationEntryPoint;
 import com.junior.service.member.MemberService;
 import com.junior.service.security.UserDetailsServiceImpl;
+import com.junior.util.RedisUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @MockBean(JpaMetamodelMappingContext.class)     //JPA 관련 빈들을 mock으로 등록
 @Import(SecurityConfig.class)
 class MemberControllerTest {
+
+    @MockBean
+    private RedisUtil redisUtil;
 
     @MockBean
     private JwtUtil jwtUtil;

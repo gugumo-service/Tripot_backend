@@ -10,6 +10,7 @@ import com.junior.security.JwtUtil;
 import com.junior.security.exceptionhandler.CustomAuthenticationEntryPoint;
 import com.junior.service.member.OAuth2Service;
 import com.junior.service.security.UserDetailsServiceImpl;
+import com.junior.util.RedisUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,6 +39,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @MockBean(JpaMetamodelMappingContext.class)
 @Import(SecurityConfig.class)
 class OAuth2ControllerTest {
+
+    @MockBean
+    private RedisUtil redisUtil;
 
     @MockBean
     private JwtUtil jwtUtil;

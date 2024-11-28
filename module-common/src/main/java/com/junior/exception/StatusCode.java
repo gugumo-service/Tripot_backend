@@ -51,6 +51,10 @@ public enum StatusCode {
     INVALID_MEMBER_STATUS(401, "MEMBER-ERR-002", "해당 회원 status로 실행할 수 없음"),
     MEMBER_NOT_FOUND(404, "MEMBER-ERR-003", "해당 회원을 찾을 수 없음"),
 
+    // LOGIN 관련 상태코드
+    ADMIN_LOGIN_SUCCESS(200, "LOGIN-SUCCESS-001", "관리자 로그인 성공"),
+    ADMIN_LOGIN_FAILURE(401, "LOGIN-ERR-001", "관리자 로그인 실패"),
+
     // JWT 관련 예외
     REISSUE_SUCCESS(200, "JWT-SUCCESS-001", "JWT 재발급 완료"),
     LOGOUT(200, "JWT-SUCCESS-002", "로그아웃 완료"),

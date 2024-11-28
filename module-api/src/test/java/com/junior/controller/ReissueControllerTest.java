@@ -8,6 +8,7 @@ import com.junior.security.JwtUtil;
 import com.junior.security.exceptionhandler.CustomAuthenticationEntryPoint;
 import com.junior.service.member.ReissueService;
 import com.junior.service.security.UserDetailsServiceImpl;
+import com.junior.util.RedisUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -32,6 +33,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @MockBean(JpaMetamodelMappingContext.class)
 @Import(SecurityConfig.class)
 class ReissueControllerTest {
+
+    @MockBean
+    private RedisUtil redisUtil;
 
     @MockBean
     private JwtUtil jwtUtil;

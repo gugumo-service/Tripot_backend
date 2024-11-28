@@ -13,6 +13,7 @@ import com.junior.security.exceptionhandler.CustomAuthenticationEntryPoint;
 import com.junior.service.notice.NoticeAdminService;
 
 import com.junior.service.security.UserDetailsServiceImpl;
+import com.junior.util.RedisUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -44,6 +45,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @MockBean(JpaMetamodelMappingContext.class)     //JPA 관련 빈들을 mock으로 등록
 @Import(SecurityConfig.class)
 class NoticeAdminControllerTest {
+
+    @MockBean
+    private RedisUtil redisUtil;
 
     @MockBean
     private JwtUtil jwtUtil;
