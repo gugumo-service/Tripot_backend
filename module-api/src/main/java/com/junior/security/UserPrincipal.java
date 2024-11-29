@@ -27,7 +27,7 @@ public class UserPrincipal implements UserDetails {
         collection.add(new GrantedAuthority() {
             @Override
             public String getAuthority() {
-                return member.getRole().name();
+                return "ROLE_" + member.getRole().name();
             }
         });
 

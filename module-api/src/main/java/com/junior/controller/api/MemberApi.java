@@ -28,8 +28,8 @@ public interface MemberApi {
                                     examples = @ExampleObject(
                                             value = """
                                                     {
-                                                        "customCode": "JWT-SUCCESS-001",
-                                                        "customMessage": "JWT 재발급 완료",
+                                                        "customCode": "MEMBER-SUCCESS-001",
+                                                        "customMessage": "회원 활성화 성공",
                                                         "status": true,
                                                         "data": null
                                                     }
@@ -64,7 +64,7 @@ public interface MemberApi {
 
     @Operation(summary = "유효 닉네임 확인", description = "닉네임의 사용가능여부를 받습니다.",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "회원 활성화 성공",
+                    @ApiResponse(responseCode = "200", description = "닉네임 사용가능 여부",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = CommonResponse.class),
                                     examples = @ExampleObject(
                                             value = """
@@ -79,9 +79,9 @@ public interface MemberApi {
             })
     public CommonResponse<Boolean> checkNicknameValid(@RequestParam("nickname") String nickname);
 
-    @Operation(summary = "회원 활성화", description = "회원의 추가정보를 입력받습니다.",
+    @Operation(summary = "회원 조회", description = "회원의 정보를 조회합니다.",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "회원 활성화 성공",
+                    @ApiResponse(responseCode = "200", description = "회원 조회",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = CommonResponse.class),
                                     examples = @ExampleObject(
                                             value = """

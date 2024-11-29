@@ -85,7 +85,7 @@ public class Member {
     }
 
     public void updateNickname(UpdateNicknameDto updateNicknameDto) {
-        this.nickname = updateNicknameDto.getNickname();
+        this.nickname = updateNicknameDto.nickname();
     }
 
     public void updateProfile(String profileUrl) {

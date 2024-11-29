@@ -49,6 +49,11 @@ public enum StatusCode {
     GET_MEMBER_INFO(200, "MEMBER-SUCCESS-007", "회원 정보 조회 성공"),
     INVALID_MEMBER(401, "MEMBER-ERR-001", "유효하지 않은 회원"),
     INVALID_MEMBER_STATUS(401, "MEMBER-ERR-002", "해당 회원 status로 실행할 수 없음"),
+    MEMBER_NOT_FOUND(404, "MEMBER-ERR-003", "해당 회원을 찾을 수 없음"),
+
+    // LOGIN 관련 상태코드
+    ADMIN_LOGIN_SUCCESS(200, "LOGIN-SUCCESS-001", "관리자 로그인 성공"),
+    ADMIN_LOGIN_FAILURE(401, "LOGIN-ERR-001", "관리자 로그인 실패"),
 
     // JWT 관련 예외
     REISSUE_SUCCESS(200, "JWT-SUCCESS-001", "JWT 재발급 완료"),
@@ -59,6 +64,15 @@ public enum StatusCode {
     EXPIRED_REFRESH_TOKEN(401, "JWT-ERR-004", "만료된 Refresh 토큰"),
     NOT_ACCESS_TOKEN(401, "JWT-ERR-005", "Access token이 아님"),
     ACCESS_DENIED(403, "JWT-ERR-006", "접근이 거부됨"),
+    INVALID_TOKEN(401, "JWT-ERR-007", "유효하지 않은 토큰"),
+
+    // 공지사항 관련 상태코드
+    NOTICE_CREATE_SUCCESS(201, "NOTICE-SUCCESS-001", "공지사항 업로드 성공"),
+    NOTICE_NOT_FOUND(400, "NOTICE-ERR-001", "해당 공지사항을 찾을 수 없음"),
+    NOTICE_DELETE_SUCCESS(200, "NOTICE-SUCCESS-002", "공지사항 삭제 성공"),
+    NOTICE_UPDATE_SUCCESS(200, "NOTICE-SUCCESS-003", "공지사항 수정 성공"),
+    NOTICE_FIND_SUCCESS(200, "NOTICE-SUCCESS-004", "공지사항 조회 성공"),
+    NOTICE_FIND_DETAIL_SUCCESS(200, "NOTICE-SUCCESS-005", "공지사항 세부정보 조회 성공"),
 
 
     // 공통 예외
