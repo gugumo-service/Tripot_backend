@@ -29,7 +29,7 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
     }
 
     QResponseStoryListDto createQResponseStoryListDto() {
-        return new QResponseStoryListDto(story.thumbnailImg, story.title, story.content, story.id);
+        return new QResponseStoryListDto(story.thumbnailImg, story.title, story.content, story.city, story.id, story.latitude, story.longitude);
     }
 
 //    public Slice<ResponseStoryDto> findAllStories_old(Long cursorId, Pageable pageable) {
@@ -154,7 +154,7 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
          */
         BooleanBuilder isContainSearch = new BooleanBuilder();
 
-        if(city != null && city.isEmpty()) {
+        if(city != null && !city.isEmpty()) {
             isContainSearch.and(story.city.eq(city));
         }
 

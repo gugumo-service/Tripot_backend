@@ -15,11 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/stories")
 public class PublicStoryController {
-
     private final StoryService storyService;
-
-
-
     @GetMapping("/all")
     public CommonResponse<Object> getStories(
             @RequestParam(name = "cursorId", required = false) Long cursorId,

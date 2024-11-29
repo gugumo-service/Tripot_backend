@@ -90,7 +90,7 @@ public class MemberStoryController {
     }
 
     //NOTE: 스토리 좋아요 기능  notion 명: 좋아요 기능
-    @GetMapping("/like/{storyId}")
+    @GetMapping("/{storyId}/like")
     public CommonResponse<Object> clickLike(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @PathVariable("storyId") Long storyId

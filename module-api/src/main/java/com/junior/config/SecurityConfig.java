@@ -69,10 +69,9 @@ public class SecurityConfig {
                                 "/swagger-resources/**",
                                 "/v3/api-docs/**").permitAll()
 
-                        .requestMatchers("/test/**").permitAll()
-
                         //admin 관련 설정
                         .requestMatchers("/api/v1/admin/**").hasRole(MemberRole.ADMIN.name())
+                        .requestMatchers("/createTestMember").permitAll()
                         .anyRequest().authenticated());
 
 
