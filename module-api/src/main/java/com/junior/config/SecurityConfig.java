@@ -9,6 +9,7 @@ import com.junior.security.filter.JwtValidExceptionHandlerFilter;
 import com.junior.security.filter.JWTFilter;
 import com.junior.security.handler.LoginFailureHandler;
 import com.junior.security.handler.LoginSuccessJwtProviderHandler;
+import com.junior.security.provider.CustomDaoAuthenticationProvider;
 import com.junior.service.security.UserDetailsServiceImpl;
 import com.junior.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
@@ -86,7 +87,7 @@ public class SecurityConfig {
 
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() throws Exception {
-        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        DaoAuthenticationProvider daoAuthenticationProvider = new CustomDaoAuthenticationProvider();
 
         daoAuthenticationProvider.setUserDetailsService(userDetailsService);
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
