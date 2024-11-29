@@ -82,7 +82,7 @@ public class SecurityConfig {
 
     @Bean
     public static PasswordEncoder passwordEncoder(){
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
@@ -98,7 +98,7 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager() throws Exception {//AuthenticationManager 등록
         DaoAuthenticationProvider provider = daoAuthenticationProvider();//DaoAuthenticationProvider 사용
-        provider.setPasswordEncoder(passwordEncoder());//PasswordEncoder로는 PasswordEncoderFactories.createDelegatingPasswordEncoder() 사용
+        provider.setPasswordEncoder(passwordEncoder());
         return new ProviderManager(provider);
     }
 
