@@ -116,7 +116,7 @@ public class StoryService {
         Story findStory = storyRepository.findById(storyId)
                 .orElseThrow(()->new StoryNotFoundException(StatusCode.STORY_NOT_FOUND));
 
-        boolean isAuthor = findStory.isHidden() && findStory.getMember().equals(findMember);
+        boolean isAuthor = findStory.isHidden() && findStory.getMember().getId().equals(findMember.getId());
 
         if(!isAuthor) {
             throw new StoryNotFoundException(StatusCode.STORY_NOT_PERMISSION);
