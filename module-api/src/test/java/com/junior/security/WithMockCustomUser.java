@@ -16,8 +16,8 @@ import java.lang.annotation.Target;
 public @interface WithMockCustomUser {
 
     long id() default 2L;
-    String nickname() default "테스트닉";
-    String username() default "KAKAO 3748293465";
+    String nickname() default "테스트사용자닉네임";
+    String username() default "테스트사용자유저네임";
     MemberRole role() default MemberRole.USER;
     SignUpType signUpType() default SignUpType.KAKAO;
     String profileImage() default "s3.com/testProfile";

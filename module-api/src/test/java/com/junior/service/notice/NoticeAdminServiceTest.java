@@ -305,8 +305,8 @@ class NoticeAdminServiceTest {
     Member createActiveTestMember() {
         return Member.builder()
                 .id(2L)
-                .nickname("테스트닉")
-                .username("KAKAO 3748293465")
+                .nickname("테스트사용자닉네임")
+                .username("테스트사용자유저네임")
                 .role(MemberRole.USER)
                 .signUpType(SignUpType.KAKAO)
                 .profileImage("s3.com/testProfile")

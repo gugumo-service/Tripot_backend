@@ -15,9 +15,9 @@ import java.lang.annotation.Target;
 @WithSecurityContext(factory = WithMockCustomAdminSecurityContextFactory.class)
 public @interface WithMockCustomAdmin {
 
-    long id() default 2L;
-    String nickname() default "테스트닉";
-    String username() default "KAKAO 3748293467";
+    long id() default 3L;
+    String nickname() default "테스트관리자닉네임";
+    String username() default "테스트관리자유저네임";
     MemberRole role() default MemberRole.ADMIN;
     SignUpType signUpType() default SignUpType.USERNAME;
     String profileImage() default "s3.com/testProfile";
