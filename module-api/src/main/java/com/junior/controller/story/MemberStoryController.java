@@ -42,7 +42,7 @@ public class MemberStoryController {
     }
 
     //NOTE: 회원별 검색어 기반 스토리 조회   notion 명: 스토리 조회(검색어 + 도시)
-    @PostMapping("/filter")
+    @GetMapping("/search")
     public CommonResponse<Object> getStoriesByMemberAndCityAndSearch(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @RequestParam(name = "cursorId", required = false) Long cursorId,
