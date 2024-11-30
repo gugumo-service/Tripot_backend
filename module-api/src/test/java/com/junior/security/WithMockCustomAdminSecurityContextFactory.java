@@ -1,7 +1,6 @@
-package com.junior.controller.security;
+package com.junior.security;
 
 import com.junior.domain.member.Member;
-import com.junior.security.UserPrincipal;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;

@@ -2,8 +2,7 @@ package com.junior.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.junior.config.SecurityConfig;
-import com.junior.controller.security.WithMockCustomUser;
-import com.junior.dto.notice.NoticeAdminDto;
+import com.junior.security.WithMockCustomUser;
 import com.junior.dto.notice.NoticeUserDto;
 import com.junior.security.JwtUtil;
 import com.junior.security.exceptionhandler.CustomAuthenticationEntryPoint;
@@ -31,7 +30,6 @@ import java.util.List;
 
 
 import static org.mockito.BDDMockito.given;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
