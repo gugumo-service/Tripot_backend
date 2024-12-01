@@ -148,7 +148,6 @@ class MemberControllerTest {
     @WithMockCustomUser
     void changeNickname() throws Exception {
         //given
-        UserPrincipal principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UpdateNicknameDto updateNicknameDto = new UpdateNicknameDto("newnick");
         String content = objectMapper.writeValueAsString(updateNicknameDto);
 
