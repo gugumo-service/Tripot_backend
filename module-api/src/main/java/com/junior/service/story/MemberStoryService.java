@@ -21,8 +21,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class StoryService {
-
+public class MemberStoryService {
     private final StoryRepository storyRepository;
 
     @Transactional
@@ -35,15 +34,6 @@ public class StoryService {
         storyRepository.save(story);
     }
 
-//    public Slice<ResponseStoryListDto> findAllStories(UserPrincipal userPrincipal, Long cursorId, int size, String city) {
-//
-//        Member member = userPrincipal.getMember();
-//
-//        Pageable pageable = PageRequest.of(0, size);
-//
-//        return storyRepository.findAllStories(member, cursorId, pageable, city);
-//    }
-
     @Transactional
     public void editStory(UserPrincipal userPrincipal, Long storyId, CreateStoryDto createStoryDto) {
 
@@ -51,12 +41,13 @@ public class StoryService {
 
         Story findStory = storyRepository.findStoryByIdAndMember(storyId, findMember)
                 .orElseThrow(() -> new StoryNotFoundException(StatusCode.STORY_NOT_FOUND));
-        
+
         // 더티 체킹을 통해 수정쿼리가 자동으로 발생
         findStory.updateStory(createStoryDto);
     }
 
-    public Slice<ResponseStoryListDto> findStoriesByMemberAndCityAndSearch(UserPrincipal userPrincipal, Long cursorId, int size, String city, String search) {
+    // findStoriesByMemberAndCityAndSearch
+    public Slice<ResponseStoryListDto> findStoriesByFilter(UserPrincipal userPrincipal, Long cursorId, int size, String city, String search) {
 
         Member findMember = userPrincipal.getMember();
 
@@ -81,7 +72,7 @@ public class StoryService {
         return storyCntByCity;
     }
 
-    public List<ResponseStoryListDto> findStoriesByMemberAndMap(UserPrincipal userPrincipal, GeoPointDto geoPointLt, GeoPointDto geoPointRb) {
+    public List<ResponseStoryListDto> findStoriesByMap(UserPrincipal userPrincipal, GeoPointDto geoPointLt, GeoPointDto geoPointRb) {
         Member findMember = userPrincipal.getMember();
 
         return storyRepository.findStoryByMap(findMember, geoPointLt, geoPointRb);

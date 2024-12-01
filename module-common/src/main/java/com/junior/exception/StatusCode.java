@@ -24,6 +24,9 @@ public enum StatusCode {
     STORY_READ_SUCCESS(200, "STORY-SUCCESS-0001", "스토리 불러오기 성공"),
     STORY_NOT_PERMISSION(400, "STORY-ERR-0003", "권한이 없는 스토리"),
 
+    RECOMMENDED_CITY_SUCCESS(200, "RECOMMENDED-SUCCESS-001", "추천 도시 성공"),
+    RECOMMENDED_STORIES_SUCCESS(200, "RECOMMENDED-SUCCESS-002", "추천 스토리 성공"),
+
     // like 관련 예외
     LIKE_NOT_FOUND(400, "LIKE-ERR-0001", "좋아요 조회 실패"),
     LIKE_CHANGE_SUCCESS(200, "LIKE-CHANGE-SUCCESS-0000", "좋아요 전환 성공"),

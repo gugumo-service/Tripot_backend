@@ -4,6 +4,7 @@ import com.junior.dto.story.*;
 import com.junior.exception.StatusCode;
 import com.junior.response.CommonResponse;
 import com.junior.security.UserPrincipal;
+import com.junior.service.story.MemberStoryService;
 import com.junior.service.story.StoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
@@ -17,7 +18,7 @@ import java.util.List;
 @RequestMapping("/api/v1/stories")
 public class MemberStoryController {
 
-    private final StoryService storyService;
+    private final MemberStoryService memberStoryService;
 
     //NOTE: 스토리 생성  notion 명: 스토리 작성
     @PostMapping("/new")
@@ -25,7 +26,7 @@ public class MemberStoryController {
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @RequestBody CreateStoryDto createStoryDto) {
 
-        storyService.createStory(userPrincipal, createStoryDto);
+        memberStoryService.createStory(userPrincipal, createStoryDto);
 
         return CommonResponse.success(StatusCode.STORY_CREATE_SUCCESS, null);
     }
@@ -36,7 +37,8 @@ public class MemberStoryController {
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @PathVariable("storyId") Long storyId
     ) {
-        ResponseStoryDto findStory = storyService.findStoryById(userPrincipal, storyId);
+
+        ResponseStoryDto findStory = memberStoryService.findStoryById(userPrincipal, storyId);
 
         return CommonResponse.success(StatusCode.STORY_READ_SUCCESS, findStory);
     }
@@ -50,21 +52,23 @@ public class MemberStoryController {
             @RequestParam(value = "search", required = false) String search,
             @RequestParam(value = "city", required = false) String city
     ) {
-        Slice<ResponseStoryListDto> storiesByFiltering = storyService.findStoriesByMemberAndCityAndSearch(userPrincipal, cursorId, size, city, search);
 
-        return CommonResponse.success(StatusCode.STORY_READ_SUCCESS, storiesByFiltering);
+        Slice<ResponseStoryListDto> storiesByFilter = memberStoryService.findStoriesByFilter(userPrincipal, cursorId, size, city, search);
+
+        return CommonResponse.success(StatusCode.STORY_READ_SUCCESS, storiesByFilter);
     }
 
     //NOTE: 회원별 지도 기반 스토리 조회(전체, 지도에 표시할 스토리들)  notion 명: 스토리 조회(좌표 기준 조회)
     //@PostMapping("/listByMap") // /list/map
-    @PostMapping("/list/map")
+    @PostMapping("/map")
     public CommonResponse<Object> getStoriesByMemberAndMap(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @RequestBody GeoRect geoRect
     ) {
-        List<ResponseStoryListDto> stories = storyService.findStoriesByMemberAndMap(userPrincipal, geoRect.geoPointLt(), geoRect.geoPointRb());
 
-        return CommonResponse.success(StatusCode.STORY_READ_SUCCESS, stories);
+        List<ResponseStoryListDto> storiesByMap = memberStoryService.findStoriesByMap(userPrincipal, geoRect.geoPointLt(), geoRect.geoPointRb());
+
+        return CommonResponse.success(StatusCode.STORY_READ_SUCCESS, storiesByMap);
     }
 
     //NOTE: 스토리 수정  notion 명: 스토리 수정
@@ -74,7 +78,7 @@ public class MemberStoryController {
             @PathVariable("storyId") Long storyId,
             @RequestBody CreateStoryDto createStoryDto) {
 
-        storyService.editStory(userPrincipal, storyId, createStoryDto);
+        memberStoryService.editStory(userPrincipal, storyId, createStoryDto);
 
         return CommonResponse.success(StatusCode.STORY_EDIT_SUCCESS, null);
     }
@@ -84,7 +88,8 @@ public class MemberStoryController {
     public CommonResponse<Object> getStoryCntByCity(
             @AuthenticationPrincipal UserPrincipal userPrincipal
     ) {
-        List<ResponseStoryCntByCityDto> storyCntByCity = storyService.getStoryCntByCity(userPrincipal);
+
+        List<ResponseStoryCntByCityDto> storyCntByCity = memberStoryService.getStoryCntByCity(userPrincipal);
 
         return CommonResponse.success(StatusCode.STORY_READ_SUCCESS, storyCntByCity);
     }
@@ -96,7 +101,7 @@ public class MemberStoryController {
             @PathVariable("storyId") Long storyId
     ) {
 
-        storyService.clickLike(userPrincipal, storyId);
+        memberStoryService.clickLike(userPrincipal, storyId);
 
         return CommonResponse.success(StatusCode.LIKE_CHANGE_SUCCESS, null);
     }
