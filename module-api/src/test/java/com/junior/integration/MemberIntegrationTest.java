@@ -1,5 +1,6 @@
 package com.junior.integration;
 
+import com.amazonaws.services.s3.AmazonS3Client;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.junior.controller.MemberController;
 import com.junior.domain.member.Member;
@@ -11,10 +12,12 @@ import com.junior.repository.member.MemberRepository;
 import com.junior.security.UserPrincipal;
 import com.junior.security.WithMockCustomPreactiveUser;
 import com.junior.security.WithMockCustomUser;
+import com.junior.service.s3.S3Service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
@@ -23,8 +26,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.nullValue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -43,16 +50,22 @@ public class MemberIntegrationTest extends IntegrationControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    //aws 테스트는 요금이 발생할 수 있으므로 해당 객체를 mock 처리
+    @MockBean
+    private AmazonS3Client amazonS3Client;
+
     @Autowired
     private MockMvc mockMvc;
 
     @BeforeEach
-    void init() {
+    void init() throws MalformedURLException {
         Member preactiveTestMember = createPreactiveTestMember();
         Member activeTestMember = createActiveTestMember();
 
         memberRepository.save(preactiveTestMember);
         memberRepository.save(activeTestMember);
+
+        given(amazonS3Client.getUrl(any(), any())).willReturn(new URL("https://aws.com/new-url"));
     }
 
     @Test
@@ -201,7 +214,7 @@ public class MemberIntegrationTest extends IntegrationControllerTest {
         //given
         MockMultipartFile profileImg = createMockMultipartFile();
 
-        //s3에 저장하는 과정이 생략되어야 함
+        //s3에 저장하는 과정이 생략되어야 함 -> AmazonS3Client mock 처리
 
 
         //when
@@ -219,6 +232,10 @@ public class MemberIntegrationTest extends IntegrationControllerTest {
                 .andExpect(jsonPath("$.customMessage").value("회원 프로필 사진 변경 성공"))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
+
+        //회원 정보에 변경된 url이 저장되어야 함
+        Member member = memberRepository.findById(2L).get();
+        assertThat(member.getProfileImage()).isEqualTo("https://aws.com/new-url");
 
     }
 

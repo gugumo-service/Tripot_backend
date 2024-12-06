@@ -47,7 +47,7 @@ public class IntegrationControllerTest {
 
     MockMultipartFile createMockMultipartFile() {
         MockMultipartFile profileImg = new MockMultipartFile(
-                "프로필 사진",
+                "profileimg",
                 "profiles.png",
                 MediaType.IMAGE_PNG_VALUE,
                 "thumbnail".getBytes()
