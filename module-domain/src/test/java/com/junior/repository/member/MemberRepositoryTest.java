@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -22,6 +23,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
 @Import(TestConfig.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class MemberRepositoryTest {
 
     @Autowired
@@ -41,10 +43,6 @@ class MemberRepositoryTest {
         memberRepository.save(testMember);
     }
 
-    @AfterEach
-    void clean() {
-        memberRepository.deleteAll();
-    }
 
     @Test
     @DisplayName("정확히 동일한 username을 가진 회원이 있을 때에만 true를 반환")

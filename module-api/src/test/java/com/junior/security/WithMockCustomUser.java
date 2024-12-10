@@ -1,4 +1,4 @@
-package com.junior.controller.security;
+package com.junior.security;
 
 import com.junior.domain.member.MemberRole;
 import com.junior.domain.member.MemberStatus;
@@ -12,17 +12,17 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-@WithSecurityContext(factory = WithMockCustomAdminSecurityContextFactory.class)
-public @interface WithMockCustomAdmin {
+@WithSecurityContext(factory = WithMockCustomUserSecurityContextFactory.class)
+public @interface WithMockCustomUser {
 
     long id() default 2L;
-    String nickname() default "테스트닉";
-    String username() default "KAKAO 3748293467";
-    MemberRole role() default MemberRole.ADMIN;
-    SignUpType signUpType() default SignUpType.USERNAME;
+    String nickname() default "테스트사용자닉네임";
+    String username() default "테스트사용자유저네임";
+    MemberRole role() default MemberRole.USER;
+    SignUpType signUpType() default SignUpType.KAKAO;
     String profileImage() default "s3.com/testProfile";
     String recommendLocation() default "서울";
     MemberStatus status() default MemberStatus.ACTIVE;
-    ;
+;
 
 }

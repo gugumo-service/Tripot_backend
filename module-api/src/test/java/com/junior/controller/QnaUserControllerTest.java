@@ -2,11 +2,11 @@ package com.junior.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.junior.config.SecurityConfig;
-import com.junior.security.WithMockCustomUser;
-import com.junior.dto.notice.NoticeUserDto;
+import com.junior.dto.qna.QnaUserDto;
 import com.junior.security.JwtUtil;
+import com.junior.security.WithMockCustomUser;
 import com.junior.security.exceptionhandler.CustomAuthenticationEntryPoint;
-import com.junior.service.notice.NoticeUserService;
+import com.junior.service.qna.QnaUserService;
 import com.junior.service.security.UserDetailsServiceImpl;
 import com.junior.util.RedisUtil;
 import org.junit.jupiter.api.DisplayName;
@@ -27,18 +27,16 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 
-@WebMvcTest(NoticeUserController.class)
+@WebMvcTest(QnaUserController.class)
 @MockBean(JpaMetamodelMappingContext.class)     //JPA 관련 빈들을 mock으로 등록
 @Import(SecurityConfig.class)
-class NoticeUserControllerTest {
+class QnaUserControllerTest {
 
     @MockBean
     private RedisUtil redisUtil;
@@ -59,16 +57,16 @@ class NoticeUserControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private NoticeUserService noticeUserService;
+    private QnaUserService qnaUserService;
 
     @InjectMocks
-    private NoticeUserController noticeUserController;
+    private QnaUserController qnaUserController;
 
 
     @Test
-    @DisplayName("사용자 공지 조회 응답이 반환되어야 함")
+    @DisplayName("사용자 Q&A 조회 응답이 반환되어야 함")
     @WithMockCustomUser
-    void findNotice() throws Exception {
+    void findQna() throws Exception {
 
         //given
 
@@ -77,15 +75,15 @@ class NoticeUserControllerTest {
 
         PageRequest pageable = PageRequest.of(0, size);
 
-        List<NoticeUserDto> result = new ArrayList<>();
+        List<QnaUserDto> result = new ArrayList<>();
 
-        result.add(new NoticeUserDto(1L, "title", "content", LocalDateTime.MIN));
+        result.add(new QnaUserDto(1L, "question", "answer", LocalDateTime.MIN));
 
-        given(noticeUserService.findNotice(cursorId, size)).willReturn(new SliceImpl<>(result, pageable, false));
+        given(qnaUserService.findQna(cursorId, size)).willReturn(new SliceImpl<>(result, pageable, false));
 
         //when
         ResultActions actions = mockMvc.perform(
-                get("/api/v1/notices")
+                get("/api/v1/qna")
                         .accept(MediaType.APPLICATION_JSON)
                         .param("cursorId", cursorId.toString())
                         .param("size", size.toString())
@@ -95,12 +93,12 @@ class NoticeUserControllerTest {
         //then
         actions
                 .andDo(print())
-                .andExpect(jsonPath("$.customCode").value("NOTICE-SUCCESS-004"))
-                .andExpect(jsonPath("$.customMessage").value("공지사항 조회 성공"))
+                .andExpect(jsonPath("$.customCode").value("Q&A-SUCCESS-004"))
+                .andExpect(jsonPath("$.customMessage").value("Q&A 조회 성공"))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data.pageable.pageNumber").value(0))
                 .andExpect(jsonPath("$.data.pageable.pageSize").value(5))
-                .andExpect(jsonPath("$.data.content[0].title").value("title"));
+                .andExpect(jsonPath("$.data.content[0].question").value("question"));
 
 
     }
