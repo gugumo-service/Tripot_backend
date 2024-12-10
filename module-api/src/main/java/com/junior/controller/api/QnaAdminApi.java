@@ -28,7 +28,7 @@ public interface QnaAdminApi {
                                     examples = @ExampleObject(
                                             value = """
                                                     {
-                                                        "customCode": "QNA-SUCCESS-001",
+                                                        "customCode": "Q&A-SUCCESS-001",
                                                         "customMessage": "Q&A 업로드 성공",
                                                         "status": true,
                                                         "data": null
@@ -46,7 +46,7 @@ public interface QnaAdminApi {
                                     examples = @ExampleObject(
                                             value = """
                                                     {
-                                                         "customCode": "QNA-SUCCESS-004",
+                                                         "customCode": "Q&A-SUCCESS-004",
                                                          "customMessage": "Q&A 조회 성공",
                                                          "status": true,
                                                          "data": {
@@ -96,7 +96,7 @@ public interface QnaAdminApi {
                                     examples = @ExampleObject(
                                             value = """
                                                     {
-                                                        "customCode": "QNA-SUCCESS-005",
+                                                        "customCode": "Q&A-SUCCESS-005",
                                                         "customMessage": "Q&A 세부정보 조회 성공",
                                                         "status": true,
                                                         "data": {
@@ -113,7 +113,7 @@ public interface QnaAdminApi {
                                             @ExampleObject(
                                                     value = """
                                                             {
-                                                                "customCode": "QNA-ERR-001",
+                                                                "customCode": "Q&A-ERR-001",
                                                                 "customMessage": "해당 Q&A을 찾을 수 없음",
                                                                 "status": false,
                                                                 "data": null
@@ -146,7 +146,7 @@ public interface QnaAdminApi {
                                     examples = @ExampleObject(
                                             value = """
                                                     {
-                                                        "customCode": "QNA-SUCCESS-003",
+                                                        "customCode": "Q&A-SUCCESS-003",
                                                         "customMessage": "Q&A 수정 성공",
                                                         "status": true,
                                                         "data": null
@@ -159,7 +159,7 @@ public interface QnaAdminApi {
                                             @ExampleObject(
                                                     value = """
                                                             {
-                                                                "customCode": "QNA-ERR-001",
+                                                                "customCode": "Q&A-ERR-001",
                                                                 "customMessage": "해당 Q&A을 찾을 수 없음",
                                                                 "status": false,
                                                                 "data": null
@@ -177,7 +177,7 @@ public interface QnaAdminApi {
                                     examples = @ExampleObject(
                                             value = """
                                                     {
-                                                        "customCode": "QNA-SUCCESS-002",
+                                                        "customCode": "Q&A-SUCCESS-002",
                                                         "customMessage": "Q&A 삭제 성공",
                                                         "status": true,
                                                         "data": null
@@ -190,7 +190,7 @@ public interface QnaAdminApi {
                                             @ExampleObject(
                                                     value = """
                                                             {
-                                                                "customCode": "QNA-ERR-001",
+                                                                "customCode": "Q&A-ERR-001",
                                                                 "customMessage": "해당 Q&A을 찾을 수 없음",
                                                                 "status": false,
                                                                 "data": null
