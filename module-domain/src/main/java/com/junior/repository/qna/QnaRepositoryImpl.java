@@ -59,7 +59,7 @@ public class QnaRepositoryImpl implements QnaRepositoryCustom {
         log.info("[{}] Q&A 카운트 쿼리 실행", Thread.currentThread().getStackTrace()[1].getMethodName());
         JPAQuery<Long> count = queryFactory.select(qna.count())
                 .from(qna)
-                .where(queryContains(q));
+                .where(queryContains(q), qna.isDeleted.isFalse());
 
         return PageableExecutionUtils.getPage(searchResult, pageable, count::fetchOne);
 

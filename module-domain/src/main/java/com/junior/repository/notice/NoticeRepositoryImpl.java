@@ -56,7 +56,7 @@ public class NoticeRepositoryImpl implements NoticeRepositoryCustom{
         log.info("[{}] 공지사항 카운트 쿼리 실행", Thread.currentThread().getStackTrace()[1].getMethodName());
         JPAQuery<Long> count = queryFactory.select(notice.count())
                 .from(notice)
-                .where(queryContains(q));
+                .where(queryContains(q), notice.isDeleted.isFalse());
 
         return PageableExecutionUtils.getPage(searchResult, pageable, count::fetchOne);
 

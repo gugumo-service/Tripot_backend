@@ -157,7 +157,7 @@ class NoticeRepositoryTest {
         assertThat(content.get(0).title()).isNotEqualTo("title 100");
 
         //총 요소의 개수: 100 - 1 = 99
-        assertThat(page.getTotalElements()).isEqualTo(100);
+        assertThat(page.getTotalElements()).isEqualTo(99);
 
     }
 
