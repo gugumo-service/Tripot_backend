@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @Import(TestConfig.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class NoticeRepositoryTest {
 
     @Autowired
@@ -45,10 +47,6 @@ class NoticeRepositoryTest {
 
     }
 
-    @AfterEach
-    void clean(){
-        noticeRepository.deleteAll();
-    }
 
     @Test
     @DisplayName("공지사항 dto를 페이징하여 가져올 수 있어야 함")

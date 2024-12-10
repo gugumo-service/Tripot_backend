@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.List;
 
@@ -24,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @Import(TestConfig.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class QnaRepositoryTest {
 
     @Autowired
@@ -48,10 +50,6 @@ class QnaRepositoryTest {
 
     }
 
-    @AfterEach
-    void clean(){
-        qnaRepository.deleteAll();
-    }
 
     @Test
     @DisplayName("Q&A dto를 페이징하여 가져올 수 있어야 함")
