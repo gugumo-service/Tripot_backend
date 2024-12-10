@@ -38,6 +38,5 @@ public class OAuth2Controller implements OAuth2Api {
         oAuth2Service.logout(refreshTokenDto);
 
         return CommonResponse.success(StatusCode.LOGOUT, null);
-
     }
 }
