@@ -126,6 +126,10 @@ public class Story extends BaseEntity {
         member.getLikeStories().remove(like);
     }
 
+    public boolean isAuthor(Member member) {
+        return this.member.equals(member);
+    }
+
     public void increaseViewCnt() {
         this.viewCnt+=1;
     }

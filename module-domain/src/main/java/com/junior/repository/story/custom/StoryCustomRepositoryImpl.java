@@ -8,6 +8,7 @@ import com.junior.domain.story.Story;
 import com.junior.dto.story.*;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +26,7 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
     private final JPAQueryFactory query;
 
     QResponseStoryDto createQResponseStoryDto() {
-        return new QResponseStoryDto(story.id, story.title, story.content, story.thumbnailImg, story.latitude, story.longitude, story.city, story.likeCnt, story.isHidden, story.createdDate, story.imgUrls);
+        return new QResponseStoryDto(story.id, story.title, story.content, story.thumbnailImg, story.latitude, story.longitude, story.city, story.member, null, story.likeCnt, story.isHidden, story.createdDate, story.imgUrls);
     }
 
     QResponseStoryListDto createQResponseStoryListDto() {
