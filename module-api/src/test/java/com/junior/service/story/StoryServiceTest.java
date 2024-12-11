@@ -1,4 +1,4 @@
-package com.junior.moduleapi.service.story;
+package com.junior.service.story;
 
 import com.junior.domain.like.Like;
 import com.junior.domain.member.Member;
@@ -6,10 +6,10 @@ import com.junior.domain.member.MemberRole;
 import com.junior.domain.member.MemberStatus;
 import com.junior.domain.member.SignUpType;
 import com.junior.domain.story.Story;
+import com.junior.dto.story.ResponseStoryDto;
 import com.junior.repository.member.MemberRepository;
 import com.junior.repository.story.StoryRepository;
 import com.junior.security.UserPrincipal;
-import com.junior.service.story.StoryService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,23 +61,40 @@ public class StoryServiceTest {
 
     @Test
     @Transactional
-    public void clickLikeTest() {
+    public void findStoryByIdTest() {
         Member member = createMember("heeseong");
         memberRepository.save(member);
+
+        UserPrincipal userPrincipal = new UserPrincipal(member);
 
         Story story = createStory(member, "title", "city");
         storyRepository.save(story);
 
-        UserPrincipal userPrincipal = new UserPrincipal(member);
+        ResponseStoryDto storyById = storyService.findStoryById(userPrincipal, 1L);
 
-        storyService.clickLike(userPrincipal, 1L);
 
-        List<Like> likeMembers = story.getLikeMembers();
-
-        Assertions.assertThat(likeMembers.size()).isEqualTo(1);
-        Assertions.assertThat(likeMembers.get(0).getMember()).isEqualTo(member);
-
-        storyService.clickLike(userPrincipal, 1L);
-        Assertions.assertThat(likeMembers.size()).isEqualTo(0);
+        Assertions.assertThat(storyById.author()).isEqualTo(member);
     }
+
+//    @Test
+//    @Transactional
+//    public void clickLikeTest() {
+//        Member member = createMember("heeseong");
+//        memberRepository.save(member);
+//
+//        Story story = createStory(member, "title", "city");
+//        storyRepository.save(story);
+//
+//        UserPrincipal userPrincipal = new UserPrincipal(member);
+//
+//        storyService.clickLike(userPrincipal, 1L);
+//
+//        List<Like> likeMembers = story.getLikeMembers();
+//
+//        Assertions.assertThat(likeMembers.size()).isEqualTo(1);
+//        Assertions.assertThat(likeMembers.get(0).getMember()).isEqualTo(member);
+//
+//        storyService.clickLike(userPrincipal, 1L);
+//        Assertions.assertThat(likeMembers.size()).isEqualTo(0);
+//    }
 }

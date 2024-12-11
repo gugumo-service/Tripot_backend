@@ -116,7 +116,8 @@ public class StoryService {
         Story findStory = storyRepository.findById(storyId)
                 .orElseThrow(()->new StoryNotFoundException(StatusCode.STORY_NOT_FOUND));
 
-        boolean isNotAuthor = findStory.isHidden() && !findStory.getMember().getId().equals(findMember.getId());
+
+        boolean isNotAuthor = findStory.isHidden() && findStory.isAuthor(findMember);
 
         if(isNotAuthor) {
             throw new StoryNotFoundException(StatusCode.STORY_NOT_PERMISSION);
@@ -128,9 +129,12 @@ public class StoryService {
 //            }
 //        }
 
+        boolean isLikedUser = findStory.getLikeMembers().stream()
+                        .anyMatch(like -> like.getMember().getId().equals(findMember.getId()));
+
         findStory.increaseViewCnt();
 
-        return ResponseStoryDto.from(findStory);
+        return ResponseStoryDto.from(findStory, isLikedUser);
     }
 
     @Transactional
