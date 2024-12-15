@@ -47,11 +47,15 @@ public class Comment extends BaseEntity {
         this.parent = parentComment;
         parentComment.addChild(this);
     }
-    public void deleteComment(Boolean isDelete) {
-        this.isDeleted = isDelete;
+    public void deleteComment() {
+        this.isDeleted = true;
     }
 
     public void addChild(Comment childComment) {
         this.child.add(childComment);
+    }
+
+    public void updateComment(String content) {
+        this.content = content;
     }
 }

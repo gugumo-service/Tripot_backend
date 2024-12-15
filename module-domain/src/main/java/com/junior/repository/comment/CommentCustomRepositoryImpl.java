@@ -2,6 +2,7 @@ package com.junior.repository.comment;
 
 import com.junior.domain.story.Comment;
 import com.junior.dto.comment.QResponseParentCommentDto;
+import com.junior.dto.comment.ResponseChildCommentDto;
 import com.junior.dto.comment.ResponseParentCommentDto;
 import com.junior.dto.story.ResponseStoryListDto;
 import com.querydsl.core.BooleanBuilder;
@@ -25,7 +26,7 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository {
 
     private final JPAQueryFactory query;
 
-    private boolean isHaveNextStoryList(List<ResponseParentCommentDto> comments, Pageable pageable) {
+    private<T> boolean isHaveNextStoryList(List<T> comments, Pageable pageable) {
 
         boolean hasNext;
 
@@ -64,6 +65,32 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository {
                                 comment.content,
                                 comment.member,
                                 comment.child.size().longValue()
+                        )
+                )
+                .from(comment)
+                .where(booleanBuilder)
+                .limit(pageable.getPageSize() + 1)
+                .fetch();
+
+        boolean hasNext = isHaveNextStoryList(comments, pageable);
+
+        return new SliceImpl<>(comments, pageable, hasNext);
+    }
+
+    @Override
+    public Slice<ResponseChildCommentDto> findChildCommentByParentCommendId(Long parentCommentId, Pageable pageable, Long cursorId) {
+
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        booleanBuilder.and(comment.parent.id.eq(parentCommentId));
+        booleanBuilder.and(comment.isDeleted.eq(false));
+        booleanBuilder.and(eqCursorId(cursorId));
+
+        List<ResponseChildCommentDto> comments = query.select(
+                        Projections.constructor(
+                                ResponseChildCommentDto.class,
+                                comment.id,
+                                comment.content,
+                                comment.member
                         )
                 )
                 .from(comment)

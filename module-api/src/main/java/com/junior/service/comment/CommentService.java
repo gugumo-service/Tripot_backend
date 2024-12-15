@@ -4,6 +4,7 @@ import com.junior.domain.member.Member;
 import com.junior.domain.story.Comment;
 import com.junior.domain.story.Story;
 import com.junior.dto.comment.CreateCommentDto;
+import com.junior.dto.comment.ResponseChildCommentDto;
 import com.junior.dto.comment.ResponseParentCommentDto;
 import com.junior.exception.CommentNotFoundException;
 import com.junior.exception.StatusCode;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -59,8 +61,40 @@ public class CommentService {
         return commentRepository.findParentCommentByStoryId(storyId, pageable, cursorId);
     }
 
-    public List<Comment> findChildCommentByCommentStoryId(Long commentId) {
+    public Slice<ResponseChildCommentDto> findChildCommentByParentCommentId(Long parentCommentId, Long cursorId, int size) {
 
-        return null;
+        Pageable pageable = PageRequest.of(0, size);
+
+        return commentRepository.findChildCommentByParentCommendId(parentCommentId, pageable, cursorId);
+    }
+
+    public void editComment(UserPrincipal userPrincipal, Long commentId, String content) {
+        Member findMember = userPrincipal.getMember();
+
+        Comment findComment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CommentNotFoundException(StatusCode.COMMENT_NOT_FOUND));
+
+        if (Objects.equals(findComment.getMember().getId(), findMember.getId())) {
+            findComment.updateComment(content);
+        }
+        else {
+            //FIXME : 권한 문제로 예외 바꾸기
+            throw new CommentNotFoundException(StatusCode.COMMENT_NOT_FOUND);
+        }
+    }
+
+    public void deleteComment(UserPrincipal userPrincipal, Long commentId) {
+        Member findMember = userPrincipal.getMember();
+
+        Comment findComment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CommentNotFoundException(StatusCode.COMMENT_NOT_FOUND));
+
+        if (Objects.equals(findComment.getMember().getId(), findMember.getId())) {
+            findComment.deleteComment();
+        }
+        else {
+            //FIXME : 권한 문제로 예외 바꾸기
+            throw new CommentNotFoundException(StatusCode.COMMENT_NOT_FOUND);
+        }
     }
 }
