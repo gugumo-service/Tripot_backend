@@ -4,6 +4,7 @@ import com.junior.domain.member.Member;
 import com.junior.domain.story.Comment;
 import com.junior.domain.story.Story;
 import com.junior.dto.comment.CreateCommentDto;
+import com.junior.dto.comment.ResponseParentCommentDto;
 import com.junior.exception.CommentNotFoundException;
 import com.junior.exception.StatusCode;
 import com.junior.exception.StoryNotFoundException;
@@ -11,6 +12,9 @@ import com.junior.repository.comment.CommentRepository;
 import com.junior.repository.story.StoryRepository;
 import com.junior.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,16 +52,15 @@ public class CommentService {
         commentRepository.save(comment);
     }
 
-    public List<Comment> findCommentByStoryId(Long storyId) {
+    public Slice<ResponseParentCommentDto> findParentCommentByStoryId(Long storyId, Long cursorId, int size) {
 
-        return commentRepository.findCommentByStoryId(storyId);
+        Pageable pageable = PageRequest.of(0, size);
+
+        return commentRepository.findParentCommentByStoryId(storyId, pageable, cursorId);
     }
 
-//    private List<ResponseCommentDto> convertNestedStructure(List<Comment> comments) {
-//        List<ResponseCommentDto> result = new ArrayList<>();
-//        Map<Long, ResponseCommentDto> dtoMap = new HashMap<>();
-//
-//
-//
-//    }
+    public List<Comment> findChildCommentByCommentStoryId(Long commentId) {
+
+        return null;
+    }
 }

@@ -30,6 +30,7 @@ public enum StatusCode {
 
     // comment 관련 예외
     COMMENT_CREATE_SUCCESS(200, "COMMENT-SUCCESS-0001", "댓글 저장 성공"),
+    COMMENT_READ_SUCCESS(200, "COMMENT-SUCCESS-0002", "댓글 불러오기 성공"),
     COMMENT_NOT_FOUND(400, "COMMENT-ERR-0001", "댓글 불러오기 실패"),
 
     //s3 관련 예외
