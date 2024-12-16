@@ -101,5 +101,14 @@ public class MemberStoryController {
         return CommonResponse.success(StatusCode.LIKE_CHANGE_SUCCESS, null);
     }
 
+    @GetMapping("/like-list")
+    public CommonResponse<Object> getLikeStories(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @RequestParam(name = "cursorId", required = false) Long cursorId,
+            @RequestParam("size") int size
+    ) {
+        Slice<ResponseStoryListDto> stories = storyService.getLikeStories(userPrincipal, cursorId, size);
 
+        return CommonResponse.success(StatusCode.STORY_READ_SUCCESS, stories);
+    }
 }

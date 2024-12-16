@@ -5,6 +5,7 @@ import com.junior.domain.story.Comment;
 import com.junior.domain.story.Story;
 import com.junior.dto.comment.CreateCommentDto;
 import com.junior.dto.comment.ResponseChildCommentDto;
+import com.junior.dto.comment.ResponseMyCommentDto;
 import com.junior.dto.comment.ResponseParentCommentDto;
 import com.junior.exception.CommentNotFoundException;
 import com.junior.exception.StatusCode;
@@ -96,5 +97,14 @@ public class CommentService {
             //FIXME : 권한 문제로 예외 바꾸기
             throw new CommentNotFoundException(StatusCode.COMMENT_NOT_FOUND);
         }
+    }
+
+    public Slice<ResponseMyCommentDto> findMyCommentByMember(UserPrincipal userPrincipal, Long cursorId, int size) {
+
+        Member findMember = userPrincipal.getMember();
+
+        Pageable pageable = PageRequest.of(0, size);
+
+        return commentRepository.findCommentsByMember(findMember, pageable, cursorId);
     }
 }

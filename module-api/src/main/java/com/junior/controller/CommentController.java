@@ -2,6 +2,7 @@ package com.junior.controller;
 
 import com.junior.dto.comment.CreateCommentDto;
 import com.junior.dto.comment.ResponseChildCommentDto;
+import com.junior.dto.comment.ResponseMyCommentDto;
 import com.junior.dto.comment.ResponseParentCommentDto;
 import com.junior.exception.StatusCode;
 import com.junior.response.CommonResponse;
@@ -72,5 +73,17 @@ public class CommentController {
         Slice<ResponseChildCommentDto> childCommentDto = commentService.findChildCommentByParentCommentId(parentCommentId, cursorId, size);
 
         return CommonResponse.success(StatusCode.COMMENT_READ_SUCCESS, childCommentDto);
+    }
+
+    @GetMapping("/my")
+    public CommonResponse<Object> findMyComment(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @RequestParam(name = "cursorId", required = false) Long cursorId,
+            @RequestParam("size") int size
+    ) {
+
+        Slice<ResponseMyCommentDto> commentsDto = commentService.findMyCommentByMember(userPrincipal, cursorId, size);
+
+        return CommonResponse.success(StatusCode.COMMENT_READ_SUCCESS, commentsDto);
     }
 }

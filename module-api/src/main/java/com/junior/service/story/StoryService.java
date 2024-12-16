@@ -166,4 +166,12 @@ public class StoryService {
             findStory.removeLikeMember(existingLike);
         }
     }
+
+    public Slice<ResponseStoryListDto> getLikeStories(UserPrincipal userPrincipal, Long cursorId, int size) {
+        Member findMember = userPrincipal.getMember();
+
+        Pageable pageable = PageRequest.of(0, size);
+
+        return storyRepository.findLikeStories(findMember, pageable, cursorId);
+    }
 }
