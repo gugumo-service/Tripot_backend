@@ -8,6 +8,7 @@ import com.junior.domain.member.SignUpType;
 import com.junior.domain.story.Comment;
 import com.junior.domain.story.Story;
 import com.junior.dto.comment.ResponseChildCommentDto;
+import com.junior.dto.comment.ResponseMyCommentDto;
 import com.junior.dto.comment.ResponseParentCommentDto;
 import com.junior.dto.story.CreateStoryDto;
 import com.junior.repository.member.MemberRepository;
@@ -208,5 +209,68 @@ public class CommentCustomRepositoryImplTest {
         List<ResponseChildCommentDto> content = parentCommentByStoryId.getContent();
 
         Assertions.assertThat(content.size()).isEqualTo(3);
+    }
+
+    @Test
+    @DisplayName("내가 쓴 댓글을 조회할 수 있다.")
+    public void findCommentsByMemberTest() {
+        Member testMember = Member.builder().nickname("테스트닉")
+                .username("KAKAO 3748293466")
+                .role(MemberRole.USER)
+                .status(MemberStatus.ACTIVE)
+                .signUpType(SignUpType.KAKAO)
+                .recommendLocation("서울")
+                .build();
+        memberRepository.save(testMember);
+
+        Story story = createStory(testMember, "title", "city");
+        storyRepository.save(story);
+
+        Comment parentComment3 = Comment.builder()
+                .parent(null)
+                .content("content3")
+                .member(testMember)
+                .story(story)
+                .isDeleted(false)
+                .build();
+
+        Comment childComment1 = Comment.builder()
+                .parent(parentComment3)
+                .content("child1")
+                .member(testMember)
+                .story(story)
+                .isDeleted(false)
+                .build();
+
+        Comment childComment2 = Comment.builder()
+                .parent(parentComment3)
+                .content("child2")
+                .member(testMember)
+                .story(story)
+                .isDeleted(false)
+                .build();
+
+        Comment childComment3 = Comment.builder()
+                .parent(parentComment3)
+                .content("child3")
+                .member(testMember)
+                .story(story)
+                .isDeleted(false)
+                .build();
+
+        childComment1.updateParent(parentComment3);
+        childComment2.updateParent(parentComment3);
+        childComment3.updateParent(parentComment3);
+
+        commentRepository.save(parentComment3);
+        commentRepository.save(childComment1);
+        commentRepository.save(childComment2);
+        commentRepository.save(childComment3);
+
+        Pageable pageable = PageRequest.of(0, 5);
+
+        Slice<ResponseMyCommentDto> commentsByMember = commentRepository.findCommentsByMember(testMember, pageable, null);
+        List<ResponseMyCommentDto> content = commentsByMember.getContent();
+        Assertions.assertThat(content.size()).isEqualTo(4);
     }
 }

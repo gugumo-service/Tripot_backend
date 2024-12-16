@@ -1,8 +1,10 @@
 package com.junior.repository.comment;
 
+import com.junior.domain.member.Member;
 import com.junior.domain.story.Comment;
 import com.junior.dto.comment.QResponseParentCommentDto;
 import com.junior.dto.comment.ResponseChildCommentDto;
+import com.junior.dto.comment.ResponseMyCommentDto;
 import com.junior.dto.comment.ResponseParentCommentDto;
 import com.junior.dto.story.ResponseStoryListDto;
 import com.querydsl.core.BooleanBuilder;
@@ -91,6 +93,31 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository {
                                 comment.id,
                                 comment.content,
                                 comment.member
+                        )
+                )
+                .from(comment)
+                .where(booleanBuilder)
+                .limit(pageable.getPageSize() + 1)
+                .fetch();
+
+        boolean hasNext = isHaveNextStoryList(comments, pageable);
+
+        return new SliceImpl<>(comments, pageable, hasNext);
+    }
+
+    @Override
+    public Slice<ResponseMyCommentDto> findCommentsByMember(Member findMember, Pageable pageable, Long cursorId) {
+
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        booleanBuilder.and(comment.member.eq(findMember));
+        booleanBuilder.and(comment.isDeleted.eq(false));
+        booleanBuilder.and(eqCursorId(cursorId));
+
+        List<ResponseMyCommentDto> comments = query.select(
+                        Projections.constructor(
+                                ResponseMyCommentDto.class,
+                                comment.story,
+                                comment.content
                         )
                 )
                 .from(comment)
