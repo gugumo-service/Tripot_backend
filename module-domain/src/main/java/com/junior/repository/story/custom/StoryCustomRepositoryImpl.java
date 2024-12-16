@@ -5,8 +5,10 @@ import com.junior.domain.like.QLike;
 import com.junior.domain.member.Member;
 import com.junior.domain.story.QStory;
 import com.junior.domain.story.Story;
+import com.junior.dto.comment.ResponseChildCommentDto;
 import com.junior.dto.story.*;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +17,9 @@ import org.springframework.data.domain.*;
 
 import java.util.List;
 
+import static com.junior.domain.story.QComment.comment;
 import static com.junior.domain.story.QStory.story;
+import static com.junior.domain.like.QLike.like;
 
 
 @Slf4j
@@ -32,19 +36,38 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
         return new QResponseStoryListDto(story.thumbnailImg, story.title, story.content, story.city, story.id, story.latitude, story.longitude);
     }
 
-//    public Slice<ResponseStoryDto> findAllStories_old(Long cursorId, Pageable pageable) {
-//        List<ResponseStoryDto> stories = query.select(createQResponseStoryDto())
-//                .from(story)
-//                .where(eqCursorId(cursorId),
-//                        story.isHidden.eq(false))
-//                .limit(pageable.getPageSize() + 1)
-//                .orderBy(story.createdDate.desc())
-//                .fetch();
-//
-//        boolean hasNext = isHaveNextStoryList(stories, pageable);
-//
-//        return new SliceImpl<>(stories, pageable, hasNext);
-//    }
+    public Boolean isLikedMember(Member findMember, Story findStory) {
+
+        QLike like =  QLike.like;
+
+        return query.selectOne()
+                .from(like)
+                .where(like.member.eq(findMember),
+                        like.story.eq(findStory))
+                .fetchFirst() != null;
+    }
+
+    private boolean isHaveNextStoryList(List<ResponseStoryListDto> stories, Pageable pageable) {
+
+        boolean hasNext;
+
+        if(stories.size() == pageable.getPageSize() + 1) {
+            stories.remove(pageable.getPageSize());
+            hasNext = true;
+        }
+        else {
+            hasNext = false;
+        }
+
+        return hasNext;
+    }
+
+    private BooleanExpression eqCursorId(Long cursorId) {
+        if(cursorId != null) {
+            return story.id.lt(cursorId);
+        }
+        return null;
+    }
 
     @Override
     public Slice<ResponseStoryListDto> findAllStories(Long cursorId, Pageable pageable, String city) {
@@ -70,22 +93,6 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
         return new SliceImpl<>(stories, pageable, hasNext);
     }
 
-//    @Override
-//    public Slice<ResponseStoryDto> findStoriesByMemberAndCity(Long cursorId, Pageable pageable, String city, Member findMember) {
-//        List<ResponseStoryDto> stories = query.select(createQResponseStoryDto())
-//                .from(story)
-//                .where(story.city.eq(city),
-//                        story.member.eq(findMember),
-//                        eqCursorId(cursorId))
-//                .limit(pageable.getPageSize() + 1)
-//                .orderBy(story.createdDate.desc())
-//                .fetch();
-//
-//        boolean hasNext = isHaveNextStoryList(stories, pageable);
-//
-//        return new SliceImpl<>(stories, pageable, hasNext);
-//    }
-
     @Override
     public Story findStoryByIdAndMember(Long storyId, Member member) {
 
@@ -101,30 +108,6 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
 
         return stories.get(0);
     }
-
-//    @Override
-//    public Slice<ResponseStoryDto> findStoriesByMemberAndMapWithPaging(Long cursorId, Pageable pageable, GeoPointDto geoPointLt, GeoPointDto geoPointRb, Member findMember) {
-//
-//        List<ResponseStoryDto> stories = query.select(createQResponseStoryDto())
-//                .from(story)
-//                .where(story.latitude.between(
-//                                Math.min(geoPointLt.latitude(), geoPointRb.latitude()),
-//                                Math.max(geoPointLt.latitude(), geoPointRb.latitude())
-//                        ),
-//                        story.longitude.between(
-//                                Math.min(geoPointLt.longitude(), geoPointRb.longitude()),
-//                                Math.max(geoPointLt.longitude(), geoPointRb.longitude())
-//                        ),
-//                        eqCursorId(cursorId)
-//                )
-//                .limit(pageable.getPageSize() + 1)
-//                .orderBy(story.createdDate.desc())
-//                .fetch();
-//
-//        boolean hasNext = isHaveNextStoryList(stories, pageable);
-//
-//        return new SliceImpl<>(stories, pageable, hasNext);
-//    }
 
     @Override
     public List<ResponseStoryListDto> findStoryByMap(Member findMember, GeoPointDto geoPointLt, GeoPointDto geoPointRb) {
@@ -187,38 +170,22 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
     }
 
     @Override
-    public Boolean isLikedMember(Member findMember, Story findStory) {
+    public Slice<ResponseStoryListDto> findLikeStories(Member findMember, Pageable pageable, Long cursorId) {
 
-        QLike like =  QLike.like;
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
 
-        return query.selectOne()
-                .from(like)
-                .where(like.member.eq(findMember),
-                        like.story.eq(findStory))
-                .fetchFirst() != null;
+        booleanBuilder.and(eqCursorId(cursorId));
+
+        List<ResponseStoryListDto> likeStories = query.select(createQResponseStoryListDto())
+                .from(story)
+                .join(like).on(like.member.eq(findMember))
+                .where(booleanBuilder)
+                .orderBy(story.city.asc())
+                .limit(pageable.getPageSize() + 1)
+                .fetch();
+
+        boolean hasNext = isHaveNextStoryList(likeStories, pageable);
+
+        return new SliceImpl<>(likeStories, pageable, hasNext);
     }
-
-    private boolean isHaveNextStoryList(List<ResponseStoryListDto> stories, Pageable pageable) {
-
-        boolean hasNext;
-
-        if(stories.size() == pageable.getPageSize() + 1) {
-            stories.remove(pageable.getPageSize());
-            hasNext = true;
-        }
-        else {
-            hasNext = false;
-        }
-
-        return hasNext;
-    }
-
-    private BooleanExpression eqCursorId(Long cursorId) {
-        if(cursorId != null) {
-            return story.id.lt(cursorId);
-        }
-        return null;
-    }
-
-
 }

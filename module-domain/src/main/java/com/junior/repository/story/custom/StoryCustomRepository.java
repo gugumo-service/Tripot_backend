@@ -24,4 +24,6 @@ public interface StoryCustomRepository {
     public List<ResponseStoryCntByCityDto> getStoryCntByCity(Member findMember);
 
     public Boolean isLikedMember(Member findMember, Story fidStory);
+
+    public Slice<ResponseStoryListDto> findLikeStories(Member findMember, Pageable pageable, Long cursorId);
 }
