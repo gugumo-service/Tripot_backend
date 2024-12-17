@@ -7,6 +7,8 @@ import com.junior.domain.story.Story;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Builder
@@ -26,7 +28,12 @@ public class Report extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ReportType reportType;
 
-    //이렇게 하는게 맞나? 상속관계 매핑은? 한다면 전략은?
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private ReportStatus reportStatus = ReportStatus.UNCONFIRMED;
+
+    private LocalDateTime confirmTime;
+
 
     /**
      * reportType=STORY일 경우, 그 외의 경우 NULL

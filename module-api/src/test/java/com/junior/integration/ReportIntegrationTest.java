@@ -1,0 +1,114 @@
+package com.junior.integration;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.junior.controller.report.ReportController;
+import com.junior.domain.member.Member;
+import com.junior.domain.report.Report;
+import com.junior.domain.report.ReportStatus;
+import com.junior.domain.report.ReportType;
+import com.junior.domain.story.Comment;
+import com.junior.domain.story.Story;
+import com.junior.dto.report.CreateReportDto;
+import com.junior.repository.comment.CommentRepository;
+import com.junior.repository.member.MemberRepository;
+import com.junior.repository.report.ReportRepository;
+import com.junior.repository.story.StoryRepository;
+import com.junior.security.WithMockCustomUser;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.nullValue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+
+public class ReportIntegrationTest extends IntegrationControllerTest {
+
+    @Autowired
+    private ReportController reportController;
+
+    @Autowired
+    private MemberRepository memberRepository;
+
+    @Autowired
+    private StoryRepository storyRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
+
+    @Autowired
+    private ReportRepository reportRepository;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @Autowired
+    private MockMvc mockMvc;
+
+
+
+    @BeforeEach
+    void init() {
+        Member preactiveTestMember = createPreactiveTestMember();
+        Member activeTestMember = createActiveTestMember();
+
+        memberRepository.save(preactiveTestMember);
+        memberRepository.save(activeTestMember);
+
+        Story testStory = createStory(activeTestMember);
+        storyRepository.save(testStory);
+
+        Comment testComment = createComment(activeTestMember, testStory);
+        commentRepository.save(testComment);
+
+
+    }
+
+    @Test
+    @DisplayName("스토리에 대한 신고 기능이 정상적으로 이루어져야 함")
+    @WithMockCustomUser
+    public void report_story() throws Exception {
+        //given
+        CreateReportDto createReportDto = new CreateReportDto(1L, "STORY");
+        String content = objectMapper.writeValueAsString(createReportDto);
+
+        //when
+        ResultActions actions = mockMvc.perform(
+                post("/api/v1/reports")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content)
+        );
+
+
+        //then
+        actions
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.customCode").value("REPORT-SUCCESS-001"))
+                .andExpect(jsonPath("$.customMessage").value("신고 성공"))
+                .andExpect(jsonPath("$.status").value(true))
+                .andExpect(jsonPath("$.data").value(nullValue()));
+
+        //신고 내역이 정상적으로 저장되어야 함
+        Report report = reportRepository.findById(1L).orElseThrow(RuntimeException::new);
+
+        assertThat(report.getMember().getUsername()).isEqualTo("테스트사용자유저네임");
+        assertThat(report.getReportType()).isEqualTo(ReportType.STORY);
+        assertThat(report.getStory().getTitle()).isEqualTo("testStoryTitle");
+        assertThat(report.getComment()).isNull();
+        assertThat(report.getReportStatus()).isEqualTo(ReportStatus.UNCONFIRMED);
+
+
+    }
+
+
+}

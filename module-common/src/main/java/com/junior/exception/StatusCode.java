@@ -82,6 +82,10 @@ public enum StatusCode {
     QNA_FIND_SUCCESS(200, "Q&A-SUCCESS-004", "Q&A 조회 성공"),
     QNA_FIND_DETAIL_SUCCESS(200, "Q&A-SUCCESS-005", "Q&A 세부정보 조회 성공"),
 
+    // 신고 관련 상태코드
+    REPORT_CREATE_SUCCESS(201, "REPORT-SUCCESS-001", "신고 성공"),
+    REPORT_NOT_VALID(400, "REPORT-ERR-001", "유효한 신고 유형이 아님"),
+    REPORT_NOT_FOUND(400, "REPORT-ERR-002", "해당 신고내역을 찾을 수 없음"),
 
     // 공통 예외
     UNKNOWN_ERROR(9999, "UNKNOWN-ERROR", "정의되지 않은 예외");
