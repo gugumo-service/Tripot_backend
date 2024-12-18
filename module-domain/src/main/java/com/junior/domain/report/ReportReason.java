@@ -4,7 +4,12 @@ import com.junior.exception.ReportException;
 import com.junior.exception.StatusCode;
 
 public enum ReportReason {
-    SAMPLE("샘플");
+    SPAMMARKET("스팸홍보"),
+    SPAMLOT("도배"),
+    ADULT("음란물"),
+    ILLEGAL("불법정보 포함"),
+    FWORD("욕설/인신공격"),
+    PERSONAL("개인정보노출");
 
     private final String name;
     private ReportReason(String name) {

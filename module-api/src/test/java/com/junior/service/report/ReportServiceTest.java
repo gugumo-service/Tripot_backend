@@ -53,7 +53,7 @@ class ReportServiceTest {
         CreateReportDto createReportDto = CreateReportDto.builder()
                 .reportContentId(1L)
                 .reportType("story")
-                .reportReason("샘플")
+                .reportReason("스팸홍보")
                 .build();
 
         Member testActiveMember = createActiveTestMember();
@@ -80,7 +80,7 @@ class ReportServiceTest {
         CreateReportDto createReportDto = CreateReportDto.builder()
                 .reportContentId(1L)
                 .reportType("comment")
-                .reportReason("샘플")
+                .reportReason("스팸홍보")
                 .build();
 
         Member testActiveMember = createActiveTestMember();
@@ -110,7 +110,7 @@ class ReportServiceTest {
         CreateReportDto createReportDto = CreateReportDto.builder()
                 .reportContentId(1L)
                 .reportType("notvalid")
-                .reportReason("샘플")
+                .reportReason("스팸홍보")
                 .build();
 
         Member testActiveMember = createActiveTestMember();

@@ -78,7 +78,7 @@ public class ReportIntegrationTest extends IntegrationControllerTest {
     @WithMockCustomUser
     public void report_story() throws Exception {
         //given
-        CreateReportDto createReportDto = new CreateReportDto(1L, "STORY", "샘플");
+        CreateReportDto createReportDto = new CreateReportDto(1L, "STORY", "스팸홍보");
         String content = objectMapper.writeValueAsString(createReportDto);
 
         //when
@@ -104,7 +104,7 @@ public class ReportIntegrationTest extends IntegrationControllerTest {
 
         assertThat(report.getMember().getUsername()).isEqualTo("테스트사용자유저네임");
         assertThat(report.getReportType()).isEqualTo(ReportType.STORY);
-        assertThat(report.getReportReason()).isEqualTo(ReportReason.SAMPLE);
+        assertThat(report.getReportReason()).isEqualTo(ReportReason.SPAMMARKET);
         assertThat(report.getStory().getTitle()).isEqualTo("testStoryTitle");
         assertThat(report.getComment()).isNull();
         assertThat(report.getReportStatus()).isEqualTo(ReportStatus.UNCONFIRMED);

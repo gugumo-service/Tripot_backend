@@ -62,7 +62,7 @@ public class ReportControllerTest {
     void saveReport() throws Exception {
 
         //given
-        CreateReportDto createReportDto = new CreateReportDto(1L, "STORY", "샘플");
+        CreateReportDto createReportDto = new CreateReportDto(1L, "STORY", "스팸홍보");
 
         String content = objectMapper.writeValueAsString(createReportDto);
 
