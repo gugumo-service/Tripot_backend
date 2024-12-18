@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.junior.controller.report.ReportController;
 import com.junior.domain.member.Member;
 import com.junior.domain.report.Report;
+import com.junior.domain.report.ReportReason;
 import com.junior.domain.report.ReportStatus;
 import com.junior.domain.report.ReportType;
 import com.junior.domain.story.Comment;
@@ -77,7 +78,7 @@ public class ReportIntegrationTest extends IntegrationControllerTest {
     @WithMockCustomUser
     public void report_story() throws Exception {
         //given
-        CreateReportDto createReportDto = new CreateReportDto(1L, "STORY");
+        CreateReportDto createReportDto = new CreateReportDto(1L, "STORY", "샘플");
         String content = objectMapper.writeValueAsString(createReportDto);
 
         //when
@@ -103,6 +104,7 @@ public class ReportIntegrationTest extends IntegrationControllerTest {
 
         assertThat(report.getMember().getUsername()).isEqualTo("테스트사용자유저네임");
         assertThat(report.getReportType()).isEqualTo(ReportType.STORY);
+        assertThat(report.getReportReason()).isEqualTo(ReportReason.SAMPLE);
         assertThat(report.getStory().getTitle()).isEqualTo("testStoryTitle");
         assertThat(report.getComment()).isNull();
         assertThat(report.getReportStatus()).isEqualTo(ReportStatus.UNCONFIRMED);

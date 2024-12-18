@@ -53,6 +53,7 @@ class ReportServiceTest {
         CreateReportDto createReportDto = CreateReportDto.builder()
                 .reportContentId(1L)
                 .reportType("story")
+                .reportReason("샘플")
                 .build();
 
         Member testActiveMember = createActiveTestMember();
@@ -79,6 +80,7 @@ class ReportServiceTest {
         CreateReportDto createReportDto = CreateReportDto.builder()
                 .reportContentId(1L)
                 .reportType("comment")
+                .reportReason("샘플")
                 .build();
 
         Member testActiveMember = createActiveTestMember();
@@ -108,6 +110,34 @@ class ReportServiceTest {
         CreateReportDto createReportDto = CreateReportDto.builder()
                 .reportContentId(1L)
                 .reportType("notvalid")
+                .reportReason("샘플")
+                .build();
+
+        Member testActiveMember = createActiveTestMember();
+
+
+        UserPrincipal principal = new UserPrincipal(testActiveMember);
+
+        given(memberRepository.findById(anyLong())).willReturn(Optional.ofNullable(testActiveMember));
+
+
+
+        //when, then
+        assertThatThrownBy(() -> reportService.save(createReportDto, principal))
+                .isInstanceOf(ReportException.class)
+                .hasMessageContaining("유효한 신고 유형이 아님");
+    }
+
+
+    @Test
+    @DisplayName("유효하지 않은 신고 사유에 대한 예외 처리가 진행되어야 함")
+    void save_report_reason_not_valid() {
+
+        //given
+        CreateReportDto createReportDto = CreateReportDto.builder()
+                .reportContentId(1L)
+                .reportType("notvalid")
+                .reportReason("샘플이아님")
                 .build();
 
         Member testActiveMember = createActiveTestMember();

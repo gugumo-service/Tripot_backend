@@ -5,6 +5,7 @@ import lombok.Builder;
 @Builder
 public record CreateReportDto(
         Long reportContentId,
-        String reportType
+        String reportType,
+        String reportReason
 ) {
 }

@@ -2,6 +2,7 @@ package com.junior.service.report;
 
 import com.junior.domain.member.Member;
 import com.junior.domain.report.Report;
+import com.junior.domain.report.ReportReason;
 import com.junior.domain.report.ReportType;
 import com.junior.domain.story.Comment;
 import com.junior.domain.story.Story;
@@ -41,9 +42,16 @@ public class ReportService {
             throw new ReportException(StatusCode.REPORT_NOT_VALID);
         }
 
+        ReportReason reportReason;
+
+
+        try{
+            reportReason = ReportReason.nameOf(createReportDto.reportReason());
+        } catch (IllegalArgumentException e) {
+            throw new ReportException(StatusCode.REPORT_NOT_VALID);
+        }
 
         Report report;
-
 
         if (reportType.equals(ReportType.STORY)) {
 
@@ -53,6 +61,7 @@ public class ReportService {
             report = Report.builder()
                     .member(member)
                     .reportType(reportType)
+                    .reportReason(reportReason)
                     .story(story)
                     .build();
         } else if (reportType.equals(ReportType.COMMENT)) {
@@ -62,6 +71,7 @@ public class ReportService {
             report = Report.builder()
                     .member(member)
                     .reportType(reportType)
+                    .reportReason(reportReason)
                     .comment(comment)
                     .build();
         } else {

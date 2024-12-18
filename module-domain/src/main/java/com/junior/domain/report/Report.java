@@ -32,6 +32,9 @@ public class Report extends BaseEntity {
     @Builder.Default
     private ReportStatus reportStatus = ReportStatus.UNCONFIRMED;
 
+    @Enumerated(EnumType.STRING)
+    private ReportReason reportReason;
+
     private LocalDateTime confirmTime;
 
 
