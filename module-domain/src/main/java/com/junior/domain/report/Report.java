@@ -53,4 +53,7 @@ public class Report extends BaseEntity {
     private Comment comment;
 
 
+    public void confirmReport() {
+        this.reportStatus = ReportStatus.CONFIRMED;
+    }
 }

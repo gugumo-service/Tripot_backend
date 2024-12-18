@@ -84,6 +84,7 @@ public enum StatusCode {
 
     // 신고 관련 상태코드
     REPORT_CREATE_SUCCESS(201, "REPORT-SUCCESS-001", "신고 성공"),
+    REPORT_CONFIRM_SUCCESS(200, "REPORT-SUCCESS-002", "신고 처리(미삭제) 성공"),
     REPORT_NOT_VALID(400, "REPORT-ERR-001", "유효한 신고 유형이 아님"),
     REPORT_NOT_FOUND(400, "REPORT-ERR-002", "해당 신고내역을 찾을 수 없음"),
 

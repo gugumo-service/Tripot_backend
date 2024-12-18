@@ -14,6 +14,7 @@ import com.junior.repository.comment.CommentRepository;
 import com.junior.repository.member.MemberRepository;
 import com.junior.repository.report.ReportRepository;
 import com.junior.repository.story.StoryRepository;
+import com.junior.security.WithMockCustomAdmin;
 import com.junior.security.WithMockCustomUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,6 +26,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.nullValue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -110,6 +112,46 @@ public class ReportIntegrationTest extends IntegrationControllerTest {
         assertThat(report.getReportStatus()).isEqualTo(ReportStatus.UNCONFIRMED);
 
 
+    }
+
+    @Test
+    @DisplayName("신고 확인 기능이 정상적으로 적동되어야 함")
+    @WithMockCustomAdmin
+    void confirmReport() throws Exception {
+
+        //given
+        Long reportId = 1L;
+
+        Member testMember = memberRepository.findById(2L).get();
+        Story testStory = storyRepository.findById(1L).get();
+
+        Report report = Report.builder()
+                .member(testMember)
+                .reportType(ReportType.STORY)
+                .reportReason(ReportReason.SPAMMARKET)
+                .story(testStory)
+                .build();
+
+        reportRepository.save(report);
+
+        //when
+        ResultActions actions = mockMvc.perform(
+                patch("/api/v1/admin/reports/{report_id}/confirm", reportId)
+                        .accept(MediaType.APPLICATION_JSON)
+        );
+
+        //then
+        actions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.customCode").value("REPORT-SUCCESS-002"))
+                .andExpect(jsonPath("$.customMessage").value("신고 처리(미삭제) 성공"))
+                .andExpect(jsonPath("$.status").value(true))
+                .andExpect(jsonPath("$.data").value(nullValue()));
+
+        Report resultReport = reportRepository.findById(1L).orElseThrow(RuntimeException::new);
+
+        assertThat(resultReport.getReportStatus()).isEqualTo(ReportStatus.CONFIRMED);
     }
 
 

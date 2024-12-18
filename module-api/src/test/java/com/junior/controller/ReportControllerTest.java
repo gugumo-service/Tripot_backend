@@ -3,12 +3,11 @@ package com.junior.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.junior.config.SecurityConfig;
 import com.junior.controller.report.ReportController;
-import com.junior.dto.member.ActivateMemberDto;
 import com.junior.dto.report.CreateReportDto;
 import com.junior.security.JwtUtil;
+import com.junior.security.WithMockCustomAdmin;
 import com.junior.security.WithMockCustomUser;
 import com.junior.security.exceptionhandler.CustomAuthenticationEntryPoint;
-import com.junior.service.member.MemberService;
 import com.junior.service.report.ReportService;
 import com.junior.service.security.UserDetailsServiceImpl;
 import com.junior.util.RedisUtil;
@@ -81,6 +80,30 @@ public class ReportControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.customCode").value("REPORT-SUCCESS-001"))
                 .andExpect(jsonPath("$.customMessage").value("신고 성공"))
+                .andExpect(jsonPath("$.status").value(true))
+                .andExpect(jsonPath("$.data").value(nullValue()));
+    }
+
+    @Test
+    @DisplayName("신고 확인 응답이 반환되어야 함")
+    @WithMockCustomAdmin
+    void confirmReport() throws Exception {
+
+        //given
+        Long reportId = 1L;
+
+        //when
+        ResultActions actions = mockMvc.perform(
+                patch("/api/v1/admin/reports/{report_id}/confirm", reportId)
+                        .accept(MediaType.APPLICATION_JSON)
+        );
+
+        //then
+        actions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.customCode").value("REPORT-SUCCESS-002"))
+                .andExpect(jsonPath("$.customMessage").value("신고 처리(미삭제) 성공"))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
     }

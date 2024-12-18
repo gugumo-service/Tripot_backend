@@ -5,6 +5,7 @@ import com.junior.domain.member.MemberRole;
 import com.junior.domain.member.MemberStatus;
 import com.junior.domain.member.SignUpType;
 import com.junior.domain.report.Report;
+import com.junior.domain.report.ReportStatus;
 import com.junior.domain.story.Comment;
 import com.junior.domain.story.Story;
 import com.junior.dto.report.CreateReportDto;
@@ -23,6 +24,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -153,6 +155,48 @@ class ReportServiceTest {
         assertThatThrownBy(() -> reportService.save(createReportDto, principal))
                 .isInstanceOf(ReportException.class)
                 .hasMessageContaining("유효한 신고 유형이 아님");
+    }
+
+    @Test
+    @DisplayName("신고 상태가 확인 상태로 변경되어야 함")
+    void confirm_report_success() {
+
+        //given
+        Member testActiveMember = createActiveTestMember();
+        Story testStory = createStory(testActiveMember, "title", "city");
+
+
+        given(storyRepository.findById(anyLong())).willReturn(Optional.ofNullable(testStory));
+
+
+        //when
+        reportService.confirmReport(1L);
+
+        //then
+        Report report = reportRepository.findById(1L).orElseThrow(() -> new RuntimeException());
+
+        assertThat(report.getReportStatus()).isEqualTo(ReportStatus.CONFIRMED);
+
+
+    }
+
+    @Test
+    @DisplayName("확인할 신고를 찾지 못할 시 예외 처리를 해야 함")
+    void confirm_report_not_found() {
+
+        //given
+        Member testActiveMember = createActiveTestMember();
+        Story testStory = createStory(testActiveMember, "title", "city");
+
+
+
+        //when, then
+        assertThatThrownBy(() -> reportService.confirmReport(1L))
+                .isInstanceOf(ReportException.class)
+                .hasMessageContaining("해당 신고내역을 찾을 수 없음");
+
+
+
     }
 
     Member createActiveTestMember() {

@@ -12,6 +12,7 @@ public enum ReportReason {
     PERSONAL("개인정보노출");
 
     private final String name;
+
     private ReportReason(String name) {
         this.name = name;
     }

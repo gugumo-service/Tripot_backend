@@ -83,7 +83,13 @@ public class ReportService {
 
     //TODO: findReport 구현(페이징)
 
+    public void confirmReport(Long id) {
 
+        Report report = reportRepository.findById(id)
+                .orElseThrow(() -> new ReportException(StatusCode.REPORT_NOT_FOUND));
+
+        report.confirmReport();
+    }
 
 
 }
