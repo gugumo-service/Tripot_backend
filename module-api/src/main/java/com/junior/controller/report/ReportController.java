@@ -34,4 +34,10 @@ public class ReportController {
 
         return ResponseEntity.status(StatusCode.REPORT_CONFIRM_SUCCESS.getHttpCode()).body(CommonResponse.success(StatusCode.REPORT_CONFIRM_SUCCESS, null));
     }
+
+    @PatchMapping("/api/v1/admin/reports/{report_id}/delete")
+    public ResponseEntity<CommonResponse<Object>> deleteReportTarget(@PathVariable("report_id") Long reportId) {
+        reportService.deleteReportTarget(reportId);
+        return ResponseEntity.status(StatusCode.REPORT_DELETE_TARGET_SUCCESS.getHttpCode()).body(CommonResponse.success(StatusCode.REPORT_DELETE_TARGET_SUCCESS, null));
+    }
 }

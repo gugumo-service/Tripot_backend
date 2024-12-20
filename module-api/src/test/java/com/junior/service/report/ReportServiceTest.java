@@ -5,7 +5,9 @@ import com.junior.domain.member.MemberRole;
 import com.junior.domain.member.MemberStatus;
 import com.junior.domain.member.SignUpType;
 import com.junior.domain.report.Report;
+import com.junior.domain.report.ReportReason;
 import com.junior.domain.report.ReportStatus;
+import com.junior.domain.report.ReportType;
 import com.junior.domain.story.Comment;
 import com.junior.domain.story.Story;
 import com.junior.dto.report.CreateReportDto;
@@ -199,6 +201,53 @@ class ReportServiceTest {
 
     }
 
+    @Test
+    @DisplayName("신고당한 스토리에 대한 삭제 처리가 정상적으로 이루어져야 함")
+    void delete_report_story_success() {
+
+        //given
+        Member testActiveMember = createActiveTestMember();
+        Story testStory = createStory(testActiveMember, "title", "city");
+
+        Report testReport = createReport(testActiveMember, ReportType.STORY, testStory);
+
+        given(reportRepository.findById(anyLong())).willReturn(Optional.ofNullable(testReport));
+
+        //when
+        reportService.deleteReportTarget(1L);
+
+        //then
+        Report resultReport = reportRepository.findById(1L).orElseThrow(RuntimeException::new);
+
+        assertThat(resultReport.getReportStatus()).isEqualTo(ReportStatus.DELETED);
+        assertThat(resultReport.getStory().getIsDeleted()).isTrue();
+
+    }
+
+    @Test
+    @DisplayName("신고당한 댓글에 대한 삭제 처리가 정상적으로 이루어져야 함")
+    void delete_report_comment_success() {
+
+        //given
+        Member testActiveMember = createActiveTestMember();
+        Story testStory = createStory(testActiveMember, "title", "city");
+        Comment testComment = createComment(testActiveMember, testStory);
+
+        Report testReport = createReport(testActiveMember, ReportType.COMMENT, testComment);
+
+        given(reportRepository.findById(anyLong())).willReturn(Optional.ofNullable(testReport));
+
+        //when
+        reportService.deleteReportTarget(1L);
+
+        //then
+        Report resultReport = reportRepository.findById(1L).orElseThrow(RuntimeException::new);
+
+        assertThat(resultReport.getReportStatus()).isEqualTo(ReportStatus.DELETED);
+        assertThat(resultReport.getComment().getIsDeleted()).isTrue();
+
+    }
+
     Member createActiveTestMember() {
         return Member.builder()
                 .id(2L)
@@ -231,6 +280,24 @@ class ReportServiceTest {
                 .member(member)
                 .content("content")
                 .story(story)
+                .build();
+    }
+
+    Report createReport(Member member, ReportType reportType, Story story) {
+       return Report.builder()
+                .member(member)
+                .reportType(reportType)
+                .reportReason(ReportReason.SPAMMARKET)
+                .story(story)
+                .build();
+    }
+
+    Report createReport(Member member, ReportType reportType, Comment comment) {
+       return Report.builder()
+                .member(member)
+                .reportType(reportType)
+                .reportReason(ReportReason.SPAMMARKET)
+                .comment(comment)
                 .build();
     }
 

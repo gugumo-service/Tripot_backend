@@ -107,4 +107,28 @@ public class ReportControllerTest {
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
     }
+
+    @Test
+    @DisplayName("신고 대상 삭제 응답이 반환되어야 함")
+    @WithMockCustomAdmin
+    void deleteReportTarget() throws Exception {
+
+        //given
+        Long reportId = 1L;
+
+        //when
+        ResultActions actions = mockMvc.perform(
+                patch("/api/v1/admin/reports/{report_id}/delete", reportId)
+                        .accept(MediaType.APPLICATION_JSON)
+        );
+
+        //then
+        actions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.customCode").value("REPORT-SUCCESS-003"))
+                .andExpect(jsonPath("$.customMessage").value("신고 처리(삭제) 성공"))
+                .andExpect(jsonPath("$.status").value(true))
+                .andExpect(jsonPath("$.data").value(nullValue()));
+    }
 }

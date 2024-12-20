@@ -154,5 +154,92 @@ public class ReportIntegrationTest extends IntegrationControllerTest {
         assertThat(resultReport.getReportStatus()).isEqualTo(ReportStatus.CONFIRMED);
     }
 
+    @Test
+    @DisplayName("신고 대상 스토리 삭제 기능이 정상적으로 적동되어야 함")
+    @WithMockCustomAdmin
+    void deleteReportTarget_story() throws Exception {
+
+        //given
+        Long reportId = 1L;
+
+        Member testMember = memberRepository.findById(2L).get();
+        Story testStory = storyRepository.findById(1L).get();
+
+        Report report = Report.builder()
+                .member(testMember)
+                .reportType(ReportType.STORY)
+                .reportReason(ReportReason.SPAMMARKET)
+                .story(testStory)
+                .build();
+
+        reportRepository.save(report);
+
+        //when
+        ResultActions actions = mockMvc.perform(
+                patch("/api/v1/admin/reports/{report_id}/delete", reportId)
+                        .accept(MediaType.APPLICATION_JSON)
+        );
+
+        //then
+        actions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.customCode").value("REPORT-SUCCESS-003"))
+                .andExpect(jsonPath("$.customMessage").value("신고 처리(삭제) 성공"))
+                .andExpect(jsonPath("$.status").value(true))
+                .andExpect(jsonPath("$.data").value(nullValue()));
+
+        Report resultReport = reportRepository.findById(1L).orElseThrow(RuntimeException::new);
+        Story resultStory = storyRepository.findById(1L).orElseThrow(RuntimeException::new);
+
+        assertThat(resultReport.getReportStatus()).isEqualTo(ReportStatus.DELETED);
+        assertThat(resultStory.getIsDeleted()).isTrue();
+
+    }
+
+    @Test
+    @DisplayName("신고 대상 댓글 삭제 기능이 정상적으로 적동되어야 함")
+    @WithMockCustomAdmin
+    void deleteReportTarget_comment() throws Exception {
+
+        //given
+        Long reportId = 1L;
+
+        Member testMember = memberRepository.findById(2L).get();
+        Comment testComment = commentRepository.findById(1L).get();
+
+
+        Report report = Report.builder()
+                .member(testMember)
+                .reportType(ReportType.COMMENT)
+                .reportReason(ReportReason.SPAMMARKET)
+                .comment(testComment)
+                .build();
+
+        reportRepository.save(report);
+
+        //when
+        ResultActions actions = mockMvc.perform(
+                patch("/api/v1/admin/reports/{report_id}/delete", reportId)
+                        .accept(MediaType.APPLICATION_JSON)
+        );
+
+        //then
+        actions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.customCode").value("REPORT-SUCCESS-003"))
+                .andExpect(jsonPath("$.customMessage").value("신고 처리(삭제) 성공"))
+                .andExpect(jsonPath("$.status").value(true))
+                .andExpect(jsonPath("$.data").value(nullValue()));
+
+        Report resultReport = reportRepository.findById(1L).orElseThrow(RuntimeException::new);
+        Comment resultComment = commentRepository.findById(1L).orElseThrow(RuntimeException::new);
+
+        assertThat(resultReport.getReportStatus()).isEqualTo(ReportStatus.DELETED);
+        assertThat(resultComment.getIsDeleted()).isTrue();
+
+    }
+
 
 }

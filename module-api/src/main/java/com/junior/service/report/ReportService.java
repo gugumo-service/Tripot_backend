@@ -91,5 +91,14 @@ public class ReportService {
         report.confirmReport();
     }
 
+    public void deleteReportTarget(Long id) {
+
+        Report report = reportRepository.findById(id)
+                .orElseThrow(() -> new ReportException(StatusCode.REPORT_NOT_FOUND));
+
+        report.deleteReportTarget();
+
+    }
+
 
 }

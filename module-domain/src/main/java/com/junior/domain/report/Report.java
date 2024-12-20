@@ -4,6 +4,8 @@ import com.junior.domain.base.BaseEntity;
 import com.junior.domain.member.Member;
 import com.junior.domain.story.Comment;
 import com.junior.domain.story.Story;
+import com.junior.exception.ReportException;
+import com.junior.exception.StatusCode;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -55,5 +57,17 @@ public class Report extends BaseEntity {
 
     public void confirmReport() {
         this.reportStatus = ReportStatus.CONFIRMED;
+    }
+
+    public void deleteReportTarget() {
+        if (reportType.equals(ReportType.STORY)) {
+            this.story.deleteStory();
+        } else if (reportType.equals(ReportType.COMMENT)) {
+            this.comment.deleteComment(true);
+        } else {
+            throw new ReportException(StatusCode.REPORT_NOT_VALID);
+        }
+
+        this.reportStatus = ReportStatus.DELETED;
     }
 }
