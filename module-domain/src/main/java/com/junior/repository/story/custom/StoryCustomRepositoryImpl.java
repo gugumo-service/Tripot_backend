@@ -33,9 +33,9 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
 
     private final JPAQueryFactory query;
 
-    QResponseStoryDto createQResponseStoryDto() {
-        return new QResponseStoryDto(story.id, story.title, story.content, story.thumbnailImg, story.latitude, story.longitude, story.city, story.likeCnt, story.isHidden, story.createdDate, story.imgUrls);
-    }
+//    QResponseStoryDto createQResponseStoryDto() {
+//        return new QResponseStoryDto(story.id, story.title, story.content, story.thumbnailImg, story.latitude, story.longitude, story.city, story.likeCnt, story.isHidden, story.createdDate, story.imgUrls);
+//    }
 
     QResponseStoryListDto createQResponseStoryListDto() {
         return new QResponseStoryListDto(story.thumbnailImg, story.title, story.content, story.city, story.id, story.latitude, story.longitude);
@@ -171,21 +171,6 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
 
     @Override
     public Slice<ResponseStoryListDto> findStoriesByMemberAndCityAndSearch(Long cursorId, Pageable pageable, Member findMember, String city, String search) {
-
-        /*
-            BooleanBuilder 란
-            queryDsl 에서 동적 조건을 간단하게 구성하기 위한 클래스
-            and(), or(), not() 등 사용 가능
-         */
-//        BooleanBuilder isContainSearch = new BooleanBuilder();
-//
-//        if(city != null && !city.isEmpty()) {
-//            isContainSearch.and(story.city.eq(city));
-//        }
-//
-//        if(search != null && !search.isEmpty()) {
-//            isContainSearch.and((story.title.contains(search)).or(story.content.contains(search)));
-//        }
 
         List<ResponseStoryListDto> stories = query.select(createQResponseStoryListDto())
                 .from(story)
