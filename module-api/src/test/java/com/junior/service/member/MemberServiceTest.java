@@ -157,7 +157,7 @@ class MemberServiceTest {
         MemberInfoDto memberInfo = memberService.getMemberInfo(principal);
 
         //then
-        assertThat(memberInfo.nickname()).isEqualTo("테스트닉");
+        assertThat(memberInfo.nickname()).isEqualTo("테스트사용자닉네임");
         assertThat(memberInfo.profileImageUrl()).isEqualTo("s3.com/testProfile");
 
 
@@ -264,8 +264,8 @@ class MemberServiceTest {
     Member createPreactiveTestMember() {
         return Member.builder()
                 .id(1L)
-                .nickname("테스트닉")
-                .username("KAKAO 3748293466")
+                .nickname("테스트비활성화닉네임")
+                .username("테스트비활성화유저네임")
                 .role(MemberRole.USER)
                 .signUpType(SignUpType.KAKAO)
                 .profileImage("s3.com/testProfile")
@@ -276,8 +276,8 @@ class MemberServiceTest {
     Member createActiveTestMember() {
         return Member.builder()
                 .id(2L)
-                .nickname("테스트닉")
-                .username("KAKAO 3748293465")
+                .nickname("테스트사용자닉네임")
+                .username("테스트사용자유저네임")
                 .role(MemberRole.USER)
                 .signUpType(SignUpType.KAKAO)
                 .profileImage("s3.com/testProfile")

@@ -79,6 +79,14 @@ public enum StatusCode {
     NOTICE_FIND_SUCCESS(200, "NOTICE-SUCCESS-004", "공지사항 조회 성공"),
     NOTICE_FIND_DETAIL_SUCCESS(200, "NOTICE-SUCCESS-005", "공지사항 세부정보 조회 성공"),
 
+    // Q&A 관련 상태코드
+    QNA_CREATE_SUCCESS(201, "Q&A-SUCCESS-001", "Q&A 업로드 성공"),
+    QNA_NOT_FOUND(400, "Q&A-ERR-001", "해당 Q&A를 찾을 수 없음"),
+    QNA_DELETE_SUCCESS(200, "Q&A-SUCCESS-002", "Q&A 삭제 성공"),
+    QNA_UPDATE_SUCCESS(200, "Q&A-SUCCESS-003", "Q&A 수정 성공"),
+    QNA_FIND_SUCCESS(200, "Q&A-SUCCESS-004", "Q&A 조회 성공"),
+    QNA_FIND_DETAIL_SUCCESS(200, "Q&A-SUCCESS-005", "Q&A 세부정보 조회 성공"),
+
 
     // 공통 예외
     UNKNOWN_ERROR(9999, "UNKNOWN-ERROR", "정의되지 않은 예외");
