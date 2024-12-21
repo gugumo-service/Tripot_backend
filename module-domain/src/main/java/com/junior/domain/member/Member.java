@@ -55,9 +55,9 @@ public class Member {
     //추천 여행 지역 -> 추후 추가예정
     private String recommendLocation;
 
-    @Builder.Default
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Like> likeStories = new ArrayList<>();
+//    @Builder.Default
+//    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Like> likeStories = new ArrayList<>();
 
     public void activateMember(ActivateMemberDto activateMemberDto) {
         nickname = activateMemberDto.nickname();

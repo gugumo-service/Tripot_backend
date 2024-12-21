@@ -13,7 +13,6 @@ import com.junior.dto.comment.ResponseParentCommentDto;
 import com.junior.dto.story.CreateStoryDto;
 import com.junior.repository.member.MemberRepository;
 import com.junior.repository.story.StoryRepository;
-import org.assertj.core.api.Assert;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

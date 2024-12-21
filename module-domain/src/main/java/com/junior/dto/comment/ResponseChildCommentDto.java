@@ -5,7 +5,9 @@ import com.junior.domain.member.Member;
 public record ResponseChildCommentDto(
         Long id,
         String content,
-        Member member
+        Long memberId,
+        String nickname,
+        String profileImgPath
 ) {
 
 }

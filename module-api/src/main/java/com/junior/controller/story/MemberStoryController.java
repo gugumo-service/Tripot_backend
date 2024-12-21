@@ -101,6 +101,7 @@ public class MemberStoryController {
         return CommonResponse.success(StatusCode.LIKE_CHANGE_SUCCESS, null);
     }
 
+    //NOTE: 좋아요 스토리 리스트  notion 명: 좋아요 누른 스토리 조회
     @GetMapping("/like-list")
     public CommonResponse<Object> getLikeStories(
             @AuthenticationPrincipal UserPrincipal userPrincipal,

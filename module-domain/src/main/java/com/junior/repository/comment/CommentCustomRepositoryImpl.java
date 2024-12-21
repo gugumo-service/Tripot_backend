@@ -1,17 +1,13 @@
 package com.junior.repository.comment;
 
 import com.junior.domain.member.Member;
-import com.junior.domain.story.Comment;
-import com.junior.dto.comment.QResponseParentCommentDto;
 import com.junior.dto.comment.ResponseChildCommentDto;
 import com.junior.dto.comment.ResponseMyCommentDto;
 import com.junior.dto.comment.ResponseParentCommentDto;
-import com.junior.dto.story.ResponseStoryListDto;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +17,6 @@ import org.springframework.data.domain.SliceImpl;
 import java.util.List;
 
 import static com.junior.domain.story.QComment.comment;
-import static com.junior.domain.story.QStory.story;
 
 @RequiredArgsConstructor
 public class CommentCustomRepositoryImpl implements CommentCustomRepository {
@@ -65,7 +60,9 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository {
                                 ResponseParentCommentDto.class,
                                 comment.id,
                                 comment.content,
-                                comment.member,
+                                comment.member.id,
+                                comment.member.nickname,
+                                comment.member.profileImage,
                                 comment.child.size().longValue()
                         )
                 )
@@ -92,7 +89,9 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository {
                                 ResponseChildCommentDto.class,
                                 comment.id,
                                 comment.content,
-                                comment.member
+                                comment.member.id,
+                                comment.member.nickname,
+                                comment.member.profileImage
                         )
                 )
                 .from(comment)

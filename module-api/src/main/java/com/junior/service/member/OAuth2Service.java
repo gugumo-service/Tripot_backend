@@ -36,30 +36,6 @@ public class OAuth2Service {
     private final JwtUtil jwtUtil;
     private final RedisUtil redisUtil;
 
-
-    public String testCreateMember() {
-        Member member = Member.builder()
-                .nickname("nickname")         //일단 전송 후 수정하는 방식
-                .username("username")
-                .role(MemberRole.USER)
-                //사용자 동의 정보: activeMember 기능에 추가
-                .signUpType(SignUpType.KAKAO)
-                .build();
-
-        memberRepository.save(member);
-
-        LoginCreateJwtDto loginCreateJwtDto = LoginCreateJwtDto.builder()
-                .id(member.getId())
-                .username(member.getUsername())
-                .role(member.getRole().toString())
-                .requestTimeMs(LocalDateTime.now())
-                .build();
-
-        String accessToken = jwtUtil.createJwt(loginCreateJwtDto, "access");
-
-        return "Bearer " + accessToken;
-    }
-
     public CheckActiveMemberDto oauth2Login(HttpServletResponse response, String code, OAuth2Provider provider) {
 
         OAuth2UserInfo userInfo = generateOAuth2UserInfo(code, provider);
