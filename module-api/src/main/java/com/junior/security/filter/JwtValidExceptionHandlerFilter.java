@@ -60,7 +60,7 @@ public class JwtValidExceptionHandlerFilter extends OncePerRequestFilter {
             setErrorResponse(response, StatusCode.EXPIRED_ACCESS_TOKEN);
         } catch (JwtException | IllegalArgumentException e) {
             //유효하지 않은 토큰
-            setErrorResponse(response, StatusCode.NOT_ACCESS_TOKEN);
+            setErrorResponse(response, StatusCode.INVALID_TOKEN);
         }
 
 

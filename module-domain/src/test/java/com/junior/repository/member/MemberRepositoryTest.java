@@ -5,7 +5,6 @@ import com.junior.domain.member.Member;
 import com.junior.domain.member.MemberRole;
 import com.junior.domain.member.MemberStatus;
 import com.junior.domain.member.SignUpType;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -17,8 +16,8 @@ import org.springframework.context.annotation.Import;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
-
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 
 @DataJpaTest
@@ -43,7 +42,7 @@ class MemberRepositoryTest {
     }
 
     @AfterEach
-    void clean(){
+    void clean() {
         memberRepository.deleteAll();
     }
 
@@ -84,7 +83,6 @@ class MemberRepositoryTest {
                 .isInstanceOf(NoSuchElementException.class);
 
         assertThat(existMember.get().getUsername()).isEqualTo("KAKAO 3748293466");
-
 
 
     }

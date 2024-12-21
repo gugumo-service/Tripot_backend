@@ -14,7 +14,9 @@ public interface StoryCustomRepository {
 
     public Slice<ResponseStoryListDto> findAllStories(Member member, Long cursorId, Pageable pageable, String city, String search);
 
-    public Optional<Story> findStoryByIdAndMember(Long storyId, Member member);
+//    public Slice<ResponseStoryDto> findStoriesByMemberAndCity(Long cursorId, Pageable pageable, String city, Member member);
+
+    public Story findStoryByIdAndMember(Long storyId, Member member);
 //    public Slice<ResponseStoryDto> findStoriesByMemberAndMapWithPaging(Long cursorId, Pageable pageable, GeoPointDto geoPointLt, GeoPointDto geoPointRb, Member findMember);
     public List<ResponseStoryListDto> findStoryByMap(Member findMember, GeoPointDto geoPointLt, GeoPointDto geoPointRb);
 
@@ -29,4 +31,6 @@ public interface StoryCustomRepository {
     Optional<String> getRecommendedRecentPopularCity();
 
     Slice<ResponseStoryListDto> getRecentPopularStories(Member member, Long cursorId, Pageable pageable);
+
+    public Slice<ResponseStoryListDto> findLikeStories(Member findMember, Pageable pageable, Long cursorId);
 }

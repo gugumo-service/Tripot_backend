@@ -59,9 +59,9 @@ public class Story extends BaseEntity {
     @Column(nullable = false)
     boolean isHidden;
 
-    @Builder.Default
-    @OneToMany(mappedBy = "story", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Like> likeMembers = new ArrayList<>();
+//    @Builder.Default
+//    @OneToMany(mappedBy = "story", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Like> likeMembers = new ArrayList<>();
 
     @ElementCollection
     @CollectionTable(name = "story_images", joinColumns = @JoinColumn(name = "story_id"))
@@ -81,7 +81,7 @@ public class Story extends BaseEntity {
         this.isHidden = isHidden;
         this.imgUrls = imgUrls;
 
-        this.likeMembers = new ArrayList<>();
+//        this.likeMembers = new ArrayList<>();
         this.isDeleted = false;
         this.viewCnt = 0L;
         this.likeCnt = 0L;
@@ -112,19 +112,19 @@ public class Story extends BaseEntity {
         this.imgUrls = createStoryDto.imgUrls();
     }
 
-    public void addLikeMember(Like like) {
-        likeMembers.add(like);
-
-        Member member = like.getMember();
-        member.getLikeStories().add(like);
-    }
-
-    public void removeLikeMember(Like like) {
-        this.likeMembers.remove(like);
-
-        Member member = like.getMember();
-        member.getLikeStories().remove(like);
-    }
+//    public void addLikeMember(Like like) {
+//        likeMembers.add(like);
+//
+////        Member member = like.getMember();
+////        member.getLikeStories().add(like);
+//    }
+//
+//    public void removeLikeMember(Like like) {
+//        this.likeMembers.remove(like);
+//
+////        Member member = like.getMember();
+////        member.getLikeStories().remove(like);
+//    }
 
     public void increaseViewCnt() {
         this.viewCnt+=1;

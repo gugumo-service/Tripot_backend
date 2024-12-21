@@ -4,7 +4,6 @@ import com.junior.domain.like.Like;
 import com.junior.domain.member.Member;
 import com.junior.domain.story.Story;
 import com.junior.dto.story.*;
-import com.junior.exception.LikeNotFoundException;
 import com.junior.exception.StatusCode;
 import com.junior.exception.StoryNotFoundException;
 import com.junior.repository.story.StoryRepository;
@@ -121,17 +120,25 @@ public class StoryService {
                     .story(findStory)
                     .build();
 
-            findStory.addLikeMember(like);
+//            findStory.addLikeMember(like);
         }
         else {
-            List<Like> likeMembers = findStory.getLikeMembers();
-
-            Like existingLike = likeMembers.stream()
-                    .filter(like -> like.getMember().equals(findMember))
-                    .findFirst()
-                    .orElseThrow(() -> new LikeNotFoundException(StatusCode.LIKE_NOT_FOUND));
-
-            findStory.removeLikeMember(existingLike);
+//            List<Like> likeMembers = findStory.getLikeMembers();
+//
+//            Like existingLike = likeMembers.stream()
+//                    .filter(like -> like.getMember().equals(findMember))
+//                    .findFirst()
+//                    .orElseThrow(() -> new LikeNotFoundException(StatusCode.LIKE_NOT_FOUND));
+//
+//            findStory.removeLikeMember(existingLike);
         }
+    }
+
+    public Slice<ResponseStoryListDto> getLikeStories(UserPrincipal userPrincipal, Long cursorId, int size) {
+        Member findMember = userPrincipal.getMember();
+
+        Pageable pageable = PageRequest.of(0, size);
+
+        return storyRepository.findLikeStories(findMember, pageable, cursorId);
     }
 }

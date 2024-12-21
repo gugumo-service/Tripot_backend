@@ -1,4 +1,4 @@
-package com.junior.domain.repository.story;
+package com.junior.repository.story;
 
 import com.junior.TestConfig;
 import com.junior.domain.member.Member;

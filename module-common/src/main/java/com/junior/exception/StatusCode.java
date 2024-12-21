@@ -23,6 +23,8 @@ public enum StatusCode {
     STORY_BAD_REQUEST(500, "STORY-ERR-0002", "잘못된 파라미터"),
     STORY_READ_SUCCESS(200, "STORY-SUCCESS-0001", "스토리 불러오기 성공"),
     STORY_NOT_PERMISSION(400, "STORY-ERR-0003", "권한이 없는 스토리"),
+    RECOMMENDED_CITY_SUCCESS(200, "RECOMMENDED-SUCCESS-001", "추천 도시 성공"),
+    RECOMMENDED_STORIES_SUCCESS(200, "RECOMMENDED-SUCCESS-002", "추천 스토리 성공"),
 
     RECOMMENDED_CITY_SUCCESS(200, "RECOMMENDED-SUCCESS-001", "추천 도시 성공"),
     RECOMMENDED_STORIES_SUCCESS(200, "RECOMMENDED-SUCCESS-002", "추천 스토리 성공"),
@@ -33,6 +35,9 @@ public enum StatusCode {
 
     // comment 관련 예외
     COMMENT_CREATE_SUCCESS(200, "COMMENT-SUCCESS-0001", "댓글 저장 성공"),
+    COMMENT_READ_SUCCESS(200, "COMMENT-SUCCESS-0002", "댓글 불러오기 성공"),
+    COMMENT_EDIT_SUCCESS(200, "COMMENT-SUCCESS-0003", "댓글 수정 성공"),
+    COMMENT_DELETE_SUCCESS(200, "COMMENT-SUCCESS-0004", "댓글 삭제 성공"),
     COMMENT_NOT_FOUND(400, "COMMENT-ERR-0001", "댓글 불러오기 실패"),
 
     //s3 관련 예외
@@ -52,6 +57,11 @@ public enum StatusCode {
     GET_MEMBER_INFO(200, "MEMBER-SUCCESS-007", "회원 정보 조회 성공"),
     INVALID_MEMBER(401, "MEMBER-ERR-001", "유효하지 않은 회원"),
     INVALID_MEMBER_STATUS(401, "MEMBER-ERR-002", "해당 회원 status로 실행할 수 없음"),
+    MEMBER_NOT_FOUND(404, "MEMBER-ERR-003", "해당 회원을 찾을 수 없음"),
+
+    // LOGIN 관련 상태코드
+    ADMIN_LOGIN_SUCCESS(200, "LOGIN-SUCCESS-001", "관리자 로그인 성공"),
+    ADMIN_LOGIN_FAILURE(401, "LOGIN-ERR-001", "관리자 로그인 실패"),
 
     // JWT 관련 예외
     REISSUE_SUCCESS(200, "JWT-SUCCESS-001", "JWT 재발급 완료"),
@@ -62,6 +72,15 @@ public enum StatusCode {
     EXPIRED_REFRESH_TOKEN(401, "JWT-ERR-004", "만료된 Refresh 토큰"),
     NOT_ACCESS_TOKEN(401, "JWT-ERR-005", "Access token이 아님"),
     ACCESS_DENIED(403, "JWT-ERR-006", "접근이 거부됨"),
+    INVALID_TOKEN(401, "JWT-ERR-007", "유효하지 않은 토큰"),
+
+    // 공지사항 관련 상태코드
+    NOTICE_CREATE_SUCCESS(201, "NOTICE-SUCCESS-001", "공지사항 업로드 성공"),
+    NOTICE_NOT_FOUND(400, "NOTICE-ERR-001", "해당 공지사항을 찾을 수 없음"),
+    NOTICE_DELETE_SUCCESS(200, "NOTICE-SUCCESS-002", "공지사항 삭제 성공"),
+    NOTICE_UPDATE_SUCCESS(200, "NOTICE-SUCCESS-003", "공지사항 수정 성공"),
+    NOTICE_FIND_SUCCESS(200, "NOTICE-SUCCESS-004", "공지사항 조회 성공"),
+    NOTICE_FIND_DETAIL_SUCCESS(200, "NOTICE-SUCCESS-005", "공지사항 세부정보 조회 성공"),
 
 
     // 공통 예외
