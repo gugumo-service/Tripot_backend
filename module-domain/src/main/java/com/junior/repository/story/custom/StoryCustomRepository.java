@@ -16,7 +16,7 @@ public interface StoryCustomRepository {
 
 //    public Slice<ResponseStoryDto> findStoriesByMemberAndCity(Long cursorId, Pageable pageable, String city, Member member);
 
-    public Story findStoryByIdAndMember(Long storyId, Member member);
+    public Optional<Story> findStoryByIdAndMember(Long storyId, Member member);
 //    public Slice<ResponseStoryDto> findStoriesByMemberAndMapWithPaging(Long cursorId, Pageable pageable, GeoPointDto geoPointLt, GeoPointDto geoPointRb, Member findMember);
     public List<ResponseStoryListDto> findStoryByMap(Member findMember, GeoPointDto geoPointLt, GeoPointDto geoPointRb);
 

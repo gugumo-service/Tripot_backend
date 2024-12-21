@@ -33,4 +33,19 @@ public class LikeCustomRepositoryImpl implements LikeCustomRepository {
                         like.story.eq(story))
                 .execute();
     }
+
+    @Override
+    public Boolean isLikeStory(Member findMember, Story findStory) {
+        QLike like = QLike.like;
+
+        Integer fetchOne = query.selectOne()
+                .from(like)
+                .where(
+                        like.story.eq(findStory),
+                        like.member.eq(findMember)
+                )
+                .fetchOne();
+
+        return fetchOne != null;
+    }
 }

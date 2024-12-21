@@ -1,6 +1,5 @@
 package com.junior.repository.story.custom;
 
-import com.junior.domain.like.Like;
 import com.junior.domain.like.QLike;
 import com.junior.domain.member.Member;
 import com.junior.domain.story.QStory;
@@ -13,18 +12,19 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.JPAExpressions;
-import com.querydsl.jpa.JPQLQuery;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 
 import java.util.List;
 import java.util.Optional;
 
 import static com.junior.domain.story.QStory.story;
+import static com.junior.domain.like.QLike.like;
 
 
 @Slf4j
@@ -270,6 +270,18 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
                 .where(getHiddenCondition(member))
                 .limit(pageable.getPageSize() + 1)
                 .orderBy(getOrderByClause("popular"))
+                .fetch();
+
+        boolean hasNext = isHaveNextStoryList(stories, pageable);
+
+        return new SliceImpl<>(stories, pageable, hasNext);
+    }
+
+    @Override
+    public Slice<ResponseStoryListDto> findLikeStories(Member findMember, Pageable pageable, Long cursorId) {
+        List<ResponseStoryListDto> stories = query.select(createQResponseStoryListDto())
+                .from(like)
+                .where(like.member.id.eq(findMember.getId()))
                 .fetch();
 
         boolean hasNext = isHaveNextStoryList(stories, pageable);

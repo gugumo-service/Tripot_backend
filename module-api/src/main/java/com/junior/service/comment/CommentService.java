@@ -45,7 +45,7 @@ public class CommentService {
                 .build();
 
         // 부모 댓글 추가
-        if(createCommentDto.parentCommentId() != null) {
+        if(createCommentDto.parentCommentId() != -1) {
             Comment parentComment = commentRepository.findById(createCommentDto.parentCommentId())
                     .orElseThrow(() -> new CommentNotFoundException(StatusCode.COMMENT_NOT_FOUND));
 
@@ -69,6 +69,7 @@ public class CommentService {
         return commentRepository.findChildCommentByParentCommendId(parentCommentId, pageable, cursorId);
     }
 
+    @Transactional
     public void editComment(UserPrincipal userPrincipal, Long commentId, String content) {
         Member findMember = userPrincipal.getMember();
 
@@ -84,6 +85,7 @@ public class CommentService {
         }
     }
 
+    @Transactional
     public void deleteComment(UserPrincipal userPrincipal, Long commentId) {
         Member findMember = userPrincipal.getMember();
 

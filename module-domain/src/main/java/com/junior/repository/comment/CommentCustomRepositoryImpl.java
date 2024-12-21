@@ -115,7 +115,7 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository {
         List<ResponseMyCommentDto> comments = query.select(
                         Projections.constructor(
                                 ResponseMyCommentDto.class,
-                                comment.story,
+                                comment.story.id,
                                 comment.content
                         )
                 )

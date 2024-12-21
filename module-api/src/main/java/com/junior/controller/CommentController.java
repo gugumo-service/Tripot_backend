@@ -1,9 +1,6 @@
 package com.junior.controller;
 
-import com.junior.dto.comment.CreateCommentDto;
-import com.junior.dto.comment.ResponseChildCommentDto;
-import com.junior.dto.comment.ResponseMyCommentDto;
-import com.junior.dto.comment.ResponseParentCommentDto;
+import com.junior.dto.comment.*;
 import com.junior.exception.StatusCode;
 import com.junior.response.CommonResponse;
 import com.junior.security.UserPrincipal;
@@ -34,9 +31,9 @@ public class CommentController {
     public CommonResponse<Object> edit(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @PathVariable("commentId") Long commentId,
-            @RequestBody String content
+            @RequestBody UpdateCommentDto content
     ) {
-        commentService.editComment(userPrincipal, commentId, content);
+        commentService.editComment(userPrincipal, commentId, content.content());
 
         return CommonResponse.success(StatusCode.COMMENT_EDIT_SUCCESS, null);
     }

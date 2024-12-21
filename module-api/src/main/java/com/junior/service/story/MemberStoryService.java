@@ -7,6 +7,7 @@ import com.junior.dto.story.*;
 import com.junior.exception.LikeNotFoundException;
 import com.junior.exception.StatusCode;
 import com.junior.exception.StoryNotFoundException;
+import com.junior.repository.story.LikeRepository;
 import com.junior.repository.story.StoryRepository;
 import com.junior.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import software.amazon.awssdk.services.ssm.endpoints.internal.Value;
 
 import java.util.List;
 
@@ -23,6 +25,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class MemberStoryService {
     private final StoryRepository storyRepository;
+    private final LikeRepository likeRepository;
 
     @Transactional
     public void createStory(UserPrincipal userPrincipal, CreateStoryDto createStoryDto) {
@@ -85,6 +88,8 @@ public class MemberStoryService {
         Story findStory = storyRepository.findById(storyId)
                 .orElseThrow(()->new StoryNotFoundException(StatusCode.STORY_NOT_FOUND));
 
+        Boolean isLikeStory = likeRepository.isLikeStory(findMember, findStory);
+
         boolean isNotAuthor = findStory.isHidden() && !findStory.getMember().getId().equals(findMember.getId());
 
         if(isNotAuthor) {
@@ -93,7 +98,7 @@ public class MemberStoryService {
 
         findStory.increaseViewCnt();
 
-        return ResponseStoryDto.from(findStory);
+        return ResponseStoryDto.from(findStory, isLikeStory);
     }
 
     @Transactional
@@ -112,17 +117,19 @@ public class MemberStoryService {
                     .story(findStory)
                     .build();
 
-            findStory.addLikeMember(like);
+            likeRepository.save(like);
         }
         else {
-            List<Like> likeMembers = findStory.getLikeMembers();
-
-            Like existingLike = likeMembers.stream()
-                    .filter(like -> like.getMember().equals(findMember))
-                    .findFirst()
-                    .orElseThrow(() -> new LikeNotFoundException(StatusCode.LIKE_NOT_FOUND));
-
-            findStory.removeLikeMember(existingLike);
+            Like findLike = likeRepository.findLikeByMemberAndStory(findMember, findStory);
+            likeRepository.delete(findLike);
         }
+    }
+
+    public Slice<ResponseStoryListDto> getLikeStories(UserPrincipal userPrincipal, Long cursorId, int size) {
+        Member findMember = userPrincipal.getMember();
+
+        Pageable pageable = PageRequest.of(0, size);
+
+        return storyRepository.findLikeStories(findMember, pageable, cursorId);
     }
 }

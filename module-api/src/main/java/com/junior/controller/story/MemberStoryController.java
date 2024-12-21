@@ -5,7 +5,6 @@ import com.junior.exception.StatusCode;
 import com.junior.response.CommonResponse;
 import com.junior.security.UserPrincipal;
 import com.junior.service.story.MemberStoryService;
-import com.junior.service.story.StoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -113,7 +112,7 @@ public class MemberStoryController {
             @RequestParam(name = "cursorId", required = false) Long cursorId,
             @RequestParam("size") int size
     ) {
-        Slice<ResponseStoryListDto> stories = storyService.getLikeStories(userPrincipal, cursorId, size);
+        Slice<ResponseStoryListDto> stories = memberStoryService.getLikeStories(userPrincipal, cursorId, size);
 
         return CommonResponse.success(StatusCode.STORY_READ_SUCCESS, stories);
     }

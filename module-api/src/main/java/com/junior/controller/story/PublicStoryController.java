@@ -34,11 +34,13 @@ public class PublicStoryController {
     }
 
     @GetMapping("/recommended/random")
-    public CommonResponse<Object> recommendStories() {
+    public CommonResponse<Object> recommendStories(
+            @AuthenticationPrincipal UserPrincipal userPrincipal
+    ) {
 
         String recommendedRandomCity = publicStoryService.getRecommendedRandomCity();
 
-        return CommonResponse.success(StatusCode.STORY_READ_SUCCESS, recommendedRandomCity);
+        return CommonResponse.success(StatusCode.RECOMMENDED_CITY_SUCCESS, recommendedRandomCity);
     }
 
     @GetMapping("/recommended/recent-popular-story")
@@ -54,7 +56,9 @@ public class PublicStoryController {
     }
 
     @GetMapping("/recommended/recent-popular-city")
-    public CommonResponse<Object> recentMostCityStories() {
+    public CommonResponse<Object> recentMostCityStories(
+            @AuthenticationPrincipal UserPrincipal userPrincipal
+    ) {
 
         String recommendedRecentPopular = publicStoryService.getRecommendedRecentPopularCity();
 
