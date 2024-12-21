@@ -12,11 +12,11 @@ import java.util.Optional;
 public interface StoryCustomRepository {
 //    public Slice<ResponseStoryDto> findAllStories_old(Long cursorId, Pageable pageable);
 
-    public Slice<ResponseStoryListDto> findAllStories(Long cursorId, Pageable pageable, String city);
+    public Slice<ResponseStoryListDto> findAllStories(Member member, Long cursorId, Pageable pageable, String city, String search);
 
 //    public Slice<ResponseStoryDto> findStoriesByMemberAndCity(Long cursorId, Pageable pageable, String city, Member member);
 
-    public Story findStoryByIdAndMember(Long storyId, Member member);
+    public Optional<Story> findStoryByIdAndMember(Long storyId, Member member);
 //    public Slice<ResponseStoryDto> findStoriesByMemberAndMapWithPaging(Long cursorId, Pageable pageable, GeoPointDto geoPointLt, GeoPointDto geoPointRb, Member findMember);
     public List<ResponseStoryListDto> findStoryByMap(Member findMember, GeoPointDto geoPointLt, GeoPointDto geoPointRb);
 
@@ -25,6 +25,12 @@ public interface StoryCustomRepository {
     public List<ResponseStoryCntByCityDto> getStoryCntByCity(Member findMember);
 
     public Boolean isLikedMember(Member findMember, Story fidStory);
+
+    public Optional<String> getRecommendedRandomCity();
+
+    Optional<String> getRecommendedRecentPopularCity();
+
+    Slice<ResponseStoryListDto> getRecentPopularStories(Member member, Long cursorId, Pageable pageable);
 
     public Slice<ResponseStoryListDto> findLikeStories(Member findMember, Pageable pageable, Long cursorId);
 }

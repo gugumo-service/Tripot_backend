@@ -1,24 +1,28 @@
 package com.junior.repository.story.custom;
 
-import com.junior.domain.like.Like;
 import com.junior.domain.like.QLike;
 import com.junior.domain.member.Member;
 import com.junior.domain.story.QStory;
 import com.junior.domain.story.Story;
-import com.junior.dto.comment.ResponseChildCommentDto;
 import com.junior.dto.story.*;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Projections;
+import com.querydsl.core.Tuple;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 
 import java.util.List;
+import java.util.Optional;
 
-import static com.junior.domain.story.QComment.comment;
 import static com.junior.domain.story.QStory.story;
 import static com.junior.domain.like.QLike.like;
 
@@ -29,23 +33,12 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
 
     private final JPAQueryFactory query;
 
-    QResponseStoryDto createQResponseStoryDto() {
-        return new QResponseStoryDto(story.id, story.title, story.content, story.thumbnailImg, story.latitude, story.longitude, story.city, story.member, null, story.likeCnt, story.isHidden, story.createdDate, story.imgUrls);
-    }
+//    QResponseStoryDto createQResponseStoryDto() {
+//        return new QResponseStoryDto(story.id, story.title, story.content, story.thumbnailImg, story.latitude, story.longitude, story.city, story.likeCnt, story.isHidden, story.createdDate, story.imgUrls);
+//    }
 
     QResponseStoryListDto createQResponseStoryListDto() {
         return new QResponseStoryListDto(story.thumbnailImg, story.title, story.content, story.city, story.id, story.latitude, story.longitude);
-    }
-
-    public Boolean isLikedMember(Member findMember, Story findStory) {
-
-        QLike like =  QLike.like;
-
-        return query.selectOne()
-                .from(like)
-                .where(like.member.eq(findMember),
-                        like.story.eq(findStory))
-                .fetchFirst() != null;
     }
 
     private boolean isHaveNextStoryList(List<ResponseStoryListDto> stories, Pageable pageable) {
@@ -70,23 +63,68 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
         return null;
     }
 
-    @Override
-    public Slice<ResponseStoryListDto> findAllStories(Long cursorId, Pageable pageable, String city) {
+    private OrderSpecifier<?> getPopularityOrder() {
+        NumberExpression<Long> popularityScore = story.viewCnt.multiply(0.3)
+                .add(story.likeCnt.multiply(0.7));
 
-        BooleanBuilder builder = new BooleanBuilder();
+        return popularityScore.desc();
+    }
 
-        builder.and(eqCursorId(cursorId));
-        builder.and(story.isHidden.eq(false));
-
-        if(city != null && !city.isEmpty()) {
-            builder.and(story.city.eq(city));
+    private OrderSpecifier<?> getOrderByClause(String sortCondition) {
+        if ("asc".equalsIgnoreCase(sortCondition)) {
+            return story.createdDate.asc(); // 생성 날짜 오름차순
+        } else if ("desc".equalsIgnoreCase(sortCondition)) {
+            return story.createdDate.desc(); // 생성 날짜 내림차순
+        } else if ("popular".equalsIgnoreCase(sortCondition)) {
+            return getPopularityOrder(); // 인기순 (조회수와 좋아요 수 기반)
+        } else {
+            return story.createdDate.desc(); // 기본값: 생성 날짜 내림차순
         }
+    }
+
+    private BooleanBuilder getHiddenCondition(Member member) {
+        BooleanBuilder hiddenCondition = new BooleanBuilder();
+
+        hiddenCondition.or(story.isHidden.eq(false));
+        hiddenCondition.or(
+                story.isHidden.eq(true).and(story.member.eq(member))
+        );
+
+        return hiddenCondition;
+    }
+
+    private BooleanBuilder getCityCondition(String city) {
+        BooleanBuilder cityCondition = new BooleanBuilder();
+
+        if(!StringUtils.isBlank(city)) {
+            cityCondition.and(story.city.eq(city));
+        }
+
+        return cityCondition;
+    }
+
+    private BooleanBuilder getSearchCondition(String search) {
+        BooleanBuilder searchCondition = new BooleanBuilder();
+
+        if(!StringUtils.isBlank(search)) {
+            searchCondition.and((story.title.contains(search)).or(story.content.contains(search)));
+        }
+
+        return searchCondition;
+    }
+
+    @Override
+    public Slice<ResponseStoryListDto> findAllStories(Member member, Long cursorId, Pageable pageable, String city, String search) {
 
         List<ResponseStoryListDto> stories = query.select(createQResponseStoryListDto())
                 .from(story)
-                .where(builder)
+                .where(getCityCondition(city),
+                        eqCursorId(cursorId),
+                        getHiddenCondition(member),
+                        getSearchCondition(search)
+                )
                 .limit(pageable.getPageSize() + 1)
-                .orderBy(story.createdDate.desc())
+                .orderBy(getOrderByClause("desc"))
                 .fetch();
 
         boolean hasNext = isHaveNextStoryList(stories, pageable);
@@ -95,19 +133,21 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
     }
 
     @Override
-    public Story findStoryByIdAndMember(Long storyId, Member member) {
+    public Optional<Story> findStoryByIdAndMember(Long storyId, Member member) {
 
         /*
             Dto 가 아닌 엔티티 그 자체를 반환
             게시글을 수정할 때 더티체킹이 진행되기 위함
          */
-        List<Story> stories = query.select(QStory.story)
+        Story stories = query.select(story)
                 .from(story)
-                .where(QStory.story.member.eq(member),
-                        QStory.story.id.eq(storyId))
-                .fetch();
+                .where(
+                        story.member.eq(member),
+                        story.id.eq(storyId)
+                )
+                .fetchOne();
 
-        return stories.get(0);
+        return Optional.ofNullable(stories);
     }
 
     @Override
@@ -122,37 +162,26 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
                         story.longitude.between(
                                 Math.min(geoPointLt.longitude(), geoPointRb.longitude()),
                                 Math.max(geoPointLt.longitude(), geoPointRb.longitude())
-                        )
+                        ),
+                        getHiddenCondition(findMember)
                 )
-                .orderBy(story.createdDate.desc())
+                .orderBy(getOrderByClause("desc"))
                 .fetch();
     }
 
     @Override
     public Slice<ResponseStoryListDto> findStoriesByMemberAndCityAndSearch(Long cursorId, Pageable pageable, Member findMember, String city, String search) {
 
-        /*
-            BooleanBuilder 란
-            queryDsl 에서 동적 조건을 간단하게 구성하기 위한 클래스
-            and(), or(), not() 등 사용 가능
-         */
-        BooleanBuilder isContainSearch = new BooleanBuilder();
-
-        if(city != null && !city.isEmpty()) {
-            isContainSearch.and(story.city.eq(city));
-        }
-
-        if(search != null && !search.isEmpty()) {
-            isContainSearch.and((story.title.contains(search)).or(story.content.contains(search)));
-        }
-
         List<ResponseStoryListDto> stories = query.select(createQResponseStoryListDto())
                 .from(story)
                 .where(story.member.eq(findMember),
-                        isContainSearch,
-                        eqCursorId(cursorId))
+                        getCityCondition(city),
+                        getSearchCondition(search),
+                        eqCursorId(cursorId),
+                        getHiddenCondition(findMember)
+                )
                 .limit(pageable.getPageSize() + 1)
-                .orderBy(story.createdDate.desc())
+                .orderBy(getOrderByClause("desc"))
                 .fetch();
 
         boolean hasNext = isHaveNextStoryList(stories, pageable);
@@ -171,22 +200,77 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
     }
 
     @Override
-    public Slice<ResponseStoryListDto> findLikeStories(Member findMember, Pageable pageable, Long cursorId) {
+    public Boolean isLikedMember(Member findMember, Story findStory) {
 
-        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        QLike like =  QLike.like;
 
-        booleanBuilder.and(eqCursorId(cursorId));
+        return query.selectOne()
+                .from(like)
+                .where(like.member.eq(findMember),
+                        like.story.eq(findStory))
+                .fetchFirst() != null;
+    }
 
-        List<ResponseStoryListDto> likeStories = query.select(createQResponseStoryListDto())
+    @Override
+    public Optional<String> getRecommendedRandomCity() {
+        String randomCity = query.select(story.city)
                 .from(story)
-                .join(like).on(like.member.eq(findMember))
-                .where(booleanBuilder)
-                .orderBy(story.city.asc())
-                .limit(pageable.getPageSize() + 1)
+                .orderBy(Expressions.numberTemplate(Double.class, "RAND()").asc())
+                .limit(1L)
+                .fetchOne();
+
+        return Optional.ofNullable(randomCity);
+    }
+
+    @Override
+    public Optional<String> getRecommendedRecentPopularCity() {
+
+        // 서브쿼리로 최신 n개의 글을 가져온 후, 그 중에서 도시별로 그룹화하여 개수를 카운트
+        QStory subStory = new QStory("subStory");
+
+        List<Tuple> result = query.select(story.city, story.city.count())
+                .from(story)
+                .where(story.createdDate.in(
+                        JPAExpressions.select(subStory.createdDate)
+                                .from(subStory)
+                                .orderBy(subStory.createdDate.desc())  // 최신 글 순으로 정렬
+                                .limit(100L) // 최신 n개의 글
+                ))
+                .groupBy(story.city) // 도시별로 그룹화
+                .orderBy(story.city.count().desc()) // 도시별 게시글 수 내림차순
+                .limit(1) // 가장 많이 등장한 도시만 반환
                 .fetch();
 
-        boolean hasNext = isHaveNextStoryList(likeStories, pageable);
+        // 결과가 있다면, 첫 번째 튜플의 도시 값을 반환
+        return result.stream()
+                .findFirst()
+                .map(tuple -> tuple.get(story.city));
+    }
 
-        return new SliceImpl<>(likeStories, pageable, hasNext);
+    @Override
+    public Slice<ResponseStoryListDto> getRecentPopularStories(Member member, Long cursorId, Pageable pageable) {
+
+        List<ResponseStoryListDto> stories = query.select(createQResponseStoryListDto())
+                .from(story)
+                .where(getHiddenCondition(member))
+                .limit(pageable.getPageSize() + 1)
+                .orderBy(getOrderByClause("popular"))
+                .fetch();
+
+        boolean hasNext = isHaveNextStoryList(stories, pageable);
+
+        return new SliceImpl<>(stories, pageable, hasNext);
+    }
+
+    @Override
+    public Slice<ResponseStoryListDto> findLikeStories(Member findMember, Pageable pageable, Long cursorId) {
+        List<ResponseStoryListDto> stories = query.select(createQResponseStoryListDto())
+                .from(like)
+                .where(like.member.id.eq(findMember.getId()))
+                .fetch();
+
+        boolean hasNext = isHaveNextStoryList(stories, pageable);
+
+        return new SliceImpl<>(stories, pageable, hasNext);
     }
 }

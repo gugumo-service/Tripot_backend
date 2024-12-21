@@ -8,15 +8,10 @@ import lombok.Builder;
 public record ResponseParentCommentDto(
         Long id,
         String content,
-        Member member,
+        Long memberId,
+        String nickname,
+        String profileImgPath,
         Long childCount
 ) {
 
-    @QueryProjection
-    public ResponseParentCommentDto(Long id, String content, Member member, Long childCount) {
-        this.id = id;
-        this.content = content;
-        this.member = member;
-        this.childCount = childCount;
-    }
 }
