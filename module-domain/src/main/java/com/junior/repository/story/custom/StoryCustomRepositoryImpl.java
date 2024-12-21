@@ -172,21 +172,6 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
     @Override
     public Slice<ResponseStoryListDto> findStoriesByMemberAndCityAndSearch(Long cursorId, Pageable pageable, Member findMember, String city, String search) {
 
-        /*
-            BooleanBuilder 란
-            queryDsl 에서 동적 조건을 간단하게 구성하기 위한 클래스
-            and(), or(), not() 등 사용 가능
-         */
-//        BooleanBuilder isContainSearch = new BooleanBuilder();
-//
-//        if(city != null && !city.isEmpty()) {
-//            isContainSearch.and(story.city.eq(city));
-//        }
-//
-//        if(search != null && !search.isEmpty()) {
-//            isContainSearch.and((story.title.contains(search)).or(story.content.contains(search)));
-//        }
-
         List<ResponseStoryListDto> stories = query.select(createQResponseStoryListDto())
                 .from(story)
                 .where(story.member.eq(findMember),
