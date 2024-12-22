@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,11 +32,15 @@ public class PublicStoryService {
     }
 
     public String getRecommendedRandomCity() {
-        return storyRepository.getRecommendedRandomCity().orElseThrow();
+        Optional<String> recommendedRandomCity = storyRepository.getRecommendedRandomCity();
+
+        return recommendedRandomCity.orElse("");
     }
 
     public String getRecommendedRecentPopularCity() {
-        return storyRepository.getRecommendedRecentPopularCity().orElseThrow();
+        Optional<String> recommendedRecentPopularCity = storyRepository.getRecommendedRecentPopularCity();
+
+        return recommendedRecentPopularCity.orElse("");
     }
 
     public Slice<ResponseStoryListDto> getRecentPopularStories(UserPrincipal userPrincipal, Long cursorId, int size) {
