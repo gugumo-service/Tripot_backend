@@ -57,6 +57,7 @@ public class Report extends BaseEntity {
 
     public void confirmReport() {
         this.reportStatus = ReportStatus.CONFIRMED;
+        this.confirmTime = LocalDateTime.now();
     }
 
     public void deleteReportTarget() {
@@ -69,5 +70,6 @@ public class Report extends BaseEntity {
         }
 
         this.reportStatus = ReportStatus.DELETED;
+        this.confirmTime = LocalDateTime.now();
     }
 }
