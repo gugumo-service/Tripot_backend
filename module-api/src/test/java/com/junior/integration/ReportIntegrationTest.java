@@ -16,6 +16,7 @@ import com.junior.repository.report.ReportRepository;
 import com.junior.repository.story.StoryRepository;
 import com.junior.security.WithMockCustomAdmin;
 import com.junior.security.WithMockCustomUser;
+import com.junior.security.WithMockCustomUser2;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -62,9 +63,13 @@ public class ReportIntegrationTest extends IntegrationControllerTest {
     void init() {
         Member preactiveTestMember = createPreactiveTestMember();
         Member activeTestMember = createActiveTestMember();
+        Member testAdmin = createAdmin();
+        Member activeTestMember2 = createActiveTestMember2();
 
         memberRepository.save(preactiveTestMember);
         memberRepository.save(activeTestMember);
+        memberRepository.save(testAdmin);
+        memberRepository.save(activeTestMember2);
 
         Story testStory = createStory(activeTestMember);
         storyRepository.save(testStory);
@@ -77,7 +82,7 @@ public class ReportIntegrationTest extends IntegrationControllerTest {
 
     @Test
     @DisplayName("스토리에 대한 신고 기능이 정상적으로 이루어져야 함")
-    @WithMockCustomUser
+    @WithMockCustomUser2
     public void report_story() throws Exception {
         //given
         CreateReportDto createReportDto = new CreateReportDto(1L, "STORY", "스팸홍보");
@@ -104,12 +109,42 @@ public class ReportIntegrationTest extends IntegrationControllerTest {
         //신고 내역이 정상적으로 저장되어야 함
         Report report = reportRepository.findById(1L).orElseThrow(RuntimeException::new);
 
-        assertThat(report.getMember().getUsername()).isEqualTo("테스트사용자유저네임");
+        assertThat(report.getMember().getUsername()).isEqualTo("테스트사용자유저네임2");
         assertThat(report.getReportType()).isEqualTo(ReportType.STORY);
         assertThat(report.getReportReason()).isEqualTo(ReportReason.SPAMMARKET);
         assertThat(report.getStory().getTitle()).isEqualTo("testStoryTitle");
         assertThat(report.getComment()).isNull();
         assertThat(report.getReportStatus()).isEqualTo(ReportStatus.UNCONFIRMED);
+
+
+    }
+
+    @Test
+    @DisplayName("본인 글은 신고할 수 없어야 함")
+    @WithMockCustomUser
+    public void report_story_equal_author() throws Exception {
+        //given
+        CreateReportDto createReportDto = new CreateReportDto(1L, "STORY", "스팸홍보");
+        String content = objectMapper.writeValueAsString(createReportDto);
+
+        //when
+        ResultActions actions = mockMvc.perform(
+                post("/api/v1/reports")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content)
+        );
+
+
+        //then
+        actions
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.customCode").value("REPORT-ERR-004"))
+                .andExpect(jsonPath("$.customMessage").value("본인 글은 신고할 수 없음"))
+                .andExpect(jsonPath("$.status").value(false))
+                .andExpect(jsonPath("$.data").value(nullValue()));
+
 
 
     }

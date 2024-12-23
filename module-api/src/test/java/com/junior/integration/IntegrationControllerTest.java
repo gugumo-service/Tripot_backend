@@ -53,6 +53,32 @@ public class IntegrationControllerTest {
                 .build();
     }
 
+    Member createAdmin() {
+        return Member.builder()
+                .id(3L)
+                .nickname("테스트관리자닉네임")
+                .username("테스트관리자유저네임")
+                .role(MemberRole.ADMIN)
+                .signUpType(SignUpType.USERNAME)
+                .profileImage("s3.com/testProfile")
+                .recommendLocation("서울")
+                .status(MemberStatus.ACTIVE)
+                .build();
+    }
+
+    Member createActiveTestMember2() {
+        return Member.builder()
+                .id(4L)
+                .nickname("테스트사용자닉네임2")
+                .username("테스트사용자유저네임2")
+                .role(MemberRole.USER)
+                .signUpType(SignUpType.KAKAO)
+                .profileImage("s3.com/testProfile")
+                .recommendLocation("서울")
+                .status(MemberStatus.ACTIVE)
+                .build();
+    }
+
     MockMultipartFile createMockMultipartFile() {
         MockMultipartFile profileImg = new MockMultipartFile(
                 "profileimg",

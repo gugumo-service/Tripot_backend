@@ -58,6 +58,10 @@ public class ReportService {
             Story story = storyRepository.findById(createReportDto.reportContentId())
                     .orElseThrow(()->new StoryNotFoundException(StatusCode.STORY_NOT_FOUND));
 
+            if (story.getMember().equals(member)) {
+                throw new ReportException(StatusCode.REPORT_EQUALS_AUTHOR);
+            }
+
             report = Report.builder()
                     .member(member)
                     .reportType(reportType)
@@ -67,6 +71,10 @@ public class ReportService {
         } else if (reportType.equals(ReportType.COMMENT)) {
             Comment comment = commentRepository.findById(createReportDto.reportContentId())
                     .orElseThrow(() -> new CommentNotFoundException(StatusCode.COMMENT_NOT_FOUND));
+
+            if (comment.getMember().equals(member)) {
+                throw new ReportException(StatusCode.REPORT_EQUALS_AUTHOR);
+            }
 
             report = Report.builder()
                     .member(member)

@@ -60,12 +60,13 @@ class ReportServiceTest {
                 .reportReason("스팸홍보")
                 .build();
 
-        Member testActiveMember = createActiveTestMember();
-        Story testStory = createStory(testActiveMember, "title", "city");
+        Member testWriter = createActiveTestMember();
+        Member testReporter = createActiveTestMember2();
+        Story testStory = createStory(testWriter, "title", "city");
 
-        UserPrincipal principal = new UserPrincipal(testActiveMember);
+        UserPrincipal principal = new UserPrincipal(testReporter);
 
-        given(memberRepository.findById(anyLong())).willReturn(Optional.ofNullable(testActiveMember));
+        given(memberRepository.findById(anyLong())).willReturn(Optional.ofNullable(testReporter));
         given(storyRepository.findById(anyLong())).willReturn(Optional.ofNullable(testStory));
 
         //when
@@ -87,13 +88,15 @@ class ReportServiceTest {
                 .reportReason("스팸홍보")
                 .build();
 
-        Member testActiveMember = createActiveTestMember();
-        Story testStory = createStory(testActiveMember, "title", "city");
-        Comment testComment = createComment(testActiveMember, testStory);
+        Member testWriter = createActiveTestMember();
+        Member testReporter = createActiveTestMember2();
+        Story testStory = createStory(testWriter, "title", "city");
+        Comment testComment = createComment(testWriter, testStory);
 
-        UserPrincipal principal = new UserPrincipal(testActiveMember);
 
-        given(memberRepository.findById(anyLong())).willReturn(Optional.ofNullable(testActiveMember));
+        UserPrincipal principal = new UserPrincipal(testReporter);
+
+        given(memberRepository.findById(anyLong())).willReturn(Optional.ofNullable(testReporter));
         given(commentRepository.findById(anyLong())).willReturn(Optional.ofNullable(testComment));
 
 
@@ -103,6 +106,34 @@ class ReportServiceTest {
         //then
 
         verify(reportRepository).save(any(Report.class));
+    }
+
+    @Test
+    @DisplayName("본인 글은 신고가 불가능해야 함")
+    void save_report_report_equal_author() {
+
+        //given
+        CreateReportDto createReportDto = CreateReportDto.builder()
+                .reportContentId(1L)
+                .reportType("comment")
+                .reportReason("스팸홍보")
+                .build();
+
+        Member testWriter = createActiveTestMember();
+        Story testStory = createStory(testWriter, "title", "city");
+        Comment testComment = createComment(testWriter, testStory);
+
+
+        UserPrincipal principal = new UserPrincipal(testWriter);
+
+        given(memberRepository.findById(anyLong())).willReturn(Optional.ofNullable(testWriter));
+        given(commentRepository.findById(anyLong())).willReturn(Optional.ofNullable(testComment));
+
+
+        //when, then
+        assertThatThrownBy(() -> reportService.save(createReportDto, principal))
+                .isInstanceOf(ReportException.class)
+                .hasMessageContaining("본인 글은 신고할 수 없음");
     }
 
 
@@ -167,8 +198,10 @@ class ReportServiceTest {
         Member testActiveMember = createActiveTestMember();
         Story testStory = createStory(testActiveMember, "title", "city");
 
+        Report testReport = createReport(testActiveMember, ReportType.STORY, testStory);
 
-        given(storyRepository.findById(anyLong())).willReturn(Optional.ofNullable(testStory));
+
+        given(reportRepository.findById(anyLong())).willReturn(Optional.ofNullable(testReport));
 
 
         //when
@@ -253,6 +286,19 @@ class ReportServiceTest {
                 .id(2L)
                 .nickname("테스트사용자닉네임")
                 .username("테스트사용자유저네임")
+                .role(MemberRole.USER)
+                .signUpType(SignUpType.KAKAO)
+                .profileImage("s3.com/testProfile")
+                .recommendLocation("서울")
+                .status(MemberStatus.ACTIVE)
+                .build();
+    }
+
+    Member createActiveTestMember2() {
+        return Member.builder()
+                .id(4L)
+                .nickname("테스트사용자닉네임2")
+                .username("테스트사용자유저네임2")
                 .role(MemberRole.USER)
                 .signUpType(SignUpType.KAKAO)
                 .profileImage("s3.com/testProfile")
