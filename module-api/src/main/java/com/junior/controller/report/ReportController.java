@@ -1,12 +1,16 @@
 package com.junior.controller.report;
 
 import com.junior.dto.report.CreateReportDto;
+import com.junior.dto.report.ReportDto;
 import com.junior.exception.StatusCode;
+import com.junior.page.PageCustom;
 import com.junior.response.CommonResponse;
 import com.junior.security.UserPrincipal;
 import com.junior.service.report.ReportService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +30,13 @@ public class ReportController {
 
         return ResponseEntity.status(StatusCode.REPORT_CREATE_SUCCESS.getHttpCode()).body(CommonResponse.success(StatusCode.REPORT_CREATE_SUCCESS, null));
 
+    }
+
+    @GetMapping("/api/v1/admin/reports")
+    public <T extends ReportDto> ResponseEntity<CommonResponse<PageCustom<T>>> findReport(@PageableDefault Pageable pageable,
+                                                                                          @RequestParam(name = "report_type", defaultValue = "ALL") String reportType) {
+
+        return ResponseEntity.status(StatusCode.REPORT_FIND_SUCCESS.getHttpCode()).body(CommonResponse.success(StatusCode.REPORT_FIND_SUCCESS, reportService.findReport(reportType, pageable)));
     }
 
     @PatchMapping("/api/v1/admin/reports/{report_id}/confirm")
