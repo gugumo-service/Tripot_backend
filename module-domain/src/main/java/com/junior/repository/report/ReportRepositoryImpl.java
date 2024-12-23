@@ -1,5 +1,6 @@
 package com.junior.repository.report;
 
+import com.junior.domain.report.ReportStatus;
 import com.junior.domain.report.ReportType;
 import com.junior.dto.report.QReportQueryDto;
 import com.junior.dto.report.ReportDto;
@@ -32,7 +33,7 @@ public class ReportRepositoryImpl implements ReportRepositoryCustom {
     //이 로직은 신고 상세조회로?
     //모든 report를 한 번에 조회?
     @Override
-    public Page<ReportQueryDto> findReport(ReportType reportType, Pageable pageable) {
+    public Page<ReportQueryDto> findReport(ReportStatus reportStatus, Pageable pageable) {
 
         List<ReportQueryDto> result;
         JPAQuery<Long> count;
@@ -54,7 +55,7 @@ public class ReportRepositoryImpl implements ReportRepositoryCustom {
                 .leftJoin(report.member, member)
                 .leftJoin(report.story, story)
                 .leftJoin(report.comment, comment)
-                .where(reportTypeEq(reportType))
+                .where(reportTypeEq(reportStatus))
                 .orderBy(report.createdDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -73,7 +74,7 @@ public class ReportRepositoryImpl implements ReportRepositoryCustom {
 
     }
 
-    private BooleanExpression reportTypeEq(ReportType reportType) {
-        return reportType != null ? report.reportType.eq(reportType) : null;
+    private BooleanExpression reportTypeEq(ReportStatus reportStatus) {
+        return reportStatus != null ? report.reportStatus.eq(reportStatus) : null;
     }
 }

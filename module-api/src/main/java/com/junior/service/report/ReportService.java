@@ -3,6 +3,7 @@ package com.junior.service.report;
 import com.junior.domain.member.Member;
 import com.junior.domain.report.Report;
 import com.junior.domain.report.ReportReason;
+import com.junior.domain.report.ReportStatus;
 import com.junior.domain.report.ReportType;
 import com.junior.domain.story.Comment;
 import com.junior.domain.story.Story;
@@ -96,21 +97,21 @@ public class ReportService {
         reportRepository.save(report);
     }
 
-    public <T extends ReportDto> PageCustom<T> findReport(String reportType, Pageable pageable) {
+    public <T extends ReportDto> PageCustom<T> findReport(String reportStatus, Pageable pageable) {
 
-        ReportType eReportType;
+        ReportStatus eReportStatus;
 
-        if (reportType.equals("ALL")) {
-            eReportType = null;
+        if (reportStatus.equals("ALL")) {
+            eReportStatus = null;
         } else {
             try {
-                eReportType = ReportType.valueOf(reportType);
+                eReportStatus = ReportStatus.valueOf(reportStatus);
             } catch (IllegalArgumentException e) {
                 throw new ReportException(StatusCode.REPORT_TYPE_NOT_VALID);
             }
         }
 
-        Page<ReportQueryDto> report = reportRepository.findReport(eReportType, pageable);
+        Page<ReportQueryDto> report = reportRepository.findReport(eReportStatus, pageable);
 
         List<T> result = report.stream()
                 .map(r -> convertReport(r))

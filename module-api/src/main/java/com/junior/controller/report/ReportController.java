@@ -33,10 +33,10 @@ public class ReportController {
     }
 
     @GetMapping("/api/v1/admin/reports")
-    public <T extends ReportDto> ResponseEntity<CommonResponse<PageCustom<T>>> findReport(@PageableDefault Pageable pageable,
-                                                                                          @RequestParam(name = "report_type", defaultValue = "ALL") String reportType) {
+    public <T extends ReportDto> ResponseEntity<CommonResponse<PageCustom<T>>> findReport(@PageableDefault(size = 15, page = 1) Pageable pageable,
+                                                                                          @RequestParam(name = "report_type", defaultValue = "ALL") String reportStatus) {
 
-        return ResponseEntity.status(StatusCode.REPORT_FIND_SUCCESS.getHttpCode()).body(CommonResponse.success(StatusCode.REPORT_FIND_SUCCESS, reportService.findReport(reportType, pageable)));
+        return ResponseEntity.status(StatusCode.REPORT_FIND_SUCCESS.getHttpCode()).body(CommonResponse.success(StatusCode.REPORT_FIND_SUCCESS, reportService.findReport(reportStatus, pageable)));
     }
 
     @PatchMapping("/api/v1/admin/reports/{report_id}/confirm")
