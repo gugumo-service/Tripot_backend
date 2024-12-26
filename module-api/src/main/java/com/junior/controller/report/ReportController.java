@@ -1,5 +1,6 @@
 package com.junior.controller.report;
 
+import com.junior.controller.api.ReportApi;
 import com.junior.dto.report.CreateReportDto;
 import com.junior.dto.report.ReportDto;
 import com.junior.exception.StatusCode;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-public class ReportController {
+public class ReportController implements ReportApi {
 
     private final ReportService reportService;
 
