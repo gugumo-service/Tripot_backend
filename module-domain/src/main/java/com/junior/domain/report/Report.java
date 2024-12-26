@@ -43,14 +43,14 @@ public class Report extends BaseEntity {
     /**
      * reportType=STORY일 경우, 그 외의 경우 NULL
      */
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "story_id")
     private Story story;
 
     /**
      * reportType=COMMENT일 경우, 그 외의 경우 NULL
      */
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_id")
     private Comment comment;
 
