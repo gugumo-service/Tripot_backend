@@ -71,6 +71,10 @@ public class ReportService {
                 throw new ReportException(StatusCode.REPORT_EQUALS_AUTHOR);
             }
 
+            if (reportRepository.existsByMemberAndStory(member, story)) {
+                throw new ReportException(StatusCode.REPORT_DUPLICATE);
+            }
+
             report = Report.builder()
                     .member(member)
                     .reportType(reportType)
@@ -85,6 +89,11 @@ public class ReportService {
                 throw new ReportException(StatusCode.REPORT_EQUALS_AUTHOR);
             }
 
+            if (reportRepository.existsByMemberAndComment(member, comment)) {
+                throw new ReportException(StatusCode.REPORT_DUPLICATE);
+            }
+
+
             report = Report.builder()
                     .member(member)
                     .reportType(reportType)
@@ -94,6 +103,10 @@ public class ReportService {
         } else {
             throw new ReportException(StatusCode.REPORT_NOT_VALID);
         }
+
+
+
+
 
         reportRepository.save(report);
     }

@@ -129,6 +129,8 @@ class ReportServiceTest {
                 .build();
 
         Member testWriter = createActiveTestMember();
+        Member testWriter2 = createActiveTestMember();
+
         Story testStory = createStory(testWriter, "title", "city");
         Comment testComment = createComment(testWriter, testStory);
 
@@ -143,6 +145,37 @@ class ReportServiceTest {
         assertThatThrownBy(() -> reportService.save(createReportDto, principal))
                 .isInstanceOf(ReportException.class)
                 .hasMessageContaining("본인 글은 신고할 수 없음");
+    }
+
+
+    @Test
+    @DisplayName("중복신고가 불가능해야함")
+    void save_report_report_duplicate() {
+
+        //given
+        CreateReportDto createReportDto = CreateReportDto.builder()
+                .reportContentId(1L)
+                .reportType("comment")
+                .reportReason("스팸홍보")
+                .build();
+
+        Member testWriter = createActiveTestMember();
+        Member testReporter = createActiveTestMember2();
+        Story testStory = createStory(testWriter, "title", "city");
+        Comment testComment = createComment(testWriter, testStory);
+
+
+        UserPrincipal principal = new UserPrincipal(testReporter);
+
+        given(memberRepository.findById(anyLong())).willReturn(Optional.ofNullable(testReporter));
+        given(commentRepository.findById(anyLong())).willReturn(Optional.ofNullable(testComment));
+        given(reportRepository.existsByMemberAndComment(any(Member.class), any(Comment.class))).willReturn(true);
+
+
+        //when, then
+        assertThatThrownBy(() -> reportService.save(createReportDto, principal))
+                .isInstanceOf(ReportException.class)
+                .hasMessageContaining("중복신고할 수 없음");
     }
 
 

@@ -91,6 +91,7 @@ public enum StatusCode {
     REPORT_NOT_FOUND(400, "REPORT-ERR-002", "해당 신고내역을 찾을 수 없음"),
     REPORT_TYPE_NOT_VALID(400, "REPORT-ERR-003", "유효한 신고 타입이 아님"),
     REPORT_EQUALS_AUTHOR(400, "REPORT-ERR-004", "본인 글은 신고할 수 없음"),
+    REPORT_DUPLICATE(400, "REPORT-ERR-005", "중복신고할 수 없음"),
 
     // 공통 예외
     UNKNOWN_ERROR(9999, "UNKNOWN-ERROR", "정의되지 않은 예외");
