@@ -17,6 +17,7 @@ import com.junior.repository.story.StoryRepository;
 import com.junior.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -111,14 +112,17 @@ public class ReportService {
             }
         }
 
-        Page<ReportQueryDto> report = reportRepository.findReport(eReportStatus, pageable);
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber() - 1, pageable.getPageSize());
 
-        List<T> result = report.stream()
+        Page<ReportQueryDto> report = reportRepository.findReport(eReportStatus, pageRequest);
+        List<ReportQueryDto> content = report.getContent();
+
+        List<T> result = content.stream()
                 .map(r -> convertReport(r))
                 .map(r -> (T) r)
                 .collect(Collectors.toList());
 
-        return new PageCustom<>(result, pageable, report.getTotalElements());
+        return new PageCustom<>(result, report.getPageable(), report.getTotalElements());
     }
 
     public void confirmReport(Long id) {
