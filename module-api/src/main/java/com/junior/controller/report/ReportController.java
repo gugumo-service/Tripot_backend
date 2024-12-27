@@ -35,7 +35,7 @@ public class ReportController implements ReportApi {
 
     @GetMapping("/api/v1/admin/reports")
     public <T extends ReportDto> ResponseEntity<CommonResponse<PageCustom<T>>> findReport(@PageableDefault(size = 15, page = 1) Pageable pageable,
-                                                                                          @RequestParam(name = "report_type", defaultValue = "ALL") String reportStatus) {
+                                                                                          @RequestParam(name = "report_status", defaultValue = "ALL") String reportStatus) {
 
         return ResponseEntity.status(StatusCode.REPORT_FIND_SUCCESS.getHttpCode()).body(CommonResponse.success(StatusCode.REPORT_FIND_SUCCESS, reportService.findReport(reportStatus, pageable)));
     }
@@ -47,7 +47,7 @@ public class ReportController implements ReportApi {
         return ResponseEntity.status(StatusCode.REPORT_CONFIRM_SUCCESS.getHttpCode()).body(CommonResponse.success(StatusCode.REPORT_CONFIRM_SUCCESS, null));
     }
 
-    @PatchMapping("/api/v1/admin/reports/{report_id}/delete")
+    @PatchMapping("/api/v1/admin/reports/{report_id}/delete-target")
     public ResponseEntity<CommonResponse<Object>> deleteReportTarget(@PathVariable("report_id") Long reportId) {
         reportService.deleteReportTarget(reportId);
         return ResponseEntity.status(StatusCode.REPORT_DELETE_TARGET_SUCCESS.getHttpCode()).body(CommonResponse.success(StatusCode.REPORT_DELETE_TARGET_SUCCESS, null));

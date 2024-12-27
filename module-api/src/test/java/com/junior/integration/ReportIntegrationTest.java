@@ -222,12 +222,12 @@ public class ReportIntegrationTest extends IntegrationControllerTest {
     void findReport() throws Exception {
 
         //given
-        String reportType = "CONFIRMED";
+        String reportStatus = "CONFIRMED";
 
         //when
         ResultActions actions = mockMvc.perform(
                 get("/api/v1/admin/reports")
-                        .queryParam("report_type",reportType)
+                        .queryParam("report_status",reportStatus)
                         .accept(MediaType.APPLICATION_JSON)
         );
 
