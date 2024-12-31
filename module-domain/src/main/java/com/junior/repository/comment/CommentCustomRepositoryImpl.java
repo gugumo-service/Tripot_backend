@@ -17,6 +17,7 @@ import org.springframework.data.domain.SliceImpl;
 import java.util.List;
 
 import static com.junior.domain.story.QComment.comment;
+import static com.junior.domain.story.QStory.story;
 
 @RequiredArgsConstructor
 public class CommentCustomRepositoryImpl implements CommentCustomRepository {
@@ -118,10 +119,13 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository {
                         Projections.constructor(
                                 ResponseMyCommentDto.class,
                                 comment.story.id,
-                                comment.content
+                                comment.content,
+                                comment.createdDate,
+                                story.title
                         )
                 )
                 .from(comment)
+                .join(comment.story, story)
                 .where(booleanBuilder)
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
