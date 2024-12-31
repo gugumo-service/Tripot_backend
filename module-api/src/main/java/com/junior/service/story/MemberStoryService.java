@@ -118,10 +118,14 @@ public class MemberStoryService {
                     .build();
 
             likeRepository.save(like);
+
+            findStory.increaseLikeCnt();
         }
         else {
             Like findLike = likeRepository.findLikeByMemberAndStory(findMember, findStory);
             likeRepository.delete(findLike);
+
+            findStory.decreaseLikeCnt();
         }
     }
 
