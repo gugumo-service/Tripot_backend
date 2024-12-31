@@ -112,4 +112,11 @@ public class Story extends BaseEntity {
     public void increaseViewCnt() {
         this.viewCnt+=1;
     }
+
+    public void increaseLikeCnt() {
+        this.likeCnt+=1;
+    }
+    public void decreaseLikeCnt() {
+        this.likeCnt-=1;
+    }
 }
