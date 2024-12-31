@@ -63,7 +63,8 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository {
                                 comment.member.id,
                                 comment.member.nickname,
                                 comment.member.profileImage,
-                                comment.child.size().longValue()
+                                comment.child.size().longValue(),
+                                comment.createdDate
                         )
                 )
                 .from(comment)
@@ -91,7 +92,8 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository {
                                 comment.content,
                                 comment.member.id,
                                 comment.member.nickname,
-                                comment.member.profileImage
+                                comment.member.profileImage,
+                                comment.createdDate
                         )
                 )
                 .from(comment)
