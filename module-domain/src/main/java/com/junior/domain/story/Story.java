@@ -113,6 +113,10 @@ public class Story extends BaseEntity {
         this.viewCnt+=1;
     }
 
+    public void deleteStory() {
+        this.isDeleted = true;
+    }
+
     public void increaseLikeCnt() {
         this.likeCnt+=1;
     }

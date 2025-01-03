@@ -87,6 +87,16 @@ public enum StatusCode {
     QNA_FIND_SUCCESS(200, "Q&A-SUCCESS-004", "Q&A 조회 성공"),
     QNA_FIND_DETAIL_SUCCESS(200, "Q&A-SUCCESS-005", "Q&A 세부정보 조회 성공"),
 
+    // 신고 관련 상태코드
+    REPORT_CREATE_SUCCESS(201, "REPORT-SUCCESS-001", "신고 성공"),
+    REPORT_CONFIRM_SUCCESS(200, "REPORT-SUCCESS-002", "신고 처리(미삭제) 성공"),
+    REPORT_DELETE_TARGET_SUCCESS(200, "REPORT-SUCCESS-003", "신고 처리(삭제) 성공"),
+    REPORT_FIND_SUCCESS(200, "REPORT-SUCCESS-004", "신고 조회 성공"),
+    REPORT_NOT_VALID(400, "REPORT-ERR-001", "유효한 신고 유형이 아님"),
+    REPORT_NOT_FOUND(400, "REPORT-ERR-002", "해당 신고내역을 찾을 수 없음"),
+    REPORT_TYPE_NOT_VALID(400, "REPORT-ERR-003", "유효한 신고 타입이 아님"),
+    REPORT_EQUALS_AUTHOR(400, "REPORT-ERR-004", "본인 글은 신고할 수 없음"),
+    REPORT_DUPLICATE(400, "REPORT-ERR-005", "중복신고할 수 없음"),
 
     // 공통 예외
     UNKNOWN_ERROR(9999, "UNKNOWN-ERROR", "정의되지 않은 예외");

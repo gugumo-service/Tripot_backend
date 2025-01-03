@@ -63,6 +63,15 @@ public class ApiExceptionHandler {
         return ResponseEntity.status(statusCode.getHttpCode()).body(CommonResponse.fail(statusCode));
     }
 
+    @ExceptionHandler(ReportException.class)
+    protected ResponseEntity<CommonResponse<Object>> handleNoticeException(ReportException e) {
+        log.warn("{} : {}", Thread.currentThread().getStackTrace()[1].getMethodName(), e.getMessage());
+//        final ErrorResponse response = ErrorResponse.of(e.getStatusCode());
+//        return ResponseEntity.status(e.getStatusCode().getHttpCode()).body(response);
+        StatusCode statusCode = e.getStatusCode();
+        return ResponseEntity.status(statusCode.getHttpCode()).body(CommonResponse.fail(statusCode));
+    }
+
 
     /**
      * 랩핑하지 못한 예외가 발생하는 경우
