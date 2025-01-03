@@ -28,13 +28,16 @@ public class Report extends BaseEntity {
     private Member member;
 
     @Enumerated(EnumType.STRING)
+    @Column(length = 10)
     private ReportType reportType;
 
     @Enumerated(EnumType.STRING)
     @Builder.Default
+    @Column(length = 10)
     private ReportStatus reportStatus = ReportStatus.UNCONFIRMED;
 
     @Enumerated(EnumType.STRING)
+    @Column(length = 15)
     private ReportReason reportReason;
 
     private LocalDateTime confirmTime;
