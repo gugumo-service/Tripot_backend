@@ -22,9 +22,10 @@ public class ReportQueryDto {
     private LocalDateTime confirmTime;
     private String title;
     private String content;
+    private Long storyId;
 
     @QueryProjection
-    public ReportQueryDto(Long id, String reporterUsername, ReportType reportType, LocalDateTime reportedTime, ReportStatus reportStatus, ReportReason reportReason, LocalDateTime confirmTime, String title, String content) {
+    public ReportQueryDto(Long id, String reporterUsername, ReportType reportType, LocalDateTime reportedTime, ReportStatus reportStatus, ReportReason reportReason, LocalDateTime confirmTime, String title, String content, Long storyId) {
         this.id = id;
         this.reporterUsername = reporterUsername;
         this.reportType = reportType;
@@ -34,5 +35,6 @@ public class ReportQueryDto {
         this.confirmTime = confirmTime;
         this.title = title;
         this.content = content;
+        this.storyId = storyId;
     }
 }

@@ -222,7 +222,7 @@ public class ReportIntegrationTest extends IntegrationControllerTest {
     void findReport() throws Exception {
 
         //given
-        String reportStatus = "CONFIRMED";
+        String reportStatus = "UNCONFIRMED";
 
         //when
         ResultActions actions = mockMvc.perform(
@@ -240,7 +240,8 @@ public class ReportIntegrationTest extends IntegrationControllerTest {
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data.pageable.number").value(1))
                 .andExpect(jsonPath("$.data.content[0].reportReason").value("스팸홍보"))
-                .andExpect(jsonPath("$.data.content[0].reportStatus").value("CONFIRMED"));
+                .andExpect(jsonPath("$.data.content[0].reportStatus").value("UNCONFIRMED"))
+                .andExpect(jsonPath("$.data.content[0].storyId").value(1));
 
 
 
@@ -308,7 +309,7 @@ public class ReportIntegrationTest extends IntegrationControllerTest {
 
         //when
         ResultActions actions = mockMvc.perform(
-                patch("/api/v1/admin/reports/{report_id}/delete", reportId)
+                patch("/api/v1/admin/reports/{report_id}/delete-target", reportId)
                         .accept(MediaType.APPLICATION_JSON)
         );
 
@@ -352,7 +353,7 @@ public class ReportIntegrationTest extends IntegrationControllerTest {
 
         //when
         ResultActions actions = mockMvc.perform(
-                patch("/api/v1/admin/reports/{report_id}/delete", reportId)
+                patch("/api/v1/admin/reports/{report_id}/delete-target", reportId)
                         .accept(MediaType.APPLICATION_JSON)
         );
 

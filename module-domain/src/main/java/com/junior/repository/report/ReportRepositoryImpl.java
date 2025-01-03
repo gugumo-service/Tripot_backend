@@ -48,7 +48,8 @@ public class ReportRepositoryImpl implements ReportRepositoryCustom {
                                 report.reportReason,
                                 report.confirmTime,
                                 report.story.title,
-                                report.comment.content
+                                report.comment.content,
+                                report.story.id
                         )
                 )
                 .from(report)

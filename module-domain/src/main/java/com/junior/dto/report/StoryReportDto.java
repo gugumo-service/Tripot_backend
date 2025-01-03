@@ -11,4 +11,5 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 public class StoryReportDto extends ReportDto{
     private String title;
+    private Long storyId;
 }

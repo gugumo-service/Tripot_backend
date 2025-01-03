@@ -168,6 +168,7 @@ public class ReportService {
                     .reportStatus(r.getReportStatus())
                     .reportReason(r.getReportReason().getName())
                     .title(r.getTitle())
+                    .storyId(r.getStoryId())
                     .build();
         } else if (r.getReportType().equals(ReportType.COMMENT)) {
             result = CommentReportDto.builder()
