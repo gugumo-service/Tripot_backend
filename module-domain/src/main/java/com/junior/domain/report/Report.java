@@ -67,7 +67,7 @@ public class Report extends BaseEntity {
         if (reportType.equals(ReportType.STORY)) {
             this.story.deleteStory();
         } else if (reportType.equals(ReportType.COMMENT)) {
-            this.comment.deleteComment(true);
+            this.comment.deleteComment();
         } else {
             throw new ReportException(StatusCode.REPORT_NOT_VALID);
         }
