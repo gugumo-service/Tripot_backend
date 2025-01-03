@@ -23,6 +23,8 @@ public enum StatusCode {
     STORY_BAD_REQUEST(500, "STORY-ERR-0002", "잘못된 파라미터"),
     STORY_READ_SUCCESS(200, "STORY-SUCCESS-0001", "스토리 불러오기 성공"),
     STORY_NOT_PERMISSION(400, "STORY-ERR-0003", "권한이 없는 스토리"),
+    RECOMMENDED_CITY_SUCCESS(200, "RECOMMENDED-SUCCESS-001", "추천 도시 성공"),
+    RECOMMENDED_STORIES_SUCCESS(200, "RECOMMENDED-SUCCESS-002", "추천 스토리 성공"),
 
     // like 관련 예외
     LIKE_NOT_FOUND(400, "LIKE-ERR-0001", "좋아요 조회 실패"),
@@ -30,6 +32,9 @@ public enum StatusCode {
 
     // comment 관련 예외
     COMMENT_CREATE_SUCCESS(200, "COMMENT-SUCCESS-0001", "댓글 저장 성공"),
+    COMMENT_READ_SUCCESS(200, "COMMENT-SUCCESS-0002", "댓글 불러오기 성공"),
+    COMMENT_EDIT_SUCCESS(200, "COMMENT-SUCCESS-0003", "댓글 수정 성공"),
+    COMMENT_DELETE_SUCCESS(200, "COMMENT-SUCCESS-0004", "댓글 삭제 성공"),
     COMMENT_NOT_FOUND(400, "COMMENT-ERR-0001", "댓글 불러오기 실패"),
 
     //s3 관련 예외

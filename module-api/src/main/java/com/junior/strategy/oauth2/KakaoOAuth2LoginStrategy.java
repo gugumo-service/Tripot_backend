@@ -22,6 +22,7 @@ public class KakaoOAuth2LoginStrategy implements OAuth2MemberStrategy {
     @Value("${kakao.client-secret}")
     private String secretKey;
     private final String KAKAO_REDIRECT_URI = "http://54.180.139.123:8080/api/v1/login/oauth2/kakao";
+//    private final String KAKAO_REDIRECT_URI = "http://localhost:8080/api/v1/login/oauth2/kakao";
     private final String KAUTH_TOKEN_URL_HOST = "https://kauth.kakao.com";
     private final String KAUTH_USER_URL_HOST = "https://kapi.kakao.com";
 

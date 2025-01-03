@@ -1,4 +1,4 @@
-package com.junior.domain.repository.story;
+package com.junior.repository.story;
 
 import com.junior.TestConfig;
 import com.junior.domain.member.Member;
@@ -125,11 +125,11 @@ class StoryCustomRepositoryImplTest {
                 .isHidden(true)
                 .build();
 
-        Story findStory = storyRepository.findStoryByIdAndMember(1L, member);
+        Story findStory = storyRepository.findStoryByIdAndMember(1L, member).orElseThrow();
 
         findStory.updateStory(createStoryDto);
 
-        Story editStory = storyRepository.findStoryByIdAndMember(1L, member);
+        Story editStory = storyRepository.findStoryByIdAndMember(1L, member).orElseThrow();
 
         Assertions.assertThat(editStory.getTitle()).isEqualTo("editStory");
         Assertions.assertThat(editStory.getContent()).isEqualTo("editContent");
@@ -239,11 +239,11 @@ class StoryCustomRepositoryImplTest {
 
         Pageable pageable = PageRequest.of(0, 3);
 
-        Slice<ResponseStoryListDto> stories = storyRepository.findStoriesByMemberAndCityAndSearch(null, pageable, member, "city", "title");
+        Slice<ResponseStoryListDto> stories = storyRepository.findStoriesByMemberAndCityAndSearch(null, pageable, member, null, "filter");
         List<ResponseStoryListDto> contents = stories.getContent();
 
         Assertions.assertThat(contents.size()).isEqualTo(1);
-        Assertions.assertThat(contents.get(0).title()).isEqualTo("title");
+        Assertions.assertThat(contents.get(0).title()).isEqualTo("filterTitle");
 
         Slice<ResponseStoryListDto> stories1 = storyRepository.findStoriesByMemberAndCityAndSearch(null, pageable, member, "city", null);
         List<ResponseStoryListDto> contents1 = stories1.getContent();

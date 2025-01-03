@@ -3,12 +3,13 @@ package com.junior.domain.like;
 import com.junior.domain.member.Member;
 import com.junior.domain.story.Story;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 @Entity(name = "likes")
 @Builder
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Like {
 
     @Id

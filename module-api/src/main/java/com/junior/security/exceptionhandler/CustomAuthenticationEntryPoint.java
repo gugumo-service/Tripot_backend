@@ -39,6 +39,4 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
             e.printStackTrace();
         }
     }
-
-
 }

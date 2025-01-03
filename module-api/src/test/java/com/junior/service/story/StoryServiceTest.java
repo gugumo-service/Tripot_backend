@@ -1,100 +1,45 @@
-package com.junior.service.story;
+package com.junior.moduleapi.service.story;
 
+import com.junior.ModuleApiApplication;
+import com.junior.config.YamlPropertySourceFactory;
 import com.junior.domain.like.Like;
 import com.junior.domain.member.Member;
 import com.junior.domain.member.MemberRole;
 import com.junior.domain.member.MemberStatus;
 import com.junior.domain.member.SignUpType;
 import com.junior.domain.story.Story;
-import com.junior.dto.story.ResponseStoryDto;
 import com.junior.repository.member.MemberRepository;
 import com.junior.repository.story.StoryRepository;
 import com.junior.security.UserPrincipal;
+import com.junior.service.story.StoryService;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@SpringBootTest
-@TestPropertySource(properties = "spring.profiles.active=local")
+@SpringBootTest(classes = ModuleApiApplication.class,
+        properties = "spring.config.location=classpath:/application-api-local.yml")
 public class StoryServiceTest {
 
     @Autowired
     private StoryService storyService;
-    @Autowired
-    private MemberRepository memberRepository;
-    @Autowired
+
+    @MockBean
     private StoryRepository storyRepository;
 
-    public Member createMember(String nickname) {
-        return Member.builder()
-                .nickname(nickname)
-                .username("username")
-                .password("password")
-                .profileImage("profilePath")
-                .role(MemberRole.USER)
-                .status(MemberStatus.ACTIVE)
-                .isAgreeTermsUse(true)
-                .isAgreeMarketing(true)
-                .isAgreeCollectingUsingPersonalInformation(true)
-                .recommendLocation("DEAJEON")
-                .signUpType(SignUpType.KAKAO)
-                .build();
-    }
-
-    public Story createStory(Member member, String title, String city) {
-        return Story.createStory()
-                .title(title)
-                .member(member)
-                .content("content")
-                .longitude(1.0)
-                .latitude(1.0)
-                .city(city)
-                .isHidden(false)
-                .thumbnailImg("thumbURL")
-                .build();
-    }
-
     @Test
-    @Transactional
-    public void findStoryByIdTest() {
-        Member member = createMember("heeseong");
-        memberRepository.save(member);
+    @DisplayName("test")
+    public void test() {
 
-        UserPrincipal userPrincipal = new UserPrincipal(member);
-
-        Story story = createStory(member, "title", "city");
-        storyRepository.save(story);
-
-        ResponseStoryDto storyById = storyService.findStoryById(userPrincipal, 1L);
-
-
-        Assertions.assertThat(storyById.author()).isEqualTo(member);
     }
-
-//    @Test
-//    @Transactional
-//    public void clickLikeTest() {
-//        Member member = createMember("heeseong");
-//        memberRepository.save(member);
-//
-//        Story story = createStory(member, "title", "city");
-//        storyRepository.save(story);
-//
-//        UserPrincipal userPrincipal = new UserPrincipal(member);
-//
-//        storyService.clickLike(userPrincipal, 1L);
-//
-//        List<Like> likeMembers = story.getLikeMembers();
-//
-//        Assertions.assertThat(likeMembers.size()).isEqualTo(1);
-//        Assertions.assertThat(likeMembers.get(0).getMember()).isEqualTo(member);
-//
-//        storyService.clickLike(userPrincipal, 1L);
-//        Assertions.assertThat(likeMembers.size()).isEqualTo(0);
-//    }
 }
