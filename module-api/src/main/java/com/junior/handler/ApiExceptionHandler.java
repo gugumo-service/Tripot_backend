@@ -55,7 +55,7 @@ public class ApiExceptionHandler {
     }
 
     @ExceptionHandler(QnaException.class)
-    protected ResponseEntity<CommonResponse<Object>> handleNoticeException(QnaException e) {
+    protected ResponseEntity<CommonResponse<Object>> handleQnaException(QnaException e) {
         log.warn("{} : {}", Thread.currentThread().getStackTrace()[1].getMethodName(), e.getMessage());
 //        final ErrorResponse response = ErrorResponse.of(e.getStatusCode());
 //        return ResponseEntity.status(e.getStatusCode().getHttpCode()).body(response);
@@ -64,7 +64,7 @@ public class ApiExceptionHandler {
     }
 
     @ExceptionHandler(ReportException.class)
-    protected ResponseEntity<CommonResponse<Object>> handleNoticeException(ReportException e) {
+    protected ResponseEntity<CommonResponse<Object>> handleReportException(ReportException e) {
         log.warn("{} : {}", Thread.currentThread().getStackTrace()[1].getMethodName(), e.getMessage());
 //        final ErrorResponse response = ErrorResponse.of(e.getStatusCode());
 //        return ResponseEntity.status(e.getStatusCode().getHttpCode()).body(response);

@@ -15,12 +15,10 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 public interface ReportApi {
-
 
 
     @Operation(summary = "신고내역 업로드", description = "게시글 및 댓글을 신고합니다.",
@@ -37,21 +35,10 @@ public interface ReportApi {
                                                     }
                                                     """
                                     ))),
-                    @ApiResponse(responseCode = "400", description = "Bad Request",
+                    @ApiResponse(responseCode = "202", description = "본인 글은 신고할 수 없음",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = CommonResponse.class),
-                                    examples = {
-                                            @ExampleObject(name = "유효한 신고 유형이 아님",
-                                                    value = """
-                                                    {
-                                                        "customCode": "REPORT-ERR-001",
-                                                        "customMessage": "유효한 신고 유형이 아님",
-                                                        "status": false,
-                                                        "data": null
-                                                    }
-                                                    """
-                                            ),
-                                            @ExampleObject(name = "본인 글은 신고할 수 없음",
-                                                    value = """
+                                    examples = @ExampleObject(name = "본인 글은 신고할 수 없음",
+                                            value = """
                                                     {
                                                         "customCode": "REPORT-ERR-004",
                                                         "customMessage": "본인 글은 신고할 수 없음",
@@ -59,36 +46,49 @@ public interface ReportApi {
                                                         "data": null
                                                     }
                                                     """
+                                    ))),
+                    @ApiResponse(responseCode = "400", description = "Bad Request",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CommonResponse.class),
+                                    examples = {
+                                            @ExampleObject(name = "유효한 신고 유형이 아님",
+                                                    value = """
+                                                            {
+                                                                "customCode": "REPORT-ERR-001",
+                                                                "customMessage": "유효한 신고 유형이 아님",
+                                                                "status": false,
+                                                                "data": null
+                                                            }
+                                                            """
                                             ),
                                             @ExampleObject(name = "중복신고할 수 없음",
                                                     value = """
-                                                    {
-                                                        "customCode": "REPORT-ERR-005",
-                                                        "customMessage": "중복신고할 수 없음",
-                                                        "status": false,
-                                                        "data": null
-                                                    }
-                                                    """
+                                                            {
+                                                                "customCode": "REPORT-ERR-005",
+                                                                "customMessage": "중복신고할 수 없음",
+                                                                "status": false,
+                                                                "data": null
+                                                            }
+                                                            """
                                             ),
                                             @ExampleObject(name = "스토리를 찾을 수 없음",
                                                     value = """
-                                                    {
-                                                        "customCode": "STORY-ERR-0001",
-                                                        "customMessage": "스토리 불러오기 실패",
-                                                        "status": false,
-                                                        "data": null
-                                                    }
-                                                    """
+                                                            {
+                                                                "customCode": "STORY-ERR-0001",
+                                                                "customMessage": "스토리 불러오기 실패",
+                                                                "status": false,
+                                                                "data": null
+                                                            }
+                                                            """
                                             ),
                                             @ExampleObject(name = "댓글을 찾을 수 없음",
                                                     value = """
-                                                    {
-                                                        "customCode": "COMMENT-ERR-0001",
-                                                        "customMessage": "댓글 불러오기 실패",
-                                                        "status": false,
-                                                        "data": null
-                                                    }
-                                                    """
+                                                            {
+                                                                "customCode": "COMMENT-ERR-0001",
+                                                                "customMessage": "댓글 불러오기 실패",
+                                                                "status": false,
+                                                                "data": null
+                                                            }
+                                                            """
                                             ),
                                     })),
                     @ApiResponse(responseCode = "401", description = "인증 실패",
@@ -96,13 +96,13 @@ public interface ReportApi {
                                     examples = {
                                             @ExampleObject(name = "유효하지 않은 회원",
                                                     value = """
-                                                    {
-                                                        "customCode": "MEMBER-ERR-001",
-                                                        "customMessage": "유효하지 않은 회원",
-                                                        "status": false,
-                                                        "data": null
-                                                    }
-                                                    """
+                                                            {
+                                                                "customCode": "MEMBER-ERR-001",
+                                                                "customMessage": "유효하지 않은 회원",
+                                                                "status": false,
+                                                                "data": null
+                                                            }
+                                                            """
                                             )
                                     }))
 
@@ -158,16 +158,16 @@ public interface ReportApi {
                                     examples = {
                                             @ExampleObject(name = "유효한 신고 타입이 아님",
                                                     value = """
-                                                    {
-                                                        "customCode": "REPORT-ERR-003",
-                                                        "customMessage": "유효한 신고 타입이 아님",
-                                                        "status": false,
-                                                        "data": null
-                                                    }
-                                                    """
+                                                            {
+                                                                "customCode": "REPORT-ERR-003",
+                                                                "customMessage": "유효한 신고 타입이 아님",
+                                                                "status": false,
+                                                                "data": null
+                                                            }
+                                                            """
                                             )
                                     }))
-    })
+            })
     public <T extends ReportDto> ResponseEntity<CommonResponse<PageCustom<T>>> findReport(@PageableDefault(size = 15, page = 1) Pageable pageable,
                                                                                           @RequestParam(name = "report_type", defaultValue = "ALL") String reportStatus);
 
@@ -228,4 +228,4 @@ public interface ReportApi {
                                     )))
             })
     public ResponseEntity<CommonResponse<Object>> deleteReportTarget(@PathVariable("report_id") Long reportId);
-    }
+}
