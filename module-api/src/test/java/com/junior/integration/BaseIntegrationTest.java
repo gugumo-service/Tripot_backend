@@ -7,7 +7,6 @@ import com.junior.domain.member.MemberStatus;
 import com.junior.domain.member.SignUpType;
 import com.junior.domain.story.Comment;
 import com.junior.domain.story.Story;
-import com.junior.dto.story.CreateStoryDto;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
@@ -26,9 +25,9 @@ import java.util.List;
 @Transactional
 @Import(SecurityConfig.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class IntegrationControllerTest {
+public class BaseIntegrationTest {
 
-    Member createPreactiveTestMember() {
+    protected Member createPreactiveTestMember() {
         return Member.builder()
                 .id(1L)
                 .nickname("테스트비활성화닉네임")
@@ -40,7 +39,7 @@ public class IntegrationControllerTest {
                 .build();
     }
 
-    Member createActiveTestMember() {
+    protected Member createActiveTestMember() {
         return Member.builder()
                 .id(2L)
                 .nickname("테스트사용자닉네임")
@@ -53,7 +52,7 @@ public class IntegrationControllerTest {
                 .build();
     }
 
-    Member createAdmin() {
+    protected Member createAdmin() {
         return Member.builder()
                 .id(3L)
                 .nickname("테스트관리자닉네임")
@@ -66,7 +65,7 @@ public class IntegrationControllerTest {
                 .build();
     }
 
-    Member createActiveTestMember2() {
+    protected Member createActiveTestMember2() {
         return Member.builder()
                 .id(4L)
                 .nickname("테스트사용자닉네임2")
@@ -79,7 +78,7 @@ public class IntegrationControllerTest {
                 .build();
     }
 
-    MockMultipartFile createMockMultipartFile() {
+    protected MockMultipartFile createMockMultipartFile() {
         MockMultipartFile profileImg = new MockMultipartFile(
                 "profileimg",
                 "profiles.png",
@@ -91,7 +90,7 @@ public class IntegrationControllerTest {
 
     }
 
-    Story createStory(Member member) {
+    protected Story createStory(Member member) {
         List<String> imgUrls = new ArrayList<>();
         imgUrls.add("imgUrl1");
         imgUrls.add("imgUrl2");
@@ -112,7 +111,7 @@ public class IntegrationControllerTest {
     }
 
 
-    Comment createComment(Member member, Story story) {
+    protected Comment createComment(Member member, Story story) {
 
         return Comment.builder()
                 .id(1L)
