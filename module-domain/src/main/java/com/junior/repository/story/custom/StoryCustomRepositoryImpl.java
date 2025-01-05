@@ -12,13 +12,16 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
+import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -272,5 +275,30 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
         boolean hasNext = isHaveNextStoryList(stories, pageable);
 
         return new SliceImpl<>(stories, pageable, hasNext);
+    }
+
+
+    /**
+     * 관리자 페이지에서 스토리의 리스트를 페이지로 반환
+     * @param pageable
+     * @param keyword
+     * @return
+     */
+    @Override
+    public Page<ResponseStoryListDto> findAllStories(Pageable pageable, String keyword) {
+
+        List<ResponseStoryListDto> result = query.select(createQResponseStoryListDto())
+                .from(story)
+                .where(getSearchCondition(keyword))
+                .orderBy(story.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> count = query.select(story.count())
+                .from(story)
+                .where(getSearchCondition(keyword));
+
+        return PageableExecutionUtils.getPage(result, pageable, count::fetchOne);
     }
 }

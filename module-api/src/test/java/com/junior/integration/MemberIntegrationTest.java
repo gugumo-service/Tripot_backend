@@ -6,13 +6,10 @@ import com.junior.controller.MemberController;
 import com.junior.domain.member.Member;
 import com.junior.domain.member.MemberStatus;
 import com.junior.dto.member.ActivateMemberDto;
-import com.junior.dto.member.MemberInfoDto;
 import com.junior.dto.member.UpdateNicknameDto;
 import com.junior.repository.member.MemberRepository;
-import com.junior.security.UserPrincipal;
 import com.junior.security.WithMockCustomPreactiveUser;
 import com.junior.security.WithMockCustomUser;
-import com.junior.service.s3.S3Service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,10 +18,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -39,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-public class MemberIntegrationTest extends IntegrationControllerTest {
+public class MemberIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
     private MemberController memberController;

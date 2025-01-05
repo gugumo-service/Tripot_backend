@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -350,4 +351,109 @@ class StoryCustomRepositoryImplTest {
         Assertions.assertThat(storyCntByCity.get(3).city()).isEqualTo("서울");
         Assertions.assertThat(storyCntByCity.get(3).cnt()).isEqualTo(2);
     }
+
+    @Test
+    @DisplayName("키워드 검색을 통한 페이징된 스토리 리스트를 불러올 수 있어야 한다.")
+    public void findAllStoriesAdmin() throws Exception {
+        //given
+        Member member = createMember("nickname");
+        memberRepository.save(member);
+
+        //총 18개의 데이터 저장
+        for (int i = 0; i < 3; i++) {
+            Story story1 = Story.createStory()
+                    .title("filterTitle")
+                    .member(member)
+                    .content("filterContent")
+                    .longitude(-10.0)
+                    .latitude(-10.0)
+                    .city("서울")
+                    .isHidden(true)
+                    .thumbnailImg("thumbURL")
+                    .build();
+
+            Story story2 = Story.createStory()
+                    .title("filterTitle")
+                    .member(member)
+                    .content("filterContent")
+                    .longitude(-10.0)
+                    .latitude(-10.0)
+                    .city("대전")
+                    .isHidden(true)
+                    .thumbnailImg("thumbURL")
+                    .build();
+
+            Story story3 = Story.createStory()
+                    .title("filterTitle")
+                    .member(member)
+                    .content("filterContent")
+                    .longitude(-10.0)
+                    .latitude(-10.0)
+                    .city("대구")
+                    .isHidden(true)
+                    .thumbnailImg("thumbURL")
+                    .build();
+
+            Story story4 = Story.createStory()
+                    .title("filterTitle")
+                    .member(member)
+                    .content("filterContent")
+                    .longitude(-10.0)
+                    .latitude(-10.0)
+                    .city("부산")
+                    .isHidden(true)
+                    .thumbnailImg("thumbURL")
+                    .build();
+
+            Story story5 = Story.createStory()
+                    .title("filterTitle")
+                    .member(member)
+                    .content("filterContent")
+                    .longitude(-10.0)
+                    .latitude(-10.0)
+                    .city("서울")
+                    .isHidden(true)
+                    .thumbnailImg("thumbURL")
+                    .build();
+
+            Story story6 = Story.createStory()
+                    .title("filterTitle")
+                    .member(member)
+                    .content("filterContent")
+                    .longitude(-10.0)
+                    .latitude(-10.0)
+                    .city("대전")
+                    .isHidden(true)
+                    .thumbnailImg("thumbURL")
+                    .build();
+
+            storyRepository.save(story1);
+            storyRepository.save(story2);
+            storyRepository.save(story3);
+            storyRepository.save(story4);
+            storyRepository.save(story5);
+            storyRepository.save(story6);
+        }
+
+        PageRequest pageRequest = PageRequest.of(0, 15);
+
+        //when
+        Page<ResponseStoryListDto> resultPage = storyRepository.findAllStories(pageRequest, "");
+
+        //then
+        List<ResponseStoryListDto> content = resultPage.getContent();
+
+        Assertions.assertThat(content.size()).isEqualTo(15);
+
+
+        //id가 가장 높은 두 개의 스토리에 대해서 확인
+        Assertions.assertThat(content.get(0).city()).isEqualTo("대전");
+        Assertions.assertThat(content.get(0).storyId()).isEqualTo(18);
+        Assertions.assertThat(content.get(1).city()).isEqualTo("서울");
+        Assertions.assertThat(content.get(1).storyId()).isEqualTo(17);
+
+
+    }
+
+
 }

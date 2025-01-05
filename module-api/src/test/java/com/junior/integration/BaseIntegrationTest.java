@@ -97,7 +97,6 @@ public class BaseIntegrationTest {
         imgUrls.add("imgUrl3");
 
         return Story.builder()
-                .id(1L)
                 .title("testStoryTitle")
                 .member(member)
                 .content("testStoryContent")
@@ -114,7 +113,6 @@ public class BaseIntegrationTest {
     protected Comment createComment(Member member, Story story) {
 
         return Comment.builder()
-                .id(1L)
                 .member(member)
                 .content("content")
                 .story(story)

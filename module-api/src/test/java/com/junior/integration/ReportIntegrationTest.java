@@ -33,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-public class ReportIntegrationTest extends IntegrationControllerTest {
+public class ReportIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
     private ReportController reportController;
