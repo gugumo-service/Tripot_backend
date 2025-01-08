@@ -15,7 +15,6 @@ import static com.junior.exception.StatusCode.REISSUE_SUCCESS;
 
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "Reissue")
 public class ReissueController implements ReissueApi {
 
     private final ReissueService reissueService;

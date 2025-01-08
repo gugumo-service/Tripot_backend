@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "OAuth2")
 public class OAuth2Controller implements OAuth2Api {
 
     private final OAuth2Service oAuth2Service;

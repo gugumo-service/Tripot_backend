@@ -17,7 +17,6 @@ import static com.junior.exception.StatusCode.*;
 
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "Member")
 public class MemberController implements MemberApi {
 
     private final MemberService memberService;
