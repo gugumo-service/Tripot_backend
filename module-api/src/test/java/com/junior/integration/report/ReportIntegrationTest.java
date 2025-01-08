@@ -169,7 +169,7 @@ public class ReportIntegrationTest extends BaseIntegrationTest {
         //then
         actions
                 .andDo(print())
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isAccepted())
                 .andExpect(jsonPath("$.customCode").value("REPORT-ERR-004"))
                 .andExpect(jsonPath("$.customMessage").value("본인 글은 신고할 수 없음"))
                 .andExpect(jsonPath("$.status").value(false))
