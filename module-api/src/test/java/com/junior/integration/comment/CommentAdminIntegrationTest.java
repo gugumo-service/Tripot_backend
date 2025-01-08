@@ -1,10 +1,11 @@
-package com.junior.integration;
+package com.junior.integration.comment;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.junior.domain.member.Member;
 import com.junior.domain.story.Comment;
 import com.junior.domain.story.Story;
+import com.junior.integration.BaseIntegrationTest;
 import com.junior.repository.comment.CommentRepository;
 import com.junior.repository.member.MemberRepository;
 import com.junior.repository.story.StoryRepository;

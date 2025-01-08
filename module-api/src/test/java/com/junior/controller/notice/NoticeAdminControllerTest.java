@@ -1,17 +1,17 @@
-package com.junior.controller;
+package com.junior.controller.notice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.junior.config.SecurityConfig;
+import com.junior.security.WithMockCustomAdmin;
+import com.junior.dto.notice.CreateNoticeDto;
 import com.junior.dto.notice.NoticeAdminDto;
-import com.junior.dto.qna.CreateQnaDto;
-import com.junior.dto.qna.QnaAdminDto;
-import com.junior.dto.qna.QnaDetailDto;
-import com.junior.dto.qna.UpdateQnaDto;
+import com.junior.dto.notice.NoticeDetailDto;
+import com.junior.dto.notice.UpdateNoticeDto;
 import com.junior.page.PageCustom;
 import com.junior.security.JwtUtil;
-import com.junior.security.WithMockCustomAdmin;
 import com.junior.security.exceptionhandler.CustomAuthenticationEntryPoint;
-import com.junior.service.qna.QnaAdminService;
+import com.junior.service.notice.NoticeAdminService;
+
 import com.junior.service.security.UserDetailsServiceImpl;
 import com.junior.util.RedisUtil;
 import org.junit.jupiter.api.DisplayName;
@@ -40,10 +40,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@WebMvcTest(QnaAdminController.class)
+@WebMvcTest(NoticeAdminController.class)
 @MockBean(JpaMetamodelMappingContext.class)     //JPA 관련 빈들을 mock으로 등록
 @Import(SecurityConfig.class)
-class QnaAdminControllerTest {
+class NoticeAdminControllerTest {
 
     @MockBean
     private RedisUtil redisUtil;
@@ -64,23 +64,23 @@ class QnaAdminControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private QnaAdminService qnaAdminService;
+    private NoticeAdminService noticeAdminService;
 
     @InjectMocks
-    private QnaAdminController qnaAdminController;
+    private NoticeAdminController noticeAdminController;
 
     @Test
-    @DisplayName("Q&A 저장 응답이 반환되어야 함")
+    @DisplayName("공지 저장 응답이 반환되어야 함")
     @WithMockCustomAdmin
-    void saveQna() throws Exception {
+    void saveNotice() throws Exception {
 
         //given
-        CreateQnaDto createQnaDto = new CreateQnaDto("question", "answer");
-        String content = objectMapper.writeValueAsString(createQnaDto);
+        CreateNoticeDto createNoticeDto = new CreateNoticeDto("title", "content");
+        String content = objectMapper.writeValueAsString(createNoticeDto);
 
         //when
         ResultActions actions = mockMvc.perform(
-                post("/api/v1/admin/qna")
+                post("/api/v1/admin/notices")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content)
@@ -91,8 +91,8 @@ class QnaAdminControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.customCode").value("Q&A-SUCCESS-001"))
-                .andExpect(jsonPath("$.customMessage").value("Q&A 업로드 성공"))
+                .andExpect(jsonPath("$.customCode").value("NOTICE-SUCCESS-001"))
+                .andExpect(jsonPath("$.customMessage").value("공지사항 업로드 성공"))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
 
@@ -100,25 +100,24 @@ class QnaAdminControllerTest {
     }
 
     @Test
-    @DisplayName("Q&A 조회 응답이 반환되어야 함")
+    @DisplayName("공지 조회 응답이 반환되어야 함")
     @WithMockCustomAdmin
-    void findQna() throws Exception {
+    void findNotice() throws Exception {
 
         //given
         Pageable resultPageable = PageRequest.of(0, 15);
         String q = "";
 
-        List<QnaAdminDto> result = new ArrayList<>();
+        List<NoticeAdminDto> result = new ArrayList<>();
 
-        result.add(new QnaAdminDto(1L, "question"));
+        result.add(new NoticeAdminDto(1L, "title"));
 
 
-        given(qnaAdminService.findQna(anyString(), any(Pageable.class)))
-                .willReturn(new PageCustom<>(result, resultPageable, result.size()));
+        given(noticeAdminService.findNotice(anyString(), any(Pageable.class))).willReturn(new PageCustom<>(result, resultPageable, result.size()));
 
         //when
         ResultActions actions = mockMvc.perform(
-                get("/api/v1/admin/qna")
+                get("/api/v1/admin/notices")
                         .accept(MediaType.APPLICATION_JSON)
         );
 
@@ -126,14 +125,11 @@ class QnaAdminControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("Q&A-SUCCESS-004"))
-                .andExpect(jsonPath("$.customMessage").value("Q&A 조회 성공"))
+                .andExpect(jsonPath("$.customCode").value("NOTICE-SUCCESS-004"))
+                .andExpect(jsonPath("$.customMessage").value("공지사항 조회 성공"))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data.pageable.number").value(1))
-                .andExpect(jsonPath("$.data.content[0].question").value("question"));
-
-
-
+                .andExpect(jsonPath("$.data.content[0].title").value("title"));
 
 
 
@@ -141,23 +137,23 @@ class QnaAdminControllerTest {
     }
 
     @Test
-    @DisplayName("Q&A 세부내용 조회 응답이 반환되어야 함")
+    @DisplayName("공지 세부내용 조회 응답이 반환되어야 함")
     @WithMockCustomAdmin
-    void findQnaDetail() throws Exception {
+    void findNoticeDetail() throws Exception {
 
         //given
 
-        QnaDetailDto qnaDetailDto = QnaDetailDto.builder()
+        NoticeDetailDto noticeDetailDto = NoticeDetailDto.builder()
                 .id(1L)
-                .question("question")
-                .answer("answer")
+                .title("title")
+                .content("content")
                 .build();
 
-        given(qnaAdminService.findQnaDetail(anyLong())).willReturn(qnaDetailDto);
+        given(noticeAdminService.findNoticeDetail(anyLong())).willReturn(noticeDetailDto);
 
         //when
         ResultActions actions = mockMvc.perform(
-                get("/api/v1/admin/qna/{qna_id}", 1L)
+                get("/api/v1/admin/notices/{notice_id}", 1L)
                         .accept(MediaType.APPLICATION_JSON)
         );
 
@@ -165,11 +161,11 @@ class QnaAdminControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("Q&A-SUCCESS-005"))
-                .andExpect(jsonPath("$.customMessage").value("Q&A 세부정보 조회 성공"))
+                .andExpect(jsonPath("$.customCode").value("NOTICE-SUCCESS-005"))
+                .andExpect(jsonPath("$.customMessage").value("공지사항 세부정보 조회 성공"))
                 .andExpect(jsonPath("$.status").value(true))
-                .andExpect(jsonPath("$.data.question").value("question"))
-                .andExpect(jsonPath("$.data.answer").value("answer"));
+                .andExpect(jsonPath("$.data.title").value("title"))
+                .andExpect(jsonPath("$.data.content").value("content"));
 
 
 
@@ -180,18 +176,18 @@ class QnaAdminControllerTest {
 
 
     @Test
-    @DisplayName("Q&A 수정 응답이 반환되어야 함")
+    @DisplayName("공지 수정 응답이 반환되어야 함")
     @WithMockCustomAdmin
-    void updateQna() throws Exception {
+    void updateNotice() throws Exception {
 
         //given
-        Long qnaId = 1L;
-        UpdateQnaDto updateQnaDto = new UpdateQnaDto("new question", "new answer");
-        String content = objectMapper.writeValueAsString(updateQnaDto);
+        Long noticeId = 1L;
+        UpdateNoticeDto updateNoticeDto = new UpdateNoticeDto("new title", "new content");
+        String content = objectMapper.writeValueAsString(updateNoticeDto);
 
         //when
         ResultActions actions = mockMvc.perform(
-                patch("/api/v1/admin/qna/{qna_id}", qnaId)
+                patch("/api/v1/admin/notices/{notice_id}", noticeId)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content)
@@ -201,23 +197,23 @@ class QnaAdminControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("Q&A-SUCCESS-003"))
-                .andExpect(jsonPath("$.customMessage").value("Q&A 수정 성공"))
+                .andExpect(jsonPath("$.customCode").value("NOTICE-SUCCESS-003"))
+                .andExpect(jsonPath("$.customMessage").value("공지사항 수정 성공"))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
     }
 
     @Test
-    @DisplayName("Q&A 삭제 응답이 반환되어야 함")
+    @DisplayName("공지사항 삭제 응답이 반환되어야 함")
     @WithMockCustomAdmin
-    void deleteQna() throws Exception {
+    void deleteNotice() throws Exception {
 
         //given
-        Long qnaId = 1L;
+        Long noticeId = 1L;
 
         //when
         ResultActions actions = mockMvc.perform(
-                delete("/api/v1/admin/qna/{qna_id}", qnaId)
+                delete("/api/v1/admin/notices/{notice_id}", noticeId)
                         .accept(MediaType.APPLICATION_JSON)
         );
 
@@ -225,8 +221,8 @@ class QnaAdminControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("Q&A-SUCCESS-002"))
-                .andExpect(jsonPath("$.customMessage").value("Q&A 삭제 성공"))
+                .andExpect(jsonPath("$.customCode").value("NOTICE-SUCCESS-002"))
+                .andExpect(jsonPath("$.customMessage").value("공지사항 삭제 성공"))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
     }

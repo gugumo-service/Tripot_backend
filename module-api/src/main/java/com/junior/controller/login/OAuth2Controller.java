@@ -1,4 +1,4 @@
-package com.junior.controller;
+package com.junior.controller.login;
 
 import com.junior.controller.api.OAuth2Api;
 import com.junior.dto.jwt.RefreshTokenDto;
@@ -7,7 +7,6 @@ import com.junior.dto.oauth2.OAuth2Provider;
 import com.junior.exception.StatusCode;
 import com.junior.response.CommonResponse;
 import com.junior.service.member.OAuth2Service;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

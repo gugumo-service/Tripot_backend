@@ -1,12 +1,13 @@
-package com.junior.integration;
+package com.junior.integration.member;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.junior.controller.MemberController;
+import com.junior.controller.member.MemberController;
 import com.junior.domain.member.Member;
 import com.junior.domain.member.MemberStatus;
 import com.junior.dto.member.ActivateMemberDto;
 import com.junior.dto.member.UpdateNicknameDto;
+import com.junior.integration.BaseIntegrationTest;
 import com.junior.repository.member.MemberRepository;
 import com.junior.security.WithMockCustomPreactiveUser;
 import com.junior.security.WithMockCustomUser;

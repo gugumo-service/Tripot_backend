@@ -1,5 +1,7 @@
-package com.junior.controller;
+package com.junior.controller.comment;
 
+import com.junior.controller.BaseControllerTest;
+import com.junior.controller.CommentAdminController;
 import com.junior.dto.comment.CommentAdminDto;
 import com.junior.page.PageCustom;
 import com.junior.security.WithMockCustomAdmin;
@@ -21,13 +23,12 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(CommentAdminController.class)
-class CommentAdminControllerTest extends BaseControllerTest{
+class CommentAdminControllerTest extends BaseControllerTest {
 
     @MockBean
     private CommentAdminService commentAdminService;

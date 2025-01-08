@@ -1,4 +1,4 @@
-package com.junior.integration;
+package com.junior.integration.report;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.junior.controller.report.ReportController;
@@ -10,6 +10,7 @@ import com.junior.domain.report.ReportType;
 import com.junior.domain.story.Comment;
 import com.junior.domain.story.Story;
 import com.junior.dto.report.CreateReportDto;
+import com.junior.integration.BaseIntegrationTest;
 import com.junior.repository.comment.CommentRepository;
 import com.junior.repository.member.MemberRepository;
 import com.junior.repository.report.ReportRepository;

@@ -1,4 +1,4 @@
-package com.junior.controller;
+package com.junior.controller.member;
 
 import com.junior.controller.api.MemberApi;
 import com.junior.dto.member.ActivateMemberDto;
@@ -7,7 +7,6 @@ import com.junior.dto.member.UpdateNicknameDto;
 import com.junior.response.CommonResponse;
 import com.junior.security.UserPrincipal;
 import com.junior.service.member.MemberService;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
