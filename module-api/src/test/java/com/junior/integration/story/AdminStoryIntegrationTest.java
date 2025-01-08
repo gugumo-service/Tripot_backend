@@ -78,7 +78,8 @@ public class AdminStoryIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.customMessage").value("스토리 불러오기 성공"))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data.pageable.number").value(2))
-                .andExpect(jsonPath("$.data.content[0].storyId").value(3));
+                .andExpect(jsonPath("$.data.content[0].storyId").value(3))
+                .andExpect(jsonPath("$.data.content[0].isDeleted").value(false));
 
 
     }
@@ -105,7 +106,8 @@ public class AdminStoryIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.customCode").value("STORY-SUCCESS-0001"))
                 .andExpect(jsonPath("$.customMessage").value("스토리 불러오기 성공"))
                 .andExpect(jsonPath("$.status").value(true))
-                .andExpect(jsonPath("$.data.id").value(10));
+                .andExpect(jsonPath("$.data.id").value(10))
+                .andExpect(jsonPath("$.data.isDeleted").value(false));
 
 
     }

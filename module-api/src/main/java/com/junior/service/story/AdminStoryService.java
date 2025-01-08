@@ -2,6 +2,7 @@ package com.junior.service.story;
 
 import com.junior.domain.story.Story;
 import com.junior.dto.story.AdminStoryDetailDto;
+import com.junior.dto.story.AdminStoryDto;
 import com.junior.dto.story.ResponseStoryListDto;
 import com.junior.exception.StatusCode;
 import com.junior.exception.StoryNotFoundException;
@@ -21,11 +22,11 @@ public class AdminStoryService {
 
     private final StoryRepository storyRepository;
 
-    public PageCustom<ResponseStoryListDto> findStory(Pageable pageable, String keyword) {
+    public PageCustom<AdminStoryDto> findStory(Pageable pageable, String keyword) {
 
         PageRequest pageRequest = PageRequest.of(pageable.getPageNumber() - 1, pageable.getPageSize());
 
-        Page<ResponseStoryListDto> result = storyRepository.findAllStories(pageRequest, keyword);
+        Page<AdminStoryDto> result = storyRepository.findAllStories(pageRequest, keyword);
 
         log.info("[{}] 관리자 스토리 조회 page: {}", Thread.currentThread().getStackTrace()[1].getMethodName(), pageable.getPageNumber());
 

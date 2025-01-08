@@ -2,6 +2,7 @@ package com.junior.controller.story;
 
 import com.junior.controller.BaseControllerTest;
 import com.junior.dto.story.AdminStoryDetailDto;
+import com.junior.dto.story.AdminStoryDto;
 import com.junior.dto.story.ResponseStoryListDto;
 import com.junior.page.PageCustom;
 import com.junior.security.WithMockCustomAdmin;
@@ -46,9 +47,9 @@ class AdminStoryControllerTest extends BaseControllerTest {
         //given
         PageRequest pageRequest = PageRequest.of(0, 15);
 
-        List<ResponseStoryListDto> storyDtos = new ArrayList<>();
+        List<AdminStoryDto> storyDtos = new ArrayList<>();
 
-        ResponseStoryListDto storyDto = ResponseStoryListDto.builder()
+        AdminStoryDto storyDto = AdminStoryDto.builder()
                 .thumbnailImg("thumbnail")
                 .storyId(1L)
                 .title("title")
@@ -56,6 +57,7 @@ class AdminStoryControllerTest extends BaseControllerTest {
                 .longitude(-10.0)
                 .latitude(10.0)
                 .city("서울")
+                .isDeleted(false)
                 .build();
 
         storyDtos.add(storyDto);
@@ -96,6 +98,7 @@ class AdminStoryControllerTest extends BaseControllerTest {
                 .likeCnt(3L)
                 .createDate(LocalDateTime.of(2025, 1, 1, 0, 0, 0))
                 .imgUrls(new ArrayList<>())
+                .isDeleted(true)
                 .build();
 
         given(adminStoryService.findStoryDetail(anyLong())).willReturn(storyDetailDto);
@@ -114,7 +117,8 @@ class AdminStoryControllerTest extends BaseControllerTest {
                 .andExpect(jsonPath("$.customMessage").value("스토리 불러오기 성공"))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data.likeCnt").value(3L))
-                .andExpect(jsonPath("$.data.city").value("서울"));
+                .andExpect(jsonPath("$.data.city").value("서울"))
+                .andExpect(jsonPath("$.data.isDeleted").value(true));
 
     }
 }

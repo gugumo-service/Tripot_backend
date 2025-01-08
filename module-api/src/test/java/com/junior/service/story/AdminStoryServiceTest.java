@@ -2,6 +2,7 @@ package com.junior.service.story;
 
 import com.junior.domain.story.Story;
 import com.junior.dto.story.AdminStoryDetailDto;
+import com.junior.dto.story.AdminStoryDto;
 import com.junior.dto.story.ResponseStoryListDto;
 import com.junior.page.PageCustom;
 import com.junior.repository.story.StoryRepository;
@@ -42,9 +43,9 @@ class AdminStoryServiceTest {
     void findStory() {
 
         //given
-        List<ResponseStoryListDto> storyDtos = new ArrayList<>();
+        List<AdminStoryDto> storyDtos = new ArrayList<>();
 
-        ResponseStoryListDto storyDto = ResponseStoryListDto.builder()
+        AdminStoryDto storyDto = AdminStoryDto.builder()
                 .thumbnailImg("thumbnail")
                 .storyId(1L)
                 .title("title")
@@ -52,6 +53,7 @@ class AdminStoryServiceTest {
                 .longitude(-10.0)
                 .latitude(10.0)
                 .city("서울")
+                .isDeleted(false)
                 .build();
 
         storyDtos.add(storyDto);
@@ -63,12 +65,13 @@ class AdminStoryServiceTest {
         given(storyRepository.findAllStories(any(Pageable.class), anyString())).willReturn(new PageImpl<>(storyDtos, afterPageRequest, storyDtos.size()));
 
         //when
-        PageCustom<ResponseStoryListDto> result = adminStoryService.findStory(beforePageRequest, "");
+        PageCustom<AdminStoryDto> result = adminStoryService.findStory(beforePageRequest, "");
 
         //then
-        List<ResponseStoryListDto> content = result.getContent();
+        List<AdminStoryDto> content = result.getContent();
 
         assertThat(content.get(0).city()).isEqualTo("서울");
+        assertThat(content.get(0).isDeleted()).isFalse();
 
     }
 
@@ -97,5 +100,6 @@ class AdminStoryServiceTest {
         //then
         assertThat(result.city()).isEqualTo("서울");
         assertThat(result.likeCnt()).isEqualTo(3L);
+        assertThat(result.isDeleted()).isFalse();
     }
 }

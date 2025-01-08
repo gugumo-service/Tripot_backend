@@ -1,6 +1,7 @@
 package com.junior.controller.story;
 
 import com.junior.dto.story.AdminStoryDetailDto;
+import com.junior.dto.story.AdminStoryDto;
 import com.junior.dto.story.ResponseStoryListDto;
 import com.junior.exception.StatusCode;
 import com.junior.page.PageCustom;
@@ -24,7 +25,7 @@ public class AdminStoryController {
     private final AdminStoryService adminStoryService;
 
     @GetMapping("/api/v1/admin/stories")
-    public CommonResponse<PageCustom<ResponseStoryListDto>> findStory(@PageableDefault(size = 15, page = 1) Pageable pageable, @RequestParam(required = false, name = "q", defaultValue = "") String q) {
+    public CommonResponse<PageCustom<AdminStoryDto>> findStory(@PageableDefault(size = 15, page = 1) Pageable pageable, @RequestParam(required = false, name = "q", defaultValue = "") String q) {
         return CommonResponse.success(StatusCode.STORY_READ_SUCCESS, adminStoryService.findStory(pageable, q));
     }
 

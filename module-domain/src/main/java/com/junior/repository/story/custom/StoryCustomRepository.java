@@ -35,5 +35,5 @@ public interface StoryCustomRepository {
 
     public Slice<ResponseStoryListDto> findLikeStories(Member findMember, Pageable pageable, Long cursorId);
 
-    public Page<ResponseStoryListDto> findAllStories(Pageable pageable, String keyword);
+    public Page<AdminStoryDto> findAllStories(Pageable pageable, String keyword);
 }

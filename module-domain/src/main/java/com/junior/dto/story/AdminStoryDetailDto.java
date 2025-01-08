@@ -17,7 +17,8 @@ public record AdminStoryDetailDto(
         String city,
         Long likeCnt,
         LocalDateTime createDate,
-        List<String> imgUrls
+        List<String> imgUrls,
+        Boolean isDeleted
 ) {
 
 
@@ -34,6 +35,7 @@ public record AdminStoryDetailDto(
                 .likeCnt(story.getLikeCnt())
                 .imgUrls(story.getImgUrls())
                 .createDate(story.getCreatedDate())
+                .isDeleted(story.getIsDeleted())
                 .build();
     }
 }

@@ -285,9 +285,11 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
      * @return
      */
     @Override
-    public Page<ResponseStoryListDto> findAllStories(Pageable pageable, String keyword) {
+    public Page<AdminStoryDto> findAllStories(Pageable pageable, String keyword) {
 
-        List<ResponseStoryListDto> result = query.select(createQResponseStoryListDto())
+        List<AdminStoryDto> result = query.select(new QAdminStoryDto(
+                        story.thumbnailImg, story.title, story.content, story.city, story.id, story.latitude, story.longitude, story.isDeleted
+                ))
                 .from(story)
                 .where(getSearchCondition(keyword))
                 .orderBy(story.id.desc())
