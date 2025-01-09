@@ -1,5 +1,6 @@
 package com.junior.controller.story;
 
+import com.junior.controller.api.AdminStoryApi;
 import com.junior.dto.story.AdminStoryDetailDto;
 import com.junior.dto.story.AdminStoryDto;
 import com.junior.dto.story.ResponseStoryListDto;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-public class AdminStoryController {
+public class AdminStoryController implements AdminStoryApi {
 
     private final AdminStoryService adminStoryService;
 

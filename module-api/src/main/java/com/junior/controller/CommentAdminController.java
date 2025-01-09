@@ -1,5 +1,6 @@
 package com.junior.controller;
 
+import com.junior.controller.api.CommentAdminApi;
 import com.junior.dto.comment.CommentAdminDto;
 import com.junior.exception.StatusCode;
 import com.junior.page.PageCustom;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-public class CommentAdminController {
+public class CommentAdminController implements CommentAdminApi {
 
     private final CommentAdminService commentAdminService;
 
@@ -25,7 +26,7 @@ public class CommentAdminController {
     }
 
     @DeleteMapping("/api/v1/admin/comments/{comment_id}")
-    public CommonResponse<PageCustom<CommentAdminDto>> findComment(@PathVariable(name = "comment_id") Long commentId) {
+    public CommonResponse<PageCustom<CommentAdminDto>> deleteComment(@PathVariable(name = "comment_id") Long commentId) {
         commentAdminService.deleteComment(commentId);
 
         return CommonResponse.success(StatusCode.COMMENT_DELETE_SUCCESS, null);
