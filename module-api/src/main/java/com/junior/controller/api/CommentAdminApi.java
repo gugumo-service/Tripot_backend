@@ -169,5 +169,5 @@ public interface CommentAdminApi {
                                             )
                                     }))
             })
-    public CommonResponse<PageCustom<CommentAdminDto>> deleteComment(@PathVariable(name = "comment_id") Long commentId)
+    public CommonResponse<PageCustom<CommentAdminDto>> deleteComment(@PathVariable(name = "comment_id") Long commentId);
 }
