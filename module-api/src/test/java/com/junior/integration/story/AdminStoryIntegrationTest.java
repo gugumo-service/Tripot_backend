@@ -17,6 +17,9 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.ArrayList;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.nullValue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -109,6 +112,35 @@ public class AdminStoryIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data.id").value(10))
                 .andExpect(jsonPath("$.data.isDeleted").value(false));
+
+
+    }
+
+    @Test
+    @DisplayName("관리자 스토리 상세조회 기능이 정상 동작해야함")
+    @WithMockCustomAdmin
+    void deleteStory() throws Exception {
+
+        //given
+
+        //when
+        ResultActions actions = mockMvc.perform(
+                delete("/api/v1/admin/stories/{story_id}", 10)
+                        .accept(MediaType.APPLICATION_JSON)
+        );
+
+        //then
+        actions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.customCode").value("STORY-SUCCESS-0002"))
+                .andExpect(jsonPath("$.customMessage").value("스토리 삭제 성공"))
+                .andExpect(jsonPath("$.status").value(true))
+                .andExpect(jsonPath("$.data").value(nullValue()));
+
+        Story result = storyRepository.findById(10L).orElseThrow(() -> new RuntimeException());
+
+        assertThat(result.getIsDeleted()).isTrue();
 
 
     }

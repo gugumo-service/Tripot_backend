@@ -27,6 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -98,5 +99,34 @@ class AdminStoryServiceTest {
         assertThat(result.city()).isEqualTo("서울");
         assertThat(result.likeCnt()).isEqualTo(3L);
         assertThat(result.isDeleted()).isFalse();
+    }
+
+    @Test
+    @DisplayName("스토리 삭제 기능이 정상 동작해야 함")
+    void deleteStory() {
+
+        //given
+        Story story = Story.builder()
+                .id(1L)
+                .title("title")
+                .content("content")
+                .thumbnailImg("thumbnail")
+                .latitude(-10.0)
+                .longitude(10.0)
+                .city("서울")
+                .likeCnt(3L)
+                .imgUrls(new ArrayList<>())
+                .build();
+
+        given(storyRepository.findById(anyLong())).willReturn(Optional.ofNullable(story));
+
+        //when, then
+        adminStoryService.deleteStory(1L);
+
+        //then
+        Story result = storyRepository.findById(1L).orElseThrow(() -> new RuntimeException());
+
+        assertThat(result.getIsDeleted()).isTrue();
+
     }
 }

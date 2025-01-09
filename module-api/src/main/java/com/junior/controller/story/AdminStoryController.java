@@ -12,10 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,6 +29,12 @@ public class AdminStoryController {
     @GetMapping("/api/v1/admin/stories/{story_id}")
     public CommonResponse<AdminStoryDetailDto> findStoryDetail(@PathVariable(name = "story_id") Long storyId) {
         return CommonResponse.success(StatusCode.STORY_READ_SUCCESS, adminStoryService.findStoryDetail(storyId));
+    }
+
+    @DeleteMapping("/api/v1/admin/stories/{story_id}")
+    public CommonResponse<Object> deleteStory(@PathVariable(name = "story_id") Long storyId) {
+        adminStoryService.deleteStory(storyId);
+        return CommonResponse.success(StatusCode.STORY_DELETE_SUCCESS, null);
     }
 
 }
