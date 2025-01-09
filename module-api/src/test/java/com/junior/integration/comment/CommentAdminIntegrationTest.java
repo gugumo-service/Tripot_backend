@@ -18,6 +18,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.nullValue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -87,6 +90,34 @@ public class CommentAdminIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data.pageable.number").value(1))
                 .andExpect(jsonPath("$.data.content[0].id").value(18));
+
+    }
+
+    @Test
+    @DisplayName("관리자 댓글 삭제 기능이 정상 동작해야 함")
+    @WithMockCustomAdmin
+    public void deleteComment() throws Exception {
+        //given
+        Long targetCommentId = 10L;
+
+        //when
+        ResultActions actions = mockMvc.perform(
+                delete("/api/v1/admin/comments/{comment_id}", targetCommentId)
+                        .accept(MediaType.APPLICATION_JSON)
+        );
+
+        //then
+        actions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.customCode").value("COMMENT-SUCCESS-0004"))
+                .andExpect(jsonPath("$.customMessage").value("댓글 삭제 성공"))
+                .andExpect(jsonPath("$.status").value(true))
+                .andExpect(jsonPath("$.data").value(nullValue()));
+
+        Comment comment = commentRepository.findById(10L).orElseThrow(() -> new RuntimeException());
+
+        assertThat(comment.getIsDeleted()).isTrue();
 
     }
 

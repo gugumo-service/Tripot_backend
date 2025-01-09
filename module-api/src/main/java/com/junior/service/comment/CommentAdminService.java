@@ -2,6 +2,8 @@ package com.junior.service.comment;
 
 import com.junior.domain.story.Comment;
 import com.junior.dto.comment.CommentAdminDto;
+import com.junior.exception.CommentNotFoundException;
+import com.junior.exception.StatusCode;
 import com.junior.page.PageCustom;
 import com.junior.repository.comment.CommentRepository;
 import com.junior.repository.member.MemberRepository;
@@ -38,6 +40,16 @@ public class CommentAdminService {
 
         return new PageCustom<>(result, pageResult.getPageable(), pageResult.getTotalElements());
 
+    }
+
+    public void deleteComment(Long commentId) {
+
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CommentNotFoundException(StatusCode.COMMENT_NOT_FOUND));
+
+        log.info("[{}] 관리자 댓글 삭제 id: {}", Thread.currentThread().getStackTrace()[1].getMethodName(), commentId);
+
+        comment.deleteComment();
     }
 
     private CommentAdminDto convertToDto(Comment comment) {

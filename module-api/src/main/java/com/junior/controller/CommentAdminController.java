@@ -9,8 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,5 +23,14 @@ public class CommentAdminController {
 
         return CommonResponse.success(StatusCode.COMMENT_READ_SUCCESS, commentAdminService.findComment(pageable));
     }
+
+    @DeleteMapping("/api/v1/admin/comments/{comment_id}")
+    public CommonResponse<PageCustom<CommentAdminDto>> findComment(@PathVariable(name = "comment_id") Long commentId) {
+        commentAdminService.deleteComment(commentId);
+
+        return CommonResponse.success(StatusCode.COMMENT_DELETE_SUCCESS, null);
+    }
+
+
 
 }

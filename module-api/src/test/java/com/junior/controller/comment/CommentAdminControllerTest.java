@@ -19,8 +19,10 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -72,6 +74,31 @@ class CommentAdminControllerTest extends BaseControllerTest {
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data.pageable.number").value(1))
                 .andExpect(jsonPath("$.data.content[0].createdUsername").value("username"));
+
+    }
+
+    @Test
+    @DisplayName("관리자용 댓글 삭제 기능이 정상적으로 응답을 반환해야 함")
+    @WithMockCustomAdmin
+    void deleteComment() throws Exception {
+
+        //given
+
+
+        //when
+        ResultActions actions = mockMvc.perform(
+                delete("/api/v1/admin/comments/{comment_id}", 1L)
+                        .accept(MediaType.APPLICATION_JSON)
+        );
+
+        //then
+        actions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.customCode").value("COMMENT-SUCCESS-0004"))
+                .andExpect(jsonPath("$.customMessage").value("댓글 삭제 성공"))
+                .andExpect(jsonPath("$.status").value(true))
+                .andExpect(jsonPath("$.data").value(nullValue()));
 
     }
 }
