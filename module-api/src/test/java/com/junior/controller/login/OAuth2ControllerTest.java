@@ -1,4 +1,4 @@
-package com.junior.controller;
+package com.junior.controller.login;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.junior.config.SecurityConfig;

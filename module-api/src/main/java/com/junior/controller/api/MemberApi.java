@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
-
+@Tag(name = "Member")
 public interface MemberApi {
 
     @Operation(summary = "회원 활성화", description = "회원의 추가정보를 입력받습니다.",

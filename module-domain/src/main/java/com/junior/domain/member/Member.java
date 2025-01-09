@@ -15,6 +15,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@EqualsAndHashCode
 public class Member {
 
     @Id

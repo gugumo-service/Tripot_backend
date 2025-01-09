@@ -8,9 +8,11 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.RequestParam;
 
+@Tag(name = "Q&A User")
 public interface QnaUserApi {
 
 

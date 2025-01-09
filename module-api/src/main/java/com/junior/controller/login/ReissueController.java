@@ -1,10 +1,9 @@
-package com.junior.controller;
+package com.junior.controller.login;
 
 import com.junior.controller.api.ReissueApi;
 import com.junior.dto.jwt.RefreshTokenDto;
 import com.junior.response.CommonResponse;
 import com.junior.service.member.ReissueService;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,7 +14,6 @@ import static com.junior.exception.StatusCode.REISSUE_SUCCESS;
 
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "Reissue")
 public class ReissueController implements ReissueApi {
 
     private final ReissueService reissueService;

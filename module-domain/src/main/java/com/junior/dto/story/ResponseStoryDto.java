@@ -54,4 +54,21 @@ public record ResponseStoryDto(
                 .createDate(story.getCreatedDate())
                 .build();
     }
+
+    public static ResponseStoryDto from(Story story) {
+        return ResponseStoryDto.builder()
+                .id(story.getId())
+                .title(story.getTitle())
+                .content(story.getContent())
+                .thumbnailImg(story.getThumbnailImg())
+                .latitude(story.getLatitude())
+                .longitude(story.getLongitude())
+                .city(story.getCity())
+                .likeCnt(story.getLikeCnt())
+                .isHidden(story.isHidden())
+//                .isLikeStory(isLikeStory)
+                .imgUrls(story.getImgUrls())
+                .createDate(story.getCreatedDate())
+                .build();
+    }
 }

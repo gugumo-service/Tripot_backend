@@ -1,4 +1,4 @@
-package com.junior.controller;
+package com.junior.controller.notice;
 
 import com.junior.controller.api.NoticeAdminApi;
 import com.junior.dto.notice.CreateNoticeDto;

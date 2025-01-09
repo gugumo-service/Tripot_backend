@@ -24,7 +24,7 @@ public abstract class BaseEntity {
     @LastModifiedDate
     private LocalDateTime lastModifiedDate;
 
-    // createdBy, lastModifiedBy는 pk값을 저장 
+    // createdUsername, lastModifiedBy는 pk값을 저장
     @CreatedBy
     @Column(updatable = false)
     private Long createdBy;

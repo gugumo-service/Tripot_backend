@@ -11,7 +11,6 @@ import com.junior.domain.story.Story;
 import com.junior.repository.member.MemberRepository;
 import com.junior.repository.story.StoryRepository;
 import com.junior.security.UserPrincipal;
-import com.junior.service.story.StoryService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,8 +30,7 @@ import java.util.List;
         properties = "spring.config.location=classpath:/application-api-local.yml")
 public class StoryServiceTest {
 
-    @Autowired
-    private StoryService storyService;
+
 
     @MockBean
     private StoryRepository storyRepository;
