@@ -50,14 +50,11 @@ class AdminStoryControllerTest extends BaseControllerTest {
         List<AdminStoryDto> storyDtos = new ArrayList<>();
 
         AdminStoryDto storyDto = AdminStoryDto.builder()
-                .thumbnailImg("thumbnail")
-                .storyId(1L)
+                .id(1L)
                 .title("title")
-                .content("content")
-                .longitude(-10.0)
-                .latitude(10.0)
                 .city("서울")
                 .isDeleted(false)
+                .createdUsername("username")
                 .build();
 
         storyDtos.add(storyDto);
@@ -78,7 +75,8 @@ class AdminStoryControllerTest extends BaseControllerTest {
                 .andExpect(jsonPath("$.customMessage").value("스토리 불러오기 성공"))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data.pageable.number").value(1))
-                .andExpect(jsonPath("$.data.content[0].city").value("서울"));
+                .andExpect(jsonPath("$.data.content[0].city").value("서울"))
+                .andExpect(jsonPath("$.data.content[0].createdUsername").value("username"));
     }
 
     @Test

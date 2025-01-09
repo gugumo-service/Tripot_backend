@@ -448,10 +448,11 @@ class StoryCustomRepositoryImplTest {
 
         //id가 가장 높은 두 개의 스토리에 대해서 확인
         Assertions.assertThat(content.get(0).city()).isEqualTo("대전");
-        Assertions.assertThat(content.get(0).storyId()).isEqualTo(18);
+        Assertions.assertThat(content.get(0).id()).isEqualTo(18);
         Assertions.assertThat(content.get(0).isDeleted()).isFalse();
+        Assertions.assertThat(content.get(0).createdUsername()).isEqualTo("username");
         Assertions.assertThat(content.get(1).city()).isEqualTo("서울");
-        Assertions.assertThat(content.get(1).storyId()).isEqualTo(17);
+        Assertions.assertThat(content.get(1).id()).isEqualTo(17);
 
 
     }

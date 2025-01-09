@@ -26,6 +26,7 @@ import org.springframework.data.support.PageableExecutionUtils;
 import java.util.List;
 import java.util.Optional;
 
+import static com.junior.domain.member.QMember.member;
 import static com.junior.domain.story.QStory.story;
 import static com.junior.domain.like.QLike.like;
 
@@ -288,9 +289,10 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
     public Page<AdminStoryDto> findAllStories(Pageable pageable, String keyword) {
 
         List<AdminStoryDto> result = query.select(new QAdminStoryDto(
-                        story.thumbnailImg, story.title, story.content, story.city, story.id, story.latitude, story.longitude, story.isDeleted
+                        story.title, story.city, story.id, story.member.username, story.isDeleted
                 ))
                 .from(story)
+                .leftJoin(story.member, member)
                 .where(getSearchCondition(keyword))
                 .orderBy(story.id.desc())
                 .offset(pageable.getOffset())

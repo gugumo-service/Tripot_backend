@@ -46,14 +46,11 @@ class AdminStoryServiceTest {
         List<AdminStoryDto> storyDtos = new ArrayList<>();
 
         AdminStoryDto storyDto = AdminStoryDto.builder()
-                .thumbnailImg("thumbnail")
-                .storyId(1L)
+                .id(1L)
                 .title("title")
-                .content("content")
-                .longitude(-10.0)
-                .latitude(10.0)
                 .city("서울")
                 .isDeleted(false)
+                .createdUsername("username")
                 .build();
 
         storyDtos.add(storyDto);
