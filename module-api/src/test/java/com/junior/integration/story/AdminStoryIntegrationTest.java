@@ -117,7 +117,7 @@ public class AdminStoryIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("관리자 스토리 상세조회 기능이 정상 동작해야함")
+    @DisplayName("관리자 스토리 삭제 기능이 정상 동작해야함")
     @WithMockCustomAdmin
     void deleteStory() throws Exception {
 
