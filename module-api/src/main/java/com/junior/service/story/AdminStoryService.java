@@ -45,5 +45,14 @@ public class AdminStoryService {
         return AdminStoryDetailDto.from(findStory);
     }
 
+    public void deleteStory(Long storyId) {
+        Story findStory = storyRepository.findById(storyId)
+                .orElseThrow(() -> new StoryNotFoundException(StatusCode.STORY_NOT_FOUND));
+
+        log.info("[{}] 스토리 삭제 id: {}", Thread.currentThread().getStackTrace()[1].getMethodName(), storyId);
+
+        findStory.deleteStory();
+    }
+
 
 }

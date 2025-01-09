@@ -22,9 +22,11 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -99,4 +101,56 @@ class CommentAdminServiceTest {
         assertThat(content.size()).isEqualTo(1);
         assertThat(content.get(0).content()).isEqualTo("testCommentContent");
     }
+
+    @Test
+    public void deleteComment() throws Exception {
+        //given
+
+        Member member = Member.builder()
+                .id(2L)
+                .nickname("테스트사용자닉네임")
+                .username("테스트사용자유저네임")
+                .role(MemberRole.USER)
+                .signUpType(SignUpType.KAKAO)
+                .profileImage("s3.com/testProfile")
+                .recommendLocation("서울")
+                .status(MemberStatus.ACTIVE)
+                .build();
+
+        List<String> imgUrls = new ArrayList<>();
+        imgUrls.add("imgUrl1");
+        imgUrls.add("imgUrl2");
+        imgUrls.add("imgUrl3");
+
+        Story story = Story.builder()
+                .title("testStoryTitle")
+                .member(member)
+                .content("testStoryContent")
+                .longitude(1.0)
+                .latitude(1.0)
+                .city("city")
+                .isHidden(false)
+                .thumbnailImg("thumbURL")
+                .imgUrls(imgUrls)
+                .build();
+
+        Comment comment = Comment.builder()
+                .member(member)
+                .content("testCommentContent")
+                .story(story)
+                .build();
+
+        given(commentRepository.findById(anyLong())).willReturn(Optional.ofNullable(comment));
+
+        //when
+        commentAdminService.deleteComment(1L);
+
+        //then
+        Comment result = commentRepository.findById(1L).orElseThrow(() -> new RuntimeException());
+
+        assertThat(result.getIsDeleted()).isTrue();
+
+    }
+
+
 }
