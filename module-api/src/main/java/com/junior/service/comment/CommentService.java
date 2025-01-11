@@ -114,4 +114,10 @@ public class CommentService {
 
         return commentRepository.findCommentsByMember(findMember, pageable, cursorId);
     }
+
+    public Long findCommentCntByStoryId(UserPrincipal userPrincipal, Long storyId) {
+        Member findMember = userPrincipal.getMember();
+
+        return commentRepository.countByStoryId(storyId);
+    }
 }

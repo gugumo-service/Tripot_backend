@@ -1,12 +1,10 @@
-package com.junior.controller;
+package com.junior.controller.report;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.junior.config.SecurityConfig;
-import com.junior.controller.report.ReportController;
 import com.junior.domain.report.ReportReason;
 import com.junior.domain.report.ReportStatus;
 import com.junior.domain.report.ReportType;
-import com.junior.dto.notice.NoticeAdminDto;
 import com.junior.dto.report.CreateReportDto;
 import com.junior.dto.report.ReportDto;
 import com.junior.dto.report.StoryReportDto;
@@ -175,7 +173,7 @@ public class ReportControllerTest {
 
         //when
         ResultActions actions = mockMvc.perform(
-                patch("/api/v1/admin/reports/{report_id}/delete", reportId)
+                patch("/api/v1/admin/reports/{report_id}/delete-target", reportId)
                         .accept(MediaType.APPLICATION_JSON)
         );
 

@@ -1,4 +1,4 @@
-package com.junior.integration;
+package com.junior.integration.report;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.junior.controller.report.ReportController;
@@ -10,6 +10,7 @@ import com.junior.domain.report.ReportType;
 import com.junior.domain.story.Comment;
 import com.junior.domain.story.Story;
 import com.junior.dto.report.CreateReportDto;
+import com.junior.integration.BaseIntegrationTest;
 import com.junior.repository.comment.CommentRepository;
 import com.junior.repository.member.MemberRepository;
 import com.junior.repository.report.ReportRepository;
@@ -33,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-public class ReportIntegrationTest extends IntegrationControllerTest {
+public class ReportIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
     private ReportController reportController;
@@ -168,7 +169,7 @@ public class ReportIntegrationTest extends IntegrationControllerTest {
         //then
         actions
                 .andDo(print())
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isAccepted())
                 .andExpect(jsonPath("$.customCode").value("REPORT-ERR-004"))
                 .andExpect(jsonPath("$.customMessage").value("본인 글은 신고할 수 없음"))
                 .andExpect(jsonPath("$.status").value(false))

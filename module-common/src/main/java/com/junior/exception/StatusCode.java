@@ -21,6 +21,7 @@ public enum StatusCode {
     STORY_CREATE_SUCCESS(200, "STORY-SUCCESS-0000", "스토리 생성 성공"),
     STORY_NOT_FOUND(400, "STORY-ERR-0002", "스토리 불러오기 실패"),
     STORY_EDIT_SUCCESS(200, "STORY-SUCCESS-0001", "스토리 수정 성공"),
+    STORY_DELETE_SUCCESS(200, "STORY-SUCCESS-0002", "스토리 삭제 성공"),
     STORY_CREATE_FAIL(500, "STORY-ERR-0001", "스토리 생성 실패"),
     STORY_BAD_REQUEST(500, "STORY-ERR-0002", "잘못된 파라미터"),
     STORY_READ_SUCCESS(200, "STORY-SUCCESS-0001", "스토리 불러오기 성공"),

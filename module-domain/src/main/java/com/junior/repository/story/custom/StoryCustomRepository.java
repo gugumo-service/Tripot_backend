@@ -3,6 +3,7 @@ package com.junior.repository.story.custom;
 import com.junior.domain.member.Member;
 import com.junior.domain.story.Story;
 import com.junior.dto.story.*;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
@@ -33,4 +34,6 @@ public interface StoryCustomRepository {
     Slice<ResponseStoryListDto> getRecentPopularStories(Member member, Long cursorId, Pageable pageable);
 
     public Slice<ResponseStoryListDto> findLikeStories(Member findMember, Pageable pageable, Long cursorId);
+
+    public Page<AdminStoryDto> findAllStories(Pageable pageable, String keyword);
 }

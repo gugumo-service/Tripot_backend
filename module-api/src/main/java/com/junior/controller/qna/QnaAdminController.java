@@ -1,9 +1,6 @@
-package com.junior.controller;
+package com.junior.controller.qna;
 
 import com.junior.controller.api.QnaAdminApi;
-import com.junior.dto.notice.NoticeAdminDto;
-import com.junior.dto.notice.NoticeDetailDto;
-import com.junior.dto.notice.UpdateNoticeDto;
 import com.junior.dto.qna.CreateQnaDto;
 import com.junior.dto.qna.QnaAdminDto;
 import com.junior.dto.qna.QnaDetailDto;
@@ -12,7 +9,6 @@ import com.junior.exception.StatusCode;
 import com.junior.page.PageCustom;
 import com.junior.response.CommonResponse;
 import com.junior.security.UserPrincipal;
-import com.junior.service.notice.NoticeAdminService;
 import com.junior.service.qna.QnaAdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;

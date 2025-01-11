@@ -5,7 +5,6 @@ import com.junior.repository.member.MemberRepository;
 import com.junior.repository.story.StoryRepository;
 import com.junior.service.member.MemberService;
 import com.junior.service.s3.S3Service;
-import com.junior.service.story.StoryService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,8 +29,7 @@ public class CommentServiceTest {
     @InjectMocks
     MemberService memberService;
 
-    @InjectMocks
-    StoryService storyService;
+
     @InjectMocks
     CommentService commentService;
 

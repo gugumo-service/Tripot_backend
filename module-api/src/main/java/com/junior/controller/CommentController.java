@@ -83,4 +83,14 @@ public class CommentController {
 
         return CommonResponse.success(StatusCode.COMMENT_READ_SUCCESS, commentsDto);
     }
+
+    @GetMapping("/cnt/{storyId}")
+    public CommonResponse<Object> findCommentCntByStoryId(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @PathVariable(name = "storyId") Long storyId
+    ) {
+        Long commentCntByStoryId = commentService.findCommentCntByStoryId(userPrincipal, storyId);
+
+        return CommonResponse.success(StatusCode.COMMENT_READ_SUCCESS, commentCntByStoryId);
+    }
 }

@@ -1,4 +1,4 @@
-package com.junior.controller;
+package com.junior.controller.qna;
 
 import com.junior.controller.api.QnaUserApi;
 import com.junior.dto.qna.QnaUserDto;
