@@ -1,6 +1,7 @@
 package com.junior.service.comment;
 
 import com.junior.domain.member.Member;
+import com.junior.domain.notification.NotificationType;
 import com.junior.domain.story.Comment;
 import com.junior.domain.story.Story;
 import com.junior.dto.comment.CreateCommentDto;
@@ -13,6 +14,7 @@ import com.junior.exception.StoryNotFoundException;
 import com.junior.repository.comment.CommentRepository;
 import com.junior.repository.story.StoryRepository;
 import com.junior.security.UserPrincipal;
+import com.junior.service.notification.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +22,6 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -29,6 +30,8 @@ import java.util.Objects;
 public class CommentService {
     private final CommentRepository commentRepository;
     private final StoryRepository storyRepository;
+
+    private final NotificationService notificationService;
 
     @Transactional
     public void saveComment(UserPrincipal userPrincipal, CreateCommentDto createCommentDto) {
@@ -53,6 +56,8 @@ public class CommentService {
         }
 
         commentRepository.save(comment);
+
+        notificationService.saveNotification(userPrincipal, findMember.getProfileImage(), comment.getContent(), findStory.getId(), NotificationType.COMMENT);
     }
 
     public Slice<ResponseParentCommentDto> findParentCommentByStoryId(Long storyId, Long cursorId, int size) {

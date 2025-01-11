@@ -13,7 +13,9 @@ public enum StatusCode {
     NOT_FOUND(404, "COMMON-ERR-404", "존재하지 않는 페이지입니다."),
 */
 
-
+    // notification 관련 예외
+    NOTIFICATION_READ_SUCCESS(200, "NOTIFICATION-SUCCESS-0000", "알림 불러오기 성공"),
+    NOTIFICATION_NOT_FOUND(400, "NOTIFICATION-ERR-0001", "알림 불러오기 실패"),
 
     // STORY 관련 예외
     STORY_CREATE_SUCCESS(200, "STORY-SUCCESS-0000", "스토리 생성 성공"),
