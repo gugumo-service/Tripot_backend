@@ -256,7 +256,9 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
 
         List<ResponseStoryListDto> stories = query.select(createQResponseStoryListDto())
                 .from(story)
-                .where(getHiddenCondition(member))
+                .where(getHiddenCondition(member),
+                        eqCursorId(cursorId)
+                )
                 .limit(pageable.getPageSize() + 1)
                 .orderBy(getOrderByClause("popular"))
                 .fetch();
@@ -270,7 +272,11 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
     public Slice<ResponseStoryListDto> findLikeStories(Member findMember, Pageable pageable, Long cursorId) {
         List<ResponseStoryListDto> stories = query.select(createQResponseStoryListDto())
                 .from(like)
-                .where(like.member.id.eq(findMember.getId()))
+                .where(like.member.id.eq(findMember.getId()),
+                        eqCursorId(cursorId)
+                )
+                .limit(pageable.getPageSize() + 1)
+                .orderBy(getOrderByClause("desc"))
                 .fetch();
 
         boolean hasNext = isHaveNextStoryList(stories, pageable);
