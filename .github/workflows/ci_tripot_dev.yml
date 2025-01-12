@@ -58,7 +58,7 @@ jobs:
             
             
             sudo touch docker-compose-dev.yml
-              echo "${{ vars.DOCKER_COMPOSE_DEV }}" | sudo tee docker-compose.yml > /dev/null
+              echo "${{ vars.DOCKER_COMPOSE_DEV }}" | sudo tee docker-compose-dev.yml > /dev/null
             
             sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             sudo docker rm -f $(sudo docker ps -qa)
