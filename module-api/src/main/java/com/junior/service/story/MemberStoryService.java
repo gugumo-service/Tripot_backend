@@ -5,6 +5,7 @@ import com.junior.domain.member.Member;
 import com.junior.domain.notification.NotificationType;
 import com.junior.domain.story.Story;
 import com.junior.dto.story.*;
+import com.junior.exception.PermissionException;
 import com.junior.exception.StatusCode;
 import com.junior.exception.StoryNotFoundException;
 import com.junior.repository.story.LikeRepository;
@@ -140,5 +141,19 @@ public class MemberStoryService {
         Pageable pageable = PageRequest.of(0, size);
 
         return storyRepository.findLikeStories(findMember, pageable, cursorId);
+    }
+
+    public void deleteStory(UserPrincipal userPrincipal, Long storyId) {
+        Member findMember = userPrincipal.getMember();
+
+        Story findStory = storyRepository.findById(storyId)
+                .orElseThrow(()-> new StoryNotFoundException(StatusCode.STORY_NOT_FOUND));
+
+        if(findMember.getId().equals(findStory.getMember().getId())) {
+            findStory.deleteStory();
+        }
+        else {
+            throw new PermissionException(StatusCode.STORY_NOT_PERMISSION);
+        }
     }
 }

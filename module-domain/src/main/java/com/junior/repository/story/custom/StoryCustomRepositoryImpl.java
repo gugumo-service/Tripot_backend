@@ -117,6 +117,14 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
         return searchCondition;
     }
 
+    private BooleanBuilder getDeleteCondition() {
+        BooleanBuilder deleteCondition = new BooleanBuilder();
+
+        deleteCondition.and(story.isDeleted.eq(false));
+
+        return deleteCondition;
+    }
+
     @Override
     public Slice<ResponseStoryListDto> findAllStories(Member member, Long cursorId, Pageable pageable, String city, String search) {
 
@@ -125,7 +133,8 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
                 .where(getCityCondition(city),
                         eqCursorId(cursorId),
                         getHiddenCondition(member),
-                        getSearchCondition(search)
+                        getSearchCondition(search),
+                        getDeleteCondition()
                 )
                 .limit(pageable.getPageSize() + 1)
                 .orderBy(getOrderByClause("desc"))
@@ -147,7 +156,8 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
                 .from(story)
                 .where(
                         story.member.eq(member),
-                        story.id.eq(storyId)
+                        story.id.eq(storyId),
+                        getDeleteCondition()
                 )
                 .fetchOne();
 
@@ -167,7 +177,8 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
                                 Math.min(geoPointLt.longitude(), geoPointRb.longitude()),
                                 Math.max(geoPointLt.longitude(), geoPointRb.longitude())
                         ),
-                        getHiddenCondition(findMember)
+                        getHiddenCondition(findMember),
+                        getDeleteCondition()
                 )
                 .orderBy(getOrderByClause("desc"))
                 .fetch();
@@ -182,7 +193,8 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
                         getCityCondition(city),
                         getSearchCondition(search),
                         eqCursorId(cursorId),
-                        getHiddenCondition(findMember)
+                        getHiddenCondition(findMember),
+                        getDeleteCondition()
                 )
                 .limit(pageable.getPageSize() + 1)
                 .orderBy(getOrderByClause("desc"))
@@ -219,6 +231,7 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
     public Optional<String> getRecommendedRandomCity() {
         String randomCity = query.select(story.city)
                 .from(story)
+                .where(getDeleteCondition())
                 .orderBy(Expressions.numberTemplate(Double.class, "RAND()").asc())
                 .limit(1L)
                 .fetchOne();
@@ -237,6 +250,7 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
                 .where(story.createdDate.in(
                         JPAExpressions.select(subStory.createdDate)
                                 .from(subStory)
+                                .where(getDeleteCondition())
                                 .orderBy(subStory.createdDate.desc())  // 최신 글 순으로 정렬
                                 .limit(100L) // 최신 n개의 글
                 ))
@@ -257,7 +271,8 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
         List<ResponseStoryListDto> stories = query.select(createQResponseStoryListDto())
                 .from(story)
                 .where(getHiddenCondition(member),
-                        eqCursorId(cursorId)
+                        eqCursorId(cursorId),
+                        getDeleteCondition()
                 )
                 .limit(pageable.getPageSize() + 1)
                 .orderBy(getOrderByClause("popular"))
@@ -273,7 +288,8 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
         List<ResponseStoryListDto> stories = query.select(createQResponseStoryListDto())
                 .from(like)
                 .where(like.member.id.eq(findMember.getId()),
-                        eqCursorId(cursorId)
+                        eqCursorId(cursorId),
+                        getDeleteCondition()
                 )
                 .limit(pageable.getPageSize() + 1)
                 .orderBy(getOrderByClause("desc"))

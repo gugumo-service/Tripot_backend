@@ -42,6 +42,16 @@ public class MemberStoryController {
         return CommonResponse.success(StatusCode.STORY_READ_SUCCESS, findStory);
     }
 
+    @DeleteMapping("/{storyId}")
+    public CommonResponse<Object> deleteStory(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @PathVariable("storyId") Long storyId
+    ) {
+        memberStoryService.deleteStory(userPrincipal, storyId);
+
+        return CommonResponse.success(StatusCode.STORY_DELETE_SUCCESS, null);
+    }
+
     //NOTE: 회원별 검색어 기반 스토리 조회   notion 명: 스토리 조회(검색어 + 도시)
     @GetMapping("/search")
     public CommonResponse<Object> getStoriesByMemberAndCityAndSearch(
