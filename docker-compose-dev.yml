@@ -20,12 +20,13 @@ services:
     restart: always
     ports:
       - "6379:6379"
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
     networks:
       - doc-net-dev
     volumes:
       - ./redis-data:/data
 
-#TODO: 개발 컨테이너, green 컨테이너, blue 컨테이너 분리
   web-dev:
     container_name: web-dev
     image: theperz/tripot-dev
@@ -34,7 +35,7 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - mysql_db_dev
+      - mysql
       - redis
     networks:
       - doc-net-dev
