@@ -1,6 +1,6 @@
 services:
   mysql:
-    container_name: mysql_db_dev
+    container_name: mysql-dev
     image: mysql:latest
     restart: always
     ports:
@@ -16,6 +16,7 @@ services:
 
 
   redis:
+    container_name: redis-dev
     image: redis:latest
     restart: always
     ports:
