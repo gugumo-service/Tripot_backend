@@ -2,21 +2,22 @@ package com.junior.service.story;
 
 import com.junior.domain.like.Like;
 import com.junior.domain.member.Member;
+import com.junior.domain.notification.NotificationType;
 import com.junior.domain.story.Story;
 import com.junior.dto.story.*;
-import com.junior.exception.LikeNotFoundException;
+import com.junior.exception.PermissionException;
 import com.junior.exception.StatusCode;
 import com.junior.exception.StoryNotFoundException;
 import com.junior.repository.story.LikeRepository;
 import com.junior.repository.story.StoryRepository;
 import com.junior.security.UserPrincipal;
+import com.junior.service.notification.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import software.amazon.awssdk.services.ssm.endpoints.internal.Value;
 
 import java.util.List;
 
@@ -26,6 +27,8 @@ import java.util.List;
 public class MemberStoryService {
     private final StoryRepository storyRepository;
     private final LikeRepository likeRepository;
+
+    private final NotificationService notificationService;
 
     @Transactional
     public void createStory(UserPrincipal userPrincipal, CreateStoryDto createStoryDto) {
@@ -120,6 +123,9 @@ public class MemberStoryService {
             likeRepository.save(like);
 
             findStory.increaseLikeCnt();
+
+            //알림 저장
+            notificationService.saveNotification(userPrincipal, findMember.getProfileImage(), findStory.getTitle(), findStory.getId(), NotificationType.LIKED);
         }
         else {
             Like findLike = likeRepository.findLikeByMemberAndStory(findMember, findStory);
@@ -135,5 +141,19 @@ public class MemberStoryService {
         Pageable pageable = PageRequest.of(0, size);
 
         return storyRepository.findLikeStories(findMember, pageable, cursorId);
+    }
+
+    public void deleteStory(UserPrincipal userPrincipal, Long storyId) {
+        Member findMember = userPrincipal.getMember();
+
+        Story findStory = storyRepository.findById(storyId)
+                .orElseThrow(()-> new StoryNotFoundException(StatusCode.STORY_NOT_FOUND));
+
+        if(findMember.getId().equals(findStory.getMember().getId())) {
+            findStory.deleteStory();
+        }
+        else {
+            throw new PermissionException(StatusCode.STORY_NOT_PERMISSION);
+        }
     }
 }
