@@ -9,7 +9,7 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: tripot_dev
     networks:
-      - doc-net
+      - doc-net-dev
     volumes:
       - ./data/:/var/lib/mysql
       - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql #schema.sql 실행을 위한 설정. docker-compose.yml과 schema.sql이 같은 루트 경로에 있어야 한다.(경로 수정 가능)
@@ -21,7 +21,7 @@ services:
     ports:
       - "6379:6379"
     networks:
-      - doc-net
+      - doc-net-dev
     volumes:
       - ./redis-data:/data
 
@@ -30,14 +30,14 @@ services:
     container_name: web-dev
     image: theperz/tripot-dev
     env_file:
-      - .env
+      - dev.env
     ports:
       - "8080:8080"
     depends_on:
       - mysql_db_dev
       - redis
     networks:
-      - doc-net
+      - doc-net-dev
 
 
 networks:
