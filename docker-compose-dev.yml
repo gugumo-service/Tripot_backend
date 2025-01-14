@@ -23,8 +23,8 @@ services:
       - "6379:6379"
     environment:
       - REDIS_PASSWORD=${REDIS_PASSWORD}
-    extra_hosts:
-      - host.docker.internal:host-gateway
+    hostname: redis-dev
+    command: redis-server --requirepass ${REDIS_PASSWORD}
     networks:
       - doc-net-dev
     volumes:
