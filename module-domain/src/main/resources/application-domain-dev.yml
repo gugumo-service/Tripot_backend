@@ -19,6 +19,6 @@ spring:
         format_sql: false
   data:
     redis:
-      host: localhost
+      host: host.docker.internal
       port: 6379
       password: ${REDIS_PASSWORD}
