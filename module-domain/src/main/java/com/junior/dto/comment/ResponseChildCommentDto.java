@@ -10,7 +10,8 @@ public record ResponseChildCommentDto(
         Long memberId,
         String nickname,
         String profileImgPath,
-        LocalDateTime createDate
+        LocalDateTime createDate,
+        boolean isAuthor
 ) {
 
 }

@@ -139,7 +139,7 @@ public class CommentCustomRepositoryImplTest {
 
         Pageable pageable = PageRequest.of(0, 5);
 
-        Slice<ResponseParentCommentDto> parentCommentByStoryId = commentRepository.findParentCommentByStoryId(story.getId(), pageable, null);
+        Slice<ResponseParentCommentDto> parentCommentByStoryId = commentRepository.findParentCommentByStoryId(testMember, story.getId(), pageable, null);
         List<ResponseParentCommentDto> content = parentCommentByStoryId.getContent();
 
         Assertions.assertThat(content.size()).isEqualTo(3);
@@ -204,7 +204,7 @@ public class CommentCustomRepositoryImplTest {
 
         Pageable pageable = PageRequest.of(0, 5);
 
-        Slice<ResponseChildCommentDto> parentCommentByStoryId = commentRepository.findChildCommentByParentCommendId(parentComment3.getId(), pageable, null);
+        Slice<ResponseChildCommentDto> parentCommentByStoryId = commentRepository.findChildCommentByParentCommendId(testMember, parentComment3.getId(), pageable, null);
         List<ResponseChildCommentDto> content = parentCommentByStoryId.getContent();
 
         Assertions.assertThat(content.size()).isEqualTo(3);

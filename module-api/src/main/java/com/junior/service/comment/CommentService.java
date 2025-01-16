@@ -60,18 +60,22 @@ public class CommentService {
         notificationService.saveNotification(userPrincipal, findMember.getProfileImage(), comment.getContent(), findStory.getId(), NotificationType.COMMENT);
     }
 
-    public Slice<ResponseParentCommentDto> findParentCommentByStoryId(Long storyId, Long cursorId, int size) {
+    public Slice<ResponseParentCommentDto> findParentCommentByStoryId(UserPrincipal userPrincipal, Long storyId, Long cursorId, int size) {
+
+        Member member = userPrincipal.getMember();
 
         Pageable pageable = PageRequest.of(0, size);
 
-        return commentRepository.findParentCommentByStoryId(storyId, pageable, cursorId);
+        return commentRepository.findParentCommentByStoryId(member, storyId, pageable, cursorId);
     }
 
-    public Slice<ResponseChildCommentDto> findChildCommentByParentCommentId(Long parentCommentId, Long cursorId, int size) {
+    public Slice<ResponseChildCommentDto> findChildCommentByParentCommentId(UserPrincipal userPrincipal, Long parentCommentId, Long cursorId, int size) {
+
+        Member member = userPrincipal.getMember();
 
         Pageable pageable = PageRequest.of(0, size);
 
-        return commentRepository.findChildCommentByParentCommendId(parentCommentId, pageable, cursorId);
+        return commentRepository.findChildCommentByParentCommendId(member, parentCommentId, pageable, cursorId);
     }
 
     @Transactional

@@ -47,7 +47,7 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository {
     }
 
     @Override
-    public Slice<ResponseParentCommentDto> findParentCommentByStoryId(Long storyId, Pageable pageable, Long cursorId) {
+    public Slice<ResponseParentCommentDto> findParentCommentByStoryId(Member member, Long storyId, Pageable pageable, Long cursorId) {
 
         BooleanBuilder booleanBuilder = new BooleanBuilder();
 
@@ -65,7 +65,8 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository {
                                 comment.member.nickname,
                                 comment.member.profileImage,
                                 comment.child.size().longValue(),
-                                comment.createdDate
+                                comment.createdDate,
+                                comment.member.eq(member)
                         )
                 )
                 .from(comment)
@@ -79,7 +80,7 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository {
     }
 
     @Override
-    public Slice<ResponseChildCommentDto> findChildCommentByParentCommendId(Long parentCommentId, Pageable pageable, Long cursorId) {
+    public Slice<ResponseChildCommentDto> findChildCommentByParentCommendId(Member member, Long parentCommentId, Pageable pageable, Long cursorId) {
 
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         booleanBuilder.and(comment.parent.id.eq(parentCommentId));
@@ -94,7 +95,8 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository {
                                 comment.member.id,
                                 comment.member.nickname,
                                 comment.member.profileImage,
-                                comment.createdDate
+                                comment.createdDate,
+                                comment.member.eq(member)
                         )
                 )
                 .from(comment)
