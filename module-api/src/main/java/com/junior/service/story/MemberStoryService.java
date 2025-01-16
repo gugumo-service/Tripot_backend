@@ -45,11 +45,16 @@ public class MemberStoryService {
 
         Member findMember = userPrincipal.getMember();
 
-        Story findStory = storyRepository.findStoryByIdAndMember(storyId, findMember)
+        Story findStory = storyRepository.findById(storyId)
                 .orElseThrow(() -> new StoryNotFoundException(StatusCode.STORY_NOT_FOUND));
 
-        // 더티 체킹을 통해 수정쿼리가 자동으로 발생
-        findStory.updateStory(createStoryDto);
+        if(findMember.getId().equals(findStory.getMember().getId())) {
+            // 더티 체킹을 통해 수정쿼리가 자동으로 발생
+            findStory.updateStory(createStoryDto);
+        }
+        else {
+            throw new PermissionException(StatusCode.STORY_NOT_PERMISSION);
+        }
     }
 
     // findStoriesByMemberAndCityAndSearch
