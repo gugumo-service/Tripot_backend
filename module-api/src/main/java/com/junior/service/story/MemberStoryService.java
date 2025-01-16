@@ -93,15 +93,15 @@ public class MemberStoryService {
 
         Boolean isLikeStory = likeRepository.isLikeStory(findMember, findStory);
 
-        boolean isNotAuthor = findStory.isHidden() && !findStory.getMember().getId().equals(findMember.getId());
+        boolean isAuthor = findStory.isHidden() && findStory.getMember().getId().equals(findMember.getId());
 
-        if(isNotAuthor) {
+        if(!isAuthor) {
             throw new StoryNotFoundException(StatusCode.STORY_NOT_PERMISSION);
         }
 
         findStory.increaseViewCnt();
 
-        return ResponseStoryDto.from(findStory, isLikeStory);
+        return ResponseStoryDto.from(findStory, isLikeStory, isAuthor);
     }
 
     @Transactional
