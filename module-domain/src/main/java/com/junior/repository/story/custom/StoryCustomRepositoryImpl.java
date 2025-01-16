@@ -264,7 +264,8 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
                         JPAExpressions.select(subStory.createdDate)
                                 .from(subStory)
                                 .where(
-                                        getDeleteCondition()
+                                        getDeleteCondition(),
+                                        story.isHidden.eq(false)
                                 )
                                 .orderBy(subStory.createdDate.desc())  // 최신 글 순으로 정렬
                                 .limit(100L) // 최신 n개의 글
@@ -287,7 +288,8 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
                 .from(story)
                 .where(getHiddenCondition(member),
                         eqCursorId(cursorId),
-                        getDeleteCondition()
+                        getDeleteCondition(),
+                        story.isHidden.eq(false)
                 )
                 .limit(pageable.getPageSize() + 1)
                 .orderBy(getOrderByClause("popular"))
