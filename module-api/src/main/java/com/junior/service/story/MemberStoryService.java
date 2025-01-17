@@ -48,7 +48,9 @@ public class MemberStoryService {
         Story findStory = storyRepository.findById(storyId)
                 .orElseThrow(() -> new StoryNotFoundException(StatusCode.STORY_NOT_FOUND));
 
-        if(findMember.getId().equals(findStory.getMember().getId())) {
+        boolean isAuthor = findMember.getId().equals(findStory.getMember().getId());
+
+        if(isAuthor) {
             // 더티 체킹을 통해 수정쿼리가 자동으로 발생
             findStory.updateStory(createStoryDto);
         }
@@ -90,7 +92,7 @@ public class MemberStoryService {
     }
 
     @Transactional
-    public ResponseStoryDto findStoryById(UserPrincipal userPrincipal, Long storyId) {
+    public ResponseStoryDto findOneStory(UserPrincipal userPrincipal, Long storyId) {
         Member findMember = userPrincipal.getMember();
 
         Story findStory = storyRepository.findById(storyId)
@@ -98,9 +100,10 @@ public class MemberStoryService {
 
         Boolean isLikeStory = likeRepository.isLikeStory(findMember, findStory);
 
-        boolean isAuthor = findStory.isHidden() && findStory.getMember().getId().equals(findMember.getId());
+        boolean isAuthor = findStory.getMember().getId().equals(findMember.getId());
+        boolean isHidden = findStory.isHidden();
 
-        if(!isAuthor) {
+        if(isHidden && !isAuthor) {
             throw new StoryNotFoundException(StatusCode.STORY_NOT_PERMISSION);
         }
 
