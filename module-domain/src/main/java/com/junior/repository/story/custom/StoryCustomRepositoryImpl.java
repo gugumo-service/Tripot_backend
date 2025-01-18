@@ -67,6 +67,15 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
         return null;
     }
 
+    //FIXME: eqCursorId랑 하나로 합칠 예정
+    private BooleanExpression eqPopularityCursorId(Long cursorId, NumberExpression<Long> popularityScore) {
+        if (cursorId != null) {
+            return popularityScore.lt(cursorId)
+                    .or(popularityScore.eq(cursorId).and(story.id.lt(cursorId)));
+        }
+        return null;
+    }
+
     private OrderSpecifier<?> getPopularityOrder() {
         NumberExpression<Long> popularityScore = story.viewCnt.multiply(0.3)
                 .add(story.likeCnt.multiply(0.7));
@@ -284,10 +293,14 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
     @Override
     public Slice<ResponseStoryListDto> getRecentPopularStories(Member member, Long cursorId, Pageable pageable) {
 
+        // 인기 점수 계산
+        NumberExpression<Long> popularityScore = story.viewCnt.multiply(0.3)
+                .add(story.likeCnt.multiply(0.7));
+
         List<ResponseStoryListDto> stories = query.select(createQResponseStoryListDto())
                 .from(story)
                 .where(getHiddenCondition(member),
-                        eqCursorId(cursorId),
+                        eqPopularityCursorId(cursorId, popularityScore),
                         getDeleteCondition(),
                         story.isHidden.eq(false)
                 )
