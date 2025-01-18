@@ -52,6 +52,19 @@ public class BaseIntegrationTest {
                 .build();
     }
 
+    protected Member createActiveTestMember(String username) {
+        return Member.builder()
+                .id(2L)
+                .nickname("테스트사용자닉네임")
+                .username(username)
+                .role(MemberRole.USER)
+                .signUpType(SignUpType.KAKAO)
+                .profileImage("s3.com/testProfile")
+                .recommendLocation("서울")
+                .status(MemberStatus.ACTIVE)
+                .build();
+    }
+
     protected Member createAdmin() {
         return Member.builder()
                 .id(3L)
