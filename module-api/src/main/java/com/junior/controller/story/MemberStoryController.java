@@ -37,7 +37,7 @@ public class MemberStoryController {
             @PathVariable("storyId") Long storyId
     ) {
 
-        ResponseStoryDto findStory = memberStoryService.findStoryById(userPrincipal, storyId);
+        ResponseStoryDto findStory = memberStoryService.findOneStory(userPrincipal, storyId);
 
         return CommonResponse.success(StatusCode.STORY_READ_SUCCESS, findStory);
     }
