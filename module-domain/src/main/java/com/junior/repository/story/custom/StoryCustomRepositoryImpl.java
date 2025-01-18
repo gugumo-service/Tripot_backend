@@ -70,7 +70,8 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
     //FIXME: eqCursorId랑 하나로 합칠 예정
     private BooleanExpression eqPopularityCursorId(Long cursorId, NumberExpression<Long> popularityScore) {
         if (cursorId != null) {
-            return popularityScore.lt(cursorId);
+            return popularityScore.lt(cursorId)
+                    .or(popularityScore.eq(cursorId).and(story.id.lt(cursorId)));
         }
         return null;
     }
