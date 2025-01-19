@@ -37,12 +37,8 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
 
     private final JPAQueryFactory query;
 
-//    QResponseStoryDto createQResponseStoryDto() {
-//        return new QResponseStoryDto(story.id, story.title, story.content, story.thumbnailImg, story.latitude, story.longitude, story.city, story.likeCnt, story.isHidden, story.createdDate, story.imgUrls);
-//    }
-
     QResponseStoryListDto createQResponseStoryListDto() {
-        return new QResponseStoryListDto(story.thumbnailImg, story.title, story.content, story.city, story.id, story.latitude, story.longitude);
+        return new QResponseStoryListDto(story.thumbnailImg, story.title, story.content, story.city, story.id, story.latitude, story.longitude, story.likeCnt);
     }
 
     private boolean isHaveNextStoryList(List<ResponseStoryListDto> stories, Pageable pageable) {
@@ -66,21 +62,13 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
         }
         return null;
     }
-
-    //FIXME: eqCursorId랑 하나로 합칠 예정
-    private BooleanExpression eqPopularityCursorId(Long cursorId, NumberExpression<Long> popularityScore) {
-        if (cursorId != null) {
-            return popularityScore.lt(cursorId)
-                    .or(popularityScore.eq(cursorId).and(story.id.lt(cursorId)));
+    
+    //FIXME: 필요에 따라 eqCursorId와 하나로 합칠 필요 있음
+    private BooleanExpression PopularEqCursorId(Long cursorId) {
+        if(cursorId != null) {
+            return story.likeCnt.lt(cursorId);
         }
         return null;
-    }
-
-    private OrderSpecifier<?> getPopularityOrder() {
-        NumberExpression<Long> popularityScore = story.viewCnt.multiply(0.3)
-                .add(story.likeCnt.multiply(0.7));
-
-        return popularityScore.desc();
     }
 
     private OrderSpecifier<?> getOrderByClause(String sortCondition) {
@@ -89,7 +77,7 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
         } else if ("desc".equalsIgnoreCase(sortCondition)) {
             return story.createdDate.desc(); // 생성 날짜 내림차순
         } else if ("popular".equalsIgnoreCase(sortCondition)) {
-            return getPopularityOrder(); // 인기순 (조회수와 좋아요 수 기반)
+            return story.likeCnt.desc(); // 인기순 (좋아요 수 기반)
         } else {
             return story.createdDate.desc(); // 기본값: 생성 날짜 내림차순
         }
@@ -293,19 +281,17 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
     @Override
     public Slice<ResponseStoryListDto> getRecentPopularStories(Member member, Long cursorId, Pageable pageable) {
 
-        // 인기 점수 계산
-        NumberExpression<Long> popularityScore = story.viewCnt.multiply(0.3)
-                .add(story.likeCnt.multiply(0.7));
-
         List<ResponseStoryListDto> stories = query.select(createQResponseStoryListDto())
                 .from(story)
-                .where(getHiddenCondition(member),
-                        eqPopularityCursorId(cursorId, popularityScore),
+                .where(
+                        PopularEqCursorId(cursorId),
                         getDeleteCondition(),
                         story.isHidden.eq(false)
                 )
                 .limit(pageable.getPageSize() + 1)
-                .orderBy(getOrderByClause("popular"))
+                .orderBy(
+                        getOrderByClause("popular")
+                )
                 .fetch();
 
         boolean hasNext = isHaveNextStoryList(stories, pageable);
