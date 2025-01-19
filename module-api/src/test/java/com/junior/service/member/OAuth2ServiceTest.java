@@ -7,6 +7,7 @@ import com.junior.domain.member.SignUpType;
 import com.junior.dto.jwt.LoginCreateJwtDto;
 import com.junior.dto.jwt.RefreshTokenDto;
 import com.junior.dto.member.CheckActiveMemberDto;
+import com.junior.dto.oauth2.OAuth2LoginDto;
 import com.junior.dto.oauth2.OAuth2Provider;
 import com.junior.dto.oauth2.OAuth2UserInfo;
 import com.junior.exception.JwtErrorException;
@@ -17,6 +18,7 @@ import com.junior.strategy.oauth2.OAuth2UserGenerator;
 import com.junior.util.RedisUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -52,6 +54,7 @@ class OAuth2ServiceTest {
 
     @Test
     @DisplayName("카카오 로그인 시 관련 기능들의 정상 동작 및 해당 dto의 성공적 반환, 새 회원")
+    @Disabled
     void oauth2Login_kakao_new_member() {
 
         //given
@@ -84,6 +87,7 @@ class OAuth2ServiceTest {
 
     @Test
     @DisplayName("카카오 로그인 시 관련 기능들의 정상 동작 및 해당 dto의 성공적 반환, 추가정보 미기입 회원에 관해 리턴")
+    @Disabled
     void oauth2Login_kakao_preactive() {
 
         //given
@@ -123,6 +127,7 @@ class OAuth2ServiceTest {
 
     @Test
     @DisplayName("카카오 로그인 시 관련 기능들의 정상 동작 및 해당 dto의 성공적 반환, 추가정보 기입 회원에 관해 리턴")
+    @Disabled
     void oauth2Login_kakao_active() {
 
         //given
@@ -148,6 +153,124 @@ class OAuth2ServiceTest {
 
         //when
         CheckActiveMemberDto result = oAuth2Service.oauth2Login(response, code, kakaoProvider);
+
+        //then
+
+        //토큰이 헤더에 정상적으로 들어가야 함
+        assertThat(response.getHeader("Authorization")).isEqualTo("Bearer " + sampleAccess);
+        assertThat(response.getHeader("refresh_token")).isEqualTo("Bearer " + sampleRefresh);
+
+        //새 회원이므로 isActivate는 false여야 함
+        assertThat(result.nickname()).isEqualTo("nickname");
+        assertThat(result.isActivate()).isTrue();
+    }
+
+    @Test
+    @DisplayName("카카오 로그인 시 관련 기능들의 정상 동작 및 해당 dto의 성공적 반환, 새 회원")
+    void oauth2LoginV2_kakao_new_member() {
+
+        //given
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        OAuth2LoginDto oAuth2LoginDto = OAuth2LoginDto.builder()
+                .id(1234L)
+                .nickname("sample_nickname")
+                .build();
+        OAuth2Provider kakaoProvider = OAuth2Provider.KAKAO;
+
+        String sampleAccess = "sample_access_token";
+        String sampleRefresh = "sample_refresh_token";
+
+
+        given(jwtUtil.createJwt(any(LoginCreateJwtDto.class), eq("access"))).willReturn(sampleAccess);
+        given(jwtUtil.createJwt(any(LoginCreateJwtDto.class), eq("refresh"))).willReturn(sampleRefresh);
+        given(memberRepository.existsByUsername(anyString())).willReturn(false);
+
+
+        //when
+        CheckActiveMemberDto result = oAuth2Service.oauth2Login(response, oAuth2LoginDto, kakaoProvider);
+
+        //then
+
+        //토큰이 헤더에 정상적으로 들어가야 함
+        assertThat(response.getHeader("Authorization")).isEqualTo("Bearer " + sampleAccess);
+        assertThat(response.getHeader("refresh_token")).isEqualTo("Bearer " + sampleRefresh);
+
+        //새 회원이므로 isActivate는 false여야 함
+        assertThat(result.nickname()).isEqualTo("sample_nickname");
+        assertThat(result.isActivate()).isFalse();
+    }
+
+    @Test
+    @DisplayName("카카오 로그인 시 관련 기능들의 정상 동작 및 해당 dto의 성공적 반환, 추가정보 미기입 회원에 관해 리턴")
+    void oauth2LoginV2_kakao_preactive() {
+
+        //given
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        OAuth2LoginDto oAuth2LoginDto = OAuth2LoginDto.builder()
+                .id(1234L)
+                .nickname("nickname")
+                .build();
+        OAuth2Provider kakaoProvider = OAuth2Provider.KAKAO;
+
+        String sampleAccess = "sample_access_token";
+        String sampleRefresh = "sample_refresh_token";
+
+        given(jwtUtil.createJwt(any(LoginCreateJwtDto.class), eq("access"))).willReturn(sampleAccess);
+        given(jwtUtil.createJwt(any(LoginCreateJwtDto.class), eq("refresh"))).willReturn(sampleRefresh);
+        given(memberRepository.existsByUsername(anyString())).willReturn(true);
+        given(memberRepository.findByUsername(anyString())).willReturn(Optional.ofNullable(Member.builder()
+                .nickname("nickname")
+                .username("username")
+                .status(MemberStatus.PREACTIVE)
+                .role(MemberRole.USER)
+                .signUpType(SignUpType.KAKAO)
+                .build()));
+
+
+        //when
+        CheckActiveMemberDto result = oAuth2Service.oauth2Login(response, oAuth2LoginDto, kakaoProvider);
+
+        //then
+
+        //토큰이 헤더에 정상적으로 들어가야 함
+        assertThat(response.getHeader("Authorization")).isEqualTo("Bearer " + sampleAccess);
+        assertThat(response.getHeader("refresh_token")).isEqualTo("Bearer " + sampleRefresh);
+
+        //새 회원이므로 isActivate는 false여야 함
+        assertThat(result.nickname()).isEqualTo("nickname");
+        assertThat(result.isActivate()).isFalse();
+    }
+
+    @Test
+    @DisplayName("카카오 로그인 시 관련 기능들의 정상 동작 및 해당 dto의 성공적 반환, 추가정보 기입 회원에 관해 리턴")
+    void oauth2LoginV2_kakao_active() {
+
+        //given
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        OAuth2LoginDto oAuth2LoginDto = OAuth2LoginDto.builder()
+                .id(1234L)
+                .nickname("nickname")
+                .build();
+        OAuth2Provider kakaoProvider = OAuth2Provider.KAKAO;
+
+        String sampleAccess = "sample_access_token";
+        String sampleRefresh = "sample_refresh_token";
+
+
+        given(jwtUtil.createJwt(any(LoginCreateJwtDto.class), eq("access"))).willReturn(sampleAccess);
+        given(jwtUtil.createJwt(any(LoginCreateJwtDto.class), eq("refresh"))).willReturn(sampleRefresh);
+        given(memberRepository.existsByUsername(anyString())).willReturn(true);
+        given(memberRepository.findByUsername(anyString())).willReturn(Optional.ofNullable(Member.builder()
+                .nickname("nickname")
+                .username("username")
+                .status(MemberStatus.ACTIVE)
+                .role(MemberRole.USER)
+                .signUpType(SignUpType.KAKAO)
+                .build()));
+
+
+        //when
+        CheckActiveMemberDto result = oAuth2Service.oauth2Login(response, oAuth2LoginDto, kakaoProvider);
 
         //then
 
