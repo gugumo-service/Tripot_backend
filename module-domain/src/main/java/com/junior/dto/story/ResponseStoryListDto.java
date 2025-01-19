@@ -11,11 +11,12 @@ public record ResponseStoryListDto(
         String city,
         Long storyId,
         double latitude,
-        double longitude
+        double longitude,
+        Long likeCnt
 ) {
 
     @QueryProjection
-    public ResponseStoryListDto(String thumbnailImg, String title, String content, String city, Long storyId, double latitude, double longitude) {
+    public ResponseStoryListDto(String thumbnailImg, String title, String content, String city, Long storyId, double latitude, double longitude, Long likeCnt) {
         this.thumbnailImg = thumbnailImg;
         this.title = title;
         this.content = content;
@@ -23,5 +24,6 @@ public record ResponseStoryListDto(
         this.storyId = storyId;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.likeCnt = likeCnt;
     }
 }
