@@ -18,16 +18,12 @@ public class S3Controller {
     private final S3Service s3Service;
 
     @PostMapping("/new")
-    public CommonResponse<String> fileUpload(
-            @RequestPart MultipartFile img) {
+    public CommonResponse<Object> fileUpload(
+            @RequestPart(name = "img") MultipartFile img) {
 
         String url = s3Service.saveFile(img);
 
-        return CommonResponse.<String>builder()
-                .customCode(StatusCode.S3_UPLOAD_SUCCESS.getCustomCode())
-                .customMessage(StatusCode.S3_UPLOAD_SUCCESS.getCustomMessage())
-                .data(url)
-                .build();
+        return CommonResponse.success(StatusCode.S3_UPLOAD_SUCCESS, url);
     }
 
     @DeleteMapping
