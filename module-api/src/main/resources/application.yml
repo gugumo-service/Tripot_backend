@@ -5,6 +5,13 @@ spring:
     group:
       "local": "local"
       "prod": "prod"
+
+management:
+  endpoint:
+  endpoints:
+    web:
+      base-path: /trip
+
 #  config:
 #    import: aws-parameterstore:/config/tripot-prod/
 #
