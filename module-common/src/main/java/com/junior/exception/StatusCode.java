@@ -46,6 +46,7 @@ public enum StatusCode {
     S3_DUPLICATE_FILE(500, "S3-0002", "파일 중복"),
     S3_NOT_ALLOWED_EXTENSION(500, "S3-0003", "알 수 없는 이미지 확장자"),
     S3_BIGGER_THAN_MAX_SIZE(500, "S3-FAIL-0004", "사진 용량이 너무 큼"),
+    S3_DELETE_SUCCESS(200, "S3-0005", "이미지 삭제 성공"),
 
     // USER 관련 예외
     ACTIVATE_MEMBER(200, "MEMBER-SUCCESS-001", "회원 활성화 성공"),
