@@ -83,7 +83,6 @@ class OAuth2ControllerTest extends BaseControllerTest {
 
     @Test
     @DisplayName("소셜 로그인 응답이 정상적으로 반환되어야 함 - oauth2 과정은 프론트 측에서 진행")
-    @WithMockCustomUser
     void oauth2LoginV2() throws Exception {
 
         //given
