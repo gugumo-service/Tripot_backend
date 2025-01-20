@@ -151,6 +151,7 @@ public class MemberStoryService {
         return storyRepository.findLikeStories(findMember, pageable, cursorId);
     }
 
+    @Transactional
     public void deleteStory(UserPrincipal userPrincipal, Long storyId) {
         Member findMember = userPrincipal.getMember();
 
