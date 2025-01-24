@@ -21,12 +21,12 @@ kakao:
 cloud:
   aws:
     s3:
-      bucket: tripot
+      bucket: tripot-asia
       path:
         profile: user/profile
         story: story/image
       region:
-        static: eu-north-1
+        static: ap-northeast-2
       stack:
         auto: false
       credentials:
