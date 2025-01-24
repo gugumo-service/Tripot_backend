@@ -217,7 +217,10 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
 
         return query.select(new QResponseStoryCntByCityDto(story.city, story.count().intValue()))
                 .from(story)
-                .where(getIsAuthorCondition(findMember))
+                .where(
+                        getIsAuthorCondition(findMember),
+                        getDeleteCondition()
+                )
                 .groupBy(story.city)
                 .orderBy(story.city.asc())
                 .fetch();
