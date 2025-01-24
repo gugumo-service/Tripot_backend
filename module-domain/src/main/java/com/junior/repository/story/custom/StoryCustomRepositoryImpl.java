@@ -38,7 +38,7 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
     private final JPAQueryFactory query;
 
     QResponseStoryListDto createQResponseStoryListDto() {
-        return new QResponseStoryListDto(story.thumbnailImg, story.title, story.content, story.city, story.id, story.latitude, story.longitude, story.likeCnt);
+        return new QResponseStoryListDto(story.thumbnailImg, story.title, story.content, story.city, story.id, story.latitude, story.longitude, story.likeCnt, story.createdDate);
     }
 
     private boolean isHaveNextStoryList(List<ResponseStoryListDto> stories, Pageable pageable) {
