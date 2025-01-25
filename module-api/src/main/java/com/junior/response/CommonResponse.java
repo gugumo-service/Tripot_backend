@@ -1,12 +1,24 @@
 package com.junior.response;
 
-import lombok.Builder;
-import lombok.Getter;
+
+import com.junior.exception.StatusCode;
+import lombok.*;
+
 
 @Getter
 @Builder
 public class CommonResponse<T> {
-    private String returnCode;
-    private String returnMessage;
-    private T info;
+    private String customCode;
+    private String customMessage;
+    private boolean status;
+    private T data;
+
+
+    public static<T> CommonResponse<T> success(StatusCode statusCode, T data) {
+        return new CommonResponse<>(statusCode.getCustomCode(), statusCode.getCustomMessage(), true, data);
+    }
+
+    public static<T> CommonResponse<T> fail(StatusCode statusCode) {
+        return new CommonResponse<>(statusCode.getCustomCode(), statusCode.getCustomMessage(), false, null);
+    }
 }

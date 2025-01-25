@@ -12,8 +12,8 @@ public class CustomException extends RuntimeException{
     private String returnMessage;
 
     public CustomException(StatusCode statusCode) {
-        super(statusCode.getMessage());
-        this.returnCode = statusCode.getCode();
-        this.returnMessage = statusCode.getMessage();
+        super(statusCode.getCustomMessage());
+        this.returnCode = statusCode.getCustomCode();
+        this.returnMessage = statusCode.getCustomMessage();
     }
 }
