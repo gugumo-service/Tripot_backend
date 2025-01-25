@@ -55,7 +55,7 @@ public class CommentController {
             @RequestParam("size") int size,
             @PathVariable("storyId") Long storyId
     ) {
-        Slice<ResponseParentCommentDto> parentCommentDto = commentService.findParentCommentByStoryId(storyId, cursorId, size);
+        Slice<ResponseParentCommentDto> parentCommentDto = commentService.findParentCommentByStoryId(userPrincipal, storyId, cursorId, size);
 
         return CommonResponse.success(StatusCode.COMMENT_READ_SUCCESS, parentCommentDto);
     }
@@ -67,7 +67,7 @@ public class CommentController {
             @RequestParam("size") int size,
             @PathVariable("parentCommentId") Long parentCommentId
     ) {
-        Slice<ResponseChildCommentDto> childCommentDto = commentService.findChildCommentByParentCommentId(parentCommentId, cursorId, size);
+        Slice<ResponseChildCommentDto> childCommentDto = commentService.findChildCommentByParentCommentId(userPrincipal, parentCommentId, cursorId, size);
 
         return CommonResponse.success(StatusCode.COMMENT_READ_SUCCESS, childCommentDto);
     }

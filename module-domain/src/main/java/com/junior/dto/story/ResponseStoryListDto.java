@@ -3,6 +3,8 @@ package com.junior.dto.story;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 
+import java.time.LocalDateTime;
+
 @Builder
 public record ResponseStoryListDto(
         String thumbnailImg,
@@ -11,11 +13,13 @@ public record ResponseStoryListDto(
         String city,
         Long storyId,
         double latitude,
-        double longitude
+        double longitude,
+        Long likeCnt,
+        LocalDateTime createDate
 ) {
 
     @QueryProjection
-    public ResponseStoryListDto(String thumbnailImg, String title, String content, String city, Long storyId, double latitude, double longitude) {
+    public ResponseStoryListDto(String thumbnailImg, String title, String content, String city, Long storyId, double latitude, double longitude, Long likeCnt, LocalDateTime createDate) {
         this.thumbnailImg = thumbnailImg;
         this.title = title;
         this.content = content;
@@ -23,5 +27,7 @@ public record ResponseStoryListDto(
         this.storyId = storyId;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.likeCnt = likeCnt;
+        this.createDate = createDate;
     }
 }

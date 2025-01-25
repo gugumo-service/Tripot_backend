@@ -9,7 +9,6 @@ spring:
       max-request-size: 50MB
 
 
-
 logging:
   level:
     root: info
@@ -19,16 +18,15 @@ kakao:
   client-secret: ${KAKAO_SECRET_KEY}
 
 
-
 cloud:
   aws:
     s3:
-      bucket: tripot
+      bucket: tripot-asia
       path:
         profile: user/profile/
         story: story/image
       region:
-        static: eu-north-1
+        static: ap-northeast-2
       stack:
         auto: false
       credentials:

@@ -37,12 +37,8 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
 
     private final JPAQueryFactory query;
 
-//    QResponseStoryDto createQResponseStoryDto() {
-//        return new QResponseStoryDto(story.id, story.title, story.content, story.thumbnailImg, story.latitude, story.longitude, story.city, story.likeCnt, story.isHidden, story.createdDate, story.imgUrls);
-//    }
-
     QResponseStoryListDto createQResponseStoryListDto() {
-        return new QResponseStoryListDto(story.thumbnailImg, story.title, story.content, story.city, story.id, story.latitude, story.longitude);
+        return new QResponseStoryListDto(story.thumbnailImg, story.title, story.content, story.city, story.id, story.latitude, story.longitude, story.likeCnt, story.createdDate);
     }
 
     private boolean isHaveNextStoryList(List<ResponseStoryListDto> stories, Pageable pageable) {
@@ -66,12 +62,13 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
         }
         return null;
     }
-
-    private OrderSpecifier<?> getPopularityOrder() {
-        NumberExpression<Long> popularityScore = story.viewCnt.multiply(0.3)
-                .add(story.likeCnt.multiply(0.7));
-
-        return popularityScore.desc();
+    
+    //FIXME: 필요에 따라 eqCursorId와 하나로 합칠 필요 있음
+    private BooleanExpression PopularEqCursorId(Long cursorId) {
+        if(cursorId != null) {
+            return story.likeCnt.lt(cursorId);
+        }
+        return null;
     }
 
     private OrderSpecifier<?> getOrderByClause(String sortCondition) {
@@ -80,7 +77,7 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
         } else if ("desc".equalsIgnoreCase(sortCondition)) {
             return story.createdDate.desc(); // 생성 날짜 내림차순
         } else if ("popular".equalsIgnoreCase(sortCondition)) {
-            return getPopularityOrder(); // 인기순 (조회수와 좋아요 수 기반)
+            return story.likeCnt.desc(); // 인기순 (좋아요 수 기반)
         } else {
             return story.createdDate.desc(); // 기본값: 생성 날짜 내림차순
         }
@@ -95,6 +92,14 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
         );
 
         return hiddenCondition;
+    }
+
+    private BooleanBuilder getIsAuthorCondition(Member member) {
+        BooleanBuilder isAuthorCondition = new BooleanBuilder();
+
+        isAuthorCondition.and(story.member.eq(member));
+
+        return isAuthorCondition;
     }
 
     private BooleanBuilder getCityCondition(String city) {
@@ -155,7 +160,7 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
         Story stories = query.select(story)
                 .from(story)
                 .where(
-                        story.member.eq(member),
+                        getIsAuthorCondition(member),
                         story.id.eq(storyId),
                         getDeleteCondition()
                 )
@@ -177,6 +182,7 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
                                 Math.min(geoPointLt.longitude(), geoPointRb.longitude()),
                                 Math.max(geoPointLt.longitude(), geoPointRb.longitude())
                         ),
+                        getIsAuthorCondition(findMember),
                         getHiddenCondition(findMember),
                         getDeleteCondition()
                 )
@@ -189,7 +195,8 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
 
         List<ResponseStoryListDto> stories = query.select(createQResponseStoryListDto())
                 .from(story)
-                .where(story.member.eq(findMember),
+                .where(
+                        getIsAuthorCondition(findMember),
                         getCityCondition(city),
                         getSearchCondition(search),
                         eqCursorId(cursorId),
@@ -210,6 +217,10 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
 
         return query.select(new QResponseStoryCntByCityDto(story.city, story.count().intValue()))
                 .from(story)
+                .where(
+                        getIsAuthorCondition(findMember),
+                        getDeleteCondition()
+                )
                 .groupBy(story.city)
                 .orderBy(story.city.asc())
                 .fetch();
@@ -231,7 +242,9 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
     public Optional<String> getRecommendedRandomCity() {
         String randomCity = query.select(story.city)
                 .from(story)
-                .where(getDeleteCondition())
+                .where(
+                        getDeleteCondition()
+                )
                 .orderBy(Expressions.numberTemplate(Double.class, "RAND()").asc())
                 .limit(1L)
                 .fetchOne();
@@ -250,7 +263,10 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
                 .where(story.createdDate.in(
                         JPAExpressions.select(subStory.createdDate)
                                 .from(subStory)
-                                .where(getDeleteCondition())
+                                .where(
+                                        getDeleteCondition(),
+                                        story.isHidden.eq(false)
+                                )
                                 .orderBy(subStory.createdDate.desc())  // 최신 글 순으로 정렬
                                 .limit(100L) // 최신 n개의 글
                 ))
@@ -270,12 +286,15 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
 
         List<ResponseStoryListDto> stories = query.select(createQResponseStoryListDto())
                 .from(story)
-                .where(getHiddenCondition(member),
-                        eqCursorId(cursorId),
-                        getDeleteCondition()
+                .where(
+                        PopularEqCursorId(cursorId),
+                        getDeleteCondition(),
+                        story.isHidden.eq(false)
                 )
                 .limit(pageable.getPageSize() + 1)
-                .orderBy(getOrderByClause("popular"))
+                .orderBy(
+                        getOrderByClause("popular")
+                )
                 .fetch();
 
         boolean hasNext = isHaveNextStoryList(stories, pageable);

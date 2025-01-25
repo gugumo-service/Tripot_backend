@@ -148,4 +148,11 @@ public class S3Service {
 
         amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, fileName));
     }
+
+    public void deleteStoryImage(String imgPath) {
+        String splitStr = ".com/";
+        //https://"bucket-name"."region".amazonaws.com/"파일 이름.확장자"에서 파일 이름.확장자만 자르기
+        String fileName = imgPath.substring(imgPath.lastIndexOf(splitStr) + splitStr.length());
+        amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, fileName));
+    }
 }

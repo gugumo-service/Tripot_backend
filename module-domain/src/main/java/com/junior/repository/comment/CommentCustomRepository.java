@@ -11,8 +11,8 @@ import java.util.List;
 
 public interface CommentCustomRepository {
 
-    public Slice<ResponseParentCommentDto> findParentCommentByStoryId(Long storyId, Pageable pageable, Long cursorId);
-    public Slice<ResponseChildCommentDto> findChildCommentByParentCommendId(Long parentCommentId, Pageable pageable, Long cursorId);
+    public Slice<ResponseParentCommentDto> findParentCommentByStoryId(Member member, Long storyId, Pageable pageable, Long cursorId);
+    public Slice<ResponseChildCommentDto> findChildCommentByParentCommendId(Member member, Long parentCommentId, Pageable pageable, Long cursorId);
 
     Slice<ResponseMyCommentDto> findCommentsByMember(Member findMember, Pageable pageable, Long cursorId);
 }

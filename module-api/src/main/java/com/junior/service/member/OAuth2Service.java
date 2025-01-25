@@ -7,6 +7,7 @@ import com.junior.domain.member.SignUpType;
 import com.junior.dto.jwt.LoginCreateJwtDto;
 import com.junior.dto.jwt.RefreshTokenDto;
 import com.junior.dto.member.CheckActiveMemberDto;
+import com.junior.dto.oauth2.OAuth2LoginDto;
 import com.junior.dto.oauth2.OAuth2Provider;
 import com.junior.dto.oauth2.OAuth2UserInfo;
 import com.junior.exception.JwtErrorException;
@@ -36,9 +37,41 @@ public class OAuth2Service {
     private final JwtUtil jwtUtil;
     private final RedisUtil redisUtil;
 
+
+    /**
+     * OAuth2 과정을 백 단에서 처리
+     * @param response
+     * @param code
+     * @param provider
+     * @return
+     */
+    @Deprecated
     public CheckActiveMemberDto oauth2Login(HttpServletResponse response, String code, OAuth2Provider provider) {
 
         OAuth2UserInfo userInfo = generateOAuth2UserInfo(code, provider);
+
+        String username = userInfo.provider() + " " + userInfo.id();
+
+        boolean existMember = memberRepository.existsByUsername(username);
+
+        Member member = createMember(provider, existMember, username, userInfo);
+
+        makeJWTs(member, response);
+
+
+        return createResponse(response, member);
+    }
+
+    /**
+     * OAuth2 과정을 프론트 단에서 처리
+     * @param response
+     * @param oAuth2LoginDto
+     * @param provider
+     * @return
+     */
+    public CheckActiveMemberDto oauth2Login(HttpServletResponse response, OAuth2LoginDto oAuth2LoginDto, OAuth2Provider provider) {
+
+        OAuth2UserInfo userInfo = generateOAuth2UserInfo(oAuth2LoginDto, provider);
 
         String username = userInfo.provider() + " " + userInfo.id();
 
@@ -94,6 +127,16 @@ public class OAuth2Service {
         return userInfo;
     }
 
+    private OAuth2UserInfo generateOAuth2UserInfo(OAuth2LoginDto oAuth2LoginDto, OAuth2Provider provider) {
+        return OAuth2UserInfo.builder()
+                .id(oAuth2LoginDto.id())
+                .nickname(oAuth2LoginDto.nickname())
+                .provider(provider)
+                .build();
+    }
+
+
+
     private void makeJWTs(Member member, HttpServletResponse response) {
         //JWT 생성
         LoginCreateJwtDto loginCreateJwtDto = LoginCreateJwtDto.builder()
@@ -123,7 +166,7 @@ public class OAuth2Service {
 
         if (!existMember) {
             //PREACTIVE 상태 회원 생성
-            log.info("[{}}] 신규 회원 생성 username: {}", Thread.currentThread().getStackTrace()[1].getClassName(), username, MemberStatus.PREACTIVE);
+            log.info("[{}}] 신규 회원 생성 username: {}", Thread.currentThread().getStackTrace()[1].getClassName(), username);
 
             member = Member.builder()
                     .nickname(userInfo.nickname())         //일단 전송 후 수정하는 방식

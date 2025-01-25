@@ -3,6 +3,7 @@ package com.junior.controller.login;
 import com.junior.controller.api.OAuth2Api;
 import com.junior.dto.jwt.RefreshTokenDto;
 import com.junior.dto.member.CheckActiveMemberDto;
+import com.junior.dto.oauth2.OAuth2LoginDto;
 import com.junior.dto.oauth2.OAuth2Provider;
 import com.junior.exception.StatusCode;
 import com.junior.response.CommonResponse;
@@ -18,10 +19,19 @@ public class OAuth2Controller implements OAuth2Api {
     private final OAuth2Service oAuth2Service;
 
     @PostMapping("/api/v1/login/oauth2/{provider}")
+    @Deprecated
     public CommonResponse<CheckActiveMemberDto> oauth2Login(HttpServletResponse response, @RequestParam("code") String code, @PathVariable("provider") String provider) {
 
 
         return CommonResponse.success(StatusCode.OAUTH2_LOGIN_SUCCESS, oAuth2Service.oauth2Login(response, code, OAuth2Provider.valueOf(provider.toUpperCase())));
+
+    }
+
+    @PostMapping("/api/v2/login/oauth2/{provider}")
+    public CommonResponse<CheckActiveMemberDto> oauth2Login(HttpServletResponse response, @RequestBody OAuth2LoginDto oAuth2LoginDto, @PathVariable("provider") String provider) {
+
+
+        return CommonResponse.success(StatusCode.OAUTH2_LOGIN_SUCCESS, oAuth2Service.oauth2Login(response, oAuth2LoginDto, OAuth2Provider.valueOf(provider.toUpperCase())));
 
     }
 

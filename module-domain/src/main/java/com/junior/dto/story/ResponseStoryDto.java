@@ -18,6 +18,7 @@ public record ResponseStoryDto(
         String city,
         Long likeCnt,
         boolean isHidden,
+        boolean isAuthor,
         boolean isLikeStory,
         LocalDateTime createDate,
         List<String> imgUrls
@@ -38,7 +39,7 @@ public record ResponseStoryDto(
 //        this.imgUrls = imgUrls;
 //    }
 
-    public static ResponseStoryDto from(Story story, boolean isLikeStory) {
+    public static ResponseStoryDto from(Story story, boolean isLikeStory, boolean isAuthor) {
         return ResponseStoryDto.builder()
                 .id(story.getId())
                 .title(story.getTitle())
@@ -52,6 +53,7 @@ public record ResponseStoryDto(
                 .isLikeStory(isLikeStory)
                 .imgUrls(story.getImgUrls())
                 .createDate(story.getCreatedDate())
+                .isAuthor(isAuthor)
                 .build();
     }
 

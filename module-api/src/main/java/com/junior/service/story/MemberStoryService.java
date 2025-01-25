@@ -45,11 +45,18 @@ public class MemberStoryService {
 
         Member findMember = userPrincipal.getMember();
 
-        Story findStory = storyRepository.findStoryByIdAndMember(storyId, findMember)
+        Story findStory = storyRepository.findById(storyId)
                 .orElseThrow(() -> new StoryNotFoundException(StatusCode.STORY_NOT_FOUND));
 
-        // 더티 체킹을 통해 수정쿼리가 자동으로 발생
-        findStory.updateStory(createStoryDto);
+        boolean isAuthor = findMember.getId().equals(findStory.getMember().getId());
+
+        if(isAuthor) {
+            // 더티 체킹을 통해 수정쿼리가 자동으로 발생
+            findStory.updateStory(createStoryDto);
+        }
+        else {
+            throw new PermissionException(StatusCode.STORY_NOT_PERMISSION);
+        }
     }
 
     // findStoriesByMemberAndCityAndSearch
@@ -85,7 +92,7 @@ public class MemberStoryService {
     }
 
     @Transactional
-    public ResponseStoryDto findStoryById(UserPrincipal userPrincipal, Long storyId) {
+    public ResponseStoryDto findOneStory(UserPrincipal userPrincipal, Long storyId) {
         Member findMember = userPrincipal.getMember();
 
         Story findStory = storyRepository.findById(storyId)
@@ -93,15 +100,16 @@ public class MemberStoryService {
 
         Boolean isLikeStory = likeRepository.isLikeStory(findMember, findStory);
 
-        boolean isNotAuthor = findStory.isHidden() && !findStory.getMember().getId().equals(findMember.getId());
+        boolean isAuthor = findStory.getMember().getId().equals(findMember.getId());
+        boolean isHidden = findStory.isHidden();
 
-        if(isNotAuthor) {
+        if(isHidden && !isAuthor) {
             throw new StoryNotFoundException(StatusCode.STORY_NOT_PERMISSION);
         }
 
         findStory.increaseViewCnt();
 
-        return ResponseStoryDto.from(findStory, isLikeStory);
+        return ResponseStoryDto.from(findStory, isLikeStory, isAuthor);
     }
 
     @Transactional
@@ -143,6 +151,7 @@ public class MemberStoryService {
         return storyRepository.findLikeStories(findMember, pageable, cursorId);
     }
 
+    @Transactional
     public void deleteStory(UserPrincipal userPrincipal, Long storyId) {
         Member findMember = userPrincipal.getMember();
 
