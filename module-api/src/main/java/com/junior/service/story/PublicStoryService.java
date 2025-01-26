@@ -24,7 +24,8 @@ public class PublicStoryService {
 
     public Slice<ResponseStoryListDto> findStoriesByFilter(UserPrincipal userPrincipal, Long cursorId, int size, String city, String search) {
 
-        Member member = userPrincipal.getMember();
+//        Member member = userPrincipal.getMember();
+        Member member = (userPrincipal != null) ? userPrincipal.getMember() : null;
 
         Pageable pageable = PageRequest.of(0, size);
 
@@ -45,7 +46,8 @@ public class PublicStoryService {
 
     public Slice<ResponseStoryListDto> getRecentPopularStories(UserPrincipal userPrincipal, Long cursorId, int size) {
 
-        Member member = userPrincipal.getMember();
+//        Member member = userPrincipal.getMember();
+        Member member = (userPrincipal != null) ? userPrincipal.getMember() : null;
 
         Pageable pageable = PageRequest.of(0, size);
 
