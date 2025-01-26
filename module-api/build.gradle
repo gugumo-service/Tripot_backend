@@ -12,6 +12,8 @@ dependencies {
     // Spring Cloud AWS
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
+    // Spring Actuator
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
     //security
     implementation 'org.springframework.boot:spring-boot-starter-security'

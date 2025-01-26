@@ -6,6 +6,12 @@ spring:
       "local": "local"
       "prod": "prod"
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
 #  config:
 #    import: aws-parameterstore:/config/tripot-prod/
 #
