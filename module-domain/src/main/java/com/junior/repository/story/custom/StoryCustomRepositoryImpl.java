@@ -137,7 +137,7 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
                 .from(story)
                 .where(getCityCondition(city),
                         eqCursorId(cursorId),
-                        getHiddenCondition(member),
+//                        getHiddenCondition(member),
                         getSearchCondition(search),
                         getDeleteCondition()
                 )
