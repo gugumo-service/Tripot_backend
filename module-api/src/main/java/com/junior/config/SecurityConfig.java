@@ -70,6 +70,10 @@ public class SecurityConfig {
                         .requestMatchers("/swagger-ui/**",
                                 "/swagger-resources/**",
                                 "/v3/api-docs/**").permitAll()
+                        // 단일 스토리 조회
+                        .requestMatchers("/api/v1/stories/{storyId}").permitAll()
+                        // public 스토리 리스트 조회
+                        .requestMatchers("/api/v1/public/stories/**").permitAll()
 
                         //admin 관련 설정
                         .requestMatchers("/api/v1/admin/**").hasRole(MemberRole.ADMIN.name())
