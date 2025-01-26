@@ -137,9 +137,9 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
                 .from(story)
                 .where(getCityCondition(city),
                         eqCursorId(cursorId),
-//                        getHiddenCondition(member),
                         getSearchCondition(search),
-                        getDeleteCondition()
+                        getDeleteCondition(),
+                        story.isHidden.eq(false)
                 )
                 .limit(pageable.getPageSize() + 1)
                 .orderBy(getOrderByClause("desc"))
