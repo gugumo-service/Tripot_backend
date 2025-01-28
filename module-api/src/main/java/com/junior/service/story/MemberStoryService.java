@@ -91,16 +91,18 @@ public class MemberStoryService {
         return storyRepository.findStoryByMap(findMember, geoPointLt, geoPointRb);
     }
 
-    @Transactional
+//    @Transactional
     public ResponseStoryDto findOneStory(UserPrincipal userPrincipal, Long storyId) {
-        Member findMember = userPrincipal.getMember();
+//        Member findMember = userPrincipal.getMember();
 
-        Story findStory = storyRepository.findById(storyId)
+        Member findMember = (userPrincipal != null) ? userPrincipal.getMember() : null;
+
+        Story findStory = storyRepository.findByIdAndIsDeletedFalse(storyId)
                 .orElseThrow(()->new StoryNotFoundException(StatusCode.STORY_NOT_FOUND));
 
-        Boolean isLikeStory = likeRepository.isLikeStory(findMember, findStory);
+        boolean isLikeStory = (findMember != null) && likeRepository.isLikeStory(findMember, findStory);
 
-        boolean isAuthor = findStory.getMember().getId().equals(findMember.getId());
+        boolean isAuthor = (findMember != null) && findStory.getMember().getId().equals(findMember.getId());
         boolean isHidden = findStory.isHidden();
 
         if(isHidden && !isAuthor) {
