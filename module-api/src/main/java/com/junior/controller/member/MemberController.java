@@ -20,11 +20,6 @@ public class MemberController implements MemberApi {
 
     private final MemberService memberService;
 
-    @GetMapping("/test")
-    public CommonResponse<String> test(){
-        return CommonResponse.success(ACTIVATE_MEMBER, "success");
-    }
-
     /**
      * PREACTIVE 상태의 회원을 활성화시키는 기능
      * @param userPrincipal
