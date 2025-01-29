@@ -39,7 +39,7 @@ public class NotificationCustomRepositoryImpl implements NotificationCustomRepos
 
     private BooleanExpression eqCursorId(Long cursorId) {
         if(cursorId != null) {
-            return story.id.lt(cursorId);
+            return notification.id.lt(cursorId);
         }
         return null;
     }
