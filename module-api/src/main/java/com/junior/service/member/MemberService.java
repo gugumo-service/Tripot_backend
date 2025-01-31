@@ -3,6 +3,7 @@ package com.junior.service.member;
 import com.junior.domain.member.Member;
 import com.junior.domain.member.MemberStatus;
 import com.junior.dto.member.ActivateMemberDto;
+import com.junior.dto.member.CheckActiveMemberDto;
 import com.junior.dto.member.MemberInfoDto;
 import com.junior.dto.member.UpdateNicknameDto;
 import com.junior.exception.NotValidMemberException;
@@ -40,6 +41,25 @@ public class MemberService {
 
         log.info("[{}}] target: {} nickname: {}, location: {}", Thread.currentThread().getStackTrace()[1].getMethodName(), member.getUsername(), activateMemberDto.nickname(), activateMemberDto.recommendLocation());
         member.activateMember(activateMemberDto);
+
+    }
+
+    public CheckActiveMemberDto checkActiveMember(UserPrincipal principal) {
+
+        log.debug("[{}] MemberService 회원 조회", Thread.currentThread().getStackTrace()[1].getMethodName());
+
+        Member member = memberRepository.findById(principal.getMember().getId()).orElseThrow(
+                () -> new NotValidMemberException(StatusCode.INVALID_MEMBER)
+        );
+
+        log.debug("[{}] MemberService 회원 조회 성공 username: {}", Thread.currentThread().getStackTrace()[1].getMethodName(), member.getUsername());
+
+        CheckActiveMemberDto checkActiveMemberDto = CheckActiveMemberDto.builder()
+                .isActivate(member.getStatus() == MemberStatus.ACTIVE)
+                .nickname(member.getNickname())
+                .build();
+
+        return checkActiveMemberDto;
 
     }
 

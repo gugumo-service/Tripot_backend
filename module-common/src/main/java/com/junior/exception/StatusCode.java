@@ -56,6 +56,7 @@ public enum StatusCode {
     UPDATE_NICKNAME_MEMBER(200, "MEMBER-SUCCESS-005", "회원 닉네임 변경 성공"),
     UPDATE_PROFILE_IMAGE_MEMBER(200, "MEMBER-SUCCESS-006", "회원 프로필 사진 변경 성공"),
     GET_MEMBER_INFO(200, "MEMBER-SUCCESS-007", "회원 정보 조회 성공"),
+    GET_MEMBER_ACTIVATE(200, "MEMBER-SUCCESS-008", "회원 활성화 여부 조회 성공"),
     INVALID_MEMBER(401, "MEMBER-ERR-001", "유효하지 않은 회원"),
     INVALID_MEMBER_STATUS(401, "MEMBER-ERR-002", "해당 회원 status로 실행할 수 없음"),
     MEMBER_NOT_FOUND(404, "MEMBER-ERR-003", "해당 회원을 찾을 수 없음"),

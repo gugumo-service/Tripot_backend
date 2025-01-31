@@ -2,12 +2,13 @@ package com.junior.controller.member;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.junior.config.SecurityConfig;
-import com.junior.security.WithMockCustomUser;
 import com.junior.dto.member.ActivateMemberDto;
+import com.junior.dto.member.CheckActiveMemberDto;
 import com.junior.dto.member.MemberInfoDto;
 import com.junior.dto.member.UpdateNicknameDto;
 import com.junior.security.JwtUtil;
 import com.junior.security.UserPrincipal;
+import com.junior.security.WithMockCustomUser;
 import com.junior.security.exceptionhandler.CustomAuthenticationEntryPoint;
 import com.junior.service.member.MemberService;
 import com.junior.service.security.UserDetailsServiceImpl;
@@ -29,6 +30,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -110,6 +112,36 @@ class MemberControllerTest {
                 .andExpect(jsonPath("$.customMessage").value("닉네임 사용가능 여부"))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(false));
+
+    }
+
+    @Test
+    @WithMockCustomUser
+    public void 회원_활성화_여부_확인() throws Exception {
+        //given
+        UserPrincipal principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        CheckActiveMemberDto checkActiveMemberDto = CheckActiveMemberDto.builder()
+                .nickname("테스트사용자닉네임")
+                .isActivate(true)
+                .build();
+
+        given(memberService.checkActiveMember(principal)).willReturn(checkActiveMemberDto);
+
+        //when
+        ResultActions actions = mockMvc.perform(
+                get("/api/v1/members/check-activate")
+                        .accept(MediaType.APPLICATION_JSON)
+        );
+
+        //then
+        actions
+                .andDo(print())
+                .andExpect(jsonPath("$.customCode").value("MEMBER-SUCCESS-008"))
+                .andExpect(jsonPath("$.customMessage").value("회원 활성화 여부 조회 성공"))
+                .andExpect(jsonPath("$.status").value(true))
+                .andExpect(jsonPath("$.data.nickname").value("테스트사용자닉네임"))
+                .andExpect(jsonPath("$.data.isActivate").value(true));
 
     }
 

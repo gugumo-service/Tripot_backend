@@ -2,6 +2,7 @@ package com.junior.controller.member;
 
 import com.junior.controller.api.MemberApi;
 import com.junior.dto.member.ActivateMemberDto;
+import com.junior.dto.member.CheckActiveMemberDto;
 import com.junior.dto.member.MemberInfoDto;
 import com.junior.dto.member.UpdateNicknameDto;
 import com.junior.response.CommonResponse;
@@ -45,6 +46,18 @@ public class MemberController implements MemberApi {
 
 //        return CommonResponse.of(CHECK_NICKNAME_MEMBER.getCustomCode(), CHECK_NICKNAME_MEMBER.getCustomMessage(), !memberService.checkDuplicateNickname(nickname));
         return CommonResponse.success(CHECK_NICKNAME_MEMBER, !memberService.checkDuplicateNickname(nickname));
+    }
+
+    /**
+     * 회원의 활성화 여부를 반환하는 기능
+     * @param principal
+     * @return nickname: 사용자의 닉네임
+     *         isActivate: 해당 회원의 활성화 여부
+     */
+    @GetMapping("/api/v1/members/check-activate")
+    public CommonResponse<CheckActiveMemberDto> checkActivateMember(@AuthenticationPrincipal UserPrincipal principal) {
+
+        return CommonResponse.success(GET_MEMBER_ACTIVATE, memberService.checkActiveMember(principal));
     }
 
     /**
