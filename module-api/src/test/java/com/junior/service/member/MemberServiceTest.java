@@ -5,6 +5,7 @@ import com.junior.domain.member.MemberRole;
 import com.junior.domain.member.MemberStatus;
 import com.junior.domain.member.SignUpType;
 import com.junior.dto.member.ActivateMemberDto;
+import com.junior.dto.member.CheckActiveMemberDto;
 import com.junior.dto.member.MemberInfoDto;
 import com.junior.dto.member.UpdateNicknameDto;
 import com.junior.exception.NotValidMemberException;
@@ -91,6 +92,40 @@ class MemberServiceTest {
         //when, then
         Assertions.assertThatThrownBy(() -> memberService.activateMember(principal, activateMemberDto)).isInstanceOf(NotValidMemberException.class);
 
+
+    }
+
+    @Test
+    public void 회원_활성화_상태_확인_비활성화회원() throws Exception {
+        //given
+
+        Member testPreactiveMember = createPreactiveTestMember();
+        UserPrincipal principal = new UserPrincipal(testPreactiveMember);
+        given(memberRepository.findById(1L)).willReturn(Optional.ofNullable(testPreactiveMember));
+
+        //when
+        CheckActiveMemberDto checkActiveMemberDto = memberService.checkActiveMember(principal);
+
+        //then
+        Assertions.assertThat(checkActiveMemberDto.nickname()).isEqualTo("테스트비활성화닉네임");
+        Assertions.assertThat(checkActiveMemberDto.isActivate()).isFalse();
+
+    }
+
+    @Test
+    public void 회원_활성화_상태_확인_활성화회원() throws Exception {
+        //given
+
+        Member testActiveMember = createActiveTestMember();
+        UserPrincipal principal = new UserPrincipal(testActiveMember);
+        given(memberRepository.findById(2L)).willReturn(Optional.ofNullable(testActiveMember));
+
+        //when
+        CheckActiveMemberDto checkActiveMemberDto = memberService.checkActiveMember(principal);
+
+        //then
+        Assertions.assertThat(checkActiveMemberDto.nickname()).isEqualTo("테스트사용자닉네임");
+        Assertions.assertThat(checkActiveMemberDto.isActivate()).isTrue();
 
     }
 

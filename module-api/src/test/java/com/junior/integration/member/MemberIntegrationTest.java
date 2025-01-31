@@ -146,6 +146,50 @@ public class MemberIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
+    @DisplayName("비활성화 회원의 활성화 여부는 false가 반환되어야 함")
+    @WithMockCustomPreactiveUser
+    public void 비활성화_회원_활성화_상태_확인() throws Exception {
+        //given
+
+        //when
+        ResultActions actions = mockMvc.perform(
+                get("/api/v1/members/check-activate")
+                        .accept(MediaType.APPLICATION_JSON)
+        );
+        //then
+        actions
+                .andDo(print())
+                .andExpect(jsonPath("$.customCode").value("MEMBER-SUCCESS-008"))
+                .andExpect(jsonPath("$.customMessage").value("회원 활성화 여부 조회 성공"))
+                .andExpect(jsonPath("$.status").value(true))
+                .andExpect(jsonPath("$.data.nickname").value("테스트비활성화닉네임"))
+                .andExpect(jsonPath("$.data.isActivate").value(false));
+
+    }
+
+    @Test
+    @DisplayName("활성화 회원의 활성화 여부는 true가 반환되어야 함")
+    @WithMockCustomUser
+    public void 활성화_회원_활성화_상태_확인() throws Exception {
+        //given
+
+        //when
+        ResultActions actions = mockMvc.perform(
+                get("/api/v1/members/check-activate")
+                        .accept(MediaType.APPLICATION_JSON)
+        );
+        //then
+        actions
+                .andDo(print())
+                .andExpect(jsonPath("$.customCode").value("MEMBER-SUCCESS-008"))
+                .andExpect(jsonPath("$.customMessage").value("회원 활성화 여부 조회 성공"))
+                .andExpect(jsonPath("$.status").value(true))
+                .andExpect(jsonPath("$.data.nickname").value("테스트사용자닉네임"))
+                .andExpect(jsonPath("$.data.isActivate").value(true));
+
+    }
+
+    @Test
     @DisplayName("응답에 조회한 회원 정보가 정상적으로 들어가야 함")
     @WithMockCustomUser
     void getMemberInfo() throws Exception {
