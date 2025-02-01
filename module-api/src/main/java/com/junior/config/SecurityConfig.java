@@ -74,6 +74,12 @@ public class SecurityConfig {
                                 "/v3/api-docs/**").permitAll()
                         // 단일 스토리 조회
                         .requestMatchers(HttpMethod.GET, "/api/v1/stories/*").permitAll()
+                        // 스토리 댓글 수 조회
+                        .requestMatchers(HttpMethod.GET, "/api/v1/comment/cnt/*").permitAll()
+                        // 댓글 조회
+                        .requestMatchers(HttpMethod.GET, "/api/v1/comment/*/parent").permitAll()
+                        // 답글 조회
+                        .requestMatchers(HttpMethod.GET, "/api/v1/comment/*/child").permitAll()
                         // public 스토리 리스트 조회
                         .requestMatchers("/api/v1/public/stories/**").permitAll()
 
