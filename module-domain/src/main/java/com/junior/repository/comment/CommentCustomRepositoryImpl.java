@@ -115,6 +115,7 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         booleanBuilder.and(comment.member.eq(findMember));
         booleanBuilder.and(comment.isDeleted.eq(false));
+        booleanBuilder.and(comment.story.isDeleted.eq(false));
         booleanBuilder.and(eqCursorId(cursorId));
 
         List<ResponseMyCommentDto> comments = query.select(
