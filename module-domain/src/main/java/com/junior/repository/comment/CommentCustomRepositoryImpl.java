@@ -115,11 +115,13 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         booleanBuilder.and(comment.member.eq(findMember));
         booleanBuilder.and(comment.isDeleted.eq(false));
+        booleanBuilder.and(comment.story.isDeleted.eq(false));
         booleanBuilder.and(eqCursorId(cursorId));
 
         List<ResponseMyCommentDto> comments = query.select(
                         Projections.constructor(
                                 ResponseMyCommentDto.class,
+                                comment.id,
                                 comment.story.id,
                                 comment.content,
                                 comment.createdDate,
@@ -129,6 +131,7 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository {
                 .from(comment)
                 .join(comment.story, story)
                 .where(booleanBuilder)
+                .orderBy(comment.createdDate.desc())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
 

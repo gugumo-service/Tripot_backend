@@ -15,6 +15,7 @@ import com.junior.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -27,6 +28,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 
 
 @Configuration
@@ -71,7 +73,7 @@ public class SecurityConfig {
                                 "/swagger-resources/**",
                                 "/v3/api-docs/**").permitAll()
                         // 단일 스토리 조회
-                        .requestMatchers("/api/v1/stories/{storyId}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/stories/*").permitAll()
                         // public 스토리 리스트 조회
                         .requestMatchers("/api/v1/public/stories/**").permitAll()
 

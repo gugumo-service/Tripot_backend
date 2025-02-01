@@ -5,6 +5,7 @@ import com.junior.domain.story.Story;
 import java.time.LocalDateTime;
 
 public record ResponseMyCommentDto(
+        Long commentId,
         Long storyId,
         String content,
         LocalDateTime createDate,
