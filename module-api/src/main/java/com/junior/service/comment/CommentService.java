@@ -120,8 +120,7 @@ public class CommentService {
     }
 
     public Long findCommentCntByStoryId(UserPrincipal userPrincipal, Long storyId) {
-        Member findMember = userPrincipal.getMember();
 
-        return commentRepository.countByStoryId(storyId);
+        return commentRepository.countByStoryIdAndIsDeletedFalse(storyId);
     }
 }
