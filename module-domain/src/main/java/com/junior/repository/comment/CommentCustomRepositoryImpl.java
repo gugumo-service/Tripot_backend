@@ -129,6 +129,7 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository {
                 .from(comment)
                 .join(comment.story, story)
                 .where(booleanBuilder)
+                .orderBy(comment.createdDate.desc())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
 
