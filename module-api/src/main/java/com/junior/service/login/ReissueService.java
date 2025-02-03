@@ -1,4 +1,4 @@
-package com.junior.service.member;
+package com.junior.service.login;
 
 import com.junior.dto.jwt.LoginCreateJwtDto;
 import com.junior.dto.jwt.RefreshTokenDto;

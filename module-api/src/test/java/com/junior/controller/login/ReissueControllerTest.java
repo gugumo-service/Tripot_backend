@@ -6,7 +6,7 @@ import com.junior.dto.jwt.RefreshTokenDto;
 import com.junior.security.JwtUtil;
 import com.junior.security.WithMockCustomUser;
 import com.junior.security.exceptionhandler.CustomAuthenticationEntryPoint;
-import com.junior.service.member.ReissueService;
+import com.junior.service.login.ReissueService;
 import com.junior.service.security.UserDetailsServiceImpl;
 import com.junior.util.RedisUtil;
 import org.junit.jupiter.api.DisplayName;

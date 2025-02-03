@@ -1,4 +1,4 @@
-package com.junior.service.member;
+package com.junior.service.login;
 
 import com.junior.domain.member.Member;
 import com.junior.domain.member.MemberRole;

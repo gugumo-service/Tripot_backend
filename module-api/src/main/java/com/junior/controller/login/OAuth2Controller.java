@@ -7,7 +7,7 @@ import com.junior.dto.oauth2.OAuth2LoginDto;
 import com.junior.dto.oauth2.OAuth2Provider;
 import com.junior.exception.StatusCode;
 import com.junior.response.CommonResponse;
-import com.junior.service.member.OAuth2Service;
+import com.junior.service.login.OAuth2Service;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
