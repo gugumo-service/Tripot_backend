@@ -6,6 +6,7 @@ import com.junior.domain.notification.NotificationType;
 import com.junior.dto.notification.CreateNotificationDto;
 import com.junior.dto.notification.ResponseNotificationDto;
 import com.junior.exception.NotificationNotFoundException;
+import com.junior.exception.PermissionException;
 import com.junior.exception.StatusCode;
 import com.junior.repository.notification.NotificationRepository;
 import com.junior.security.UserPrincipal;
@@ -63,5 +64,20 @@ public class NotificationService {
 
         List<Notification> notifications = notificationRepository.findByMemberIdAndIsReadFalse(findMember.getId());
         notifications.forEach(Notification::readNotification);
+    }
+
+    @Transactional
+    public void deleteNotification(UserPrincipal userPrincipal, Long notificationId) {
+
+        Member findMember = userPrincipal.getMember();
+
+        Notification notification = notificationRepository.findById(notificationId)
+                .orElseThrow(() -> new NotificationNotFoundException(StatusCode.NOTIFICATION_NOT_FOUND));
+
+        if(notification.getMemberId().equals(findMember.getId())) {
+            notification.deleteNotification();
+        } else {
+            throw new PermissionException(StatusCode.NOTIFICATION_NOT_PERMISSION);
+        }
     }
 }

@@ -34,6 +34,9 @@ public class Notification extends BaseEntity {
     @Builder.Default
     private Boolean isRead = false;
 
+    @Builder.Default
+    private Boolean isDeleted = false;
+
     public static Notification from(CreateNotificationDto createNotificationDto) {
         return Notification.builder()
                 .content(createNotificationDto.content())
@@ -46,5 +49,9 @@ public class Notification extends BaseEntity {
 
     public void readNotification() {
         this.isRead = true;
+    }
+
+    public void deleteNotification() {
+        this.isDeleted = true;
     }
 }

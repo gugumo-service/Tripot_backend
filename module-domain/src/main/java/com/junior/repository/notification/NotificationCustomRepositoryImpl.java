@@ -50,7 +50,7 @@ public class NotificationCustomRepositoryImpl implements NotificationCustomRepos
 
         booleanBuilder.and(notification.memberId.eq(memberId));
         booleanBuilder.and(eqCursorId(cursorId));
-        booleanBuilder.and(notification.isRead.eq(false));
+        booleanBuilder.and(notification.isDeleted.eq(false));
 
         List<ResponseNotificationDto> notifications = query.select(Projections.constructor(
                         ResponseNotificationDto.class,
@@ -59,6 +59,7 @@ public class NotificationCustomRepositoryImpl implements NotificationCustomRepos
                         notification.content,
                         notification.profileImgPath,
                         notification.memberId,
+                        notification.isRead,
                         notification.createdDate,
                         notification.notificationType
                 ))
