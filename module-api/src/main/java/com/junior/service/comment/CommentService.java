@@ -57,7 +57,7 @@ public class CommentService {
 
         commentRepository.save(comment);
 
-        notificationService.saveNotification(userPrincipal, findMember.getProfileImage(), comment.getContent(), findStory.getId(), NotificationType.COMMENT);
+        notificationService.saveNotification(findStory.getMember(), findMember.getProfileImage(), comment.getContent(), findStory.getId(), NotificationType.COMMENT);
     }
 
     public Slice<ResponseParentCommentDto> findParentCommentByStoryId(UserPrincipal userPrincipal, Long storyId, Long cursorId, int size) {

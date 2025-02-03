@@ -39,6 +39,16 @@ public class NotificationController {
         return CommonResponse.success(StatusCode.NOTIFICATION_READ_SUCCESS, null);
     }
 
+    @DeleteMapping("/{notificationId}")
+    public CommonResponse<Object> deleteNotification(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @PathVariable(name = "notificationId") Long notificationId
+    ) {
+        notificationService.deleteNotification(userPrincipal, notificationId);
+
+        return CommonResponse.success(StatusCode.NOTIFICATION_DELETE_SUCCESS, null);
+    }
+
     @GetMapping("/read/all")
     public CommonResponse<Object> readAllNotification(
             @AuthenticationPrincipal UserPrincipal userPrincipal

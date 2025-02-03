@@ -135,7 +135,7 @@ public class MemberStoryService {
             findStory.increaseLikeCnt();
 
             //알림 저장
-            notificationService.saveNotification(userPrincipal, findMember.getProfileImage(), findStory.getTitle(), findStory.getId(), NotificationType.LIKED);
+            notificationService.saveNotification(findStory.getMember(), findMember.getProfileImage(), findStory.getTitle(), findStory.getId(), NotificationType.LIKED);
         }
         else {
             Like findLike = likeRepository.findLikeByMemberAndStory(findMember, findStory);

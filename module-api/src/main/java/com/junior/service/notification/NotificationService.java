@@ -6,6 +6,7 @@ import com.junior.domain.notification.NotificationType;
 import com.junior.dto.notification.CreateNotificationDto;
 import com.junior.dto.notification.ResponseNotificationDto;
 import com.junior.exception.NotificationNotFoundException;
+import com.junior.exception.PermissionException;
 import com.junior.exception.StatusCode;
 import com.junior.repository.notification.NotificationRepository;
 import com.junior.security.UserPrincipal;
@@ -26,14 +27,12 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
 
     @Transactional
-    public void saveNotification(UserPrincipal userPrincipal, String profilePath, String content, Long storyId, NotificationType notificationType) {
-
-        Member findMember = userPrincipal.getMember();
+    public void saveNotification(Member member, String profilePath, String content, Long storyId, NotificationType notificationType) {
 
         CreateNotificationDto createNotificationDto = CreateNotificationDto.builder()
                 .content(content)
                 .profileImgPath(profilePath)
-                .memberId(findMember.getId())
+                .memberId(member.getId())
                 .storyId(storyId)
                 .notificationType(notificationType)
                 .build();
@@ -65,5 +64,20 @@ public class NotificationService {
 
         List<Notification> notifications = notificationRepository.findByMemberIdAndIsReadFalse(findMember.getId());
         notifications.forEach(Notification::readNotification);
+    }
+
+    @Transactional
+    public void deleteNotification(UserPrincipal userPrincipal, Long notificationId) {
+
+        Member findMember = userPrincipal.getMember();
+
+        Notification notification = notificationRepository.findById(notificationId)
+                .orElseThrow(() -> new NotificationNotFoundException(StatusCode.NOTIFICATION_NOT_FOUND));
+
+        if(notification.getMemberId().equals(findMember.getId())) {
+            notification.deleteNotification();
+        } else {
+            throw new PermissionException(StatusCode.NOTIFICATION_NOT_PERMISSION);
+        }
     }
 }

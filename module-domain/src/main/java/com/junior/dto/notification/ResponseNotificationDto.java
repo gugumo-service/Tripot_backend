@@ -12,6 +12,7 @@ public record ResponseNotificationDto (
         String content,
         String profileImgPath,
         Long memberId,
+        Boolean isRead,
         LocalDateTime createdAt,
         NotificationType notificationType
 ){
