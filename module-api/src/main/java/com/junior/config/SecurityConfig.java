@@ -86,7 +86,7 @@ public class SecurityConfig {
                         //admin 관련 설정
                         .requestMatchers("/api/v1/admin/**").hasRole(MemberRole.ADMIN.name())
                         .requestMatchers("/createTestMember").permitAll()
-                        .requestMatchers("/trip/**").permitAll()
+                        .requestMatchers("/actuator/health").permitAll()
                         .anyRequest().authenticated());
 
 

@@ -4,13 +4,12 @@ spring:
   profiles:
     group:
       "local": "local"
-      "prod": "prod"
 
 management:
-  endpoint:
   endpoints:
     web:
-      base-path: /trip
+      exposure:
+        include: health
 
 #  config:
 #    import: aws-parameterstore:/config/tripot-prod/
