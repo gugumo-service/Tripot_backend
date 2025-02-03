@@ -34,43 +34,6 @@ class OAuth2ControllerTest extends BaseControllerTest {
 
 
     @Test
-    @DisplayName("소셜 로그인 응답이 정상적으로 반환되어야 함 - oauth2 과정은 서버 측에서 진행")
-    @WithMockCustomUser
-    @Disabled
-    void oauth2Login() throws Exception {
-
-        //given
-        MockHttpServletResponse response = new MockHttpServletResponse();
-        String code = "code";
-        String kakaoProvider = "kakao";
-
-        CheckActiveMemberDto checkActiveMemberDto = new CheckActiveMemberDto("nickname", false);
-
-        //argumentmatcher는 메서드의 모든 파라미터에 쓰거나, 안 써야 함
-        given(oAuth2Service.oauth2Login(any(HttpServletResponse.class), anyString(), any(OAuth2Provider.class))).willReturn(checkActiveMemberDto);
-
-        //when
-        ResultActions actions = mockMvc.perform(
-                post("/api/v1/login/oauth2/{provider}", kakaoProvider)
-                        .queryParam("code", code)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-        );
-
-        //then
-        actions
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("MEMBER-SUCCESS-004"))
-                .andExpect(jsonPath("$.customMessage").value("소셜 로그인 성공"))
-                .andExpect(jsonPath("$.status").value(true))
-                .andExpect(jsonPath("$.data.nickname").value("nickname"))
-                .andExpect(jsonPath("$.data.isActivate").value(false));
-
-
-    }
-
-    @Test
     @DisplayName("소셜 로그인 응답이 정상적으로 반환되어야 함 - oauth2 과정은 프론트 측에서 진행")
     void oauth2LoginV2() throws Exception {
 

@@ -14,8 +14,6 @@ import com.junior.exception.JwtErrorException;
 import com.junior.exception.StatusCode;
 import com.junior.repository.member.MemberRepository;
 import com.junior.security.JwtUtil;
-import com.junior.strategy.oauth2.KakaoOAuth2LoginStrategy;
-import com.junior.strategy.oauth2.OAuth2UserGenerator;
 import com.junior.util.RedisUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
@@ -31,36 +29,11 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class OAuth2Service {
 
-    private final OAuth2UserGenerator oAuth2UserGenerator;
-    private final KakaoOAuth2LoginStrategy kakaoOAuth2LoginStrategy;
+
     private final MemberRepository memberRepository;
     private final JwtUtil jwtUtil;
     private final RedisUtil redisUtil;
 
-
-    /**
-     * OAuth2 과정을 백 단에서 처리
-     * @param response
-     * @param code
-     * @param provider
-     * @return
-     */
-    @Deprecated
-    public CheckActiveMemberDto oauth2Login(HttpServletResponse response, String code, OAuth2Provider provider) {
-
-        OAuth2UserInfo userInfo = generateOAuth2UserInfo(code, provider);
-
-        String username = userInfo.provider() + " " + userInfo.id();
-
-        boolean existMember = memberRepository.existsByUsername(username);
-
-        Member member = createMember(provider, existMember, username, userInfo);
-
-        makeJWTs(member, response);
-
-
-        return createResponse(response, member);
-    }
 
     /**
      * OAuth2 과정을 프론트 단에서 처리
@@ -115,17 +88,6 @@ public class OAuth2Service {
 
     }
 
-
-    private OAuth2UserInfo generateOAuth2UserInfo(String code, OAuth2Provider provider) {
-        //소셜 로그인 전략 설정
-        if (provider == OAuth2Provider.KAKAO) {
-            oAuth2UserGenerator.setOAuth2MemberStrategy(kakaoOAuth2LoginStrategy);
-        }
-
-        //OAuth2 과정 진행 후 사용자 정보 받아오기
-        OAuth2UserInfo userInfo = oAuth2UserGenerator.signUpOAuth2(code);
-        return userInfo;
-    }
 
     private OAuth2UserInfo generateOAuth2UserInfo(OAuth2LoginDto oAuth2LoginDto, OAuth2Provider provider) {
         return OAuth2UserInfo.builder()

@@ -18,14 +18,6 @@ public class OAuth2Controller implements OAuth2Api {
 
     private final OAuth2Service oAuth2Service;
 
-    @PostMapping("/api/v1/login/oauth2/{provider}")
-    @Deprecated
-    public CommonResponse<CheckActiveMemberDto> oauth2Login(HttpServletResponse response, @RequestParam("code") String code, @PathVariable("provider") String provider) {
-
-
-        return CommonResponse.success(StatusCode.OAUTH2_LOGIN_SUCCESS, oAuth2Service.oauth2Login(response, code, OAuth2Provider.valueOf(provider.toUpperCase())));
-
-    }
 
     @PostMapping("/api/v2/login/oauth2/{provider}")
     public CommonResponse<CheckActiveMemberDto> oauth2Login(HttpServletResponse response, @RequestBody OAuth2LoginDto oAuth2LoginDto, @PathVariable("provider") String provider) {
