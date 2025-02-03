@@ -26,14 +26,12 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
 
     @Transactional
-    public void saveNotification(UserPrincipal userPrincipal, String profilePath, String content, Long storyId, NotificationType notificationType) {
-
-        Member findMember = userPrincipal.getMember();
+    public void saveNotification(Member member, String profilePath, String content, Long storyId, NotificationType notificationType) {
 
         CreateNotificationDto createNotificationDto = CreateNotificationDto.builder()
                 .content(content)
                 .profileImgPath(profilePath)
-                .memberId(findMember.getId())
+                .memberId(member.getId())
                 .storyId(storyId)
                 .notificationType(notificationType)
                 .build();
