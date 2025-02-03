@@ -38,6 +38,8 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class OAuth2ServiceTest {
 
+    @InjectMocks
+    OAuth2Service oAuth2Service;
     @Mock
     private OAuth2UserGenerator oAuth2UserGenerator;
     @Mock
@@ -48,9 +50,6 @@ class OAuth2ServiceTest {
     private JwtUtil jwtUtil;
     @Mock
     private RedisUtil redisUtil;
-
-    @InjectMocks
-    OAuth2Service oAuth2Service;
 
     @Test
     @DisplayName("카카오 로그인 시 관련 기능들의 정상 동작 및 해당 dto의 성공적 반환, 새 회원")

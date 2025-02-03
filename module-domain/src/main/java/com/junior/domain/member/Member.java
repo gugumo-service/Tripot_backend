@@ -1,14 +1,10 @@
 package com.junior.domain.member;
 
 
-import com.junior.domain.like.Like;
 import com.junior.dto.member.ActivateMemberDto;
 import com.junior.dto.member.UpdateNicknameDto;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -61,7 +57,7 @@ public class Member {
 //        isAgreeTermsUse = activateMemberDto.isAgreeTermsUse();
 //        isAgreeCollectingUsingPersonalInformation = activateMemberDto.isAgreeCollectingUsingPersonalInformation();
 //        isAgreeMarketing = activateMemberDto.isAgreeMarketing();
-        recommendLocation= activateMemberDto.recommendLocation();
+        recommendLocation = activateMemberDto.recommendLocation();
         status = MemberStatus.ACTIVE;
     }
 

@@ -8,7 +8,6 @@ import com.junior.domain.member.SignUpType;
 import com.junior.domain.story.Story;
 import com.junior.dto.story.*;
 import com.junior.repository.member.MemberRepository;
-import com.junior.repository.story.StoryRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

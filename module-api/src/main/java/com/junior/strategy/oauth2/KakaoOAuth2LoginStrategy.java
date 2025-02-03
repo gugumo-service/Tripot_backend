@@ -6,26 +6,24 @@ import com.junior.dto.oauth2.OAuth2UserInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
-import static com.junior.dto.oauth2.OAuth2Provider.*;
+import static com.junior.dto.oauth2.OAuth2Provider.KAKAO;
 
 @Slf4j
 @Component
 public class KakaoOAuth2LoginStrategy implements OAuth2MemberStrategy {
 
+    private final String KAKAO_REDIRECT_URI = "http://52.79.72.18:8080/api/v1/login/oauth2/kakao";
+    //    private final String KAKAO_REDIRECT_URI = "http://54.180.139.123:8080/api/v1/login/oauth2/kakao";
+//    private final String KAKAO_REDIRECT_URI = "http://localhost:8080/api/v1/login/oauth2/kakao";
+    private final String KAUTH_TOKEN_URL_HOST = "https://kauth.kakao.com";
+    private final String KAUTH_USER_URL_HOST = "https://kapi.kakao.com";
     @Value("${kakao.client-id}")
     private String clientId;
     @Value("${kakao.client-secret}")
     private String secretKey;
-    private final String KAKAO_REDIRECT_URI = "http://52.79.72.18:8080/api/v1/login/oauth2/kakao";
-//    private final String KAKAO_REDIRECT_URI = "http://54.180.139.123:8080/api/v1/login/oauth2/kakao";
-//    private final String KAKAO_REDIRECT_URI = "http://localhost:8080/api/v1/login/oauth2/kakao";
-    private final String KAUTH_TOKEN_URL_HOST = "https://kauth.kakao.com";
-    private final String KAUTH_USER_URL_HOST = "https://kapi.kakao.com";
 
     @Override
     public OAuth2UserInfo signUpOauth2(String code) {
@@ -37,7 +35,6 @@ public class KakaoOAuth2LoginStrategy implements OAuth2MemberStrategy {
                 .provider(KAKAO)
                 .build();
     }
-
 
 
     private String getAccessTokenFromKakao(String code) {

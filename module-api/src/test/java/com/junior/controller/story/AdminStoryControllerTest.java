@@ -3,7 +3,6 @@ package com.junior.controller.story;
 import com.junior.controller.BaseControllerTest;
 import com.junior.dto.story.AdminStoryDetailDto;
 import com.junior.dto.story.AdminStoryDto;
-import com.junior.dto.story.ResponseStoryListDto;
 import com.junior.page.PageCustom;
 import com.junior.security.WithMockCustomAdmin;
 import com.junior.service.story.AdminStoryService;

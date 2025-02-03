@@ -5,10 +5,10 @@ import lombok.Getter;
 @Getter
 public class QnaException extends RuntimeException {
 
-  private StatusCode statusCode;
+    private StatusCode statusCode;
 
     public QnaException(StatusCode statusCode) {
-      super(statusCode.getCustomMessage());
-      this.statusCode = statusCode;
+        super(statusCode.getCustomMessage());
+        this.statusCode = statusCode;
     }
 }

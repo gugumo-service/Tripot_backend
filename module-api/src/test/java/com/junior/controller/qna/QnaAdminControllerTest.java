@@ -132,11 +132,6 @@ class QnaAdminControllerTest {
                 .andExpect(jsonPath("$.data.content[0].question").value("question"));
 
 
-
-
-
-
-
     }
 
     @Test
@@ -171,11 +166,7 @@ class QnaAdminControllerTest {
                 .andExpect(jsonPath("$.data.answer").value("answer"));
 
 
-
-
-
     }
-
 
 
     @Test

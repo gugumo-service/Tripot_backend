@@ -1,6 +1,5 @@
 package com.junior.controller.api;
 
-import com.junior.dto.notice.NoticeUserDto;
 import com.junior.dto.qna.QnaUserDto;
 import com.junior.response.CommonResponse;
 import io.swagger.v3.oas.annotations.Operation;

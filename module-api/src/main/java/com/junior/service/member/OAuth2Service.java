@@ -136,7 +136,6 @@ public class OAuth2Service {
     }
 
 
-
     private void makeJWTs(Member member, HttpServletResponse response) {
         //JWT 생성
         LoginCreateJwtDto loginCreateJwtDto = LoginCreateJwtDto.builder()

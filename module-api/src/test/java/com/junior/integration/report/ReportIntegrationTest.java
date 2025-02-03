@@ -58,7 +58,6 @@ public class ReportIntegrationTest extends BaseIntegrationTest {
     private MockMvc mockMvc;
 
 
-
     @BeforeEach
     void init() throws InterruptedException {
         Member preactiveTestMember = createPreactiveTestMember();
@@ -176,7 +175,6 @@ public class ReportIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.data").value(nullValue()));
 
 
-
     }
 
 
@@ -214,7 +212,6 @@ public class ReportIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.data").value(nullValue()));
 
 
-
     }
 
     @Test
@@ -228,7 +225,7 @@ public class ReportIntegrationTest extends BaseIntegrationTest {
         //when
         ResultActions actions = mockMvc.perform(
                 get("/api/v1/admin/reports")
-                        .queryParam("report_status",reportStatus)
+                        .queryParam("report_status", reportStatus)
                         .accept(MediaType.APPLICATION_JSON)
         );
 
@@ -243,7 +240,6 @@ public class ReportIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.data.content[0].reportReason").value("스팸홍보"))
                 .andExpect(jsonPath("$.data.content[0].reportStatus").value("UNCONFIRMED"))
                 .andExpect(jsonPath("$.data.content[0].storyId").value(1));
-
 
 
     }

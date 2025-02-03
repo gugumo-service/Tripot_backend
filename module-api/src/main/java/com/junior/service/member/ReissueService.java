@@ -2,8 +2,8 @@ package com.junior.service.member;
 
 import com.junior.dto.jwt.LoginCreateJwtDto;
 import com.junior.dto.jwt.RefreshTokenDto;
-import com.junior.exception.StatusCode;
 import com.junior.exception.JwtErrorException;
+import com.junior.exception.StatusCode;
 import com.junior.security.JwtUtil;
 import com.junior.util.RedisUtil;
 import jakarta.servlet.http.HttpServletResponse;
@@ -40,7 +40,6 @@ public class ReissueService {
             //예외 처리: 존재하지 않는 토큰
             throw new JwtErrorException(StatusCode.TOKEN_NOT_EXIST);
         }
-
 
 
         String username = jwtUtil.getUsername(oldRefreshToken);

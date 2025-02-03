@@ -12,8 +12,8 @@ import com.junior.dto.notice.UpdateNoticeDto;
 import com.junior.exception.NotValidMemberException;
 import com.junior.exception.NoticeException;
 import com.junior.page.PageCustom;
-import com.junior.repository.notice.NoticeRepository;
 import com.junior.repository.member.MemberRepository;
+import com.junior.repository.notice.NoticeRepository;
 import com.junior.security.UserPrincipal;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -47,6 +47,15 @@ class NoticeAdminServiceTest {
 
     @InjectMocks
     private NoticeAdminService noticeAdminService;
+
+    private static Notice createNotice() {
+        Notice notice = Notice.builder()
+                .id(1L)
+                .title("title")
+                .content("content")
+                .build();
+        return notice;
+    }
 
     @Test
     @DisplayName("공지사항 저장 로직이 정상적으로 실행되어야 함")
@@ -85,12 +94,11 @@ class NoticeAdminServiceTest {
                 .withFailMessage("유효하지 않은 회원");
 
 
-
     }
 
     @Test
     @DisplayName("공지사항 조회 로직이 정상적으로 실행되어야 함")
-    void findNotice_success(){
+    void findNotice_success() {
 
         //given
 
@@ -127,7 +135,7 @@ class NoticeAdminServiceTest {
 
     @Test
     @DisplayName("공지사항 세부 조회 로직이 정상적으로 실행되어야 함")
-    void findNoticeDetail_success(){
+    void findNoticeDetail_success() {
 
         //given
 
@@ -155,7 +163,7 @@ class NoticeAdminServiceTest {
 
     @Test
     @DisplayName("공지사항을 찾지 못했을 때 관련 예외처리를 해야 함")
-    void findNoticeDetail_notice_not_found(){
+    void findNoticeDetail_notice_not_found() {
 
 
         //given
@@ -175,7 +183,7 @@ class NoticeAdminServiceTest {
 
     @Test
     @DisplayName("삭제된 공지사항에 대해 관련 예외 처리를 해야 함")
-    void findNoticeDetail_deleted_notice(){
+    void findNoticeDetail_deleted_notice() {
 
         //given
 
@@ -194,7 +202,7 @@ class NoticeAdminServiceTest {
 
     @Test
     @DisplayName("찾을 수 없는 회원에 대해 관련 예외처리를 해야 함")
-    void findNoticeDetail_not_found_member(){
+    void findNoticeDetail_not_found_member() {
 
         //given
 
@@ -212,8 +220,6 @@ class NoticeAdminServiceTest {
                 .hasMessageContaining("해당 회원을 찾을 수 없음");
 
     }
-
-
 
     @Test
     @DisplayName("공지사항 수정 로직이 정상적으로 실행되어야 함")
@@ -254,8 +260,6 @@ class NoticeAdminServiceTest {
                 .hasMessageContaining("해당 공지사항을 찾을 수 없음");
 
 
-
-
     }
 
     @Test
@@ -289,17 +293,6 @@ class NoticeAdminServiceTest {
                 .hasMessageContaining("해당 공지사항을 찾을 수 없음");
 
 
-
-
-    }
-
-    private static Notice createNotice() {
-        Notice notice = Notice.builder()
-                .id(1L)
-                .title("title")
-                .content("content")
-                .build();
-        return notice;
     }
 
     Member createActiveTestMember() {

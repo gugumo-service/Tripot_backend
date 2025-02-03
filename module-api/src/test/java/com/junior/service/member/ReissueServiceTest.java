@@ -11,12 +11,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockHttpServletResponse;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -58,7 +56,6 @@ class ReissueServiceTest {
         given(jwtUtil.getRole(anyString())).willReturn("USER");
 
 
-
         //when
         reissueService.reissue(refreshTokenDto, response);
 
@@ -70,7 +67,6 @@ class ReissueServiceTest {
         //토큰이 헤더에 정상적으로 들어가야 함
         assertThat(response.getHeader("Authorization")).isEqualTo("Bearer " + sampleAccess);
         assertThat(response.getHeader("refresh_token")).isEqualTo("Bearer " + sampleRefresh);
-
 
 
     }
@@ -87,10 +83,7 @@ class ReissueServiceTest {
         RefreshTokenDto refreshTokenDto = new RefreshTokenDto(oldRefreshToken);
 
 
-
         given(jwtUtil.isExpired(anyString())).willReturn(true);
-
-
 
 
         //when, then
@@ -113,18 +106,14 @@ class ReissueServiceTest {
         RefreshTokenDto refreshTokenDto = new RefreshTokenDto(oldRefreshToken);
 
 
-
         given(jwtUtil.isExpired(anyString())).willReturn(false);
         given(jwtUtil.getCategory(anyString())).willReturn("access");
-
 
 
         //when, then
         assertThatThrownBy(() -> reissueService.reissue(refreshTokenDto, response))
                 .isInstanceOf(JwtErrorException.class)
                 .hasMessageContaining("Refresh token이 아님");
-
-
 
 
     }
@@ -149,8 +138,6 @@ class ReissueServiceTest {
         assertThatThrownBy(() -> reissueService.reissue(refreshTokenDto, response))
                 .isInstanceOf(JwtErrorException.class)
                 .hasMessageContaining("존재하지 않는 토큰");
-
-
 
 
     }

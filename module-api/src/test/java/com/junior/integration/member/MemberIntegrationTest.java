@@ -134,7 +134,6 @@ public class MemberIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.data").value(true));
 
 
-
         //then
         actionsFalse
                 .andExpect(status().isOk())

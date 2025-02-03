@@ -6,7 +6,7 @@ import lombok.Builder;
 import java.time.LocalDateTime;
 
 @Builder
-public record ResponseNotificationDto (
+public record ResponseNotificationDto(
         Long id,
         Long storyId,
         String content,
@@ -15,5 +15,5 @@ public record ResponseNotificationDto (
         Boolean isRead,
         LocalDateTime createdAt,
         NotificationType notificationType
-){
+) {
 }

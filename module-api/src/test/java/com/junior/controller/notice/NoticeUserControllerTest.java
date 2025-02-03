@@ -2,9 +2,9 @@ package com.junior.controller.notice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.junior.config.SecurityConfig;
-import com.junior.security.WithMockCustomUser;
 import com.junior.dto.notice.NoticeUserDto;
 import com.junior.security.JwtUtil;
+import com.junior.security.WithMockCustomUser;
 import com.junior.security.exceptionhandler.CustomAuthenticationEntryPoint;
 import com.junior.service.notice.NoticeUserService;
 import com.junior.service.security.UserDetailsServiceImpl;
@@ -27,10 +27,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 

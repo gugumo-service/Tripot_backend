@@ -1,7 +1,7 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.3.3'
-	id 'io.spring.dependency-management' version '1.1.6'
+    id 'java'
+    id 'org.springframework.boot' version '3.3.3'
+    id 'io.spring.dependency-management' version '1.1.6'
 }
 
 
@@ -9,64 +9,63 @@ bootJar { enabled = false }
 jar { enabled = true }
 
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
-	}
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }
 
 
+allprojects {
+    group = 'com.junior'
+    version = '0.0.1-SNAPSHOT'
+    sourceCompatibility = '17'
 
-allprojects{
-	group = 'com.junior'
-	version = '0.0.1-SNAPSHOT'
-	sourceCompatibility = '17'
-
-	repositories {
-		mavenCentral()
-	}
+    repositories {
+        mavenCentral()
+    }
 
 
 }
 
-subprojects{
+subprojects {
 
-	apply plugin: "java"
-	apply plugin: 'java-library'
-	apply plugin: "io.spring.dependency-management"
-	apply plugin: "org.springframework.boot"
+    apply plugin: "java"
+    apply plugin: 'java-library'
+    apply plugin: "io.spring.dependency-management"
+    apply plugin: "org.springframework.boot"
 
-	configurations {
-		compileOnly {
-			extendsFrom annotationProcessor
-		}
-	}
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
 
-	dependencies {
+    dependencies {
 
-		implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.14.2'
+        implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.14.2'
 
-		//AWS Parameter Store
-		implementation platform("io.awspring.cloud:spring-cloud-aws-dependencies:3.2.0")
-		implementation 'io.awspring.cloud:spring-cloud-aws-starter-parameter-store'
-
-
-		//검증
-		implementation 'org.springframework.boot:spring-boot-starter-validation'
+        //AWS Parameter Store
+        implementation platform("io.awspring.cloud:spring-cloud-aws-dependencies:3.2.0")
+        implementation 'io.awspring.cloud:spring-cloud-aws-starter-parameter-store'
 
 
-		//루트
-		compileOnly 'org.projectlombok:lombok'
-		annotationProcessor 'org.projectlombok:lombok'
+        //검증
+        implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-		//테스트
-		testImplementation 'org.springframework.boot:spring-boot-starter-test'
-		testImplementation 'org.springframework.security:spring-security-test'
-		testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	}
 
-	tasks.named('test') {
-		useJUnitPlatform()
-	}
+        //루트
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+
+        //테스트
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testImplementation 'org.springframework.security:spring-security-test'
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    }
+
+    tasks.named('test') {
+        useJUnitPlatform()
+    }
 
 }
 

@@ -47,6 +47,15 @@ class QnaAdminServiceTest {
     @InjectMocks
     private QnaAdminService qnaAdminService;
 
+    private static Qna createQna() {
+        Qna qna = Qna.builder()
+                .id(1L)
+                .question("question")
+                .answer("answer")
+                .build();
+        return qna;
+    }
+
     @Test
     @DisplayName("Q&A 저장 로직이 정상적으로 실행되어야 함")
     void saveQna_success() {
@@ -211,7 +220,6 @@ class QnaAdminServiceTest {
 
     }
 
-
     @Test
     @DisplayName("Q&A 수정 로직이 정상적으로 실행되어야 함")
     void updateQna_success() {
@@ -284,15 +292,6 @@ class QnaAdminServiceTest {
                 .hasMessageContaining("해당 Q&A를 찾을 수 없음");
 
 
-    }
-
-    private static Qna createQna() {
-        Qna qna = Qna.builder()
-                .id(1L)
-                .question("question")
-                .answer("answer")
-                .build();
-        return qna;
     }
 
     Member createActiveTestMember() {

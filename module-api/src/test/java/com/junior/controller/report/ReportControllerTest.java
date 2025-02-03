@@ -46,26 +46,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(SecurityConfig.class)
 public class ReportControllerTest {
 
-    @MockBean
-    private RedisUtil redisUtil;
-
-    @MockBean
-    private JwtUtil jwtUtil;
-
-    @MockBean
-    private UserDetailsServiceImpl userDetailsService;
-
-    @MockBean
-    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
-
     @Autowired
     MockMvc mockMvc;
-
     @MockBean
     ReportService reportService;
-
     @Autowired
     ObjectMapper objectMapper;
+    @MockBean
+    private RedisUtil redisUtil;
+    @MockBean
+    private JwtUtil jwtUtil;
+    @MockBean
+    private UserDetailsServiceImpl userDetailsService;
+    @MockBean
+    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Test
     @DisplayName("신고 응답이 반환되어야 함")
@@ -133,8 +127,6 @@ public class ReportControllerTest {
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data.pageable.number").value(1))
                 .andExpect(jsonPath("$.data.content[0].reportReason").value("스팸홍보"));
-
-
 
 
     }

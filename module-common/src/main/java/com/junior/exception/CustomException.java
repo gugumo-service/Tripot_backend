@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class CustomException extends RuntimeException{
+public class CustomException extends RuntimeException {
     private String returnCode;
     private String returnMessage;
 

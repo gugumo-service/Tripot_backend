@@ -1,7 +1,6 @@
 package com.junior.dto.story;
 
 import com.querydsl.core.annotations.QueryProjection;
-import lombok.Builder;
 
 public record ResponseStoryCntByCityDto(
         String city,

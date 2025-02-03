@@ -1,7 +1,6 @@
 package com.junior.dto.story;
 
 import com.junior.domain.story.Story;
-import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 
 import java.time.LocalDateTime;

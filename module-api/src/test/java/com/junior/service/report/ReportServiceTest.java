@@ -10,7 +10,6 @@ import com.junior.domain.report.ReportStatus;
 import com.junior.domain.report.ReportType;
 import com.junior.domain.story.Comment;
 import com.junior.domain.story.Story;
-import com.junior.dto.notice.NoticeAdminDto;
 import com.junior.dto.report.CreateReportDto;
 import com.junior.dto.report.ReportDto;
 import com.junior.dto.report.ReportQueryDto;
@@ -38,7 +37,8 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -198,7 +198,6 @@ class ReportServiceTest {
         given(memberRepository.findById(anyLong())).willReturn(Optional.ofNullable(testActiveMember));
 
 
-
         //when, then
         assertThatThrownBy(() -> reportService.save(createReportDto, principal))
                 .isInstanceOf(ReportException.class)
@@ -223,7 +222,6 @@ class ReportServiceTest {
         UserPrincipal principal = new UserPrincipal(testActiveMember);
 
         given(memberRepository.findById(anyLong())).willReturn(Optional.ofNullable(testActiveMember));
-
 
 
         //when, then
@@ -327,12 +325,10 @@ class ReportServiceTest {
         Story testStory = createStory(testActiveMember, "title", "city");
 
 
-
         //when, then
         assertThatThrownBy(() -> reportService.confirmReport(1L))
                 .isInstanceOf(ReportException.class)
                 .hasMessageContaining("해당 신고내역을 찾을 수 없음");
-
 
 
     }
@@ -433,7 +429,7 @@ class ReportServiceTest {
     }
 
     Report createReport(Member member, ReportType reportType, Story story) {
-       return Report.builder()
+        return Report.builder()
                 .member(member)
                 .reportType(reportType)
                 .reportReason(ReportReason.SPAMMARKET)
@@ -442,7 +438,7 @@ class ReportServiceTest {
     }
 
     Report createReport(Member member, ReportType reportType, Comment comment) {
-       return Report.builder()
+        return Report.builder()
                 .member(member)
                 .reportType(reportType)
                 .reportReason(ReportReason.SPAMMARKET)

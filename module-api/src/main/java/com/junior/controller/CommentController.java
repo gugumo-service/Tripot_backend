@@ -21,7 +21,7 @@ public class CommentController {
     public CommonResponse<Object> save(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @RequestBody CreateCommentDto createCommentDto
-            ) {
+    ) {
         commentService.saveComment(userPrincipal, createCommentDto);
 
         return CommonResponse.success(StatusCode.COMMENT_CREATE_SUCCESS, null);

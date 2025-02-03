@@ -2,16 +2,15 @@ package com.junior.controller.notice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.junior.config.SecurityConfig;
-import com.junior.security.WithMockCustomAdmin;
 import com.junior.dto.notice.CreateNoticeDto;
 import com.junior.dto.notice.NoticeAdminDto;
 import com.junior.dto.notice.NoticeDetailDto;
 import com.junior.dto.notice.UpdateNoticeDto;
 import com.junior.page.PageCustom;
 import com.junior.security.JwtUtil;
+import com.junior.security.WithMockCustomAdmin;
 import com.junior.security.exceptionhandler.CustomAuthenticationEntryPoint;
 import com.junior.service.notice.NoticeAdminService;
-
 import com.junior.service.security.UserDetailsServiceImpl;
 import com.junior.util.RedisUtil;
 import org.junit.jupiter.api.DisplayName;
@@ -132,8 +131,6 @@ class NoticeAdminControllerTest {
                 .andExpect(jsonPath("$.data.content[0].title").value("title"));
 
 
-
-
     }
 
     @Test
@@ -168,11 +165,7 @@ class NoticeAdminControllerTest {
                 .andExpect(jsonPath("$.data.content").value("content"));
 
 
-
-
-
     }
-
 
 
     @Test

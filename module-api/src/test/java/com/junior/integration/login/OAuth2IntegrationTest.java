@@ -1,6 +1,5 @@
 package com.junior.integration.login;
 
-import com.amazonaws.services.s3.AmazonS3Client;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.junior.controller.member.MemberController;
 import com.junior.domain.member.Member;
@@ -9,7 +8,6 @@ import com.junior.dto.oauth2.OAuth2LoginDto;
 import com.junior.integration.BaseIntegrationTest;
 import com.junior.repository.member.MemberRepository;
 import com.junior.security.JwtUtil;
-import com.junior.security.WithMockCustomUser;
 import com.junior.util.RedisUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,9 +17,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-
-import java.net.MalformedURLException;
-import java.net.URL;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
@@ -52,7 +47,7 @@ public class OAuth2IntegrationTest extends BaseIntegrationTest {
     private MockMvc mockMvc;
 
     @BeforeEach
-    void init(){
+    void init() {
         Member preactiveTestMember = createPreactiveTestMember();
         Member activeTestMember = createActiveTestMember("KAKAO 1234");
 

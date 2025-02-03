@@ -39,27 +39,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(SecurityConfig.class)
 class MemberControllerTest {
 
-    @MockBean
-    private RedisUtil redisUtil;
-
-    @MockBean
-    private JwtUtil jwtUtil;
-
-    @MockBean
-    private UserDetailsServiceImpl userDetailsService;
-
-    @MockBean
-    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
-
     @Autowired
     MockMvc mockMvc;
-
     @MockBean
     MemberService memberService;
-
     @Autowired
     ObjectMapper objectMapper;
-
+    @MockBean
+    private RedisUtil redisUtil;
+    @MockBean
+    private JwtUtil jwtUtil;
+    @MockBean
+    private UserDetailsServiceImpl userDetailsService;
+    @MockBean
+    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Test
     @DisplayName("회원 활성화 완료 응답이 반환되어야 함")

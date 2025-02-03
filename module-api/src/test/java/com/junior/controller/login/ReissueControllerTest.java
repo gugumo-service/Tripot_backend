@@ -2,9 +2,9 @@ package com.junior.controller.login;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.junior.config.SecurityConfig;
-import com.junior.security.WithMockCustomUser;
 import com.junior.dto.jwt.RefreshTokenDto;
 import com.junior.security.JwtUtil;
+import com.junior.security.WithMockCustomUser;
 import com.junior.security.exceptionhandler.CustomAuthenticationEntryPoint;
 import com.junior.service.member.ReissueService;
 import com.junior.service.security.UserDetailsServiceImpl;
@@ -31,24 +31,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(SecurityConfig.class)
 class ReissueControllerTest {
 
-    @MockBean
-    private RedisUtil redisUtil;
-
-    @MockBean
-    private JwtUtil jwtUtil;
-
-    @MockBean
-    private UserDetailsServiceImpl userDetailsService;
-
-    @MockBean
-    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
-
     @Autowired
     MockMvc mockMvc;
-
     @Autowired
     ObjectMapper objectMapper;
-
+    @MockBean
+    private RedisUtil redisUtil;
+    @MockBean
+    private JwtUtil jwtUtil;
+    @MockBean
+    private UserDetailsServiceImpl userDetailsService;
+    @MockBean
+    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     @MockBean
     private ReissueService reissueService;
 
