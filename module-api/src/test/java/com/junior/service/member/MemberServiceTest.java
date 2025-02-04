@@ -9,6 +9,7 @@ import com.junior.dto.member.CheckActiveMemberDto;
 import com.junior.dto.member.MemberInfoDto;
 import com.junior.dto.member.UpdateNicknameDto;
 import com.junior.exception.NotValidMemberException;
+import com.junior.exception.StatusCode;
 import com.junior.repository.member.MemberRepository;
 import com.junior.security.UserPrincipal;
 import com.junior.service.s3.S3Service;
@@ -26,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
@@ -41,15 +43,10 @@ class MemberServiceTest {
     @InjectMocks
     MemberService memberService;
 
-//    @BeforeEach
-//    void init() {
-//        Member preactiveTestMember = createPreactiveTestMember();
-//    }
-
 
     @Test
     @DisplayName("회원 활성화 시 회원 정보 업데이트 및 ACTIVE 상태가 되어야 함")
-    void activateMember_success() {
+    void memberIsActivate() {
 
         //given
         ActivateMemberDto activateMemberDto = new ActivateMemberDto("updatenick", "강원");
@@ -77,7 +74,7 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("이미 ACTIVE 상태인 회원은 활성화를 할 수 없음")
-    void activateMember_fail() {
+    void failToActivateMemberIfAlreadyActivated() {
 
 
         //given
@@ -90,13 +87,33 @@ class MemberServiceTest {
 
 
         //when, then
-        Assertions.assertThatThrownBy(() -> memberService.activateMember(principal, activateMemberDto)).isInstanceOf(NotValidMemberException.class);
+        assertThatThrownBy(() -> memberService.activateMember(principal, activateMemberDto)).isInstanceOf(NotValidMemberException.class);
 
 
     }
 
     @Test
-    public void 회원_활성화_상태_확인_비활성화회원() throws Exception {
+    @DisplayName("회원 활성화 - 회원을 찾지 못했을 시의 예외 처리가 되어야 함")
+    void failToActivateMemberIfNotFound() {
+
+        //given
+        ActivateMemberDto activateMemberDto = new ActivateMemberDto("updatenick", "강원");
+
+        //비활성화된 회원 생성 및 저장
+        Member testMember = createPreactiveTestMember();
+        UserPrincipal principal = new UserPrincipal(testMember);
+
+
+        //when, then
+        assertThatThrownBy(() -> memberService.activateMember(principal, activateMemberDto))
+                .isInstanceOf(NotValidMemberException.class)
+                .hasMessageContaining(StatusCode.INVALID_MEMBER.getCustomMessage());
+
+    }
+
+    @Test
+    @DisplayName("회원 활성화 상태 확인 - 비활성화 회원의 활성화 여부는 False를 반환해야 함")
+    void falseIfCheckPreactivateMemberStatus() throws Exception {
         //given
 
         Member testPreactiveMember = createPreactiveTestMember();
@@ -107,13 +124,14 @@ class MemberServiceTest {
         CheckActiveMemberDto checkActiveMemberDto = memberService.checkActiveMember(principal);
 
         //then
-        Assertions.assertThat(checkActiveMemberDto.nickname()).isEqualTo("테스트비활성화닉네임");
-        Assertions.assertThat(checkActiveMemberDto.isActivate()).isFalse();
+        assertThat(checkActiveMemberDto.nickname()).isEqualTo("테스트비활성화닉네임");
+        assertThat(checkActiveMemberDto.isActivate()).isFalse();
 
     }
 
     @Test
-    public void 회원_활성화_상태_확인_활성화회원() throws Exception {
+    @DisplayName("회원 활성화 상태 확인 - 활성화 회원의 활성화 여부는 True를 반환해야 함")
+    void trueIfCheckActivateMemberStatus() throws Exception {
         //given
 
         Member testActiveMember = createActiveTestMember();
@@ -124,14 +142,32 @@ class MemberServiceTest {
         CheckActiveMemberDto checkActiveMemberDto = memberService.checkActiveMember(principal);
 
         //then
-        Assertions.assertThat(checkActiveMemberDto.nickname()).isEqualTo("테스트사용자닉네임");
-        Assertions.assertThat(checkActiveMemberDto.isActivate()).isTrue();
+        assertThat(checkActiveMemberDto.nickname()).isEqualTo("테스트사용자닉네임");
+        assertThat(checkActiveMemberDto.isActivate()).isTrue();
 
     }
 
     @Test
-    @DisplayName("중복된 닉네임이라면 True, 아니면 False를 반환")
-    void checkDuplicateNickname() {
+    @DisplayName("회원 활성화 상태 확인 - 회원을 찾지 못했을 시의 예외 처리가 되어야 함")
+    void failToCheckMemberStatusIfMemberNotFound() {
+
+        //given
+        ActivateMemberDto activateMemberDto = new ActivateMemberDto("updatenick", "강원");
+
+        //비활성화된 회원 생성 및 저장
+        Member testMember = createPreactiveTestMember();
+        UserPrincipal principal = new UserPrincipal(testMember);
+
+
+        //when, then
+        assertThatThrownBy(() -> memberService.checkActiveMember(principal)).isInstanceOf(NotValidMemberException.class)
+                .hasMessageContaining(StatusCode.INVALID_MEMBER.getCustomMessage());
+
+    }
+
+    @Test
+    @DisplayName("닉네임 중복 확인 - 중복된 닉네임이라면 True, 아니면 False를 반환")
+    void trueIfNicknameAlreadyExistsAndFalseIfNicknameCanBeUsed() {
 
         given(memberRepository.existsByNickname("테스트닉")).willReturn(true);          //테스트닉이라는 닉네임을 가진 사용자가 존재할 때
 
@@ -141,8 +177,8 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("프로필 사진 변경이 정상적으로 이루어져야 함")
-    void updateProfileImage_success() {
+    @DisplayName("프로필 사진 변경 - 프로필 사진 변경이 정상적으로 이루어져야 함")
+    void updateProfileImage() {
 
         //given
         Member testMember = createActiveTestMember();
@@ -161,8 +197,27 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("ACTIVE 상태가 아닌 회원은 정보 조회를 할 수 없음")
-    void updateProfileImage_fail() {
+    @DisplayName("프로필 사진 변경 - 회원을 찾을 수 없을 경우 예외를 처리해야 함")
+    void failToUpdateImageIfMemberNotFound() {
+
+
+        //given
+        Member testMember = createPreactiveTestMember();
+        UserPrincipal principal = new UserPrincipal(testMember);
+        MultipartFile profileImage = createMockMultipartFile();
+
+
+        //when, then
+        assertThatThrownBy(() -> memberService.updateProfileImage(principal, profileImage))
+                .isInstanceOf(NotValidMemberException.class)
+                .hasMessageContaining(StatusCode.INVALID_MEMBER.getCustomMessage());
+
+
+    }
+
+    @Test
+    @DisplayName("프로필 사진 변경 - ACTIVE 상태가 아닌 회원은 정보 조회를 할 수 없음")
+    void failToUpdateImageIfMemberIsNotActivate() {
 
 
         //given
@@ -173,14 +228,14 @@ class MemberServiceTest {
 
 
         //when, then
-        Assertions.assertThatThrownBy(() -> memberService.updateProfileImage(principal, profileImage)).isInstanceOf(NotValidMemberException.class);
+        assertThatThrownBy(() -> memberService.updateProfileImage(principal, profileImage)).isInstanceOf(NotValidMemberException.class);
 
 
     }
 
     @Test
-    @DisplayName("회원정보 조회 기능에서 해당 회원의 닉네임과 프로필 사진 url을 정상적으로 불러올 것")
-    void getMemberInfo_success() {
+    @DisplayName("회원정보 조회 - 해당 회원의 닉네임과 프로필 사진 url을 정상적으로 불러올 것")
+    void getMemberInfo() {
 
         //given
         Member testMember = createActiveTestMember();
@@ -199,8 +254,25 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("ACTIVE 상태가 아닌 회원은 정보 조회를 할 수 없음")
-    void getMemberInfo_fail() {
+    @DisplayName("회원 정보 조회 - 회원을 찾을 수 없을 경우 예외를 처리해야 함")
+    void failToGetMemberInfoIfMemberNotFound() {
+
+
+        //given
+        Member testMember = createPreactiveTestMember();
+        UserPrincipal principal = new UserPrincipal(testMember);
+
+
+        //when, then
+        assertThatThrownBy(() -> memberService.getMemberInfo(principal)).isInstanceOf(NotValidMemberException.class)
+                .hasMessageContaining(StatusCode.INVALID_MEMBER.getCustomMessage());
+
+
+    }
+
+    @Test
+    @DisplayName("회원 정보 조회 - ACTIVE 상태가 아닌 회원은 정보 조회를 할 수 없음")
+    void failToGetMemberInfoIfMemberIsNotActivate() {
 
 
         //given
@@ -210,14 +282,16 @@ class MemberServiceTest {
 
 
         //when, then
-        Assertions.assertThatThrownBy(() -> memberService.getMemberInfo(principal)).isInstanceOf(NotValidMemberException.class);
+        assertThatThrownBy(() -> memberService.getMemberInfo(principal))
+                .isInstanceOf(NotValidMemberException.class)
+                .hasMessageContaining(StatusCode.INVALID_MEMBER_STATUS.getCustomMessage());
 
 
     }
 
     @Test
-    @DisplayName("회원의 닉네임 수정이 정상적으로 이루어져야 함")
-    void updateNickname_success() {
+    @DisplayName("닉네임 수정 - 회원의 닉네임 수정이 정상적으로 이루어져야 함")
+    void updateNickname() {
 
         //given
         Member testMember = createActiveTestMember();
@@ -238,8 +312,29 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("ACTIVE 상태가 아닌 회원은 닉네임 수정을 할 수 없음")
-    void updateNickname_fail() {
+    @DisplayName("닉네임 수정 - 회원을 찾을 수 없을 경우 예외 처리를 해야 함")
+    void failToUpdateNicknameIfMemberNotFound() {
+
+
+        //given
+        Member testMember = createPreactiveTestMember();
+        UserPrincipal principal = new UserPrincipal(testMember);
+
+
+        UpdateNicknameDto updateNicknameDto = new UpdateNicknameDto("updatenick");
+
+
+        //when, then
+        assertThatThrownBy(() -> memberService.updateNickname(principal, updateNicknameDto))
+                .isInstanceOf(NotValidMemberException.class)
+                .hasMessageContaining(StatusCode.INVALID_MEMBER.getCustomMessage());
+
+
+    }
+
+    @Test
+    @DisplayName("닉네임 수정 - ACTIVE 상태가 아닌 회원은 닉네임 수정을 할 수 없음")
+    void failToUpdateNicknameIfMemberIsNotActivate() {
 
 
         //given
@@ -251,13 +346,15 @@ class MemberServiceTest {
 
 
         //when, then
-        Assertions.assertThatThrownBy(() -> memberService.updateNickname(principal, updateNicknameDto)).isInstanceOf(NotValidMemberException.class);
+        assertThatThrownBy(() -> memberService.updateNickname(principal, updateNicknameDto))
+                .isInstanceOf(NotValidMemberException.class)
+                .hasMessageContaining(StatusCode.INVALID_MEMBER_STATUS.getCustomMessage());;
 
 
     }
 
     @Test
-    @DisplayName("삭제된 회원은 DELETE 상태가 되어야 함")
+    @DisplayName("회원 탈퇴 - 삭제된 회원은 DELETE 상태가 되어야 함")
     void deleteMember() {
 
         //given
@@ -277,8 +374,27 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("활성화되지 않은 회원에 대한 탈퇴는 예외를 발생시킴")
-    void deleteMember_fail() {
+    @DisplayName("회원 탈퇴 - 회원을 찾지 못했을 시의 예외 처리가 되어야 함")
+    void failToDeleteMemberIfMemberNotFound() {
+
+
+        //given
+
+        //비활성화된 회원 생성 및 저장
+        Member testMember = createPreactiveTestMember();
+        UserPrincipal principal = new UserPrincipal(testMember);
+
+
+        //when, then
+        assertThatThrownBy(() -> memberService.deleteMember(principal)).isInstanceOf(NotValidMemberException.class)
+                .hasMessageContaining(StatusCode.INVALID_MEMBER.getCustomMessage());
+
+
+    }
+
+    @Test
+    @DisplayName("회원 탈퇴 - 활성화되지 않은 회원에 대한 탈퇴는 예외를 발생시킴")
+    void failToDeleteMemberIfMemberIsNotActivate() {
 
 
         //given
@@ -290,7 +406,8 @@ class MemberServiceTest {
 
 
         //when, then
-        Assertions.assertThatThrownBy(() -> memberService.deleteMember(principal)).isInstanceOf(NotValidMemberException.class);
+        assertThatThrownBy(() -> memberService.deleteMember(principal)).isInstanceOf(NotValidMemberException.class)
+                .hasMessageContaining(StatusCode.INVALID_MEMBER_STATUS.getCustomMessage());
 
 
     }
