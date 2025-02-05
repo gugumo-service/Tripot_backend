@@ -47,7 +47,7 @@ class ReissueControllerTest {
     private ReissueService reissueService;
 
     @Test
-    @DisplayName("reissue 기능에 대한 응답을 리턴해야 함")
+    @DisplayName("reissue - 응답을 정상적으로 리턴해야 함")
     @WithMockCustomUser
     void reissue() throws Exception {
 

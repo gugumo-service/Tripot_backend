@@ -64,7 +64,7 @@ class QnaUserControllerTest {
 
 
     @Test
-    @DisplayName("사용자 Q&A 조회 응답이 반환되어야 함")
+    @DisplayName("사용자 Q&A 조회 - 응답이 반환되어야 함")
     @WithMockCustomUser
     void findQna() throws Exception {
 

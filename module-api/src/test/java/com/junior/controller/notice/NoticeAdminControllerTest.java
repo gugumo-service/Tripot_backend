@@ -69,7 +69,7 @@ class NoticeAdminControllerTest {
     private NoticeAdminController noticeAdminController;
 
     @Test
-    @DisplayName("공지 저장 응답이 반환되어야 함")
+    @DisplayName("공지 저장 - 응답이 반환되어야 함")
     @WithMockCustomAdmin
     void saveNotice() throws Exception {
 
@@ -99,7 +99,7 @@ class NoticeAdminControllerTest {
     }
 
     @Test
-    @DisplayName("공지 조회 응답이 반환되어야 함")
+    @DisplayName("공지 조회 - 응답이 반환되어야 함")
     @WithMockCustomAdmin
     void findNotice() throws Exception {
 
@@ -134,7 +134,7 @@ class NoticeAdminControllerTest {
     }
 
     @Test
-    @DisplayName("공지 세부내용 조회 응답이 반환되어야 함")
+    @DisplayName("공지 세부내용 조회 - 응답이 반환되어야 함")
     @WithMockCustomAdmin
     void findNoticeDetail() throws Exception {
 
@@ -169,7 +169,7 @@ class NoticeAdminControllerTest {
 
 
     @Test
-    @DisplayName("공지 수정 응답이 반환되어야 함")
+    @DisplayName("공지 수정 - 응답이 반환되어야 함")
     @WithMockCustomAdmin
     void updateNotice() throws Exception {
 
@@ -197,7 +197,7 @@ class NoticeAdminControllerTest {
     }
 
     @Test
-    @DisplayName("공지사항 삭제 응답이 반환되어야 함")
+    @DisplayName("공지사항 삭제 - 응답이 반환되어야 함")
     @WithMockCustomAdmin
     void deleteNotice() throws Exception {
 

@@ -69,7 +69,7 @@ class QnaAdminControllerTest {
     private QnaAdminController qnaAdminController;
 
     @Test
-    @DisplayName("Q&A 저장 응답이 반환되어야 함")
+    @DisplayName("Q&A 저장 - 응답이 반환되어야 함")
     @WithMockCustomAdmin
     void saveQna() throws Exception {
 
@@ -99,7 +99,7 @@ class QnaAdminControllerTest {
     }
 
     @Test
-    @DisplayName("Q&A 조회 응답이 반환되어야 함")
+    @DisplayName("Q&A 조회 - 응답이 반환되어야 함")
     @WithMockCustomAdmin
     void findQna() throws Exception {
 
@@ -135,7 +135,7 @@ class QnaAdminControllerTest {
     }
 
     @Test
-    @DisplayName("Q&A 세부내용 조회 응답이 반환되어야 함")
+    @DisplayName("Q&A 세부내용 조회 - 응답이 반환되어야 함")
     @WithMockCustomAdmin
     void findQnaDetail() throws Exception {
 
@@ -170,7 +170,7 @@ class QnaAdminControllerTest {
 
 
     @Test
-    @DisplayName("Q&A 수정 응답이 반환되어야 함")
+    @DisplayName("Q&A 수정 - 응답이 반환되어야 함")
     @WithMockCustomAdmin
     void updateQna() throws Exception {
 
@@ -198,7 +198,7 @@ class QnaAdminControllerTest {
     }
 
     @Test
-    @DisplayName("Q&A 삭제 응답이 반환되어야 함")
+    @DisplayName("Q&A 삭제 - 응답이 반환되어야 함")
     @WithMockCustomAdmin
     void deleteQna() throws Exception {
 

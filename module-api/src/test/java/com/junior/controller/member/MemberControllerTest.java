@@ -55,7 +55,7 @@ class MemberControllerTest {
     private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Test
-    @DisplayName("회원 활성화 완료 응답이 반환되어야 함")
+    @DisplayName("회원 활성화 - 응답이 반환되어야 함")
     @WithMockCustomUser
     void activeMember() throws Exception {
 
@@ -83,7 +83,7 @@ class MemberControllerTest {
     }
 
     @Test
-    @DisplayName("닉네임 사용가능 여부 응답이 반환되어야 함")
+    @DisplayName("닉네임 사용가능 여부 - 응답이 반환되어야 함")
     void checkNicknameValid() throws Exception {
 
         //given
@@ -109,8 +109,9 @@ class MemberControllerTest {
     }
 
     @Test
+    @DisplayName("회원 활성화 여부 확인 - 응답이 정상적으로 반환되어야 함")
     @WithMockCustomUser
-    public void 회원_활성화_여부_확인() throws Exception {
+    public void checkActiveMember() throws Exception {
         //given
         UserPrincipal principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -139,7 +140,7 @@ class MemberControllerTest {
     }
 
     @Test
-    @DisplayName("응답에 조회한 회원 정보가 정상적으로 들어가야 함")
+    @DisplayName("회원 정보 조회 - 응답에 조회한 회원 정보가 정상적으로 들어가야 함")
     @WithMockCustomUser
     void getMemberInfo() throws Exception {
 
@@ -169,7 +170,7 @@ class MemberControllerTest {
     }
 
     @Test
-    @DisplayName("닉네임 변경 성공 응답이 반환되어야 함")
+    @DisplayName("닉네임 변경 - 성공 응답이 반환되어야 함")
     @WithMockCustomUser
     void changeNickname() throws Exception {
         //given
@@ -197,7 +198,7 @@ class MemberControllerTest {
 
     @Test
     @WithMockCustomUser
-    @DisplayName("회원 탈퇴 응답이 정상적으로 반환되어야 함")
+    @DisplayName("회원 탈퇴 - 응답이 정상적으로 반환되어야 함")
     void deleteMember() throws Exception {
 
         //given
@@ -221,7 +222,7 @@ class MemberControllerTest {
 
     @Test
     @WithMockCustomUser
-    @DisplayName("프로필 사진 수정 응답이 정상적으로 반환되어야 함")
+    @DisplayName("프로필 사진 수정 - 응답이 정상적으로 반환되어야 함")
     void changeProfileImage() throws Exception {
 
         //given

@@ -34,7 +34,7 @@ class OAuth2ControllerTest extends BaseControllerTest {
 
 
     @Test
-    @DisplayName("소셜 로그인 응답이 정상적으로 반환되어야 함 - oauth2 과정은 프론트 측에서 진행")
+    @DisplayName("소셜 로그인 - 응답이 정상적으로 반환되어야 함")
     void oauth2LoginV2() throws Exception {
 
         //given
@@ -75,7 +75,7 @@ class OAuth2ControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @DisplayName("로그아웃 응답을 성공적으로 반환해야 함")
+    @DisplayName("로그아웃 - 응답을 성공적으로 반환해야 함")
     @WithMockCustomUser
     void logout() throws Exception {
 

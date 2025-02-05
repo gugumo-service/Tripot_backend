@@ -62,7 +62,7 @@ public class ReportControllerTest {
     private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Test
-    @DisplayName("신고 응답이 반환되어야 함")
+    @DisplayName("신고 - 응답이 반환되어야 함")
     @WithMockCustomUser
     void saveReport() throws Exception {
 
@@ -91,7 +91,7 @@ public class ReportControllerTest {
     }
 
     @Test
-    @DisplayName("신고 조회 응답이 반환되어야 함")
+    @DisplayName("신고 조회 - 응답이 반환되어야 함")
     @WithMockCustomAdmin
     void findReport() throws Exception {
 
@@ -132,7 +132,7 @@ public class ReportControllerTest {
     }
 
     @Test
-    @DisplayName("신고 확인 응답이 반환되어야 함")
+    @DisplayName("신고 확인 - 응답이 반환되어야 함")
     @WithMockCustomAdmin
     void confirmReport() throws Exception {
 
@@ -156,7 +156,7 @@ public class ReportControllerTest {
     }
 
     @Test
-    @DisplayName("신고 대상 삭제 응답이 반환되어야 함")
+    @DisplayName("신고 대상 삭제 - 응답이 반환되어야 함")
     @WithMockCustomAdmin
     void deleteReportTarget() throws Exception {
 

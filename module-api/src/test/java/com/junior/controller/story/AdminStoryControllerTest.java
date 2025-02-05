@@ -41,7 +41,7 @@ class AdminStoryControllerTest extends BaseControllerTest {
 
 
     @Test
-    @DisplayName("관리자 스토리 조회 응답이 정상적으로 반환되어야 함")
+    @DisplayName("관리자 스토리 조회 - 응답이 정상적으로 반환되어야 함")
     @WithMockCustomAdmin
     void findStory() throws Exception {
 
@@ -81,7 +81,7 @@ class AdminStoryControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @DisplayName("관리자 스토리 상세 조회 응답이 정상적으로 반환되어야 함")
+    @DisplayName("관리자 스토리 상세 조회 - 응답이 정상적으로 반환되어야 함")
     @WithMockCustomAdmin
     void findStoryDetail() throws Exception {
 
@@ -122,7 +122,7 @@ class AdminStoryControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @DisplayName("관리자 스토리 삭제 응답이 정상적으로 반환되어야 함")
+    @DisplayName("관리자 스토리 삭제 - 응답이 정상적으로 반환되어야 함")
     @WithMockCustomAdmin
     void deleteStory() throws Exception {
 

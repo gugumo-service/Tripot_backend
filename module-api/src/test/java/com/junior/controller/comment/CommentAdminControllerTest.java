@@ -37,7 +37,7 @@ class CommentAdminControllerTest extends BaseControllerTest {
     private CommentAdminController commentAdminController;
 
     @Test
-    @DisplayName("관리자 댓글 조회 기능이 정상적으로 응답을 반환해야 함")
+    @DisplayName("관리자 댓글 조회 - 정상적으로 응답을 반환해야 함")
     @WithMockCustomAdmin
     void findComment() throws Exception {
 
@@ -76,7 +76,7 @@ class CommentAdminControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @DisplayName("관리자용 댓글 삭제 기능이 정상적으로 응답을 반환해야 함")
+    @DisplayName("관리자용 댓글 삭제 - 정상적으로 응답을 반환해야 함")
     @WithMockCustomAdmin
     void deleteComment() throws Exception {
 
