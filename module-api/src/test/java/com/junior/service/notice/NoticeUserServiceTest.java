@@ -22,7 +22,7 @@ class NoticeUserServiceTest {
     private NoticeUserService noticeUserService;
 
     @Test
-    @DisplayName("공지사항 조회 기능이 정상적으로 수행되어야 함")
+    @DisplayName("공지사항 사용자 조회 - 정상적으로 수행되어야 함")
     void findNotice() {
 
         //given

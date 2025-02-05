@@ -46,8 +46,8 @@ class NoticeAdminServiceTest extends BaseServiceTest {
 
 
     @Test
-    @DisplayName("공지사항 저장 로직이 정상적으로 실행되어야 함")
-    void saveNotice_success() {
+    @DisplayName("공지사항 저장 - 정상적으로 실행되어야 함")
+    void saveNotice() {
 
         //given
         CreateNoticeDto createNoticeDto = new CreateNoticeDto("title", "content");
@@ -66,8 +66,8 @@ class NoticeAdminServiceTest extends BaseServiceTest {
     }
 
     @Test
-    @DisplayName("회원을 찾지 못했을 때 관련 예외처리를 해야 함")
-    void saveNotice_not_valid_member() {
+    @DisplayName("공지사항 저장 - 회원을 찾지 못했을 때 관련 예외처리를 해야 함")
+    void failToSaveNoticeIfMemberNotFound() {
 
         //given
         CreateNoticeDto createNoticeDto = new CreateNoticeDto("title", "content");
@@ -85,8 +85,8 @@ class NoticeAdminServiceTest extends BaseServiceTest {
     }
 
     @Test
-    @DisplayName("공지사항 조회 로직이 정상적으로 실행되어야 함")
-    void findNotice_success() {
+    @DisplayName("공지사항 관리자 조회 - 정상적으로 실행되어야 함")
+    void findNotice() {
 
         //given
 
@@ -122,8 +122,8 @@ class NoticeAdminServiceTest extends BaseServiceTest {
     }
 
     @Test
-    @DisplayName("공지사항 세부 조회 로직이 정상적으로 실행되어야 함")
-    void findNoticeDetail_success() {
+    @DisplayName("공지사항 세부 조회 - 정상적으로 실행되어야 함")
+    void findNoticeDetail() {
 
         //given
 
@@ -150,8 +150,8 @@ class NoticeAdminServiceTest extends BaseServiceTest {
     }
 
     @Test
-    @DisplayName("공지사항을 찾지 못했을 때 관련 예외처리를 해야 함")
-    void findNoticeDetail_notice_not_found() {
+    @DisplayName("공지사항 세부 조회 - 공지사항을 찾지 못했을 때 관련 예외처리를 해야 함")
+    void failToFindNoticeDetailIfNoticeNotFound() {
 
 
         //given
@@ -170,8 +170,8 @@ class NoticeAdminServiceTest extends BaseServiceTest {
     }
 
     @Test
-    @DisplayName("삭제된 공지사항에 대해 관련 예외 처리를 해야 함")
-    void findNoticeDetail_deleted_notice() {
+    @DisplayName("공지사항 세부 조회 - 삭제된 공지사항에 대해 관련 예외 처리를 해야 함")
+    void failToFindNoticeDetailIfFindDeletedNotice() {
 
         //given
 
@@ -189,8 +189,8 @@ class NoticeAdminServiceTest extends BaseServiceTest {
     }
 
     @Test
-    @DisplayName("찾을 수 없는 회원에 대해 관련 예외처리를 해야 함")
-    void findNoticeDetail_not_found_member() {
+    @DisplayName("공지사항 세부 조회 - 찾을 수 없는 회원에 대해 관련 예외처리를 해야 함")
+    void failToFindNoticeDetailIfMemberNotFound() {
 
         //given
 
@@ -210,8 +210,8 @@ class NoticeAdminServiceTest extends BaseServiceTest {
     }
 
     @Test
-    @DisplayName("공지사항 수정 로직이 정상적으로 실행되어야 함")
-    void updateNotice_success() {
+    @DisplayName("공지사항 수정 - 정상적으로 실행되어야 함")
+    void updateNotice() {
 
         //given
         Long updateNoticeId = 1L;
@@ -235,7 +235,7 @@ class NoticeAdminServiceTest extends BaseServiceTest {
 
     @Test
     @DisplayName("공지 수정 - 공지사항을 찾지 못했을 때 관련 예외처리를 해야 함")
-    void updateNotice_notice_not_found() {
+    void failToUpdateNoticeIfNoticeNotFound() {
 
         //given
         Long updateNoticeId = 1L;
@@ -251,8 +251,8 @@ class NoticeAdminServiceTest extends BaseServiceTest {
     }
 
     @Test
-    @DisplayName("공지사항 삭제 로직이 정상적으로 실행되어야 함")
-    void deleteNotice_success() {
+    @DisplayName("공지사항 삭제 - 정상적으로 실행되어야 함")
+    void deleteNotice() {
 
         //given
         Notice notice = createNotice();
@@ -269,7 +269,7 @@ class NoticeAdminServiceTest extends BaseServiceTest {
 
     @Test
     @DisplayName("공지 삭제 - 공지사항을 찾지 못했을 때 관련 예외처리를 해야 함")
-    void deleteNotice_notice_not_found() {
+    void failToDeleteNoticeIfNoticeNotFound() {
 
         //given
         Long deleteNoticeId = 1L;

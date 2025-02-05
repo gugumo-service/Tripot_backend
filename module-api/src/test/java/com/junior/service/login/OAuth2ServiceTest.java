@@ -45,8 +45,8 @@ class OAuth2ServiceTest {
 
 
     @Test
-    @DisplayName("카카오 로그인 시 관련 기능들의 정상 동작 및 해당 dto의 성공적 반환, 새 회원")
-    void oauth2LoginV2_kakao_new_member() {
+    @DisplayName("카카오 로그인 - 관련 기능들의 정상 동작 및 해당 dto의 성공적 반환, 새 회원")
+    void oauth2LoginV2WithNewMember() {
 
         //given
         MockHttpServletResponse response = new MockHttpServletResponse();
@@ -80,8 +80,8 @@ class OAuth2ServiceTest {
     }
 
     @Test
-    @DisplayName("카카오 로그인 시 관련 기능들의 정상 동작 및 해당 dto의 성공적 반환, 추가정보 미기입 회원에 관해 리턴")
-    void oauth2LoginV2_kakao_preactive() {
+    @DisplayName("카카오 로그인 - 관련 기능들의 정상 동작 및 해당 dto의 성공적 반환, 추가정보 미기입 회원에 관해 리턴")
+    void oauth2LoginV2WithKakaoExistingPreactiveMember() {
 
         //given
         MockHttpServletResponse response = new MockHttpServletResponse();
@@ -121,8 +121,8 @@ class OAuth2ServiceTest {
     }
 
     @Test
-    @DisplayName("카카오 로그인 시 관련 기능들의 정상 동작 및 해당 dto의 성공적 반환, 추가정보 기입 회원에 관해 리턴")
-    void oauth2LoginV2_kakao_active() {
+    @DisplayName("카카오 로그인 - 관련 기능들의 정상 동작 및 해당 dto의 성공적 반환, 추가정보 기입 회원에 관해 리턴")
+    void oauth2LoginV2WithKakaoExistingActiveMember() {
 
         //given
         MockHttpServletResponse response = new MockHttpServletResponse();
@@ -164,8 +164,8 @@ class OAuth2ServiceTest {
 
 
     @Test
-    @DisplayName("로그아웃의 모든 과정이 성공적으로 진행되어야 함")
-    void logout_success() {
+    @DisplayName("로그아웃 - 모든 과정이 성공적으로 진행되어야 함")
+    void logout() {
 
         //given
 
@@ -185,8 +185,8 @@ class OAuth2ServiceTest {
     }
 
     @Test
-    @DisplayName("로그아웃 중 유효한 토큰이 아닐 경우(RFC 7235를 지키지 않음) 관련 예외처리를 해야 함")
-    void logout_not_valid() {
+    @DisplayName("로그아웃 - 유효한 토큰이 아닐 경우(Bearer를 접두어로 붙이지 않음) 관련 예외처리를 해야 함")
+    void failToLogoutIfNotPrefixBearer() {
 
         //given
 
@@ -206,8 +206,8 @@ class OAuth2ServiceTest {
     }
 
     @Test
-    @DisplayName("로그아웃 중 refresh 토큰이 아닐 경우 관련 예외처리를 해야 함")
-    void logout_not_refresh() {
+    @DisplayName("로그아웃 - refresh 토큰이 아닐 경우 관련 예외처리를 해야 함")
+    void failToLogoutIfNotRefreshToken() {
 
         //given
 
@@ -228,8 +228,8 @@ class OAuth2ServiceTest {
     }
 
     @Test
-    @DisplayName("로그아웃 중 토큰이 만료되었을 경우 관련 예외처리를 해야 함")
-    void logout_expired() {
+    @DisplayName("로그아웃 - 토큰이 만료되었을 경우 관련 예외처리를 해야 함")
+    void failToLogoutIfExpiredRefreshToken() {
 
 
         //given
@@ -252,8 +252,8 @@ class OAuth2ServiceTest {
     }
 
     @Test
-    @DisplayName("로그아웃 중 유효하지 않은 토큰에 대해 관련 예외처리를 해야 함")
-    void logout_jwt_exception() {
+    @DisplayName("로그아웃 - 유효하지 않은 토큰에 대해 관련 예외처리를 해야 함")
+    void failToLogoutIfNotValidToken() {
 
 
         //given

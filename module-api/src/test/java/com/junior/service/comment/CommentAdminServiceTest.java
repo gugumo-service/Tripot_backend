@@ -38,7 +38,7 @@ class CommentAdminServiceTest extends BaseServiceTest {
     private CommentAdminService commentAdminService;
 
     @Test
-    @DisplayName("댓글 조회 기능이 정상 동작해야 함")
+    @DisplayName("관리자용 댓글 조회 - 기능이 정상 동작해야 함")
     void findComment() {
 
         //given
@@ -90,6 +90,7 @@ class CommentAdminServiceTest extends BaseServiceTest {
     }
 
     @Test
+    @DisplayName("관리자용 댓글 삭제 - 기능이 정상 동작해야 함")
     public void deleteComment() throws Exception {
         //given
 

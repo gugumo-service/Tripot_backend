@@ -53,8 +53,8 @@ class QnaAdminServiceTest extends BaseServiceTest {
     }
 
     @Test
-    @DisplayName("Q&A 저장 로직이 정상적으로 실행되어야 함")
-    void saveQna_success() {
+    @DisplayName("Q&A 저장 - 정상적으로 실행되어야 함")
+    void saveQna() {
 
         //given
         CreateQnaDto createQnaDto = new CreateQnaDto("question", "answer");
@@ -73,8 +73,8 @@ class QnaAdminServiceTest extends BaseServiceTest {
     }
 
     @Test
-    @DisplayName("회원을 찾지 못했을 때 관련 예외처리를 해야 함")
-    void saveQna_not_valid_member() {
+    @DisplayName("Q&A 저장 - 회원을 찾지 못했을 때 관련 예외처리를 해야 함")
+    void failToSaveQnaIfMemberNotFound() {
 
         //given
         CreateQnaDto createQnaDto = new CreateQnaDto("question", "answer");
@@ -92,8 +92,8 @@ class QnaAdminServiceTest extends BaseServiceTest {
     }
 
     @Test
-    @DisplayName("Q&A 조회 로직이 정상적으로 실행되어야 함")
-    void findQna_success() {
+    @DisplayName("Q&A 조회 - 정상적으로 실행되어야 함")
+    void findQna() {
 
         //given
 
@@ -129,8 +129,8 @@ class QnaAdminServiceTest extends BaseServiceTest {
     }
 
     @Test
-    @DisplayName("Q&A 세부 조회 로직이 정상적으로 실행되어야 함")
-    void findQnaDetail_success() {
+    @DisplayName("Q&A 세부 조회 - 정상적으로 실행되어야 함")
+    void findQnaDetail() {
 
         //given
 
@@ -157,8 +157,8 @@ class QnaAdminServiceTest extends BaseServiceTest {
     }
 
     @Test
-    @DisplayName("Q&A를 찾지 못했을 때 관련 예외처리를 해야 함")
-    void findQnaDetail_Qna_not_found() {
+    @DisplayName("Q&A 세부 조회 - Q&A를 찾지 못했을 때 관련 예외처리를 해야 함")
+    void failToFindQnaDetailIfQnaNotFound() {
 
 
         //given
@@ -177,8 +177,8 @@ class QnaAdminServiceTest extends BaseServiceTest {
     }
 
     @Test
-    @DisplayName("삭제된 Q&A에 대해 관련 예외 처리를 해야 함")
-    void findQnaDetail_deleted_Qna() {
+    @DisplayName("Q&A 세부 조회 - 삭제된 Q&A에 대해 관련 예외 처리를 해야 함")
+    void failToFindQnaDetailIfQnaDeleted() {
 
         //given
 
@@ -196,8 +196,8 @@ class QnaAdminServiceTest extends BaseServiceTest {
     }
 
     @Test
-    @DisplayName("찾을 수 없는 회원에 대해 관련 예외처리를 해야 함")
-    void findQnaDetail_not_found_member() {
+    @DisplayName("Q&A 세부 조회 - 찾을 수 없는 회원에 대해 관련 예외처리를 해야 함")
+    void failToFindQnaDetailIfMemberNotFound() {
 
         //given
 
@@ -217,8 +217,8 @@ class QnaAdminServiceTest extends BaseServiceTest {
     }
 
     @Test
-    @DisplayName("Q&A 수정 로직이 정상적으로 실행되어야 함")
-    void updateQna_success() {
+    @DisplayName("Q&A 수정 - 정상적으로 실행되어야 함")
+    void updateQna() {
 
         //given
         Long updateQnaId = 1L;
@@ -242,7 +242,7 @@ class QnaAdminServiceTest extends BaseServiceTest {
 
     @Test
     @DisplayName("Q&A 수정 - Q&A를 찾지 못했을 때 관련 예외처리를 해야 함")
-    void updateQna_Qna_not_found() {
+    void failToUpdateQnaIfQnaNotFound() {
 
         //given
         Long updateQnaId = 1L;
@@ -258,8 +258,8 @@ class QnaAdminServiceTest extends BaseServiceTest {
     }
 
     @Test
-    @DisplayName("Q&A 삭제 로직이 정상적으로 실행되어야 함")
-    void deleteQna_success() {
+    @DisplayName("Q&A 삭제 - 정상적으로 실행되어야 함")
+    void deleteQna() {
 
         //given
         Qna Qna = createQna();
@@ -276,7 +276,7 @@ class QnaAdminServiceTest extends BaseServiceTest {
 
     @Test
     @DisplayName("Q&A 삭제 - Q&A를 찾지 못했을 때 관련 예외처리를 해야 함")
-    void deleteQna_Qna_not_found() {
+    void failToDeleteQnaIfQnaNotFound() {
 
         //given
         Long deleteQnaId = 1L;

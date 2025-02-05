@@ -21,7 +21,7 @@ class QnaUserServiceTest extends BaseServiceTest {
     private QnaUserService qnaUserService;
 
     @Test
-    @DisplayName("Q&A 조회 기능이 정상적으로 수행되어야 함")
+    @DisplayName("Q&A 사용자 조회 - 정상적으로 수행되어야 함")
     void findNotice() {
 
         //given

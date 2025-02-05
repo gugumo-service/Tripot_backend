@@ -32,8 +32,8 @@ class ReissueServiceTest {
     private ReissueService reissueService;
 
     @Test
-    @DisplayName("reissue가 정상적으로 동작해야 함")
-    void reissue_success() {
+    @DisplayName("reissue - 정상적으로 동작해야 함")
+    void reissue() {
 
         //given
         MockHttpServletResponse response = new MockHttpServletResponse();
@@ -72,8 +72,8 @@ class ReissueServiceTest {
     }
 
     @Test
-    @DisplayName("만료된 토큰에 대한 예외 처리를 해야 함")
-    void reissue_expired_token() {
+    @DisplayName("reissue - 만료된 토큰에 대한 예외 처리를 해야 함")
+    void failToReissueIfTokenExpired() {
 
         //given
         MockHttpServletResponse response = new MockHttpServletResponse();
@@ -95,8 +95,8 @@ class ReissueServiceTest {
     }
 
     @Test
-    @DisplayName("refresh_token이 아닌 것에 대한 예외 처리가 되어야 함")
-    void reissue_not_refresh() {
+    @DisplayName("reissue - refresh_token이 아닌 것에 대한 예외 처리가 되어야 함")
+    void failToReissueIfNotRefreshToken() {
 
         //given
         MockHttpServletResponse response = new MockHttpServletResponse();
@@ -119,8 +119,8 @@ class ReissueServiceTest {
     }
 
     @Test
-    @DisplayName("redis에 없는 key에 대해 예외 처리를 해야 함")
-    void reissue_token_not_exist() {
+    @DisplayName("reissue - redis에 없는 key에 대해 예외 처리를 해야 함")
+    void failToReissueIfTokenNotExistOnRedis() {
 
         //given
         MockHttpServletResponse response = new MockHttpServletResponse();
