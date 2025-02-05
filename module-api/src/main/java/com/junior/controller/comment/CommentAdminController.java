@@ -1,4 +1,4 @@
-package com.junior.controller;
+package com.junior.controller.comment;
 
 import com.junior.controller.api.CommentAdminApi;
 import com.junior.dto.comment.CommentAdminDto;

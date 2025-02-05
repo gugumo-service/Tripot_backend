@@ -1,4 +1,4 @@
-package com.junior.controller;
+package com.junior.controller.comment;
 
 import com.junior.dto.comment.*;
 import com.junior.exception.StatusCode;
