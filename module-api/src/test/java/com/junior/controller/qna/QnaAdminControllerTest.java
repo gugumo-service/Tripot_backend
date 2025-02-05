@@ -1,30 +1,20 @@
 package com.junior.controller.qna;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.junior.config.SecurityConfig;
+import com.junior.controller.BaseControllerTest;
 import com.junior.dto.qna.CreateQnaDto;
 import com.junior.dto.qna.QnaAdminDto;
 import com.junior.dto.qna.QnaDetailDto;
 import com.junior.dto.qna.UpdateQnaDto;
 import com.junior.page.PageCustom;
-import com.junior.security.JwtUtil;
 import com.junior.security.WithMockCustomAdmin;
-import com.junior.security.exceptionhandler.CustomAuthenticationEntryPoint;
 import com.junior.service.qna.QnaAdminService;
-import com.junior.service.security.UserDetailsServiceImpl;
-import com.junior.util.RedisUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.ArrayList;
@@ -40,33 +30,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @WebMvcTest(QnaAdminController.class)
-@MockBean(JpaMetamodelMappingContext.class)     //JPA 관련 빈들을 mock으로 등록
-@Import(SecurityConfig.class)
-class QnaAdminControllerTest {
-
-    @MockBean
-    private RedisUtil redisUtil;
-
-    @MockBean
-    private JwtUtil jwtUtil;
-
-    @MockBean
-    private UserDetailsServiceImpl userDetailsService;
-
-    @MockBean
-    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
+class QnaAdminControllerTest extends BaseControllerTest {
 
     @MockBean
     private QnaAdminService qnaAdminService;
-
-    @InjectMocks
-    private QnaAdminController qnaAdminController;
 
     @Test
     @DisplayName("Q&A 저장 - 응답이 반환되어야 함")

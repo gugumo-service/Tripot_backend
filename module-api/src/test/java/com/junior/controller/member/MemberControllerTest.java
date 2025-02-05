@@ -1,30 +1,21 @@
 package com.junior.controller.member;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.junior.config.SecurityConfig;
+import com.junior.controller.BaseControllerTest;
 import com.junior.dto.member.ActivateMemberDto;
 import com.junior.dto.member.CheckActiveMemberDto;
 import com.junior.dto.member.MemberInfoDto;
 import com.junior.dto.member.UpdateNicknameDto;
-import com.junior.security.JwtUtil;
 import com.junior.security.UserPrincipal;
 import com.junior.security.WithMockCustomUser;
-import com.junior.security.exceptionhandler.CustomAuthenticationEntryPoint;
 import com.junior.service.member.MemberService;
-import com.junior.service.security.UserDetailsServiceImpl;
-import com.junior.util.RedisUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.hamcrest.Matchers.nullValue;
@@ -35,24 +26,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(MemberController.class)
-@MockBean(JpaMetamodelMappingContext.class)     //JPA 관련 빈들을 mock으로 등록
-@Import(SecurityConfig.class)
-class MemberControllerTest {
+class MemberControllerTest extends BaseControllerTest {
 
-    @Autowired
-    MockMvc mockMvc;
     @MockBean
     MemberService memberService;
-    @Autowired
-    ObjectMapper objectMapper;
-    @MockBean
-    private RedisUtil redisUtil;
-    @MockBean
-    private JwtUtil jwtUtil;
-    @MockBean
-    private UserDetailsServiceImpl userDetailsService;
-    @MockBean
-    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Test
     @DisplayName("회원 활성화 - 응답이 반환되어야 함")

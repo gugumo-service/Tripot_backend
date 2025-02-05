@@ -8,7 +8,6 @@ import com.junior.dto.oauth2.OAuth2Provider;
 import com.junior.security.WithMockCustomUser;
 import com.junior.service.login.OAuth2Service;
 import jakarta.servlet.http.HttpServletResponse;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -19,7 +18,6 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;

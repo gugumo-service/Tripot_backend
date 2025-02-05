@@ -8,7 +8,6 @@ import com.junior.security.WithMockCustomAdmin;
 import com.junior.service.story.AdminStoryService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
@@ -35,9 +34,6 @@ class AdminStoryControllerTest extends BaseControllerTest {
 
     @MockBean
     private AdminStoryService adminStoryService;
-
-    @InjectMocks
-    private AdminStoryController adminStoryController;
 
 
     @Test

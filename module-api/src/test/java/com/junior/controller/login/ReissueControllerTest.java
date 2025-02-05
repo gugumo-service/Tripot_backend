@@ -1,23 +1,14 @@
 package com.junior.controller.login;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.junior.config.SecurityConfig;
+import com.junior.controller.BaseControllerTest;
 import com.junior.dto.jwt.RefreshTokenDto;
-import com.junior.security.JwtUtil;
 import com.junior.security.WithMockCustomUser;
-import com.junior.security.exceptionhandler.CustomAuthenticationEntryPoint;
 import com.junior.service.login.ReissueService;
-import com.junior.service.security.UserDetailsServiceImpl;
-import com.junior.util.RedisUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.hamcrest.Matchers.nullValue;
@@ -27,22 +18,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ReissueController.class)
-@MockBean(JpaMetamodelMappingContext.class)
-@Import(SecurityConfig.class)
-class ReissueControllerTest {
+class ReissueControllerTest extends BaseControllerTest {
 
-    @Autowired
-    MockMvc mockMvc;
-    @Autowired
-    ObjectMapper objectMapper;
-    @MockBean
-    private RedisUtil redisUtil;
-    @MockBean
-    private JwtUtil jwtUtil;
-    @MockBean
-    private UserDetailsServiceImpl userDetailsService;
-    @MockBean
-    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+
     @MockBean
     private ReissueService reissueService;
 

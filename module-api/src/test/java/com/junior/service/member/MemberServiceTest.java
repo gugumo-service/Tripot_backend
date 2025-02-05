@@ -13,7 +13,6 @@ import com.junior.exception.StatusCode;
 import com.junior.repository.member.MemberRepository;
 import com.junior.security.UserPrincipal;
 import com.junior.service.s3.S3Service;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -348,7 +347,8 @@ class MemberServiceTest {
         //when, then
         assertThatThrownBy(() -> memberService.updateNickname(principal, updateNicknameDto))
                 .isInstanceOf(NotValidMemberException.class)
-                .hasMessageContaining(StatusCode.INVALID_MEMBER_STATUS.getCustomMessage());;
+                .hasMessageContaining(StatusCode.INVALID_MEMBER_STATUS.getCustomMessage());
+        ;
 
 
     }
