@@ -39,9 +39,8 @@ public class ReportService {
     @Transactional
     public void save(CreateReportDto createReportDto, UserPrincipal principal) {
 
-        Member member = memberRepository.findById(principal.getMember().getId()).orElseThrow(
-                () -> new NotValidMemberException(StatusCode.INVALID_MEMBER)
-        );
+        Member member = memberRepository.findById(principal.getMember().getId())
+                .orElseThrow(() -> new NotValidMemberException(StatusCode.INVALID_MEMBER));
 
         ReportType reportType;
 
