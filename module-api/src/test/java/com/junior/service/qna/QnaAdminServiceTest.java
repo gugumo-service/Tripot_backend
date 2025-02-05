@@ -2,9 +2,6 @@ package com.junior.service.qna;
 
 import com.junior.domain.admin.Qna;
 import com.junior.domain.member.Member;
-import com.junior.domain.member.MemberRole;
-import com.junior.domain.member.MemberStatus;
-import com.junior.domain.member.SignUpType;
 import com.junior.dto.qna.CreateQnaDto;
 import com.junior.dto.qna.QnaAdminDto;
 import com.junior.dto.qna.QnaDetailDto;
@@ -15,12 +12,11 @@ import com.junior.page.PageCustom;
 import com.junior.repository.member.MemberRepository;
 import com.junior.repository.qna.QnaRepository;
 import com.junior.security.UserPrincipal;
+import com.junior.service.BaseServiceTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -35,8 +31,8 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@ExtendWith(MockitoExtension.class)
-class QnaAdminServiceTest {
+
+class QnaAdminServiceTest extends BaseServiceTest {
 
     @Mock
     private MemberRepository memberRepository;
@@ -294,16 +290,4 @@ class QnaAdminServiceTest {
 
     }
 
-    Member createActiveTestMember() {
-        return Member.builder()
-                .id(2L)
-                .nickname("테스트사용자닉네임")
-                .username("테스트사용자유저네임")
-                .role(MemberRole.USER)
-                .signUpType(SignUpType.KAKAO)
-                .profileImage("s3.com/testProfile")
-                .recommendLocation("서울")
-                .status(MemberStatus.ACTIVE)
-                .build();
-    }
 }

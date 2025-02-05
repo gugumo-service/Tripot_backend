@@ -1,9 +1,7 @@
 package com.junior.service.member;
 
 import com.junior.domain.member.Member;
-import com.junior.domain.member.MemberRole;
 import com.junior.domain.member.MemberStatus;
-import com.junior.domain.member.SignUpType;
 import com.junior.dto.member.ActivateMemberDto;
 import com.junior.dto.member.CheckActiveMemberDto;
 import com.junior.dto.member.MemberInfoDto;
@@ -12,6 +10,7 @@ import com.junior.exception.NotValidMemberException;
 import com.junior.exception.StatusCode;
 import com.junior.repository.member.MemberRepository;
 import com.junior.security.UserPrincipal;
+import com.junior.service.BaseServiceTest;
 import com.junior.service.s3.S3Service;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,8 +18,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
@@ -31,7 +28,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-class MemberServiceTest {
+class MemberServiceTest extends BaseServiceTest {
 
     @Mock
     MemberRepository memberRepository;
@@ -413,40 +410,4 @@ class MemberServiceTest {
     }
 
 
-    Member createPreactiveTestMember() {
-        return Member.builder()
-                .id(1L)
-                .nickname("테스트비활성화닉네임")
-                .username("테스트비활성화유저네임")
-                .role(MemberRole.USER)
-                .signUpType(SignUpType.KAKAO)
-                .profileImage("s3.com/testProfile")
-                .recommendLocation("서울")
-                .build();
-    }
-
-    Member createActiveTestMember() {
-        return Member.builder()
-                .id(2L)
-                .nickname("테스트사용자닉네임")
-                .username("테스트사용자유저네임")
-                .role(MemberRole.USER)
-                .signUpType(SignUpType.KAKAO)
-                .profileImage("s3.com/testProfile")
-                .recommendLocation("서울")
-                .status(MemberStatus.ACTIVE)
-                .build();
-    }
-
-    MockMultipartFile createMockMultipartFile() {
-        MockMultipartFile profileImg = new MockMultipartFile(
-                "프로필 사진",
-                "profiles.png",
-                MediaType.IMAGE_PNG_VALUE,
-                "thumbnail".getBytes()
-        );
-
-        return profileImg;
-
-    }
 }

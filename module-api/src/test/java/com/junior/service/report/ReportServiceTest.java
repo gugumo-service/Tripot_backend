@@ -1,9 +1,6 @@
 package com.junior.service.report;
 
 import com.junior.domain.member.Member;
-import com.junior.domain.member.MemberRole;
-import com.junior.domain.member.MemberStatus;
-import com.junior.domain.member.SignUpType;
 import com.junior.domain.report.Report;
 import com.junior.domain.report.ReportReason;
 import com.junior.domain.report.ReportStatus;
@@ -23,12 +20,11 @@ import com.junior.repository.member.MemberRepository;
 import com.junior.repository.report.ReportRepository;
 import com.junior.repository.story.StoryRepository;
 import com.junior.security.UserPrincipal;
+import com.junior.service.BaseServiceTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -44,8 +40,8 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@ExtendWith(MockitoExtension.class)
-class ReportServiceTest {
+
+class ReportServiceTest extends BaseServiceTest {
 
     @Mock
     private StoryRepository storyRepository;
@@ -506,72 +502,6 @@ class ReportServiceTest {
         assertThat(resultReport.getReportStatus()).isEqualTo(ReportStatus.DELETED);
         assertThat(resultReport.getComment().getIsDeleted()).isTrue();
 
-    }
-
-    Member createActiveTestMember() {
-        return Member.builder()
-                .id(2L)
-                .nickname("테스트사용자닉네임")
-                .username("테스트사용자유저네임")
-                .role(MemberRole.USER)
-                .signUpType(SignUpType.KAKAO)
-                .profileImage("s3.com/testProfile")
-                .recommendLocation("서울")
-                .status(MemberStatus.ACTIVE)
-                .build();
-    }
-
-    Member createActiveTestMember2() {
-        return Member.builder()
-                .id(4L)
-                .nickname("테스트사용자닉네임2")
-                .username("테스트사용자유저네임2")
-                .role(MemberRole.USER)
-                .signUpType(SignUpType.KAKAO)
-                .profileImage("s3.com/testProfile")
-                .recommendLocation("서울")
-                .status(MemberStatus.ACTIVE)
-                .build();
-    }
-
-    Story createStory(Member member, String title, String city) {
-        return Story.createStory()
-                .title(title)
-                .member(member)
-                .content("content")
-                .longitude(1.0)
-                .latitude(1.0)
-                .city(city)
-                .isHidden(false)
-                .thumbnailImg("thumbURL")
-                .build();
-    }
-
-    Comment createComment(Member member, Story story) {
-
-        return Comment.builder()
-                .member(member)
-                .content("content")
-                .story(story)
-                .build();
-    }
-
-    Report createReport(Member member, ReportType reportType, Story story) {
-        return Report.builder()
-                .member(member)
-                .reportType(reportType)
-                .reportReason(ReportReason.SPAMMARKET)
-                .story(story)
-                .build();
-    }
-
-    Report createReport(Member member, ReportType reportType, Comment comment) {
-        return Report.builder()
-                .member(member)
-                .reportType(reportType)
-                .reportReason(ReportReason.SPAMMARKET)
-                .comment(comment)
-                .build();
     }
 
 

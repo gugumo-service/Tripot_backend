@@ -2,9 +2,6 @@ package com.junior.service.notice;
 
 import com.junior.domain.admin.Notice;
 import com.junior.domain.member.Member;
-import com.junior.domain.member.MemberRole;
-import com.junior.domain.member.MemberStatus;
-import com.junior.domain.member.SignUpType;
 import com.junior.dto.notice.CreateNoticeDto;
 import com.junior.dto.notice.NoticeAdminDto;
 import com.junior.dto.notice.NoticeDetailDto;
@@ -15,13 +12,12 @@ import com.junior.page.PageCustom;
 import com.junior.repository.member.MemberRepository;
 import com.junior.repository.notice.NoticeRepository;
 import com.junior.security.UserPrincipal;
+import com.junior.service.BaseServiceTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -36,8 +32,8 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@ExtendWith(MockitoExtension.class)
-class NoticeAdminServiceTest {
+
+class NoticeAdminServiceTest extends BaseServiceTest {
 
     @Mock
     private MemberRepository memberRepository;
@@ -48,14 +44,6 @@ class NoticeAdminServiceTest {
     @InjectMocks
     private NoticeAdminService noticeAdminService;
 
-    private static Notice createNotice() {
-        Notice notice = Notice.builder()
-                .id(1L)
-                .title("title")
-                .content("content")
-                .build();
-        return notice;
-    }
 
     @Test
     @DisplayName("공지사항 저장 로직이 정상적으로 실행되어야 함")
@@ -295,16 +283,4 @@ class NoticeAdminServiceTest {
 
     }
 
-    Member createActiveTestMember() {
-        return Member.builder()
-                .id(2L)
-                .nickname("테스트사용자닉네임")
-                .username("테스트사용자유저네임")
-                .role(MemberRole.USER)
-                .signUpType(SignUpType.KAKAO)
-                .profileImage("s3.com/testProfile")
-                .recommendLocation("서울")
-                .status(MemberStatus.ACTIVE)
-                .build();
-    }
 }
