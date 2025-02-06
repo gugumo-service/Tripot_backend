@@ -8,6 +8,7 @@ import com.junior.dto.notice.NoticeDetailDto;
 import com.junior.dto.notice.UpdateNoticeDto;
 import com.junior.exception.NotValidMemberException;
 import com.junior.exception.NoticeException;
+import com.junior.exception.StatusCode;
 import com.junior.page.PageCustom;
 import com.junior.repository.member.MemberRepository;
 import com.junior.repository.notice.NoticeRepository;
@@ -165,7 +166,7 @@ class NoticeAdminServiceTest extends BaseServiceTest {
         //when, then
         assertThatThrownBy(() -> noticeAdminService.findNoticeDetail(noticeId))
                 .isInstanceOf(NoticeException.class)
-                .hasMessageContaining("해당 공지사항을 찾을 수 없음");
+                .hasMessageContaining(StatusCode.NOTICE_NOT_FOUND.getCustomMessage());
 
     }
 
@@ -184,7 +185,7 @@ class NoticeAdminServiceTest extends BaseServiceTest {
         //when, then
         assertThatThrownBy(() -> noticeAdminService.findNoticeDetail(noticeId))
                 .isInstanceOf(NoticeException.class)
-                .hasMessageContaining("해당 공지사항을 찾을 수 없음");
+                .hasMessageContaining(StatusCode.NOTICE_NOT_FOUND.getCustomMessage());
 
     }
 
@@ -205,7 +206,7 @@ class NoticeAdminServiceTest extends BaseServiceTest {
         //when, then
         assertThatThrownBy(() -> noticeAdminService.findNoticeDetail(noticeId))
                 .isInstanceOf(NotValidMemberException.class)
-                .hasMessageContaining("해당 회원을 찾을 수 없음");
+                .hasMessageContaining(StatusCode.MEMBER_NOT_FOUND.getCustomMessage());
 
     }
 
@@ -245,7 +246,7 @@ class NoticeAdminServiceTest extends BaseServiceTest {
         //when, then
         Assertions.assertThatThrownBy(() -> noticeAdminService.updateNotice(updateNoticeId, updateNoticeDto))
                 .isInstanceOf(NoticeException.class)
-                .hasMessageContaining("해당 공지사항을 찾을 수 없음");
+                .hasMessageContaining(StatusCode.NOTICE_NOT_FOUND.getCustomMessage());
 
 
     }
@@ -278,7 +279,7 @@ class NoticeAdminServiceTest extends BaseServiceTest {
         //when, then
         Assertions.assertThatThrownBy(() -> noticeAdminService.deleteNotice(deleteNoticeId))
                 .isInstanceOf(NoticeException.class)
-                .hasMessageContaining("해당 공지사항을 찾을 수 없음");
+                .hasMessageContaining(StatusCode.NOTICE_NOT_FOUND.getCustomMessage());
 
 
     }

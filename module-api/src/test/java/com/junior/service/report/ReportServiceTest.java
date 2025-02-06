@@ -130,7 +130,7 @@ class ReportServiceTest extends BaseServiceTest {
         //when, then
         assertThatThrownBy(() -> reportService.save(createReportDto, principal))
                 .isInstanceOf(ReportException.class)
-                .hasMessageContaining("유효한 신고 유형이 아님");
+                .hasMessageContaining(StatusCode.REPORT_NOT_VALID.getCustomMessage());
     }
 
     @Test
@@ -216,7 +216,7 @@ class ReportServiceTest extends BaseServiceTest {
         //when, then
         assertThatThrownBy(() -> reportService.save(createReportDto, principal))
                 .isInstanceOf(ReportException.class)
-                .hasMessageContaining("본인 글은 신고할 수 없음");
+                .hasMessageContaining(StatusCode.REPORT_EQUALS_AUTHOR.getCustomMessage());
     }
 
     @Test
@@ -246,7 +246,7 @@ class ReportServiceTest extends BaseServiceTest {
         //when, then
         assertThatThrownBy(() -> reportService.save(createReportDto, principal))
                 .isInstanceOf(ReportException.class)
-                .hasMessageContaining("본인 글은 신고할 수 없음");
+                .hasMessageContaining(StatusCode.REPORT_EQUALS_AUTHOR.getCustomMessage());
     }
 
     @Test
@@ -276,7 +276,7 @@ class ReportServiceTest extends BaseServiceTest {
         //when, then
         assertThatThrownBy(() -> reportService.save(createReportDto, principal))
                 .isInstanceOf(ReportException.class)
-                .hasMessageContaining("중복신고할 수 없음");
+                .hasMessageContaining(StatusCode.REPORT_DUPLICATE.getCustomMessage());
     }
 
     @Test
@@ -306,7 +306,7 @@ class ReportServiceTest extends BaseServiceTest {
         //when, then
         assertThatThrownBy(() -> reportService.save(createReportDto, principal))
                 .isInstanceOf(ReportException.class)
-                .hasMessageContaining("중복신고할 수 없음");
+                .hasMessageContaining(StatusCode.REPORT_DUPLICATE.getCustomMessage());
     }
 
 
@@ -411,7 +411,7 @@ class ReportServiceTest extends BaseServiceTest {
         //when  //then
         assertThatThrownBy(() -> reportService.findReport(reportStatus, pageRequest))
                 .isInstanceOf(ReportException.class)
-                .hasMessageContaining("유효한 신고 타입이 아님");
+                .hasMessageContaining(StatusCode.REPORT_TYPE_NOT_VALID.getCustomMessage());
 
     }
 
@@ -452,7 +452,7 @@ class ReportServiceTest extends BaseServiceTest {
         //when, then
         assertThatThrownBy(() -> reportService.confirmReport(1L))
                 .isInstanceOf(ReportException.class)
-                .hasMessageContaining("해당 신고내역을 찾을 수 없음");
+                .hasMessageContaining(StatusCode.REPORT_NOT_FOUND.getCustomMessage());
 
 
     }

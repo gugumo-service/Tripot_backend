@@ -10,6 +10,7 @@ import com.junior.dto.member.CheckActiveMemberDto;
 import com.junior.dto.oauth2.OAuth2LoginDto;
 import com.junior.dto.oauth2.OAuth2Provider;
 import com.junior.exception.JwtErrorException;
+import com.junior.exception.StatusCode;
 import com.junior.repository.member.MemberRepository;
 import com.junior.security.JwtUtil;
 import com.junior.util.RedisUtil;
@@ -200,7 +201,7 @@ class OAuth2ServiceTest {
         //when, then
         assertThatThrownBy(() -> oAuth2Service.logout(refreshTokenDto))
                 .isInstanceOf(JwtErrorException.class)
-                .hasMessageContaining("유효하지 않은 토큰");
+                .hasMessageContaining(StatusCode.INVALID_TOKEN.getCustomMessage());
 
 
     }
@@ -222,7 +223,7 @@ class OAuth2ServiceTest {
         //when, then
         assertThatThrownBy(() -> oAuth2Service.logout(refreshTokenDto))
                 .isInstanceOf(JwtErrorException.class)
-                .hasMessageContaining("Refresh token이 아님");
+                .hasMessageContaining(StatusCode.NOT_REFRESH_TOKEN.getCustomMessage());
 
 
     }
@@ -246,7 +247,7 @@ class OAuth2ServiceTest {
         //when, then
         assertThatThrownBy(() -> oAuth2Service.logout(refreshTokenDto))
                 .isInstanceOf(JwtErrorException.class)
-                .hasMessageContaining("만료된 Refresh 토큰");
+                .hasMessageContaining(StatusCode.EXPIRED_REFRESH_TOKEN.getCustomMessage());
 
 
     }
@@ -270,7 +271,7 @@ class OAuth2ServiceTest {
         //when, then
         assertThatThrownBy(() -> oAuth2Service.logout(refreshTokenDto))
                 .isInstanceOf(JwtErrorException.class)
-                .hasMessageContaining("유효하지 않은 토큰");
+                .hasMessageContaining(StatusCode.INVALID_TOKEN.getCustomMessage());
 
 
     }

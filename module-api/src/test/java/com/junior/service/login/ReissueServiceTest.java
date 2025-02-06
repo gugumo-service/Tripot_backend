@@ -3,6 +3,7 @@ package com.junior.service.login;
 import com.junior.dto.jwt.LoginCreateJwtDto;
 import com.junior.dto.jwt.RefreshTokenDto;
 import com.junior.exception.JwtErrorException;
+import com.junior.exception.StatusCode;
 import com.junior.security.JwtUtil;
 import com.junior.util.RedisUtil;
 import org.junit.jupiter.api.DisplayName;
@@ -89,7 +90,7 @@ class ReissueServiceTest {
         //when, then
         assertThatThrownBy(() -> reissueService.reissue(refreshTokenDto, response))
                 .isInstanceOf(JwtErrorException.class)
-                .hasMessageContaining("만료된 Refresh 토큰");
+                .hasMessageContaining(StatusCode.EXPIRED_REFRESH_TOKEN.getCustomMessage());
 
 
     }
@@ -113,7 +114,7 @@ class ReissueServiceTest {
         //when, then
         assertThatThrownBy(() -> reissueService.reissue(refreshTokenDto, response))
                 .isInstanceOf(JwtErrorException.class)
-                .hasMessageContaining("Refresh token이 아님");
+                .hasMessageContaining(StatusCode.NOT_REFRESH_TOKEN.getCustomMessage());
 
 
     }
@@ -137,7 +138,7 @@ class ReissueServiceTest {
         //when, then
         assertThatThrownBy(() -> reissueService.reissue(refreshTokenDto, response))
                 .isInstanceOf(JwtErrorException.class)
-                .hasMessageContaining("존재하지 않는 토큰");
+                .hasMessageContaining(StatusCode.TOKEN_NOT_EXIST.getCustomMessage());
 
 
     }

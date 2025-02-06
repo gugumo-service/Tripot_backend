@@ -8,6 +8,7 @@ import com.junior.dto.qna.QnaDetailDto;
 import com.junior.dto.qna.UpdateQnaDto;
 import com.junior.exception.NotValidMemberException;
 import com.junior.exception.QnaException;
+import com.junior.exception.StatusCode;
 import com.junior.page.PageCustom;
 import com.junior.repository.member.MemberRepository;
 import com.junior.repository.qna.QnaRepository;
@@ -172,7 +173,7 @@ class QnaAdminServiceTest extends BaseServiceTest {
         //when, then
         assertThatThrownBy(() -> qnaAdminService.findQnaDetail(QnaId))
                 .isInstanceOf(QnaException.class)
-                .hasMessageContaining("해당 Q&A를 찾을 수 없음");
+                .hasMessageContaining(StatusCode.QNA_NOT_FOUND.getCustomMessage());
 
     }
 
@@ -191,7 +192,7 @@ class QnaAdminServiceTest extends BaseServiceTest {
         //when, then
         assertThatThrownBy(() -> qnaAdminService.findQnaDetail(QnaId))
                 .isInstanceOf(QnaException.class)
-                .hasMessageContaining("해당 Q&A를 찾을 수 없음");
+                .hasMessageContaining(StatusCode.QNA_NOT_FOUND.getCustomMessage());
 
     }
 
@@ -212,7 +213,7 @@ class QnaAdminServiceTest extends BaseServiceTest {
         //when, then
         assertThatThrownBy(() -> qnaAdminService.findQnaDetail(QnaId))
                 .isInstanceOf(NotValidMemberException.class)
-                .hasMessageContaining("해당 회원을 찾을 수 없음");
+                .hasMessageContaining(StatusCode.MEMBER_NOT_FOUND.getCustomMessage());
 
     }
 
@@ -252,7 +253,7 @@ class QnaAdminServiceTest extends BaseServiceTest {
         //when, then
         assertThatThrownBy(() -> qnaAdminService.updateQna(updateQnaId, updateQnaDto))
                 .isInstanceOf(QnaException.class)
-                .hasMessageContaining("해당 Q&A를 찾을 수 없음");
+                .hasMessageContaining(StatusCode.QNA_NOT_FOUND.getCustomMessage());
 
 
     }
@@ -285,7 +286,7 @@ class QnaAdminServiceTest extends BaseServiceTest {
         //when, then
         assertThatThrownBy(() -> qnaAdminService.deleteQna(deleteQnaId))
                 .isInstanceOf(QnaException.class)
-                .hasMessageContaining("해당 Q&A를 찾을 수 없음");
+                .hasMessageContaining(StatusCode.QNA_NOT_FOUND.getCustomMessage());
 
 
     }
