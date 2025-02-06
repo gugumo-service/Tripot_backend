@@ -5,6 +5,7 @@ import com.junior.dto.jwt.RefreshTokenDto;
 import com.junior.dto.member.CheckActiveMemberDto;
 import com.junior.dto.oauth2.OAuth2LoginDto;
 import com.junior.dto.oauth2.OAuth2Provider;
+import com.junior.exception.StatusCode;
 import com.junior.security.WithMockCustomUser;
 import com.junior.service.login.OAuth2Service;
 import jakarta.servlet.http.HttpServletResponse;
@@ -63,8 +64,8 @@ class OAuth2ControllerTest extends BaseControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("MEMBER-SUCCESS-004"))
-                .andExpect(jsonPath("$.customMessage").value("소셜 로그인 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.OAUTH2_LOGIN_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.OAUTH2_LOGIN_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data.nickname").value("nickname"))
                 .andExpect(jsonPath("$.data.isActivate").value(false));
@@ -94,8 +95,8 @@ class OAuth2ControllerTest extends BaseControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("JWT-SUCCESS-002"))
-                .andExpect(jsonPath("$.customMessage").value("로그아웃 완료"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.LOGOUT.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.LOGOUT.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
     }

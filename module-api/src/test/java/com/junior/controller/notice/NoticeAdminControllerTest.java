@@ -5,6 +5,7 @@ import com.junior.dto.notice.CreateNoticeDto;
 import com.junior.dto.notice.NoticeAdminDto;
 import com.junior.dto.notice.NoticeDetailDto;
 import com.junior.dto.notice.UpdateNoticeDto;
+import com.junior.exception.StatusCode;
 import com.junior.page.PageCustom;
 import com.junior.security.WithMockCustomAdmin;
 import com.junior.service.notice.NoticeAdminService;
@@ -57,8 +58,8 @@ class NoticeAdminControllerTest extends BaseControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.customCode").value("NOTICE-SUCCESS-001"))
-                .andExpect(jsonPath("$.customMessage").value("공지사항 업로드 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.NOTICE_CREATE_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.NOTICE_CREATE_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
 
@@ -91,8 +92,8 @@ class NoticeAdminControllerTest extends BaseControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("NOTICE-SUCCESS-004"))
-                .andExpect(jsonPath("$.customMessage").value("공지사항 조회 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.NOTICE_FIND_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.NOTICE_FIND_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data.pageable.number").value(1))
                 .andExpect(jsonPath("$.data.content[0].title").value("title"));
@@ -125,8 +126,8 @@ class NoticeAdminControllerTest extends BaseControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("NOTICE-SUCCESS-005"))
-                .andExpect(jsonPath("$.customMessage").value("공지사항 세부정보 조회 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.NOTICE_FIND_DETAIL_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.NOTICE_FIND_DETAIL_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data.title").value("title"))
                 .andExpect(jsonPath("$.data.content").value("content"));
@@ -157,8 +158,8 @@ class NoticeAdminControllerTest extends BaseControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("NOTICE-SUCCESS-003"))
-                .andExpect(jsonPath("$.customMessage").value("공지사항 수정 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.NOTICE_UPDATE_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.NOTICE_UPDATE_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
     }
@@ -181,8 +182,8 @@ class NoticeAdminControllerTest extends BaseControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("NOTICE-SUCCESS-002"))
-                .andExpect(jsonPath("$.customMessage").value("공지사항 삭제 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.NOTICE_DELETE_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.NOTICE_DELETE_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
     }

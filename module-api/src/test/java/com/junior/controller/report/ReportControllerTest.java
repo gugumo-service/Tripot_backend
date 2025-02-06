@@ -7,6 +7,7 @@ import com.junior.domain.report.ReportType;
 import com.junior.dto.report.CreateReportDto;
 import com.junior.dto.report.ReportDto;
 import com.junior.dto.report.StoryReportDto;
+import com.junior.exception.StatusCode;
 import com.junior.page.PageCustom;
 import com.junior.security.WithMockCustomAdmin;
 import com.junior.security.WithMockCustomUser;
@@ -62,8 +63,8 @@ public class ReportControllerTest extends BaseControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.customCode").value("REPORT-SUCCESS-001"))
-                .andExpect(jsonPath("$.customMessage").value("신고 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.REPORT_CREATE_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.REPORT_CREATE_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
     }
@@ -100,8 +101,8 @@ public class ReportControllerTest extends BaseControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("REPORT-SUCCESS-004"))
-                .andExpect(jsonPath("$.customMessage").value("신고 조회 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.REPORT_FIND_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.REPORT_FIND_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data.pageable.number").value(1))
                 .andExpect(jsonPath("$.data.content[0].reportReason").value("스팸홍보"));
@@ -127,8 +128,8 @@ public class ReportControllerTest extends BaseControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("REPORT-SUCCESS-002"))
-                .andExpect(jsonPath("$.customMessage").value("신고 처리(미삭제) 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.REPORT_CONFIRM_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.REPORT_CONFIRM_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
     }
@@ -151,8 +152,8 @@ public class ReportControllerTest extends BaseControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("REPORT-SUCCESS-003"))
-                .andExpect(jsonPath("$.customMessage").value("신고 처리(삭제) 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.REPORT_DELETE_TARGET_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.REPORT_DELETE_TARGET_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
     }

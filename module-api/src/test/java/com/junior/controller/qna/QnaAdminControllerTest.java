@@ -5,6 +5,7 @@ import com.junior.dto.qna.CreateQnaDto;
 import com.junior.dto.qna.QnaAdminDto;
 import com.junior.dto.qna.QnaDetailDto;
 import com.junior.dto.qna.UpdateQnaDto;
+import com.junior.exception.StatusCode;
 import com.junior.page.PageCustom;
 import com.junior.security.WithMockCustomAdmin;
 import com.junior.service.qna.QnaAdminService;
@@ -57,8 +58,8 @@ class QnaAdminControllerTest extends BaseControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.customCode").value("Q&A-SUCCESS-001"))
-                .andExpect(jsonPath("$.customMessage").value("Q&A 업로드 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.QNA_CREATE_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.QNA_CREATE_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
 
@@ -92,8 +93,8 @@ class QnaAdminControllerTest extends BaseControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("Q&A-SUCCESS-004"))
-                .andExpect(jsonPath("$.customMessage").value("Q&A 조회 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.QNA_FIND_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.QNA_FIND_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data.pageable.number").value(1))
                 .andExpect(jsonPath("$.data.content[0].question").value("question"));
@@ -126,8 +127,8 @@ class QnaAdminControllerTest extends BaseControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("Q&A-SUCCESS-005"))
-                .andExpect(jsonPath("$.customMessage").value("Q&A 세부정보 조회 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.QNA_FIND_DETAIL_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.QNA_FIND_DETAIL_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data.question").value("question"))
                 .andExpect(jsonPath("$.data.answer").value("answer"));
@@ -158,8 +159,8 @@ class QnaAdminControllerTest extends BaseControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("Q&A-SUCCESS-003"))
-                .andExpect(jsonPath("$.customMessage").value("Q&A 수정 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.QNA_UPDATE_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.QNA_UPDATE_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
     }
@@ -182,8 +183,8 @@ class QnaAdminControllerTest extends BaseControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("Q&A-SUCCESS-002"))
-                .andExpect(jsonPath("$.customMessage").value("Q&A 삭제 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.QNA_DELETE_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.QNA_DELETE_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
     }

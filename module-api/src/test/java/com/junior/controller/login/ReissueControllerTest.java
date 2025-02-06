@@ -2,6 +2,7 @@ package com.junior.controller.login;
 
 import com.junior.controller.BaseControllerTest;
 import com.junior.dto.jwt.RefreshTokenDto;
+import com.junior.exception.StatusCode;
 import com.junior.security.WithMockCustomUser;
 import com.junior.service.login.ReissueService;
 import org.junit.jupiter.api.DisplayName;
@@ -47,8 +48,8 @@ class ReissueControllerTest extends BaseControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("JWT-SUCCESS-001"))
-                .andExpect(jsonPath("$.customMessage").value("JWT 재발급 완료"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.REISSUE_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.REISSUE_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
 
