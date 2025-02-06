@@ -5,6 +5,7 @@ import com.junior.controller.member.MemberController;
 import com.junior.domain.member.Member;
 import com.junior.dto.jwt.LoginCreateJwtDto;
 import com.junior.dto.oauth2.OAuth2LoginDto;
+import com.junior.exception.StatusCode;
 import com.junior.integration.BaseIntegrationTest;
 import com.junior.repository.member.MemberRepository;
 import com.junior.security.JwtUtil;
@@ -86,8 +87,8 @@ public class OAuth2IntegrationTest extends BaseIntegrationTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("MEMBER-SUCCESS-004"))
-                .andExpect(jsonPath("$.customMessage").value("소셜 로그인 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.OAUTH2_LOGIN_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.OAUTH2_LOGIN_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data.nickname").value("테스트사용자닉네임"))
                 .andExpect(jsonPath("$.data.isActivate").value(true));

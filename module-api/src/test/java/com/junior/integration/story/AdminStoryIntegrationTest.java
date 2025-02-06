@@ -3,6 +3,7 @@ package com.junior.integration.story;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.junior.domain.member.Member;
 import com.junior.domain.story.Story;
+import com.junior.exception.StatusCode;
 import com.junior.integration.BaseIntegrationTest;
 import com.junior.repository.member.MemberRepository;
 import com.junior.repository.story.StoryRepository;
@@ -75,8 +76,8 @@ public class AdminStoryIntegrationTest extends BaseIntegrationTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("STORY-SUCCESS-0001"))
-                .andExpect(jsonPath("$.customMessage").value("스토리 불러오기 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.STORY_READ_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.STORY_READ_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data.pageable.number").value(2))
                 .andExpect(jsonPath("$.data.content[0].id").value(3))
@@ -105,8 +106,8 @@ public class AdminStoryIntegrationTest extends BaseIntegrationTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("STORY-SUCCESS-0001"))
-                .andExpect(jsonPath("$.customMessage").value("스토리 불러오기 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.STORY_READ_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.STORY_READ_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data.id").value(10))
                 .andExpect(jsonPath("$.data.isDeleted").value(false));
@@ -131,8 +132,8 @@ public class AdminStoryIntegrationTest extends BaseIntegrationTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("STORY-SUCCESS-0002"))
-                .andExpect(jsonPath("$.customMessage").value("스토리 삭제 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.STORY_DELETE_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.STORY_DELETE_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
 

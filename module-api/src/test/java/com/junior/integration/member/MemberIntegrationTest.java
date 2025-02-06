@@ -7,6 +7,7 @@ import com.junior.domain.member.Member;
 import com.junior.domain.member.MemberStatus;
 import com.junior.dto.member.ActivateMemberDto;
 import com.junior.dto.member.UpdateNicknameDto;
+import com.junior.exception.StatusCode;
 import com.junior.integration.BaseIntegrationTest;
 import com.junior.repository.member.MemberRepository;
 import com.junior.security.WithMockCustomPreactiveUser;
@@ -85,8 +86,8 @@ public class MemberIntegrationTest extends BaseIntegrationTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("MEMBER-SUCCESS-001"))
-                .andExpect(jsonPath("$.customMessage").value("회원 활성화 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.ACTIVATE_MEMBER.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.ACTIVATE_MEMBER.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
 
@@ -128,8 +129,8 @@ public class MemberIntegrationTest extends BaseIntegrationTest {
         //then
         actionsTrue
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("MEMBER-SUCCESS-002"))
-                .andExpect(jsonPath("$.customMessage").value("닉네임 사용가능 여부"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.CHECK_NICKNAME_MEMBER.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.CHECK_NICKNAME_MEMBER.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(true));
 
@@ -137,8 +138,8 @@ public class MemberIntegrationTest extends BaseIntegrationTest {
         //then
         actionsFalse
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("MEMBER-SUCCESS-002"))
-                .andExpect(jsonPath("$.customMessage").value("닉네임 사용가능 여부"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.CHECK_NICKNAME_MEMBER.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.CHECK_NICKNAME_MEMBER.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(false));
 
@@ -158,8 +159,8 @@ public class MemberIntegrationTest extends BaseIntegrationTest {
         //then
         actions
                 .andDo(print())
-                .andExpect(jsonPath("$.customCode").value("MEMBER-SUCCESS-008"))
-                .andExpect(jsonPath("$.customMessage").value("회원 활성화 여부 조회 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.GET_MEMBER_ACTIVATE.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.GET_MEMBER_ACTIVATE.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data.nickname").value("테스트비활성화닉네임"))
                 .andExpect(jsonPath("$.data.isActivate").value(false));
@@ -180,8 +181,8 @@ public class MemberIntegrationTest extends BaseIntegrationTest {
         //then
         actions
                 .andDo(print())
-                .andExpect(jsonPath("$.customCode").value("MEMBER-SUCCESS-008"))
-                .andExpect(jsonPath("$.customMessage").value("회원 활성화 여부 조회 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.GET_MEMBER_ACTIVATE.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.GET_MEMBER_ACTIVATE.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data.nickname").value("테스트사용자닉네임"))
                 .andExpect(jsonPath("$.data.isActivate").value(true));
@@ -206,8 +207,8 @@ public class MemberIntegrationTest extends BaseIntegrationTest {
         //then
         actions
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("MEMBER-SUCCESS-007"))
-                .andExpect(jsonPath("$.customMessage").value("회원 정보 조회 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.GET_MEMBER_INFO.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.GET_MEMBER_INFO.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data.nickname").value("테스트사용자닉네임"))
                 .andExpect(jsonPath("$.data.profileImageUrl").value("s3.com/testProfile"));
@@ -234,8 +235,8 @@ public class MemberIntegrationTest extends BaseIntegrationTest {
         //then
         actions
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("MEMBER-SUCCESS-005"))
-                .andExpect(jsonPath("$.customMessage").value("회원 닉네임 변경 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.UPDATE_NICKNAME_MEMBER.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.UPDATE_NICKNAME_MEMBER.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
 
@@ -267,8 +268,8 @@ public class MemberIntegrationTest extends BaseIntegrationTest {
         //then
         actions
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("MEMBER-SUCCESS-006"))
-                .andExpect(jsonPath("$.customMessage").value("회원 프로필 사진 변경 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.UPDATE_PROFILE_IMAGE_MEMBER.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.UPDATE_PROFILE_IMAGE_MEMBER.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
 

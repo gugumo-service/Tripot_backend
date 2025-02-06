@@ -10,6 +10,7 @@ import com.junior.domain.report.ReportType;
 import com.junior.domain.story.Comment;
 import com.junior.domain.story.Story;
 import com.junior.dto.report.CreateReportDto;
+import com.junior.exception.StatusCode;
 import com.junior.integration.BaseIntegrationTest;
 import com.junior.repository.comment.CommentRepository;
 import com.junior.repository.member.MemberRepository;
@@ -130,8 +131,8 @@ public class ReportIntegrationTest extends BaseIntegrationTest {
         actions
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.customCode").value("REPORT-SUCCESS-001"))
-                .andExpect(jsonPath("$.customMessage").value("신고 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.REPORT_CREATE_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.REPORT_CREATE_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
 
@@ -169,8 +170,8 @@ public class ReportIntegrationTest extends BaseIntegrationTest {
         actions
                 .andDo(print())
                 .andExpect(status().isAccepted())
-                .andExpect(jsonPath("$.customCode").value("REPORT-ERR-004"))
-                .andExpect(jsonPath("$.customMessage").value("본인 글은 신고할 수 없음"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.REPORT_EQUALS_AUTHOR.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.REPORT_EQUALS_AUTHOR.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(false))
                 .andExpect(jsonPath("$.data").value(nullValue()));
 
@@ -206,8 +207,8 @@ public class ReportIntegrationTest extends BaseIntegrationTest {
         actions2
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.customCode").value("REPORT-ERR-005"))
-                .andExpect(jsonPath("$.customMessage").value("중복신고할 수 없음"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.REPORT_DUPLICATE.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.REPORT_DUPLICATE.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(false))
                 .andExpect(jsonPath("$.data").value(nullValue()));
 
@@ -233,8 +234,8 @@ public class ReportIntegrationTest extends BaseIntegrationTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("REPORT-SUCCESS-004"))
-                .andExpect(jsonPath("$.customMessage").value("신고 조회 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.REPORT_FIND_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.REPORT_FIND_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data.pageable.number").value(1))
                 .andExpect(jsonPath("$.data.content[0].reportReason").value("스팸홍보"))
@@ -274,8 +275,8 @@ public class ReportIntegrationTest extends BaseIntegrationTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("REPORT-SUCCESS-002"))
-                .andExpect(jsonPath("$.customMessage").value("신고 처리(미삭제) 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.REPORT_CONFIRM_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.REPORT_CONFIRM_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
 
@@ -314,8 +315,8 @@ public class ReportIntegrationTest extends BaseIntegrationTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("REPORT-SUCCESS-003"))
-                .andExpect(jsonPath("$.customMessage").value("신고 처리(삭제) 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.REPORT_DELETE_TARGET_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.REPORT_DELETE_TARGET_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
 
@@ -358,8 +359,8 @@ public class ReportIntegrationTest extends BaseIntegrationTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("REPORT-SUCCESS-003"))
-                .andExpect(jsonPath("$.customMessage").value("신고 처리(삭제) 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.REPORT_DELETE_TARGET_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.REPORT_DELETE_TARGET_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
 
