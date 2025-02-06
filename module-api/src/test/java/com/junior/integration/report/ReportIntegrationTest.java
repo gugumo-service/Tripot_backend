@@ -111,9 +111,9 @@ public class ReportIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("스토리에 대한 신고 기능이 정상적으로 이루어져야 함")
+    @DisplayName("신고 - 스토리에 대한 신고 기능이 정상적으로 이루어져야 함")
     @WithMockCustomUser2
-    public void report_story() throws Exception {
+    public void reportStory() throws Exception {
         //given
         CreateReportDto createReportDto = new CreateReportDto(1L, "STORY", "스팸홍보");
         String content = objectMapper.writeValueAsString(createReportDto);
@@ -150,9 +150,9 @@ public class ReportIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("본인 글은 신고할 수 없어야 함")
+    @DisplayName("신고 - 본인 글은 신고할 수 없어야 함")
     @WithMockCustomUser
-    public void report_story_equal_author() throws Exception {
+    public void failToReportStoryIfReporterEqualsAuthor() throws Exception {
         //given
         CreateReportDto createReportDto = new CreateReportDto(1L, "STORY", "스팸홍보");
         String content = objectMapper.writeValueAsString(createReportDto);
@@ -180,9 +180,9 @@ public class ReportIntegrationTest extends BaseIntegrationTest {
 
 
     @Test
-    @DisplayName("중복 신고가 불가능해야 함")
+    @DisplayName("신고 - 중복 신고가 불가능해야 함")
     @WithMockCustomUser2
-    public void report_story_report_duplicate() throws Exception {
+    public void failToReportStoryIfReportSameThing() throws Exception {
         //given
         CreateReportDto createReportDto = new CreateReportDto(1L, "STORY", "스팸홍보");
         String content = objectMapper.writeValueAsString(createReportDto);
@@ -216,7 +216,7 @@ public class ReportIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("신고 조회 기능이 정상적으로 작동되어야 함")
+    @DisplayName("신고 조회 - 정상적으로 작동되어야 함")
     @WithMockCustomAdmin
     void findReport() throws Exception {
 
@@ -246,7 +246,7 @@ public class ReportIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("신고 확인 기능이 정상적으로 적동되어야 함")
+    @DisplayName("신고 확인 - 정상적으로 적동되어야 함")
     @WithMockCustomAdmin
     void confirmReport() throws Exception {
 
@@ -286,9 +286,9 @@ public class ReportIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("신고 대상 스토리 삭제 기능이 정상적으로 적동되어야 함")
+    @DisplayName("신고 대상 삭제 - 스토리가 정상적으로 삭제되어야 함")
     @WithMockCustomAdmin
-    void deleteReportTarget_story() throws Exception {
+    void deleteReportTargetStory() throws Exception {
 
         //given
         Long reportId = 101L;
@@ -329,9 +329,9 @@ public class ReportIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("신고 대상 댓글 삭제 기능이 정상적으로 적동되어야 함")
+    @DisplayName("신고 대상 삭제 - 댓글이 정상적으로 삭제되어야 함")
     @WithMockCustomAdmin
-    void deleteReportTarget_comment() throws Exception {
+    void deleteReportTargetComment() throws Exception {
 
         //given
         Long reportId = 101L;

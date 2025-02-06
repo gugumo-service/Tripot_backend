@@ -71,7 +71,7 @@ public class CommentAdminIntegrationTest extends BaseIntegrationTest {
 
 
     @Test
-    @DisplayName("관리자 댓글 조회 기능이 정상 동작해야 함")
+    @DisplayName("관리자 댓글 조회 - 기능이 정상 동작해야 함")
     @WithMockCustomAdmin
     public void findComment() throws Exception {
         //given
@@ -95,7 +95,7 @@ public class CommentAdminIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("관리자 댓글 삭제 기능이 정상 동작해야 함")
+    @DisplayName("관리자 댓글 삭제 - 기능이 정상 동작해야 함")
     @WithMockCustomAdmin
     public void deleteComment() throws Exception {
         //given

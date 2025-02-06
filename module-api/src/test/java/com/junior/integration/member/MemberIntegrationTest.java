@@ -66,9 +66,9 @@ public class MemberIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("회원 활성화가 정상적으로 이루어져야 함")
+    @DisplayName("회원 활성화가 - 기능이 정상적으로 동작해야 함")
     @WithMockCustomPreactiveUser
-    public void activeMember_preactive() throws Exception {
+    public void activeMember() throws Exception {
         //given
         ActivateMemberDto activateMemberDto = new ActivateMemberDto("updatenick", "강원");
         String content = objectMapper.writeValueAsString(activateMemberDto);
@@ -102,7 +102,7 @@ public class MemberIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("닉네임 사용가능 여부를 반환해야 함")
+    @DisplayName("닉네임 사용가능 여부 확인 - 결과를 정상적으로 반환해야 함")
     void checkNicknameValid() throws Exception {
 
         //given
@@ -146,9 +146,9 @@ public class MemberIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("비활성화 회원의 활성화 여부는 false가 반환되어야 함")
+    @DisplayName("회원 활성화 여부 확인 - 비활성화 회원의 활성화 여부는 false가 반환되어야 함")
     @WithMockCustomPreactiveUser
-    public void 비활성화_회원_활성화_상태_확인() throws Exception {
+    public void checkPreactiveMemberIsActivate() throws Exception {
         //given
 
         //when
@@ -168,9 +168,9 @@ public class MemberIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("활성화 회원의 활성화 여부는 true가 반환되어야 함")
+    @DisplayName("회원 활성화 여부 확인 - 활성화 회원의 활성화 여부는 true가 반환되어야 함")
     @WithMockCustomUser
-    public void 활성화_회원_활성화_상태_확인() throws Exception {
+    public void checkActiveMemberIsActivate() throws Exception {
         //given
 
         //when
@@ -190,7 +190,7 @@ public class MemberIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("응답에 조회한 회원 정보가 정상적으로 들어가야 함")
+    @DisplayName("회원 정보 조회 - 응답에 조회한 회원 정보가 정상적으로 들어가야 함")
     @WithMockCustomUser
     void getMemberInfo() throws Exception {
 
@@ -217,7 +217,7 @@ public class MemberIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("닉네임 변경이 정상적으로 진행되어야 함")
+    @DisplayName("닉네임 변경 - 정상적으로 진행되어야 함")
     @WithMockCustomUser
     void changeNickname() throws Exception {
         //given
@@ -248,7 +248,7 @@ public class MemberIntegrationTest extends BaseIntegrationTest {
 
     @Test
     @WithMockCustomUser
-    @DisplayName("프로필 사진 수정 응답이 정상적으로 반환되어야 함")
+    @DisplayName("프로필 사진 수정 - 응답이 정상적으로 반환되어야 함")
     void changeProfileImage() throws Exception {
 
         //given

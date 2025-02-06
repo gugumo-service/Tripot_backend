@@ -58,8 +58,8 @@ public class OAuth2IntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("소셜 로그인 결과가 정상적으로 리턴되어야 함")
-    public void oauth2LoginV2_success() throws Exception {
+    @DisplayName("소셜 로그인 - 결과가 정상적으로 리턴되어야 함")
+    public void oauth2LoginV2() throws Exception {
         //given
         String sampleAccess = "sample_access_token";
         String sampleRefresh = "sample_refresh_token";
