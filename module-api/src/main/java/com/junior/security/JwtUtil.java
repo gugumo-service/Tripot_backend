@@ -45,7 +45,6 @@ public class JwtUtil {
     public String createJwt(LoginCreateJwtDto loginCreateJwtDto, String category) {
 
         Date requestDate = Timestamp.valueOf(loginCreateJwtDto.requestTimeMs());
-        ;
         Date expireDate = Timestamp.valueOf(loginCreateJwtDto.requestTimeMs());
 
         if (category.equals("access")) {
