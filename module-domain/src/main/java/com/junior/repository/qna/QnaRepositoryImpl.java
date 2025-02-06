@@ -1,9 +1,5 @@
 package com.junior.repository.qna;
 
-import com.junior.dto.notice.NoticeAdminDto;
-import com.junior.dto.notice.NoticeUserDto;
-import com.junior.dto.notice.QNoticeAdminDto;
-import com.junior.dto.notice.QNoticeUserDto;
 import com.junior.dto.qna.QQnaAdminDto;
 import com.junior.dto.qna.QQnaUserDto;
 import com.junior.dto.qna.QnaAdminDto;
@@ -21,7 +17,6 @@ import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
 
-import static com.junior.domain.admin.QNotice.notice;
 import static com.junior.domain.admin.QQna.qna;
 
 @RequiredArgsConstructor
@@ -30,6 +25,14 @@ public class QnaRepositoryImpl implements QnaRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
+    private static BooleanExpression idLt(Long cursorId) {
+
+        return cursorId != null ? qna.id.lt(cursorId) : null;
+    }
+
+    private static BooleanExpression queryContains(String q) {
+        return qna.question.contains(q).or(qna.answer.contains(q));
+    }
 
     /**
      * 관리자 페이지에서의 Q&A 조회
@@ -64,7 +67,6 @@ public class QnaRepositoryImpl implements QnaRepositoryCustom {
         return PageableExecutionUtils.getPage(searchResult, pageable, count::fetchOne);
 
     }
-
 
     /**
      * 사용자 어플에서의 Q&A 조회
@@ -101,14 +103,5 @@ public class QnaRepositoryImpl implements QnaRepositoryCustom {
         return new SliceImpl<>(resultList, pageable, hasNext);
 
 
-    }
-
-    private static BooleanExpression idLt(Long cursorId) {
-
-        return cursorId != null ? qna.id.lt(cursorId) : null;
-    }
-
-    private static BooleanExpression queryContains(String q) {
-        return qna.question.contains(q).or(qna.answer.contains(q));
     }
 }

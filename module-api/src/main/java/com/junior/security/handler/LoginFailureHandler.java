@@ -19,7 +19,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
 
         setErrorResponse(response, StatusCode.ADMIN_LOGIN_FAILURE);
-        
+
     }
 
     private void setErrorResponse(

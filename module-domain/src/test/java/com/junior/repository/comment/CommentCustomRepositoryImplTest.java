@@ -83,7 +83,7 @@ public class CommentCustomRepositoryImplTest {
                 .isDeleted(false)
                 .build();
 
-        Assertions.assertThatCode(()->commentRepository.save(parentComment1)).doesNotThrowAnyException();
+        Assertions.assertThatCode(() -> commentRepository.save(parentComment1)).doesNotThrowAnyException();
     }
 
     @Test

@@ -2,25 +2,22 @@ package com.junior.service.qna;
 
 import com.junior.domain.admin.Qna;
 import com.junior.domain.member.Member;
-import com.junior.domain.member.MemberRole;
-import com.junior.domain.member.MemberStatus;
-import com.junior.domain.member.SignUpType;
 import com.junior.dto.qna.CreateQnaDto;
 import com.junior.dto.qna.QnaAdminDto;
 import com.junior.dto.qna.QnaDetailDto;
 import com.junior.dto.qna.UpdateQnaDto;
 import com.junior.exception.NotValidMemberException;
 import com.junior.exception.QnaException;
+import com.junior.exception.StatusCode;
 import com.junior.page.PageCustom;
 import com.junior.repository.member.MemberRepository;
 import com.junior.repository.qna.QnaRepository;
 import com.junior.security.UserPrincipal;
+import com.junior.service.BaseServiceTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -35,8 +32,8 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@ExtendWith(MockitoExtension.class)
-class QnaAdminServiceTest {
+
+class QnaAdminServiceTest extends BaseServiceTest {
 
     @Mock
     private MemberRepository memberRepository;
@@ -47,9 +44,18 @@ class QnaAdminServiceTest {
     @InjectMocks
     private QnaAdminService qnaAdminService;
 
+    private static Qna createQna() {
+        Qna qna = Qna.builder()
+                .id(1L)
+                .question("question")
+                .answer("answer")
+                .build();
+        return qna;
+    }
+
     @Test
-    @DisplayName("Q&A 저장 로직이 정상적으로 실행되어야 함")
-    void saveQna_success() {
+    @DisplayName("Q&A 저장 - 정상적으로 실행되어야 함")
+    void saveQna() {
 
         //given
         CreateQnaDto createQnaDto = new CreateQnaDto("question", "answer");
@@ -68,8 +74,8 @@ class QnaAdminServiceTest {
     }
 
     @Test
-    @DisplayName("회원을 찾지 못했을 때 관련 예외처리를 해야 함")
-    void saveQna_not_valid_member() {
+    @DisplayName("Q&A 저장 - 회원을 찾지 못했을 때 관련 예외처리를 해야 함")
+    void failToSaveQnaIfMemberNotFound() {
 
         //given
         CreateQnaDto createQnaDto = new CreateQnaDto("question", "answer");
@@ -87,8 +93,8 @@ class QnaAdminServiceTest {
     }
 
     @Test
-    @DisplayName("Q&A 조회 로직이 정상적으로 실행되어야 함")
-    void findQna_success() {
+    @DisplayName("Q&A 조회 - 정상적으로 실행되어야 함")
+    void findQna() {
 
         //given
 
@@ -124,8 +130,8 @@ class QnaAdminServiceTest {
     }
 
     @Test
-    @DisplayName("Q&A 세부 조회 로직이 정상적으로 실행되어야 함")
-    void findQnaDetail_success() {
+    @DisplayName("Q&A 세부 조회 - 정상적으로 실행되어야 함")
+    void findQnaDetail() {
 
         //given
 
@@ -152,8 +158,8 @@ class QnaAdminServiceTest {
     }
 
     @Test
-    @DisplayName("Q&A를 찾지 못했을 때 관련 예외처리를 해야 함")
-    void findQnaDetail_Qna_not_found() {
+    @DisplayName("Q&A 세부 조회 - Q&A를 찾지 못했을 때 관련 예외처리를 해야 함")
+    void failToFindQnaDetailIfQnaNotFound() {
 
 
         //given
@@ -167,13 +173,13 @@ class QnaAdminServiceTest {
         //when, then
         assertThatThrownBy(() -> qnaAdminService.findQnaDetail(QnaId))
                 .isInstanceOf(QnaException.class)
-                .hasMessageContaining("해당 Q&A를 찾을 수 없음");
+                .hasMessageContaining(StatusCode.QNA_NOT_FOUND.getCustomMessage());
 
     }
 
     @Test
-    @DisplayName("삭제된 Q&A에 대해 관련 예외 처리를 해야 함")
-    void findQnaDetail_deleted_Qna() {
+    @DisplayName("Q&A 세부 조회 - 삭제된 Q&A에 대해 관련 예외 처리를 해야 함")
+    void failToFindQnaDetailIfQnaDeleted() {
 
         //given
 
@@ -186,13 +192,13 @@ class QnaAdminServiceTest {
         //when, then
         assertThatThrownBy(() -> qnaAdminService.findQnaDetail(QnaId))
                 .isInstanceOf(QnaException.class)
-                .hasMessageContaining("해당 Q&A를 찾을 수 없음");
+                .hasMessageContaining(StatusCode.QNA_NOT_FOUND.getCustomMessage());
 
     }
 
     @Test
-    @DisplayName("찾을 수 없는 회원에 대해 관련 예외처리를 해야 함")
-    void findQnaDetail_not_found_member() {
+    @DisplayName("Q&A 세부 조회 - 찾을 수 없는 회원에 대해 관련 예외처리를 해야 함")
+    void failToFindQnaDetailIfMemberNotFound() {
 
         //given
 
@@ -207,14 +213,13 @@ class QnaAdminServiceTest {
         //when, then
         assertThatThrownBy(() -> qnaAdminService.findQnaDetail(QnaId))
                 .isInstanceOf(NotValidMemberException.class)
-                .hasMessageContaining("해당 회원을 찾을 수 없음");
+                .hasMessageContaining(StatusCode.MEMBER_NOT_FOUND.getCustomMessage());
 
     }
 
-
     @Test
-    @DisplayName("Q&A 수정 로직이 정상적으로 실행되어야 함")
-    void updateQna_success() {
+    @DisplayName("Q&A 수정 - 정상적으로 실행되어야 함")
+    void updateQna() {
 
         //given
         Long updateQnaId = 1L;
@@ -238,7 +243,7 @@ class QnaAdminServiceTest {
 
     @Test
     @DisplayName("Q&A 수정 - Q&A를 찾지 못했을 때 관련 예외처리를 해야 함")
-    void updateQna_Qna_not_found() {
+    void failToUpdateQnaIfQnaNotFound() {
 
         //given
         Long updateQnaId = 1L;
@@ -248,14 +253,14 @@ class QnaAdminServiceTest {
         //when, then
         assertThatThrownBy(() -> qnaAdminService.updateQna(updateQnaId, updateQnaDto))
                 .isInstanceOf(QnaException.class)
-                .hasMessageContaining("해당 Q&A를 찾을 수 없음");
+                .hasMessageContaining(StatusCode.QNA_NOT_FOUND.getCustomMessage());
 
 
     }
 
     @Test
-    @DisplayName("Q&A 삭제 로직이 정상적으로 실행되어야 함")
-    void deleteQna_success() {
+    @DisplayName("Q&A 삭제 - 정상적으로 실행되어야 함")
+    void deleteQna() {
 
         //given
         Qna Qna = createQna();
@@ -272,7 +277,7 @@ class QnaAdminServiceTest {
 
     @Test
     @DisplayName("Q&A 삭제 - Q&A를 찾지 못했을 때 관련 예외처리를 해야 함")
-    void deleteQna_Qna_not_found() {
+    void failToDeleteQnaIfQnaNotFound() {
 
         //given
         Long deleteQnaId = 1L;
@@ -281,30 +286,9 @@ class QnaAdminServiceTest {
         //when, then
         assertThatThrownBy(() -> qnaAdminService.deleteQna(deleteQnaId))
                 .isInstanceOf(QnaException.class)
-                .hasMessageContaining("해당 Q&A를 찾을 수 없음");
+                .hasMessageContaining(StatusCode.QNA_NOT_FOUND.getCustomMessage());
 
 
     }
 
-    private static Qna createQna() {
-        Qna qna = Qna.builder()
-                .id(1L)
-                .question("question")
-                .answer("answer")
-                .build();
-        return qna;
-    }
-
-    Member createActiveTestMember() {
-        return Member.builder()
-                .id(2L)
-                .nickname("테스트사용자닉네임")
-                .username("테스트사용자유저네임")
-                .role(MemberRole.USER)
-                .signUpType(SignUpType.KAKAO)
-                .profileImage("s3.com/testProfile")
-                .recommendLocation("서울")
-                .status(MemberStatus.ACTIVE)
-                .build();
-    }
 }

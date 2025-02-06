@@ -1,11 +1,9 @@
 package com.junior.repository.notice;
 
 import com.junior.dto.notice.NoticeAdminDto;
-
 import com.junior.dto.notice.NoticeUserDto;
 import com.junior.dto.notice.QNoticeAdminDto;
 import com.junior.dto.notice.QNoticeUserDto;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -23,10 +21,18 @@ import static com.junior.domain.admin.QNotice.notice;
 
 @RequiredArgsConstructor
 @Slf4j
-public class NoticeRepositoryImpl implements NoticeRepositoryCustom{
+public class NoticeRepositoryImpl implements NoticeRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
+    private static BooleanExpression idLt(Long cursorId) {
+
+        return cursorId != null ? notice.id.lt(cursorId) : null;
+    }
+
+    private static BooleanExpression queryContains(String q) {
+        return notice.title.contains(q).or(notice.content.contains(q));
+    }
 
     /**
      * 관리자 페이지에서의 공지사항 조회
@@ -61,7 +67,6 @@ public class NoticeRepositoryImpl implements NoticeRepositoryCustom{
         return PageableExecutionUtils.getPage(searchResult, pageable, count::fetchOne);
 
     }
-
 
     /**
      * 사용자 어플에서의 공지사항 조회
@@ -98,14 +103,5 @@ public class NoticeRepositoryImpl implements NoticeRepositoryCustom{
         return new SliceImpl<>(resultList, pageable, hasNext);
 
 
-    }
-
-    private static BooleanExpression idLt(Long cursorId) {
-
-        return cursorId != null ? notice.id.lt(cursorId) : null;
-    }
-
-    private static BooleanExpression queryContains(String q) {
-        return notice.title.contains(q).or(notice.content.contains(q));
     }
 }

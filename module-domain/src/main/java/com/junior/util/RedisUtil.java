@@ -13,24 +13,27 @@ public class RedisUtil {
 
     private final StringRedisTemplate redisTemplate;
 
-    public String getData(String key){//지정된 키(key)에 해당하는 데이터를 Redis에서 가져오는 메서드
-        ValueOperations<String,String> valueOperations=redisTemplate.opsForValue();
+    public String getData(String key) {//지정된 키(key)에 해당하는 데이터를 Redis에서 가져오는 메서드
+        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
         return valueOperations.get(key);
     }
-    public void setData(String key,String value){//지정된 키(key)에 값을 저장하는 메서드
-        ValueOperations<String,String> valueOperations=redisTemplate.opsForValue();
-        valueOperations.set(key,value);
-    }
-    public void setDataExpire(String key,String value,long seconds){//지정된 키(key)에 값을 저장하고, 지정된 시간(seconds) 후에 데이터가 만료되도록 설정하는 메서드
-        ValueOperations<String,String> valueOperations=redisTemplate.opsForValue();
-        Duration expireDuration=Duration.ofSeconds(seconds);
-        valueOperations.set(key,value,expireDuration);
+
+    public void setData(String key, String value) {//지정된 키(key)에 값을 저장하는 메서드
+        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+        valueOperations.set(key, value);
     }
 
-    public boolean existsByKey(String key){
+    public void setDataExpire(String key, String value, long seconds) {//지정된 키(key)에 값을 저장하고, 지정된 시간(seconds) 후에 데이터가 만료되도록 설정하는 메서드
+        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+        Duration expireDuration = Duration.ofSeconds(seconds);
+        valueOperations.set(key, value, expireDuration);
+    }
+
+    public boolean existsByKey(String key) {
         return Boolean.TRUE.equals(redisTemplate.hasKey(key));
     }
-    public void deleteData(String key){//지정된 키(key)에 해당하는 데이터를 Redis에서 삭제하는 메서드
+
+    public void deleteData(String key) {//지정된 키(key)에 해당하는 데이터를 Redis에서 삭제하는 메서드
         redisTemplate.delete(key);
     }
 }

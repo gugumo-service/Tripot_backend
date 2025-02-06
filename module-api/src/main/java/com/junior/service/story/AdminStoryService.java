@@ -3,7 +3,6 @@ package com.junior.service.story;
 import com.junior.domain.story.Story;
 import com.junior.dto.story.AdminStoryDetailDto;
 import com.junior.dto.story.AdminStoryDto;
-import com.junior.dto.story.ResponseStoryListDto;
 import com.junior.exception.StatusCode;
 import com.junior.exception.StoryNotFoundException;
 import com.junior.page.PageCustom;

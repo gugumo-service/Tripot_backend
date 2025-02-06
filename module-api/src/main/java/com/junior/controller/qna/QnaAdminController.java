@@ -30,7 +30,7 @@ public class QnaAdminController implements QnaAdminApi {
      */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/api/v1/admin/qna")
-    public CommonResponse<Object> saveQna(@AuthenticationPrincipal UserPrincipal principal, @RequestBody CreateQnaDto createQnaDto){
+    public CommonResponse<Object> saveQna(@AuthenticationPrincipal UserPrincipal principal, @RequestBody CreateQnaDto createQnaDto) {
 
         qnaAdminService.saveQna(principal, createQnaDto);
 
@@ -45,7 +45,7 @@ public class QnaAdminController implements QnaAdminApi {
      */
     @GetMapping("/api/v1/admin/qna")
     public CommonResponse<PageCustom<QnaAdminDto>> findQna(@PageableDefault(size = 15, page = 1) Pageable pageable,
-                                                           @RequestParam(required = false, value = "q", defaultValue = "") String q){
+                                                           @RequestParam(required = false, value = "q", defaultValue = "") String q) {
 
 
         return CommonResponse.success(StatusCode.QNA_FIND_SUCCESS, qnaAdminService.findQna(q, pageable));

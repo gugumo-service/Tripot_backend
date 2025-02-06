@@ -10,5 +10,6 @@ public interface ReportRepository extends JpaRepository<Report, Long>, ReportRep
 
 
     boolean existsByMemberAndStory(Member member, Story story);
+
     boolean existsByMemberAndComment(Member member, Comment comment);
 }

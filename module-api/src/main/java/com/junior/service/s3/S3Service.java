@@ -21,17 +21,15 @@ import java.util.*;
 @Slf4j
 public class S3Service {
 
+    private final AmazonS3Client amazonS3Client;
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
-
     @Value("${cloud.aws.s3.path.profile}")
     private String profilePath;
-
-    private final AmazonS3Client amazonS3Client;
     private Set<String> uploadedFileNames = new HashSet<>();
     private Set<Long> uploadedFileSizes = new HashSet<>();
 
-    
+
     //단일 파일 업로드
     public String saveFile(MultipartFile file) {
         String randomFilename = generateRandomFilename(file);

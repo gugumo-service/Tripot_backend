@@ -1,8 +1,8 @@
 package com.junior.controller.comment;
 
 import com.junior.controller.BaseControllerTest;
-import com.junior.controller.CommentAdminController;
 import com.junior.dto.comment.CommentAdminDto;
+import com.junior.exception.StatusCode;
 import com.junior.page.PageCustom;
 import com.junior.security.WithMockCustomAdmin;
 import com.junior.service.comment.CommentAdminService;
@@ -24,7 +24,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -39,7 +38,7 @@ class CommentAdminControllerTest extends BaseControllerTest {
     private CommentAdminController commentAdminController;
 
     @Test
-    @DisplayName("관리자 댓글 조회 기능이 정상적으로 응답을 반환해야 함")
+    @DisplayName("관리자 댓글 조회 - 정상적으로 응답을 반환해야 함")
     @WithMockCustomAdmin
     void findComment() throws Exception {
 
@@ -69,8 +68,8 @@ class CommentAdminControllerTest extends BaseControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("COMMENT-SUCCESS-0002"))
-                .andExpect(jsonPath("$.customMessage").value("댓글 불러오기 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.COMMENT_READ_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.COMMENT_READ_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data.pageable.number").value(1))
                 .andExpect(jsonPath("$.data.content[0].createdUsername").value("username"));
@@ -78,7 +77,7 @@ class CommentAdminControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @DisplayName("관리자용 댓글 삭제 기능이 정상적으로 응답을 반환해야 함")
+    @DisplayName("관리자용 댓글 삭제 - 정상적으로 응답을 반환해야 함")
     @WithMockCustomAdmin
     void deleteComment() throws Exception {
 
@@ -95,8 +94,8 @@ class CommentAdminControllerTest extends BaseControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("COMMENT-SUCCESS-0004"))
-                .andExpect(jsonPath("$.customMessage").value("댓글 삭제 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.COMMENT_DELETE_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.COMMENT_DELETE_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
 

@@ -5,10 +5,10 @@ import lombok.Getter;
 @Getter
 public class ReportException extends RuntimeException {
 
-  private StatusCode statusCode;
+    private StatusCode statusCode;
 
     public ReportException(StatusCode statusCode) {
-      super(statusCode.getCustomMessage());
-      this.statusCode = statusCode;
+        super(statusCode.getCustomMessage());
+        this.statusCode = statusCode;
     }
 }

@@ -50,11 +50,10 @@ public class MemberStoryService {
 
         boolean isAuthor = findMember.getId().equals(findStory.getMember().getId());
 
-        if(isAuthor) {
+        if (isAuthor) {
             // 더티 체킹을 통해 수정쿼리가 자동으로 발생
             findStory.updateStory(createStoryDto);
-        }
-        else {
+        } else {
             throw new PermissionException(StatusCode.STORY_NOT_PERMISSION);
         }
     }
@@ -91,21 +90,21 @@ public class MemberStoryService {
         return storyRepository.findStoryByMap(findMember, geoPointLt, geoPointRb);
     }
 
-//    @Transactional
+    //    @Transactional
     public ResponseStoryDto findOneStory(UserPrincipal userPrincipal, Long storyId) {
 //        Member findMember = userPrincipal.getMember();
 
         Member findMember = (userPrincipal != null) ? userPrincipal.getMember() : null;
 
         Story findStory = storyRepository.findByIdAndIsDeletedFalse(storyId)
-                .orElseThrow(()->new StoryNotFoundException(StatusCode.STORY_NOT_FOUND));
+                .orElseThrow(() -> new StoryNotFoundException(StatusCode.STORY_NOT_FOUND));
 
         boolean isLikeStory = (findMember != null) && likeRepository.isLikeStory(findMember, findStory);
 
         boolean isAuthor = (findMember != null) && findStory.getMember().getId().equals(findMember.getId());
         boolean isHidden = findStory.isHidden();
 
-        if(isHidden && !isAuthor) {
+        if (isHidden && !isAuthor) {
             throw new StoryNotFoundException(StatusCode.STORY_NOT_PERMISSION);
         }
 
@@ -124,7 +123,7 @@ public class MemberStoryService {
         // is clicked like?
         Boolean isLiked = storyRepository.isLikedMember(findMember, findStory);
 
-        if(!isLiked) {
+        if (!isLiked) {
             Like like = Like.builder()
                     .member(findMember)
                     .story(findStory)
@@ -136,8 +135,7 @@ public class MemberStoryService {
 
             //알림 저장
             notificationService.saveNotification(findStory.getMember(), findMember.getProfileImage(), findStory.getTitle(), findStory.getId(), NotificationType.LIKED);
-        }
-        else {
+        } else {
             Like findLike = likeRepository.findLikeByMemberAndStory(findMember, findStory);
             likeRepository.delete(findLike);
 
@@ -158,12 +156,11 @@ public class MemberStoryService {
         Member findMember = userPrincipal.getMember();
 
         Story findStory = storyRepository.findById(storyId)
-                .orElseThrow(()-> new StoryNotFoundException(StatusCode.STORY_NOT_FOUND));
+                .orElseThrow(() -> new StoryNotFoundException(StatusCode.STORY_NOT_FOUND));
 
-        if(findMember.getId().equals(findStory.getMember().getId())) {
+        if (findMember.getId().equals(findStory.getMember().getId())) {
             findStory.deleteStory();
-        }
-        else {
+        } else {
             throw new PermissionException(StatusCode.STORY_NOT_PERMISSION);
         }
     }

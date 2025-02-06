@@ -99,7 +99,6 @@ public class QnaAdminService {
     }
 
 
-
     @Transactional
     public void deleteQna(Long qnaId) {
 

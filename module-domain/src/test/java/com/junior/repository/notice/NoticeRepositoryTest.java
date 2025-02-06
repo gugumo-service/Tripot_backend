@@ -4,7 +4,6 @@ import com.junior.TestConfig;
 import com.junior.domain.admin.Notice;
 import com.junior.dto.notice.NoticeAdminDto;
 import com.junior.dto.notice.NoticeUserDto;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

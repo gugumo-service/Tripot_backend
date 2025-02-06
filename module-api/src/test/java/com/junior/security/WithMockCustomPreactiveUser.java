@@ -16,13 +16,21 @@ import java.lang.annotation.Target;
 public @interface WithMockCustomPreactiveUser {
 
     long id() default 1L;
+
     String nickname() default "테스트비활성화닉네임";
+
     String username() default "테스트비활성화유저네임";
+
     MemberRole role() default MemberRole.USER;
+
     SignUpType signUpType() default SignUpType.KAKAO;
+
     String profileImage() default "s3.com/testProfile";
+
     String recommendLocation() default "서울";
+
     MemberStatus status() default MemberStatus.PREACTIVE;
-;
+
+    ;
 
 }

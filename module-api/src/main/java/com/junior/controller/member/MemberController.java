@@ -79,7 +79,7 @@ public class MemberController implements MemberApi {
      * @return 회원 닉네임 변경 성공
      */
     @PatchMapping("/api/v1/members/nicknames")
-    public CommonResponse<String> changeNickname(@AuthenticationPrincipal UserPrincipal principal, @RequestBody UpdateNicknameDto updateNicknameDto){
+    public CommonResponse<String> changeNickname(@AuthenticationPrincipal UserPrincipal principal, @RequestBody UpdateNicknameDto updateNicknameDto) {
 
         memberService.updateNickname(principal, updateNicknameDto);
 
@@ -87,12 +87,12 @@ public class MemberController implements MemberApi {
         return CommonResponse.success(UPDATE_NICKNAME_MEMBER, null);
     }
 
-     /**
+    /**
      * 회원 탈퇴 기능
      * @param principal
      * @return 회원 탈퇴 완료
      */
-     @DeleteMapping("/api/v1/members")
+    @DeleteMapping("/api/v1/members")
     public CommonResponse<String> deleteMember(@AuthenticationPrincipal UserPrincipal principal) {
         memberService.deleteMember(principal);
 
@@ -107,7 +107,7 @@ public class MemberController implements MemberApi {
      * @return 회원 프로필 사진 변경 성공
      */
     @PatchMapping("/api/v1/members/profile-images")
-    public CommonResponse<String> changeProfileImage(@AuthenticationPrincipal UserPrincipal principal, @RequestPart(value = "profileimg") MultipartFile profileImage){
+    public CommonResponse<String> changeProfileImage(@AuthenticationPrincipal UserPrincipal principal, @RequestPart(value = "profileimg") MultipartFile profileImage) {
 
         memberService.updateProfileImage(principal, profileImage);
 

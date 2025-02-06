@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.junior.domain.member.Member;
 import com.junior.domain.story.Comment;
 import com.junior.domain.story.Story;
+import com.junior.exception.StatusCode;
 import com.junior.integration.BaseIntegrationTest;
 import com.junior.repository.comment.CommentRepository;
 import com.junior.repository.member.MemberRepository;
@@ -70,7 +71,7 @@ public class CommentAdminIntegrationTest extends BaseIntegrationTest {
 
 
     @Test
-    @DisplayName("관리자 댓글 조회 기능이 정상 동작해야 함")
+    @DisplayName("관리자 댓글 조회 - 기능이 정상 동작해야 함")
     @WithMockCustomAdmin
     public void findComment() throws Exception {
         //given
@@ -85,8 +86,8 @@ public class CommentAdminIntegrationTest extends BaseIntegrationTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("COMMENT-SUCCESS-0002"))
-                .andExpect(jsonPath("$.customMessage").value("댓글 불러오기 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.COMMENT_READ_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.COMMENT_READ_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data.pageable.number").value(1))
                 .andExpect(jsonPath("$.data.content[0].id").value(18));
@@ -94,7 +95,7 @@ public class CommentAdminIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("관리자 댓글 삭제 기능이 정상 동작해야 함")
+    @DisplayName("관리자 댓글 삭제 - 기능이 정상 동작해야 함")
     @WithMockCustomAdmin
     public void deleteComment() throws Exception {
         //given
@@ -110,8 +111,8 @@ public class CommentAdminIntegrationTest extends BaseIntegrationTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("COMMENT-SUCCESS-0004"))
-                .andExpect(jsonPath("$.customMessage").value("댓글 삭제 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.COMMENT_DELETE_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.COMMENT_DELETE_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
 

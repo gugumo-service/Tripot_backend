@@ -39,7 +39,7 @@ public class CommentService {
         Member findMember = userPrincipal.getMember();
 
         Story findStory = storyRepository.findById(createCommentDto.storyId())
-                .orElseThrow(()->new StoryNotFoundException(StatusCode.STORY_NOT_FOUND));
+                .orElseThrow(() -> new StoryNotFoundException(StatusCode.STORY_NOT_FOUND));
 
         Comment comment = Comment.builder()
                 .member(findMember)
@@ -48,7 +48,7 @@ public class CommentService {
                 .build();
 
         // 부모 댓글 추가
-        if(createCommentDto.parentCommentId() != -1) {
+        if (createCommentDto.parentCommentId() != -1) {
             Comment parentComment = commentRepository.findById(createCommentDto.parentCommentId())
                     .orElseThrow(() -> new CommentNotFoundException(StatusCode.COMMENT_NOT_FOUND));
 
@@ -87,8 +87,7 @@ public class CommentService {
 
         if (Objects.equals(findComment.getMember().getId(), findMember.getId())) {
             findComment.updateComment(content);
-        }
-        else {
+        } else {
             //FIXME : 권한 문제로 예외 바꾸기
             throw new CommentNotFoundException(StatusCode.COMMENT_NOT_FOUND);
         }
@@ -103,8 +102,7 @@ public class CommentService {
 
         if (Objects.equals(findComment.getMember().getId(), findMember.getId())) {
             findComment.deleteComment();
-        }
-        else {
+        } else {
             //FIXME : 권한 문제로 예외 바꾸기
             throw new CommentNotFoundException(StatusCode.COMMENT_NOT_FOUND);
         }

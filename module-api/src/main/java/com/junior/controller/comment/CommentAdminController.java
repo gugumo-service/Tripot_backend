@@ -1,4 +1,4 @@
-package com.junior.controller;
+package com.junior.controller.comment;
 
 import com.junior.controller.api.CommentAdminApi;
 import com.junior.dto.comment.CommentAdminDto;
@@ -10,7 +10,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,7 +34,6 @@ public class CommentAdminController implements CommentAdminApi {
 
         return CommonResponse.success(StatusCode.COMMENT_DELETE_SUCCESS, null);
     }
-
 
 
 }

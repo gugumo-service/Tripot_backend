@@ -1,19 +1,18 @@
 package com.junior.service.qna;
 
 import com.junior.repository.qna.QnaRepository;
+import com.junior.service.BaseServiceTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import static org.mockito.Mockito.verify;
 
-@ExtendWith(MockitoExtension.class)
-class QnaUserServiceTest {
+
+class QnaUserServiceTest extends BaseServiceTest {
 
     @Mock
     private QnaRepository qnaRepository;
@@ -22,7 +21,7 @@ class QnaUserServiceTest {
     private QnaUserService qnaUserService;
 
     @Test
-    @DisplayName("Q&A 조회 기능이 정상적으로 수행되어야 함")
+    @DisplayName("Q&A 사용자 조회 - 정상적으로 수행되어야 함")
     void findNotice() {
 
         //given
