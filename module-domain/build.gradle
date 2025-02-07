@@ -18,20 +18,20 @@ dependencies {
     implementation project(':module-common')
 }
 
-def querydslDir = 'src/main/generated'
-
-sourceSets {
-    main.java.srcDirs += [querydslDir]
-}
-
-configurations {
-    querydsl.extendsFrom compileClasspath
-}
-
-tasks.withType(JavaCompile).configureEach {
-    options.getGeneratedSourceOutputDirectory().set(file(querydslDir))
-}
-
-clean.doLast {
-    file(querydslDir).deleteDir()
-}
+//def querydslDir = 'src/main/generated'
+//
+//sourceSets {
+//    main.java.srcDirs += [querydslDir]
+//}
+//
+//configurations {
+//    querydsl.extendsFrom compileClasspath
+//}
+//
+//tasks.withType(JavaCompile).configureEach {
+//    options.getGeneratedSourceOutputDirectory().set(file(querydslDir))
+//}
+//
+//clean.doLast {
+//    file(querydslDir).deleteDir()
+//}
