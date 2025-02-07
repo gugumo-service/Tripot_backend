@@ -52,11 +52,6 @@ public class ReportIntegrationTest extends BaseIntegrationTest {
     @Autowired
     private ReportRepository reportRepository;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
-    private MockMvc mockMvc;
 
 
     @BeforeEach

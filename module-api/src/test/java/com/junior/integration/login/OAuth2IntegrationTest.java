@@ -44,11 +44,6 @@ public class OAuth2IntegrationTest extends BaseIntegrationTest {
     @MockBean
     private JwtUtil jwtUtil;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
-    private MockMvc mockMvc;
 
     @BeforeEach
     void init() {

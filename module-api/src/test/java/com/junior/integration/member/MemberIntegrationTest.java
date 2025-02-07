@@ -44,15 +44,11 @@ public class MemberIntegrationTest extends BaseIntegrationTest {
     @Autowired
     private MemberRepository memberRepository;
 
-    @Autowired
-    private ObjectMapper objectMapper;
 
     //aws 테스트는 요금이 발생할 수 있으므로 해당 객체를 mock 처리
     @MockBean
     private AmazonS3Client amazonS3Client;
 
-    @Autowired
-    private MockMvc mockMvc;
 
     @BeforeEach
     void init() throws MalformedURLException {

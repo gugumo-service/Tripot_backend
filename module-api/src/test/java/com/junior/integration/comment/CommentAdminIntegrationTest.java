@@ -29,11 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class CommentAdminIntegrationTest extends BaseIntegrationTest {
 
-    @Autowired
-    private ObjectMapper objectMapper;
 
-    @Autowired
-    private MockMvc mockMvc;
 
     @Autowired
     private MemberRepository memberRepository;
