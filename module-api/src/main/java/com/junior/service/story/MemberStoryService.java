@@ -45,7 +45,7 @@ public class MemberStoryService {
 
         Member findMember = userPrincipal.getMember();
 
-        Story findStory = storyRepository.findById(storyId)
+        Story findStory = storyRepository.findByIdAndIsDeletedFalse(storyId)
                 .orElseThrow(() -> new StoryNotFoundException(StatusCode.STORY_NOT_FOUND));
 
         boolean isAuthor = findMember.getId().equals(findStory.getMember().getId());
