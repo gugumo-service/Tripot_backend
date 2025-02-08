@@ -72,6 +72,20 @@ public class ApiExceptionHandler {
         return ResponseEntity.status(statusCode.getHttpCode()).body(CommonResponse.fail(statusCode));
     }
 
+    @ExceptionHandler(StoryNotFoundException.class)
+    protected ResponseEntity<CommonResponse<Object>> storyNotFoundException(StoryNotFoundException e) {
+        log.warn("{} : {}", Thread.currentThread().getStackTrace()[1].getMethodName(), e.getMessage());
+        StatusCode statusCode = e.getStatusCode();
+        return ResponseEntity.status(statusCode.getHttpCode()).body(CommonResponse.fail(statusCode));
+    }
+
+    @ExceptionHandler(DeletedStoryException.class)
+    protected ResponseEntity<CommonResponse<Object>> deletedStoryException(DeletedStoryException e) {
+        log.warn("{} : {}", Thread.currentThread().getStackTrace()[1].getMethodName(), e.getMessage());
+        StatusCode statusCode = e.getStatusCode();
+        return ResponseEntity.status(statusCode.getHttpCode()).body(CommonResponse.fail(statusCode));
+    }
+
 
     /**
      * 랩핑하지 못한 예외가 발생하는 경우
