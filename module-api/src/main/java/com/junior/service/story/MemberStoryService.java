@@ -5,6 +5,7 @@ import com.junior.domain.member.Member;
 import com.junior.domain.notification.NotificationType;
 import com.junior.domain.story.Story;
 import com.junior.dto.story.*;
+import com.junior.exception.DeletedStoryException;
 import com.junior.exception.PermissionException;
 import com.junior.exception.StatusCode;
 import com.junior.exception.StoryNotFoundException;
@@ -96,8 +97,12 @@ public class MemberStoryService {
 
         Member findMember = (userPrincipal != null) ? userPrincipal.getMember() : null;
 
-        Story findStory = storyRepository.findByIdAndIsDeletedFalse(storyId)
+        Story findStory = storyRepository.findById(storyId)
                 .orElseThrow(() -> new StoryNotFoundException(StatusCode.STORY_NOT_FOUND));
+
+        if(findStory.getIsDeleted()) {
+            throw new DeletedStoryException(StatusCode.STORY_DELETED);
+        }
 
         boolean isLikeStory = (findMember != null) && likeRepository.isLikeStory(findMember, findStory);
 

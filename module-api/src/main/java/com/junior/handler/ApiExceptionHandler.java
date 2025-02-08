@@ -13,11 +13,11 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 public class ApiExceptionHandler {
 
     @ExceptionHandler(CustomException.class)
-    public CommonResponse handlerCustomException(CustomException e) {
-        return CommonResponse.builder()
-                .customCode(e.getReturnCode())
-                .customMessage(e.getReturnMessage())
-                .build();
+    public ResponseEntity<CommonResponse<Object>> handlerCustomException(CustomException e) {
+        log.warn("CustomException : {}", e.getMessage());
+        StatusCode statusCode = e.getStatusCode();
+        return ResponseEntity.status(statusCode.getHttpCode()).body(CommonResponse.fail(statusCode));
+
     }
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
