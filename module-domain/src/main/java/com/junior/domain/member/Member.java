@@ -1,6 +1,7 @@
 package com.junior.domain.member;
 
 
+import com.junior.domain.base.BaseEntity;
 import com.junior.dto.member.ActivateMemberDto;
 import com.junior.dto.member.UpdateNicknameDto;
 import jakarta.persistence.*;
@@ -11,8 +12,8 @@ import lombok.*;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@EqualsAndHashCode
-public class Member {
+@EqualsAndHashCode(callSuper = false)
+public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
