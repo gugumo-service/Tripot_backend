@@ -2,12 +2,10 @@ package com.junior.service;
 
 import com.junior.domain.member.Member;
 import com.junior.security.UserPrincipal;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
@@ -17,7 +15,7 @@ public class MemberAuditorAware implements AuditorAware<Long> {
     public Optional<Long> getCurrentAuditor() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if(authentication == null || !authentication.isAuthenticated()) {
+        if (authentication == null || !authentication.isAuthenticated()) {
             return Optional.empty();
         }
 

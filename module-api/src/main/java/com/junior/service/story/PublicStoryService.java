@@ -1,7 +1,6 @@
 package com.junior.service.story;
 
 import com.junior.domain.member.Member;
-import com.junior.dto.story.ResponseStoryCntByCityDto;
 import com.junior.dto.story.ResponseStoryListDto;
 import com.junior.repository.story.StoryRepository;
 import com.junior.security.UserPrincipal;
@@ -12,7 +11,6 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service

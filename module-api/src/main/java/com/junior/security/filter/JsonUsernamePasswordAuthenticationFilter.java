@@ -15,19 +15,15 @@ import org.springframework.util.StreamUtils;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 
 public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
     private static final String DEFAULT_LOGIN_REQUEST_URL = "/api/v1/login/admin";  // /login 으로 오는 요청을 처리할 것이다
     private static final String HTTP_METHOD = "POST";    //HTTP 메서드의 방식은 POST 이다.
     private static final String CONTENT_TYPE = "application/json";//json 타입의 데이터로만 로그인을 진행한다.
-    private final ObjectMapper objectMapper;
-
-
-
     private static final AntPathRequestMatcher DEFAULT_LOGIN_PATH_REQUEST_MATCHER =
             new AntPathRequestMatcher(DEFAULT_LOGIN_REQUEST_URL, HTTP_METHOD); //=>   /login 의 요청에, POST로 온 요청에 매칭
+    private final ObjectMapper objectMapper;
 
     public JsonUsernamePasswordAuthenticationFilter(ObjectMapper objectMapper) {
 
@@ -40,7 +36,7 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
 
         //json type이 아닌 경우 예외처리
-        if(request.getContentType() == null || !request.getContentType().equals(CONTENT_TYPE)  ) {
+        if (request.getContentType() == null || !request.getContentType().equals(CONTENT_TYPE)) {
             throw new AuthenticationServiceException("Authentication Content-Type not supported: " + request.getContentType());
         }
 

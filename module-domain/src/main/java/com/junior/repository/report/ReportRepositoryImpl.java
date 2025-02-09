@@ -1,13 +1,8 @@
 package com.junior.repository.report;
 
 import com.junior.domain.report.ReportStatus;
-import com.junior.domain.report.ReportType;
 import com.junior.dto.report.QReportQueryDto;
-import com.junior.dto.report.ReportDto;
 import com.junior.dto.report.ReportQueryDto;
-import com.junior.exception.ReportException;
-import com.junior.exception.StatusCode;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -67,8 +62,6 @@ public class ReportRepositoryImpl implements ReportRepositoryCustom {
                 .leftJoin(report.member, member)
                 .leftJoin(report.story, story)
                 .leftJoin(report.comment, comment);
-
-
 
 
         return PageableExecutionUtils.getPage(result, pageable, count::fetchOne);

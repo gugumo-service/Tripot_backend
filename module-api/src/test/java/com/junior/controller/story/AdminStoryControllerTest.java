@@ -3,13 +3,12 @@ package com.junior.controller.story;
 import com.junior.controller.BaseControllerTest;
 import com.junior.dto.story.AdminStoryDetailDto;
 import com.junior.dto.story.AdminStoryDto;
-import com.junior.dto.story.ResponseStoryListDto;
+import com.junior.exception.StatusCode;
 import com.junior.page.PageCustom;
 import com.junior.security.WithMockCustomAdmin;
 import com.junior.service.story.AdminStoryService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
@@ -37,12 +36,9 @@ class AdminStoryControllerTest extends BaseControllerTest {
     @MockBean
     private AdminStoryService adminStoryService;
 
-    @InjectMocks
-    private AdminStoryController adminStoryController;
-
 
     @Test
-    @DisplayName("관리자 스토리 조회 응답이 정상적으로 반환되어야 함")
+    @DisplayName("관리자 스토리 조회 - 응답이 정상적으로 반환되어야 함")
     @WithMockCustomAdmin
     void findStory() throws Exception {
 
@@ -73,8 +69,8 @@ class AdminStoryControllerTest extends BaseControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("STORY-SUCCESS-0001"))
-                .andExpect(jsonPath("$.customMessage").value("스토리 불러오기 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.STORY_READ_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.STORY_READ_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data.pageable.number").value(1))
                 .andExpect(jsonPath("$.data.content[0].city").value("서울"))
@@ -82,7 +78,7 @@ class AdminStoryControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @DisplayName("관리자 스토리 상세 조회 응답이 정상적으로 반환되어야 함")
+    @DisplayName("관리자 스토리 상세 조회 - 응답이 정상적으로 반환되어야 함")
     @WithMockCustomAdmin
     void findStoryDetail() throws Exception {
 
@@ -113,8 +109,8 @@ class AdminStoryControllerTest extends BaseControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("STORY-SUCCESS-0001"))
-                .andExpect(jsonPath("$.customMessage").value("스토리 불러오기 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.STORY_READ_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.STORY_READ_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data.likeCnt").value(3L))
                 .andExpect(jsonPath("$.data.city").value("서울"))
@@ -123,7 +119,7 @@ class AdminStoryControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @DisplayName("관리자 스토리 삭제 응답이 정상적으로 반환되어야 함")
+    @DisplayName("관리자 스토리 삭제 - 응답이 정상적으로 반환되어야 함")
     @WithMockCustomAdmin
     void deleteStory() throws Exception {
 
@@ -139,8 +135,8 @@ class AdminStoryControllerTest extends BaseControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("STORY-SUCCESS-0002"))
-                .andExpect(jsonPath("$.customMessage").value("스토리 삭제 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.STORY_DELETE_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.STORY_DELETE_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
 

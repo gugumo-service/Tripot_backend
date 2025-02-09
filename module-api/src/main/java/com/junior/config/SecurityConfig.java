@@ -2,11 +2,11 @@ package com.junior.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.junior.domain.member.MemberRole;
-import com.junior.security.exceptionhandler.CustomAuthenticationEntryPoint;
 import com.junior.security.JwtUtil;
+import com.junior.security.exceptionhandler.CustomAuthenticationEntryPoint;
+import com.junior.security.filter.JWTFilter;
 import com.junior.security.filter.JsonUsernamePasswordAuthenticationFilter;
 import com.junior.security.filter.JwtValidExceptionHandlerFilter;
-import com.junior.security.filter.JWTFilter;
 import com.junior.security.handler.LoginFailureHandler;
 import com.junior.security.handler.LoginSuccessJwtProviderHandler;
 import com.junior.security.provider.CustomDaoAuthenticationProvider;
@@ -24,11 +24,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 
 
 @Configuration
@@ -41,6 +39,11 @@ public class SecurityConfig {
     private final JwtUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+
+    @Bean
+    public static PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -95,11 +98,6 @@ public class SecurityConfig {
     }
 
     @Bean
-    public static PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() throws Exception {
         DaoAuthenticationProvider daoAuthenticationProvider = new CustomDaoAuthenticationProvider();
 
@@ -126,12 +124,12 @@ public class SecurityConfig {
     }
 
     @Bean
-    public LoginSuccessJwtProviderHandler loginSuccessJWTProvideHandler(){
+    public LoginSuccessJwtProviderHandler loginSuccessJWTProvideHandler() {
         return new LoginSuccessJwtProviderHandler(jwtUtil, redisUtil);
     }
 
     @Bean
-    public LoginFailureHandler loginFailureHandler(){
+    public LoginFailureHandler loginFailureHandler() {
         return new LoginFailureHandler();
     }
 

@@ -10,6 +10,7 @@ import com.junior.domain.report.ReportType;
 import com.junior.domain.story.Comment;
 import com.junior.domain.story.Story;
 import com.junior.dto.report.CreateReportDto;
+import com.junior.exception.StatusCode;
 import com.junior.integration.BaseIntegrationTest;
 import com.junior.repository.comment.CommentRepository;
 import com.junior.repository.member.MemberRepository;
@@ -56,7 +57,6 @@ public class ReportIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
-
 
 
     @BeforeEach
@@ -111,9 +111,9 @@ public class ReportIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("스토리에 대한 신고 기능이 정상적으로 이루어져야 함")
+    @DisplayName("신고 - 스토리에 대한 신고 기능이 정상적으로 이루어져야 함")
     @WithMockCustomUser2
-    public void report_story() throws Exception {
+    public void reportStory() throws Exception {
         //given
         CreateReportDto createReportDto = new CreateReportDto(1L, "STORY", "스팸홍보");
         String content = objectMapper.writeValueAsString(createReportDto);
@@ -131,8 +131,8 @@ public class ReportIntegrationTest extends BaseIntegrationTest {
         actions
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.customCode").value("REPORT-SUCCESS-001"))
-                .andExpect(jsonPath("$.customMessage").value("신고 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.REPORT_CREATE_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.REPORT_CREATE_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
 
@@ -150,9 +150,9 @@ public class ReportIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("본인 글은 신고할 수 없어야 함")
+    @DisplayName("신고 - 본인 글은 신고할 수 없어야 함")
     @WithMockCustomUser
-    public void report_story_equal_author() throws Exception {
+    public void failToReportStoryIfReporterEqualsAuthor() throws Exception {
         //given
         CreateReportDto createReportDto = new CreateReportDto(1L, "STORY", "스팸홍보");
         String content = objectMapper.writeValueAsString(createReportDto);
@@ -170,20 +170,19 @@ public class ReportIntegrationTest extends BaseIntegrationTest {
         actions
                 .andDo(print())
                 .andExpect(status().isAccepted())
-                .andExpect(jsonPath("$.customCode").value("REPORT-ERR-004"))
-                .andExpect(jsonPath("$.customMessage").value("본인 글은 신고할 수 없음"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.REPORT_EQUALS_AUTHOR.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.REPORT_EQUALS_AUTHOR.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(false))
                 .andExpect(jsonPath("$.data").value(nullValue()));
-
 
 
     }
 
 
     @Test
-    @DisplayName("중복 신고가 불가능해야 함")
+    @DisplayName("신고 - 중복 신고가 불가능해야 함")
     @WithMockCustomUser2
-    public void report_story_report_duplicate() throws Exception {
+    public void failToReportStoryIfReportSameThing() throws Exception {
         //given
         CreateReportDto createReportDto = new CreateReportDto(1L, "STORY", "스팸홍보");
         String content = objectMapper.writeValueAsString(createReportDto);
@@ -208,17 +207,16 @@ public class ReportIntegrationTest extends BaseIntegrationTest {
         actions2
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.customCode").value("REPORT-ERR-005"))
-                .andExpect(jsonPath("$.customMessage").value("중복신고할 수 없음"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.REPORT_DUPLICATE.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.REPORT_DUPLICATE.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(false))
                 .andExpect(jsonPath("$.data").value(nullValue()));
-
 
 
     }
 
     @Test
-    @DisplayName("신고 조회 기능이 정상적으로 작동되어야 함")
+    @DisplayName("신고 조회 - 정상적으로 작동되어야 함")
     @WithMockCustomAdmin
     void findReport() throws Exception {
 
@@ -228,7 +226,7 @@ public class ReportIntegrationTest extends BaseIntegrationTest {
         //when
         ResultActions actions = mockMvc.perform(
                 get("/api/v1/admin/reports")
-                        .queryParam("report_status",reportStatus)
+                        .queryParam("report_status", reportStatus)
                         .accept(MediaType.APPLICATION_JSON)
         );
 
@@ -236,8 +234,8 @@ public class ReportIntegrationTest extends BaseIntegrationTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("REPORT-SUCCESS-004"))
-                .andExpect(jsonPath("$.customMessage").value("신고 조회 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.REPORT_FIND_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.REPORT_FIND_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data.pageable.number").value(1))
                 .andExpect(jsonPath("$.data.content[0].reportReason").value("스팸홍보"))
@@ -245,11 +243,10 @@ public class ReportIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.data.content[0].storyId").value(1));
 
 
-
     }
 
     @Test
-    @DisplayName("신고 확인 기능이 정상적으로 적동되어야 함")
+    @DisplayName("신고 확인 - 정상적으로 적동되어야 함")
     @WithMockCustomAdmin
     void confirmReport() throws Exception {
 
@@ -278,8 +275,8 @@ public class ReportIntegrationTest extends BaseIntegrationTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("REPORT-SUCCESS-002"))
-                .andExpect(jsonPath("$.customMessage").value("신고 처리(미삭제) 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.REPORT_CONFIRM_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.REPORT_CONFIRM_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
 
@@ -289,9 +286,9 @@ public class ReportIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("신고 대상 스토리 삭제 기능이 정상적으로 적동되어야 함")
+    @DisplayName("신고 대상 삭제 - 스토리가 정상적으로 삭제되어야 함")
     @WithMockCustomAdmin
-    void deleteReportTarget_story() throws Exception {
+    void deleteReportTargetStory() throws Exception {
 
         //given
         Long reportId = 101L;
@@ -318,8 +315,8 @@ public class ReportIntegrationTest extends BaseIntegrationTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("REPORT-SUCCESS-003"))
-                .andExpect(jsonPath("$.customMessage").value("신고 처리(삭제) 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.REPORT_DELETE_TARGET_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.REPORT_DELETE_TARGET_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
 
@@ -332,9 +329,9 @@ public class ReportIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("신고 대상 댓글 삭제 기능이 정상적으로 적동되어야 함")
+    @DisplayName("신고 대상 삭제 - 댓글이 정상적으로 삭제되어야 함")
     @WithMockCustomAdmin
-    void deleteReportTarget_comment() throws Exception {
+    void deleteReportTargetComment() throws Exception {
 
         //given
         Long reportId = 101L;
@@ -362,8 +359,8 @@ public class ReportIntegrationTest extends BaseIntegrationTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("REPORT-SUCCESS-003"))
-                .andExpect(jsonPath("$.customMessage").value("신고 처리(삭제) 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.REPORT_DELETE_TARGET_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.REPORT_DELETE_TARGET_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
 

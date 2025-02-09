@@ -1,22 +1,19 @@
 package com.junior.domain.member;
 
 
-import com.junior.domain.like.Like;
+import com.junior.domain.base.BaseEntity;
 import com.junior.dto.member.ActivateMemberDto;
 import com.junior.dto.member.UpdateNicknameDto;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@EqualsAndHashCode
-public class Member {
+@EqualsAndHashCode(callSuper = false)
+public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,13 +39,6 @@ public class Member {
     @Builder.Default
     private MemberStatus status = MemberStatus.PREACTIVE;
 
-    // 서비스 이용 약관 동의 여부
-    private Boolean isAgreeTermsUse;
-    // 개인정보 수집 및 이용 동의
-    private Boolean isAgreeCollectingUsingPersonalInformation;
-    // 마케팅 수신 동의
-    private Boolean isAgreeMarketing;
-
     @Column(length = 15)
     @Enumerated(EnumType.STRING)
     private SignUpType signUpType;
@@ -58,10 +48,7 @@ public class Member {
 
     public void activateMember(ActivateMemberDto activateMemberDto) {
         nickname = activateMemberDto.nickname();
-//        isAgreeTermsUse = activateMemberDto.isAgreeTermsUse();
-//        isAgreeCollectingUsingPersonalInformation = activateMemberDto.isAgreeCollectingUsingPersonalInformation();
-//        isAgreeMarketing = activateMemberDto.isAgreeMarketing();
-        recommendLocation= activateMemberDto.recommendLocation();
+        recommendLocation = activateMemberDto.recommendLocation();
         status = MemberStatus.ACTIVE;
     }
 
@@ -73,9 +60,6 @@ public class Member {
         this.password = null;
         this.profileImage = null;
         this.role = null;
-        this.isAgreeTermsUse = null;
-        this.isAgreeCollectingUsingPersonalInformation = null;
-        this.isAgreeMarketing = null;
 
         this.signUpType = null;
         this.recommendLocation = null;

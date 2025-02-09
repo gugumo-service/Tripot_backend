@@ -1,6 +1,5 @@
 package com.junior.service.qna;
 
-import com.junior.dto.notice.NoticeUserDto;
 import com.junior.dto.qna.QnaUserDto;
 import com.junior.repository.qna.QnaRepository;
 import lombok.RequiredArgsConstructor;

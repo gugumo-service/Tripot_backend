@@ -53,7 +53,7 @@ public class NotificationService {
 
     @Transactional
     public void readNotification(Long notificationId) {
-        Notification notification = notificationRepository.findById(notificationId).orElseThrow(()->new NotificationNotFoundException(StatusCode.NOTIFICATION_NOT_FOUND));
+        Notification notification = notificationRepository.findById(notificationId).orElseThrow(() -> new NotificationNotFoundException(StatusCode.NOTIFICATION_NOT_FOUND));
         notification.readNotification();
     }
 
@@ -74,7 +74,7 @@ public class NotificationService {
         Notification notification = notificationRepository.findById(notificationId)
                 .orElseThrow(() -> new NotificationNotFoundException(StatusCode.NOTIFICATION_NOT_FOUND));
 
-        if(notification.getMemberId().equals(findMember.getId())) {
+        if (notification.getMemberId().equals(findMember.getId())) {
             notification.deleteNotification();
         } else {
             throw new PermissionException(StatusCode.NOTIFICATION_NOT_PERMISSION);

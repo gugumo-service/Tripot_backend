@@ -1,8 +1,14 @@
 package com.junior.exception;
 
-public class StoryNotFoundException extends RuntimeException{
+import lombok.Getter;
+
+@Getter
+public class StoryNotFoundException extends RuntimeException {
+
+    private StatusCode statusCode;
 
     public StoryNotFoundException(StatusCode statusCode) {
         super(statusCode.getCustomMessage());
+        this.statusCode = statusCode;
     }
 }
