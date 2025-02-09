@@ -1,8 +1,9 @@
-package com.junior.service.member;
+package com.junior.service.login;
 
 import com.junior.dto.jwt.LoginCreateJwtDto;
 import com.junior.dto.jwt.RefreshTokenDto;
 import com.junior.exception.JwtErrorException;
+import com.junior.exception.StatusCode;
 import com.junior.security.JwtUtil;
 import com.junior.util.RedisUtil;
 import org.junit.jupiter.api.DisplayName;
@@ -11,12 +12,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockHttpServletResponse;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -34,8 +33,8 @@ class ReissueServiceTest {
     private ReissueService reissueService;
 
     @Test
-    @DisplayName("reissue가 정상적으로 동작해야 함")
-    void reissue_success() {
+    @DisplayName("reissue - 정상적으로 동작해야 함")
+    void reissue() {
 
         //given
         MockHttpServletResponse response = new MockHttpServletResponse();
@@ -58,7 +57,6 @@ class ReissueServiceTest {
         given(jwtUtil.getRole(anyString())).willReturn("USER");
 
 
-
         //when
         reissueService.reissue(refreshTokenDto, response);
 
@@ -72,12 +70,11 @@ class ReissueServiceTest {
         assertThat(response.getHeader("refresh_token")).isEqualTo("Bearer " + sampleRefresh);
 
 
-
     }
 
     @Test
-    @DisplayName("만료된 토큰에 대한 예외 처리를 해야 함")
-    void reissue_expired_token() {
+    @DisplayName("reissue - 만료된 토큰에 대한 예외 처리를 해야 함")
+    void failToReissueIfTokenExpired() {
 
         //given
         MockHttpServletResponse response = new MockHttpServletResponse();
@@ -85,25 +82,22 @@ class ReissueServiceTest {
         String oldRefreshToken = "Bearer testRefresh";
 
         RefreshTokenDto refreshTokenDto = new RefreshTokenDto(oldRefreshToken);
-
 
 
         given(jwtUtil.isExpired(anyString())).willReturn(true);
 
 
-
-
         //when, then
         assertThatThrownBy(() -> reissueService.reissue(refreshTokenDto, response))
                 .isInstanceOf(JwtErrorException.class)
-                .hasMessageContaining("만료된 Refresh 토큰");
+                .hasMessageContaining(StatusCode.EXPIRED_REFRESH_TOKEN.getCustomMessage());
 
 
     }
 
     @Test
-    @DisplayName("refresh_token이 아닌 것에 대한 예외 처리가 되어야 함")
-    void reissue_not_refresh() {
+    @DisplayName("reissue - refresh_token이 아닌 것에 대한 예외 처리가 되어야 함")
+    void failToReissueIfNotRefreshToken() {
 
         //given
         MockHttpServletResponse response = new MockHttpServletResponse();
@@ -111,27 +105,23 @@ class ReissueServiceTest {
         String oldRefreshToken = "Bearer testRefresh";
 
         RefreshTokenDto refreshTokenDto = new RefreshTokenDto(oldRefreshToken);
-
 
 
         given(jwtUtil.isExpired(anyString())).willReturn(false);
         given(jwtUtil.getCategory(anyString())).willReturn("access");
 
 
-
         //when, then
         assertThatThrownBy(() -> reissueService.reissue(refreshTokenDto, response))
                 .isInstanceOf(JwtErrorException.class)
-                .hasMessageContaining("Refresh token이 아님");
-
-
+                .hasMessageContaining(StatusCode.NOT_REFRESH_TOKEN.getCustomMessage());
 
 
     }
 
     @Test
-    @DisplayName("redis에 없는 key에 대해 예외 처리를 해야 함")
-    void reissue_token_not_exist() {
+    @DisplayName("reissue - redis에 없는 key에 대해 예외 처리를 해야 함")
+    void failToReissueIfTokenNotExistOnRedis() {
 
         //given
         MockHttpServletResponse response = new MockHttpServletResponse();
@@ -148,9 +138,7 @@ class ReissueServiceTest {
         //when, then
         assertThatThrownBy(() -> reissueService.reissue(refreshTokenDto, response))
                 .isInstanceOf(JwtErrorException.class)
-                .hasMessageContaining("존재하지 않는 토큰");
-
-
+                .hasMessageContaining(StatusCode.TOKEN_NOT_EXIST.getCustomMessage());
 
 
     }

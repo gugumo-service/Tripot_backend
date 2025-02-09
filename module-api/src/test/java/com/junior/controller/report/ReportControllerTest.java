@@ -1,32 +1,24 @@
 package com.junior.controller.report;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.junior.config.SecurityConfig;
+import com.junior.controller.BaseControllerTest;
 import com.junior.domain.report.ReportReason;
 import com.junior.domain.report.ReportStatus;
 import com.junior.domain.report.ReportType;
 import com.junior.dto.report.CreateReportDto;
 import com.junior.dto.report.ReportDto;
 import com.junior.dto.report.StoryReportDto;
+import com.junior.exception.StatusCode;
 import com.junior.page.PageCustom;
-import com.junior.security.JwtUtil;
 import com.junior.security.WithMockCustomAdmin;
 import com.junior.security.WithMockCustomUser;
-import com.junior.security.exceptionhandler.CustomAuthenticationEntryPoint;
 import com.junior.service.report.ReportService;
-import com.junior.service.security.UserDetailsServiceImpl;
-import com.junior.util.RedisUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.ArrayList;
@@ -42,33 +34,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ReportController.class)
-@MockBean(JpaMetamodelMappingContext.class)     //JPA 관련 빈들을 mock으로 등록
-@Import(SecurityConfig.class)
-public class ReportControllerTest {
-
-    @MockBean
-    private RedisUtil redisUtil;
-
-    @MockBean
-    private JwtUtil jwtUtil;
-
-    @MockBean
-    private UserDetailsServiceImpl userDetailsService;
-
-    @MockBean
-    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
-
-    @Autowired
-    MockMvc mockMvc;
+public class ReportControllerTest extends BaseControllerTest {
 
     @MockBean
     ReportService reportService;
 
-    @Autowired
-    ObjectMapper objectMapper;
 
     @Test
-    @DisplayName("신고 응답이 반환되어야 함")
+    @DisplayName("신고 - 응답이 반환되어야 함")
     @WithMockCustomUser
     void saveReport() throws Exception {
 
@@ -90,14 +63,14 @@ public class ReportControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.customCode").value("REPORT-SUCCESS-001"))
-                .andExpect(jsonPath("$.customMessage").value("신고 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.REPORT_CREATE_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.REPORT_CREATE_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
     }
 
     @Test
-    @DisplayName("신고 조회 응답이 반환되어야 함")
+    @DisplayName("신고 조회 - 응답이 반환되어야 함")
     @WithMockCustomAdmin
     void findReport() throws Exception {
 
@@ -128,19 +101,17 @@ public class ReportControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("REPORT-SUCCESS-004"))
-                .andExpect(jsonPath("$.customMessage").value("신고 조회 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.REPORT_FIND_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.REPORT_FIND_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data.pageable.number").value(1))
                 .andExpect(jsonPath("$.data.content[0].reportReason").value("스팸홍보"));
 
 
-
-
     }
 
     @Test
-    @DisplayName("신고 확인 응답이 반환되어야 함")
+    @DisplayName("신고 확인 - 응답이 반환되어야 함")
     @WithMockCustomAdmin
     void confirmReport() throws Exception {
 
@@ -157,14 +128,14 @@ public class ReportControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("REPORT-SUCCESS-002"))
-                .andExpect(jsonPath("$.customMessage").value("신고 처리(미삭제) 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.REPORT_CONFIRM_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.REPORT_CONFIRM_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
     }
 
     @Test
-    @DisplayName("신고 대상 삭제 응답이 반환되어야 함")
+    @DisplayName("신고 대상 삭제 - 응답이 반환되어야 함")
     @WithMockCustomAdmin
     void deleteReportTarget() throws Exception {
 
@@ -181,8 +152,8 @@ public class ReportControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("REPORT-SUCCESS-003"))
-                .andExpect(jsonPath("$.customMessage").value("신고 처리(삭제) 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.REPORT_DELETE_TARGET_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.REPORT_DELETE_TARGET_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
     }

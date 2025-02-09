@@ -7,6 +7,7 @@ import com.junior.domain.member.Member;
 import com.junior.domain.member.MemberStatus;
 import com.junior.dto.member.ActivateMemberDto;
 import com.junior.dto.member.UpdateNicknameDto;
+import com.junior.exception.StatusCode;
 import com.junior.integration.BaseIntegrationTest;
 import com.junior.repository.member.MemberRepository;
 import com.junior.security.WithMockCustomPreactiveUser;
@@ -65,9 +66,9 @@ public class MemberIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("회원 활성화가 정상적으로 이루어져야 함")
+    @DisplayName("회원 활성화가 - 기능이 정상적으로 동작해야 함")
     @WithMockCustomPreactiveUser
-    public void activeMember_preactive() throws Exception {
+    public void activeMember() throws Exception {
         //given
         ActivateMemberDto activateMemberDto = new ActivateMemberDto("updatenick", "강원");
         String content = objectMapper.writeValueAsString(activateMemberDto);
@@ -85,8 +86,8 @@ public class MemberIntegrationTest extends BaseIntegrationTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("MEMBER-SUCCESS-001"))
-                .andExpect(jsonPath("$.customMessage").value("회원 활성화 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.ACTIVATE_MEMBER.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.ACTIVATE_MEMBER.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
 
@@ -101,7 +102,7 @@ public class MemberIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("닉네임 사용가능 여부를 반환해야 함")
+    @DisplayName("닉네임 사용가능 여부 확인 - 결과를 정상적으로 반환해야 함")
     void checkNicknameValid() throws Exception {
 
         //given
@@ -128,25 +129,68 @@ public class MemberIntegrationTest extends BaseIntegrationTest {
         //then
         actionsTrue
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("MEMBER-SUCCESS-002"))
-                .andExpect(jsonPath("$.customMessage").value("닉네임 사용가능 여부"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.CHECK_NICKNAME_MEMBER.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.CHECK_NICKNAME_MEMBER.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(true));
-
 
 
         //then
         actionsFalse
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("MEMBER-SUCCESS-002"))
-                .andExpect(jsonPath("$.customMessage").value("닉네임 사용가능 여부"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.CHECK_NICKNAME_MEMBER.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.CHECK_NICKNAME_MEMBER.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(false));
 
     }
 
     @Test
-    @DisplayName("응답에 조회한 회원 정보가 정상적으로 들어가야 함")
+    @DisplayName("회원 활성화 여부 확인 - 비활성화 회원의 활성화 여부는 false가 반환되어야 함")
+    @WithMockCustomPreactiveUser
+    public void checkPreactiveMemberIsActivate() throws Exception {
+        //given
+
+        //when
+        ResultActions actions = mockMvc.perform(
+                get("/api/v1/members/check-activate")
+                        .accept(MediaType.APPLICATION_JSON)
+        );
+        //then
+        actions
+                .andDo(print())
+                .andExpect(jsonPath("$.customCode").value(StatusCode.GET_MEMBER_ACTIVATE.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.GET_MEMBER_ACTIVATE.getCustomMessage()))
+                .andExpect(jsonPath("$.status").value(true))
+                .andExpect(jsonPath("$.data.nickname").value("테스트비활성화닉네임"))
+                .andExpect(jsonPath("$.data.isActivate").value(false));
+
+    }
+
+    @Test
+    @DisplayName("회원 활성화 여부 확인 - 활성화 회원의 활성화 여부는 true가 반환되어야 함")
+    @WithMockCustomUser
+    public void checkActiveMemberIsActivate() throws Exception {
+        //given
+
+        //when
+        ResultActions actions = mockMvc.perform(
+                get("/api/v1/members/check-activate")
+                        .accept(MediaType.APPLICATION_JSON)
+        );
+        //then
+        actions
+                .andDo(print())
+                .andExpect(jsonPath("$.customCode").value(StatusCode.GET_MEMBER_ACTIVATE.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.GET_MEMBER_ACTIVATE.getCustomMessage()))
+                .andExpect(jsonPath("$.status").value(true))
+                .andExpect(jsonPath("$.data.nickname").value("테스트사용자닉네임"))
+                .andExpect(jsonPath("$.data.isActivate").value(true));
+
+    }
+
+    @Test
+    @DisplayName("회원 정보 조회 - 응답에 조회한 회원 정보가 정상적으로 들어가야 함")
     @WithMockCustomUser
     void getMemberInfo() throws Exception {
 
@@ -163,8 +207,8 @@ public class MemberIntegrationTest extends BaseIntegrationTest {
         //then
         actions
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("MEMBER-SUCCESS-007"))
-                .andExpect(jsonPath("$.customMessage").value("회원 정보 조회 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.GET_MEMBER_INFO.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.GET_MEMBER_INFO.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data.nickname").value("테스트사용자닉네임"))
                 .andExpect(jsonPath("$.data.profileImageUrl").value("s3.com/testProfile"));
@@ -173,7 +217,7 @@ public class MemberIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("닉네임 변경이 정상적으로 진행되어야 함")
+    @DisplayName("닉네임 변경 - 정상적으로 진행되어야 함")
     @WithMockCustomUser
     void changeNickname() throws Exception {
         //given
@@ -191,8 +235,8 @@ public class MemberIntegrationTest extends BaseIntegrationTest {
         //then
         actions
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("MEMBER-SUCCESS-005"))
-                .andExpect(jsonPath("$.customMessage").value("회원 닉네임 변경 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.UPDATE_NICKNAME_MEMBER.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.UPDATE_NICKNAME_MEMBER.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
 
@@ -204,7 +248,7 @@ public class MemberIntegrationTest extends BaseIntegrationTest {
 
     @Test
     @WithMockCustomUser
-    @DisplayName("프로필 사진 수정 응답이 정상적으로 반환되어야 함")
+    @DisplayName("프로필 사진 수정 - 응답이 정상적으로 반환되어야 함")
     void changeProfileImage() throws Exception {
 
         //given
@@ -224,8 +268,8 @@ public class MemberIntegrationTest extends BaseIntegrationTest {
         //then
         actions
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("MEMBER-SUCCESS-006"))
-                .andExpect(jsonPath("$.customMessage").value("회원 프로필 사진 변경 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.UPDATE_PROFILE_IMAGE_MEMBER.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.UPDATE_PROFILE_IMAGE_MEMBER.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
 

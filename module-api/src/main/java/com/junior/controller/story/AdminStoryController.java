@@ -3,7 +3,6 @@ package com.junior.controller.story;
 import com.junior.controller.api.AdminStoryApi;
 import com.junior.dto.story.AdminStoryDetailDto;
 import com.junior.dto.story.AdminStoryDto;
-import com.junior.dto.story.ResponseStoryListDto;
 import com.junior.exception.StatusCode;
 import com.junior.page.PageCustom;
 import com.junior.response.CommonResponse;
@@ -12,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

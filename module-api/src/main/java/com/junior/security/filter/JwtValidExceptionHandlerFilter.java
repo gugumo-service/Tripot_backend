@@ -42,9 +42,6 @@ public class JwtValidExceptionHandlerFilter extends OncePerRequestFilter {
         String accessToken = preAccessToken.split(" ")[1];
 
 
-
-
-
         try {
             // 토큰이 access인지 확인 (발급시 페이로드에 명시)
             String category = jwtUtil.getCategory(accessToken);
@@ -62,10 +59,6 @@ public class JwtValidExceptionHandlerFilter extends OncePerRequestFilter {
             //유효하지 않은 토큰
             setErrorResponse(response, StatusCode.INVALID_TOKEN);
         }
-
-
-
-
 
 
     }

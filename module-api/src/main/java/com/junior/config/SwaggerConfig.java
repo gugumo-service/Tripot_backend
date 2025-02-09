@@ -30,7 +30,6 @@ public class SwaggerConfig {
         List<Server> servers = new ArrayList<>();
 
 
-
         Server testServer = new Server()
                 .description("Test Server")
                 .url("http://localhost:8080");
@@ -50,6 +49,7 @@ public class SwaggerConfig {
                 .addSecurityItem(securityRequirement)
                 .components(components);
     }
+
     private Info apiInfo() {
         return new Info()
                 .title("Tripot API") // API의 제목

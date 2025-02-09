@@ -1,31 +1,21 @@
 package com.junior.controller.notice;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.junior.config.SecurityConfig;
-import com.junior.security.WithMockCustomAdmin;
+import com.junior.controller.BaseControllerTest;
 import com.junior.dto.notice.CreateNoticeDto;
 import com.junior.dto.notice.NoticeAdminDto;
 import com.junior.dto.notice.NoticeDetailDto;
 import com.junior.dto.notice.UpdateNoticeDto;
+import com.junior.exception.StatusCode;
 import com.junior.page.PageCustom;
-import com.junior.security.JwtUtil;
-import com.junior.security.exceptionhandler.CustomAuthenticationEntryPoint;
+import com.junior.security.WithMockCustomAdmin;
 import com.junior.service.notice.NoticeAdminService;
-
-import com.junior.service.security.UserDetailsServiceImpl;
-import com.junior.util.RedisUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.ArrayList;
@@ -41,36 +31,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @WebMvcTest(NoticeAdminController.class)
-@MockBean(JpaMetamodelMappingContext.class)     //JPA 관련 빈들을 mock으로 등록
-@Import(SecurityConfig.class)
-class NoticeAdminControllerTest {
-
-    @MockBean
-    private RedisUtil redisUtil;
-
-    @MockBean
-    private JwtUtil jwtUtil;
-
-    @MockBean
-    private UserDetailsServiceImpl userDetailsService;
-
-    @MockBean
-    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
+class NoticeAdminControllerTest extends BaseControllerTest {
 
     @MockBean
     private NoticeAdminService noticeAdminService;
 
-    @InjectMocks
-    private NoticeAdminController noticeAdminController;
-
     @Test
-    @DisplayName("공지 저장 응답이 반환되어야 함")
+    @DisplayName("공지 저장 - 응답이 반환되어야 함")
     @WithMockCustomAdmin
     void saveNotice() throws Exception {
 
@@ -91,8 +58,8 @@ class NoticeAdminControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.customCode").value("NOTICE-SUCCESS-001"))
-                .andExpect(jsonPath("$.customMessage").value("공지사항 업로드 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.NOTICE_CREATE_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.NOTICE_CREATE_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
 
@@ -100,7 +67,7 @@ class NoticeAdminControllerTest {
     }
 
     @Test
-    @DisplayName("공지 조회 응답이 반환되어야 함")
+    @DisplayName("공지 조회 - 응답이 반환되어야 함")
     @WithMockCustomAdmin
     void findNotice() throws Exception {
 
@@ -125,19 +92,17 @@ class NoticeAdminControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("NOTICE-SUCCESS-004"))
-                .andExpect(jsonPath("$.customMessage").value("공지사항 조회 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.NOTICE_FIND_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.NOTICE_FIND_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data.pageable.number").value(1))
                 .andExpect(jsonPath("$.data.content[0].title").value("title"));
 
 
-
-
     }
 
     @Test
-    @DisplayName("공지 세부내용 조회 응답이 반환되어야 함")
+    @DisplayName("공지 세부내용 조회 - 응답이 반환되어야 함")
     @WithMockCustomAdmin
     void findNoticeDetail() throws Exception {
 
@@ -161,22 +126,18 @@ class NoticeAdminControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("NOTICE-SUCCESS-005"))
-                .andExpect(jsonPath("$.customMessage").value("공지사항 세부정보 조회 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.NOTICE_FIND_DETAIL_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.NOTICE_FIND_DETAIL_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data.title").value("title"))
                 .andExpect(jsonPath("$.data.content").value("content"));
 
 
-
-
-
     }
 
 
-
     @Test
-    @DisplayName("공지 수정 응답이 반환되어야 함")
+    @DisplayName("공지 수정 - 응답이 반환되어야 함")
     @WithMockCustomAdmin
     void updateNotice() throws Exception {
 
@@ -197,14 +158,14 @@ class NoticeAdminControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("NOTICE-SUCCESS-003"))
-                .andExpect(jsonPath("$.customMessage").value("공지사항 수정 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.NOTICE_UPDATE_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.NOTICE_UPDATE_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
     }
 
     @Test
-    @DisplayName("공지사항 삭제 응답이 반환되어야 함")
+    @DisplayName("공지사항 삭제 - 응답이 반환되어야 함")
     @WithMockCustomAdmin
     void deleteNotice() throws Exception {
 
@@ -221,8 +182,8 @@ class NoticeAdminControllerTest {
         actions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("NOTICE-SUCCESS-002"))
-                .andExpect(jsonPath("$.customMessage").value("공지사항 삭제 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.NOTICE_DELETE_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.NOTICE_DELETE_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
     }

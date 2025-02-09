@@ -22,7 +22,6 @@ public record AdminStoryDetailDto(
 ) {
 
 
-
     public static AdminStoryDetailDto from(Story story) {
         return AdminStoryDetailDto.builder()
                 .id(story.getId())

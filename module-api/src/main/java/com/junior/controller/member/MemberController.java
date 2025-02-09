@@ -2,6 +2,7 @@ package com.junior.controller.member;
 
 import com.junior.controller.api.MemberApi;
 import com.junior.dto.member.ActivateMemberDto;
+import com.junior.dto.member.CheckActiveMemberDto;
 import com.junior.dto.member.MemberInfoDto;
 import com.junior.dto.member.UpdateNicknameDto;
 import com.junior.response.CommonResponse;
@@ -48,6 +49,18 @@ public class MemberController implements MemberApi {
     }
 
     /**
+     * 회원의 활성화 여부를 반환하는 기능
+     * @param principal
+     * @return nickname: 사용자의 닉네임
+     *         isActivate: 해당 회원의 활성화 여부
+     */
+    @GetMapping("/api/v1/members/check-activate")
+    public CommonResponse<CheckActiveMemberDto> checkActivateMember(@AuthenticationPrincipal UserPrincipal principal) {
+
+        return CommonResponse.success(GET_MEMBER_ACTIVATE, memberService.checkActiveMember(principal));
+    }
+
+    /**
      *
      * @param principal
      * @return nickname: 사용자의 닉네임
@@ -66,7 +79,7 @@ public class MemberController implements MemberApi {
      * @return 회원 닉네임 변경 성공
      */
     @PatchMapping("/api/v1/members/nicknames")
-    public CommonResponse<String> changeNickname(@AuthenticationPrincipal UserPrincipal principal, @RequestBody UpdateNicknameDto updateNicknameDto){
+    public CommonResponse<String> changeNickname(@AuthenticationPrincipal UserPrincipal principal, @RequestBody UpdateNicknameDto updateNicknameDto) {
 
         memberService.updateNickname(principal, updateNicknameDto);
 
@@ -74,12 +87,12 @@ public class MemberController implements MemberApi {
         return CommonResponse.success(UPDATE_NICKNAME_MEMBER, null);
     }
 
-     /**
+    /**
      * 회원 탈퇴 기능
      * @param principal
      * @return 회원 탈퇴 완료
      */
-     @DeleteMapping("/api/v1/members")
+    @DeleteMapping("/api/v1/members")
     public CommonResponse<String> deleteMember(@AuthenticationPrincipal UserPrincipal principal) {
         memberService.deleteMember(principal);
 
@@ -94,7 +107,7 @@ public class MemberController implements MemberApi {
      * @return 회원 프로필 사진 변경 성공
      */
     @PatchMapping("/api/v1/members/profile-images")
-    public CommonResponse<String> changeProfileImage(@AuthenticationPrincipal UserPrincipal principal, @RequestPart(value = "profileimg") MultipartFile profileImage){
+    public CommonResponse<String> changeProfileImage(@AuthenticationPrincipal UserPrincipal principal, @RequestPart(value = "profileimg") MultipartFile profileImage) {
 
         memberService.updateProfileImage(principal, profileImage);
 

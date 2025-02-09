@@ -10,7 +10,6 @@ import com.querydsl.core.Tuple;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -26,9 +25,9 @@ import org.springframework.data.support.PageableExecutionUtils;
 import java.util.List;
 import java.util.Optional;
 
+import static com.junior.domain.like.QLike.like;
 import static com.junior.domain.member.QMember.member;
 import static com.junior.domain.story.QStory.story;
-import static com.junior.domain.like.QLike.like;
 
 
 @Slf4j
@@ -45,11 +44,10 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
 
         boolean hasNext;
 
-        if(stories.size() == pageable.getPageSize() + 1) {
+        if (stories.size() == pageable.getPageSize() + 1) {
             stories.remove(pageable.getPageSize());
             hasNext = true;
-        }
-        else {
+        } else {
             hasNext = false;
         }
 
@@ -57,15 +55,15 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
     }
 
     private BooleanExpression eqCursorId(Long cursorId) {
-        if(cursorId != null) {
+        if (cursorId != null) {
             return story.id.lt(cursorId);
         }
         return null;
     }
-    
+
     //FIXME: 필요에 따라 eqCursorId와 하나로 합칠 필요 있음
     private BooleanExpression PopularEqCursorId(Long cursorId) {
-        if(cursorId != null) {
+        if (cursorId != null) {
             return story.likeCnt.lt(cursorId);
         }
         return null;
@@ -105,7 +103,7 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
     private BooleanBuilder getCityCondition(String city) {
         BooleanBuilder cityCondition = new BooleanBuilder();
 
-        if(!StringUtils.isBlank(city)) {
+        if (!StringUtils.isBlank(city)) {
             cityCondition.and(story.city.eq(city));
         }
 
@@ -115,7 +113,7 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
     private BooleanBuilder getSearchCondition(String search) {
         BooleanBuilder searchCondition = new BooleanBuilder();
 
-        if(!StringUtils.isBlank(search)) {
+        if (!StringUtils.isBlank(search)) {
             searchCondition.and((story.title.contains(search)).or(story.content.contains(search)));
         }
 
@@ -229,7 +227,7 @@ public class StoryCustomRepositoryImpl implements StoryCustomRepository {
     @Override
     public Boolean isLikedMember(Member findMember, Story findStory) {
 
-        QLike like =  QLike.like;
+        QLike like = QLike.like;
 
         return query.selectOne()
                 .from(like)

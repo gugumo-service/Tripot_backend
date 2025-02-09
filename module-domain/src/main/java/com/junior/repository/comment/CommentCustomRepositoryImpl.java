@@ -5,7 +5,6 @@ import com.junior.dto.comment.ResponseChildCommentDto;
 import com.junior.dto.comment.ResponseMyCommentDto;
 import com.junior.dto.comment.ResponseParentCommentDto;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -24,15 +23,14 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository {
 
     private final JPAQueryFactory query;
 
-    private<T> boolean isHaveNextStoryList(List<T> comments, Pageable pageable) {
+    private <T> boolean isHaveNextStoryList(List<T> comments, Pageable pageable) {
 
         boolean hasNext;
 
-        if(comments.size() == pageable.getPageSize() + 1) {
+        if (comments.size() == pageable.getPageSize() + 1) {
             comments.remove(pageable.getPageSize());
             hasNext = true;
-        }
-        else {
+        } else {
             hasNext = false;
         }
 
@@ -40,7 +38,7 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository {
     }
 
     private BooleanExpression eqCursorId(Long cursorId) {
-        if(cursorId != null) {
+        if (cursorId != null) {
             return comment.id.lt(cursorId);
         }
         return null;
@@ -115,11 +113,13 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         booleanBuilder.and(comment.member.eq(findMember));
         booleanBuilder.and(comment.isDeleted.eq(false));
+        booleanBuilder.and(comment.story.isDeleted.eq(false));
         booleanBuilder.and(eqCursorId(cursorId));
 
         List<ResponseMyCommentDto> comments = query.select(
                         Projections.constructor(
                                 ResponseMyCommentDto.class,
+                                comment.id,
                                 comment.story.id,
                                 comment.content,
                                 comment.createdDate,
@@ -129,6 +129,7 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository {
                 .from(comment)
                 .join(comment.story, story)
                 .where(booleanBuilder)
+                .orderBy(comment.createdDate.desc())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
 

@@ -30,7 +30,7 @@ public class S3Controller {
     public CommonResponse<Object> deleteImg(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @RequestParam(name = "imgPath") String imgPath
-            ) {
+    ) {
         s3Service.deleteStoryImage(imgPath);
 
         return CommonResponse.success(StatusCode.S3_DELETE_SUCCESS, null);

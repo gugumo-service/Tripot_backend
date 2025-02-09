@@ -1,7 +1,9 @@
 package com.junior.dto.member;
 
+import lombok.Builder;
 
-public record CheckActiveMemberDto (
+@Builder
+public record CheckActiveMemberDto(
         String nickname,
         Boolean isActivate
 

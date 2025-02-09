@@ -2,11 +2,11 @@ package com.junior.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.junior.domain.member.MemberRole;
-import com.junior.security.exceptionhandler.CustomAuthenticationEntryPoint;
 import com.junior.security.JwtUtil;
+import com.junior.security.exceptionhandler.CustomAuthenticationEntryPoint;
+import com.junior.security.filter.JWTFilter;
 import com.junior.security.filter.JsonUsernamePasswordAuthenticationFilter;
 import com.junior.security.filter.JwtValidExceptionHandlerFilter;
-import com.junior.security.filter.JWTFilter;
 import com.junior.security.handler.LoginFailureHandler;
 import com.junior.security.handler.LoginSuccessJwtProviderHandler;
 import com.junior.security.provider.CustomDaoAuthenticationProvider;
@@ -15,6 +15,7 @@ import com.junior.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -23,7 +24,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -39,6 +39,11 @@ public class SecurityConfig {
     private final JwtUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+
+    @Bean
+    public static PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -71,7 +76,13 @@ public class SecurityConfig {
                                 "/swagger-resources/**",
                                 "/v3/api-docs/**").permitAll()
                         // 단일 스토리 조회
-                        .requestMatchers("/api/v1/stories/{storyId}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/stories/*").permitAll()
+                        // 스토리 댓글 수 조회
+                        .requestMatchers(HttpMethod.GET, "/api/v1/comment/cnt/*").permitAll()
+                        // 댓글 조회
+                        .requestMatchers(HttpMethod.GET, "/api/v1/comment/*/parent").permitAll()
+                        // 답글 조회
+                        .requestMatchers(HttpMethod.GET, "/api/v1/comment/*/child").permitAll()
                         // public 스토리 리스트 조회
                         .requestMatchers("/api/v1/public/stories/**").permitAll()
 
@@ -84,11 +95,6 @@ public class SecurityConfig {
 
         return httpSecurity.build();
 
-    }
-
-    @Bean
-    public static PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
     }
 
     @Bean
@@ -118,12 +124,12 @@ public class SecurityConfig {
     }
 
     @Bean
-    public LoginSuccessJwtProviderHandler loginSuccessJWTProvideHandler(){
+    public LoginSuccessJwtProviderHandler loginSuccessJWTProvideHandler() {
         return new LoginSuccessJwtProviderHandler(jwtUtil, redisUtil);
     }
 
     @Bean
-    public LoginFailureHandler loginFailureHandler(){
+    public LoginFailureHandler loginFailureHandler() {
         return new LoginFailureHandler();
     }
 

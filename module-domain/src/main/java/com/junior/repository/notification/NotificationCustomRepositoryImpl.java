@@ -13,12 +13,11 @@ import org.springframework.data.domain.SliceImpl;
 
 import java.util.List;
 
-import static com.junior.domain.story.QStory.story;
 import static com.junior.domain.notification.QNotification.notification;
 
 @Slf4j
 @RequiredArgsConstructor
-public class NotificationCustomRepositoryImpl implements NotificationCustomRepository{
+public class NotificationCustomRepositoryImpl implements NotificationCustomRepository {
 
     private final JPAQueryFactory query;
 
@@ -26,11 +25,10 @@ public class NotificationCustomRepositoryImpl implements NotificationCustomRepos
 
         boolean hasNext;
 
-        if(stories.size() == pageable.getPageSize() + 1) {
+        if (stories.size() == pageable.getPageSize() + 1) {
             stories.remove(pageable.getPageSize());
             hasNext = true;
-        }
-        else {
+        } else {
             hasNext = false;
         }
 
@@ -38,19 +36,20 @@ public class NotificationCustomRepositoryImpl implements NotificationCustomRepos
     }
 
     private BooleanExpression eqCursorId(Long cursorId) {
-        if(cursorId != null) {
-            return story.id.lt(cursorId);
+        if (cursorId != null) {
+            return notification.id.lt(cursorId);
         }
         return null;
     }
-//    @Override
+
+    //    @Override
     public Slice<ResponseNotificationDto> findAllNotificationByMemberAndIsReadFalse(Long memberId, Pageable pageable, Long cursorId) {
 
         BooleanBuilder booleanBuilder = new BooleanBuilder();
 
         booleanBuilder.and(notification.memberId.eq(memberId));
         booleanBuilder.and(eqCursorId(cursorId));
-        booleanBuilder.and(notification.isRead.eq(false));
+        booleanBuilder.and(notification.isDeleted.eq(false));
 
         List<ResponseNotificationDto> notifications = query.select(Projections.constructor(
                         ResponseNotificationDto.class,
@@ -59,6 +58,7 @@ public class NotificationCustomRepositoryImpl implements NotificationCustomRepos
                         notification.content,
                         notification.profileImgPath,
                         notification.memberId,
+                        notification.isRead,
                         notification.createdDate,
                         notification.notificationType
                 ))

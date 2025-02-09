@@ -1,66 +1,39 @@
 package com.junior.controller.member;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.junior.config.SecurityConfig;
-import com.junior.security.WithMockCustomUser;
+import com.junior.controller.BaseControllerTest;
 import com.junior.dto.member.ActivateMemberDto;
+import com.junior.dto.member.CheckActiveMemberDto;
 import com.junior.dto.member.MemberInfoDto;
 import com.junior.dto.member.UpdateNicknameDto;
-import com.junior.security.JwtUtil;
+import com.junior.exception.StatusCode;
 import com.junior.security.UserPrincipal;
-import com.junior.security.exceptionhandler.CustomAuthenticationEntryPoint;
+import com.junior.security.WithMockCustomUser;
 import com.junior.service.member.MemberService;
-import com.junior.service.security.UserDetailsServiceImpl;
-import com.junior.util.RedisUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(MemberController.class)
-@MockBean(JpaMetamodelMappingContext.class)     //JPA 관련 빈들을 mock으로 등록
-@Import(SecurityConfig.class)
-class MemberControllerTest {
-
-    @MockBean
-    private RedisUtil redisUtil;
-
-    @MockBean
-    private JwtUtil jwtUtil;
-
-    @MockBean
-    private UserDetailsServiceImpl userDetailsService;
-
-    @MockBean
-    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
-
-    @Autowired
-    MockMvc mockMvc;
+class MemberControllerTest extends BaseControllerTest {
 
     @MockBean
     MemberService memberService;
 
-    @Autowired
-    ObjectMapper objectMapper;
-
-
     @Test
-    @DisplayName("회원 활성화 완료 응답이 반환되어야 함")
+    @DisplayName("회원 활성화 - 응답이 반환되어야 함")
     @WithMockCustomUser
     void activeMember() throws Exception {
 
@@ -81,14 +54,14 @@ class MemberControllerTest {
         //then
         actions
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("MEMBER-SUCCESS-001"))
-                .andExpect(jsonPath("$.customMessage").value("회원 활성화 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.ACTIVATE_MEMBER.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.ACTIVATE_MEMBER.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
     }
 
     @Test
-    @DisplayName("닉네임 사용가능 여부 응답이 반환되어야 함")
+    @DisplayName("닉네임 사용가능 여부 - 응답이 반환되어야 함")
     void checkNicknameValid() throws Exception {
 
         //given
@@ -106,15 +79,46 @@ class MemberControllerTest {
         //then
         actions
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("MEMBER-SUCCESS-002"))
-                .andExpect(jsonPath("$.customMessage").value("닉네임 사용가능 여부"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.CHECK_NICKNAME_MEMBER.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.CHECK_NICKNAME_MEMBER.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(false));
 
     }
 
     @Test
-    @DisplayName("응답에 조회한 회원 정보가 정상적으로 들어가야 함")
+    @DisplayName("회원 활성화 여부 확인 - 응답이 정상적으로 반환되어야 함")
+    @WithMockCustomUser
+    public void checkActiveMember() throws Exception {
+        //given
+        UserPrincipal principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        CheckActiveMemberDto checkActiveMemberDto = CheckActiveMemberDto.builder()
+                .nickname("테스트사용자닉네임")
+                .isActivate(true)
+                .build();
+
+        given(memberService.checkActiveMember(principal)).willReturn(checkActiveMemberDto);
+
+        //when
+        ResultActions actions = mockMvc.perform(
+                get("/api/v1/members/check-activate")
+                        .accept(MediaType.APPLICATION_JSON)
+        );
+
+        //then
+        actions
+                .andDo(print())
+                .andExpect(jsonPath("$.customCode").value(StatusCode.GET_MEMBER_ACTIVATE.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.GET_MEMBER_ACTIVATE.getCustomMessage()))
+                .andExpect(jsonPath("$.status").value(true))
+                .andExpect(jsonPath("$.data.nickname").value("테스트사용자닉네임"))
+                .andExpect(jsonPath("$.data.isActivate").value(true));
+
+    }
+
+    @Test
+    @DisplayName("회원 정보 조회 - 응답에 조회한 회원 정보가 정상적으로 들어가야 함")
     @WithMockCustomUser
     void getMemberInfo() throws Exception {
 
@@ -134,8 +138,8 @@ class MemberControllerTest {
         //then
         actions
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("MEMBER-SUCCESS-007"))
-                .andExpect(jsonPath("$.customMessage").value("회원 정보 조회 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.GET_MEMBER_INFO.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.GET_MEMBER_INFO.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data.nickname").value("nickname"))
                 .andExpect(jsonPath("$.data.profileImageUrl").value("s3.com/profileImage"));
@@ -144,7 +148,7 @@ class MemberControllerTest {
     }
 
     @Test
-    @DisplayName("닉네임 변경 성공 응답이 반환되어야 함")
+    @DisplayName("닉네임 변경 - 성공 응답이 반환되어야 함")
     @WithMockCustomUser
     void changeNickname() throws Exception {
         //given
@@ -162,8 +166,8 @@ class MemberControllerTest {
         //then
         actions
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("MEMBER-SUCCESS-005"))
-                .andExpect(jsonPath("$.customMessage").value("회원 닉네임 변경 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.UPDATE_NICKNAME_MEMBER.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.UPDATE_NICKNAME_MEMBER.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
 
@@ -172,7 +176,7 @@ class MemberControllerTest {
 
     @Test
     @WithMockCustomUser
-    @DisplayName("회원 탈퇴 응답이 정상적으로 반환되어야 함")
+    @DisplayName("회원 탈퇴 - 응답이 정상적으로 반환되어야 함")
     void deleteMember() throws Exception {
 
         //given
@@ -186,8 +190,8 @@ class MemberControllerTest {
         //then
         actions
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("MEMBER-SUCCESS-003"))
-                .andExpect(jsonPath("$.customMessage").value("회원 삭제 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.DELETE_MEMBER.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.DELETE_MEMBER.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
 
@@ -196,7 +200,7 @@ class MemberControllerTest {
 
     @Test
     @WithMockCustomUser
-    @DisplayName("프로필 사진 수정 응답이 정상적으로 반환되어야 함")
+    @DisplayName("프로필 사진 수정 - 응답이 정상적으로 반환되어야 함")
     void changeProfileImage() throws Exception {
 
         //given
@@ -213,8 +217,8 @@ class MemberControllerTest {
         //then
         actions
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customCode").value("MEMBER-SUCCESS-006"))
-                .andExpect(jsonPath("$.customMessage").value("회원 프로필 사진 변경 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.UPDATE_PROFILE_IMAGE_MEMBER.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.UPDATE_PROFILE_IMAGE_MEMBER.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
 

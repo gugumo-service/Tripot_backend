@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.tags.Tags;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,23 +39,23 @@ public interface MemberApi {
                                     examples = {
                                             @ExampleObject(name = "유효하지 않은 회원",
                                                     value = """
-                                                    {
-                                                        "customCode": "MEMBER-ERR-001",
-                                                        "customMessage": "유효하지 않은 회원",
-                                                        "status": false,
-                                                        "data": null
-                                                    }
-                                                    """
+                                                            {
+                                                                "customCode": "MEMBER-ERR-001",
+                                                                "customMessage": "유효하지 않은 회원",
+                                                                "status": false,
+                                                                "data": null
+                                                            }
+                                                            """
                                             ),
                                             @ExampleObject(name = "해당 회원 status로 실행할 수 없음",
-                                            value = """
-                                                    {
-                                                        "customCode": "MEMBER-ERR-002",
-                                                        "customMessage": "해당 회원 status로 실행할 수 없음",
-                                                        "status": false,
-                                                        "data": null
-                                                    }
-                                                    """
+                                                    value = """
+                                                            {
+                                                                "customCode": "MEMBER-ERR-002",
+                                                                "customMessage": "해당 회원 status로 실행할 수 없음",
+                                                                "status": false,
+                                                                "data": null
+                                                            }
+                                                            """
                                             )
                                     }))
             })
@@ -101,23 +100,23 @@ public interface MemberApi {
                                     examples = {
                                             @ExampleObject(name = "유효하지 않은 회원",
                                                     value = """
-                                                    {
-                                                        "customCode": "MEMBER-ERR-001",
-                                                        "customMessage": "유효하지 않은 회원",
-                                                        "status": false,
-                                                        "data": null
-                                                    }
-                                                    """
+                                                            {
+                                                                "customCode": "MEMBER-ERR-001",
+                                                                "customMessage": "유효하지 않은 회원",
+                                                                "status": false,
+                                                                "data": null
+                                                            }
+                                                            """
                                             ),
                                             @ExampleObject(name = "해당 회원 status로 실행할 수 없음",
                                                     value = """
-                                                    {
-                                                        "customCode": "MEMBER-ERR-002",
-                                                        "customMessage": "해당 회원 status로 실행할 수 없음",
-                                                        "status": false,
-                                                        "data": null
-                                                    }
-                                                    """
+                                                            {
+                                                                "customCode": "MEMBER-ERR-002",
+                                                                "customMessage": "해당 회원 status로 실행할 수 없음",
+                                                                "status": false,
+                                                                "data": null
+                                                            }
+                                                            """
                                             )
                                     }))
             })
@@ -142,23 +141,23 @@ public interface MemberApi {
                                     examples = {
                                             @ExampleObject(name = "유효하지 않은 회원",
                                                     value = """
-                                                    {
-                                                        "customCode": "MEMBER-ERR-001",
-                                                        "customMessage": "유효하지 않은 회원",
-                                                        "status": false,
-                                                        "data": null
-                                                    }
-                                                    """
+                                                            {
+                                                                "customCode": "MEMBER-ERR-001",
+                                                                "customMessage": "유효하지 않은 회원",
+                                                                "status": false,
+                                                                "data": null
+                                                            }
+                                                            """
                                             ),
                                             @ExampleObject(name = "해당 회원 status로 실행할 수 없음",
                                                     value = """
-                                                    {
-                                                        "customCode": "MEMBER-ERR-002",
-                                                        "customMessage": "해당 회원 status로 실행할 수 없음",
-                                                        "status": false,
-                                                        "data": null
-                                                    }
-                                                    """
+                                                            {
+                                                                "customCode": "MEMBER-ERR-002",
+                                                                "customMessage": "해당 회원 status로 실행할 수 없음",
+                                                                "status": false,
+                                                                "data": null
+                                                            }
+                                                            """
                                             )
                                     }))
             })
@@ -183,23 +182,23 @@ public interface MemberApi {
                                     examples = {
                                             @ExampleObject(name = "유효하지 않은 회원",
                                                     value = """
-                                                    {
-                                                        "customCode": "MEMBER-ERR-001",
-                                                        "customMessage": "유효하지 않은 회원",
-                                                        "status": false,
-                                                        "data": null
-                                                    }
-                                                    """
+                                                            {
+                                                                "customCode": "MEMBER-ERR-001",
+                                                                "customMessage": "유효하지 않은 회원",
+                                                                "status": false,
+                                                                "data": null
+                                                            }
+                                                            """
                                             ),
                                             @ExampleObject(name = "해당 회원 status로 실행할 수 없음",
                                                     value = """
-                                                    {
-                                                        "customCode": "MEMBER-ERR-002",
-                                                        "customMessage": "해당 회원 status로 실행할 수 없음",
-                                                        "status": false,
-                                                        "data": null
-                                                    }
-                                                    """
+                                                            {
+                                                                "customCode": "MEMBER-ERR-002",
+                                                                "customMessage": "해당 회원 status로 실행할 수 없음",
+                                                                "status": false,
+                                                                "data": null
+                                                            }
+                                                            """
                                             )
                                     }))
             })
@@ -224,23 +223,23 @@ public interface MemberApi {
                                     examples = {
                                             @ExampleObject(name = "유효하지 않은 회원",
                                                     value = """
-                                                    {
-                                                        "customCode": "MEMBER-ERR-001",
-                                                        "customMessage": "유효하지 않은 회원",
-                                                        "status": false,
-                                                        "data": null
-                                                    }
-                                                    """
+                                                            {
+                                                                "customCode": "MEMBER-ERR-001",
+                                                                "customMessage": "유효하지 않은 회원",
+                                                                "status": false,
+                                                                "data": null
+                                                            }
+                                                            """
                                             ),
                                             @ExampleObject(name = "해당 회원 status로 실행할 수 없음",
                                                     value = """
-                                                    {
-                                                        "customCode": "MEMBER-ERR-002",
-                                                        "customMessage": "해당 회원 status로 실행할 수 없음",
-                                                        "status": false,
-                                                        "data": null
-                                                    }
-                                                    """
+                                                            {
+                                                                "customCode": "MEMBER-ERR-002",
+                                                                "customMessage": "해당 회원 status로 실행할 수 없음",
+                                                                "status": false,
+                                                                "data": null
+                                                            }
+                                                            """
                                             )
                                     }))
             })

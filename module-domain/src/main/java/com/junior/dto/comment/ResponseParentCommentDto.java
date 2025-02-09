@@ -1,10 +1,5 @@
 package com.junior.dto.comment;
 
-import com.junior.domain.member.Member;
-import com.querydsl.core.annotations.QueryProjection;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-
 import java.time.LocalDateTime;
 
 //@Builder
