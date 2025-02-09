@@ -8,12 +8,14 @@ import com.junior.security.JwtUtil;
 import com.junior.util.RedisUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ReissueService {
 
     private final JwtUtil jwtUtil;
@@ -55,6 +57,7 @@ public class ReissueService {
         String newAccessToken = jwtUtil.createJwt(loginCreateJwtDto, "access");
         String newRefreshToken = jwtUtil.createJwt(loginCreateJwtDto, "refresh");
 
+        log.info("[{}} JWT 토큰 생성 access: {}, refresh: {}", Thread.currentThread().getStackTrace()[1].getClassName(), newAccessToken, newRefreshToken);
 
         //이전 토큰을 삭제하고 새 토큰 생성
         redisUtil.deleteData(oldRefreshToken);
