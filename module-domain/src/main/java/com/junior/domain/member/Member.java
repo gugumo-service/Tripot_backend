@@ -38,13 +38,6 @@ public class Member {
     @Builder.Default
     private MemberStatus status = MemberStatus.PREACTIVE;
 
-    // 서비스 이용 약관 동의 여부
-    private Boolean isAgreeTermsUse;
-    // 개인정보 수집 및 이용 동의
-    private Boolean isAgreeCollectingUsingPersonalInformation;
-    // 마케팅 수신 동의
-    private Boolean isAgreeMarketing;
-
     @Column(length = 15)
     @Enumerated(EnumType.STRING)
     private SignUpType signUpType;
@@ -54,9 +47,6 @@ public class Member {
 
     public void activateMember(ActivateMemberDto activateMemberDto) {
         nickname = activateMemberDto.nickname();
-//        isAgreeTermsUse = activateMemberDto.isAgreeTermsUse();
-//        isAgreeCollectingUsingPersonalInformation = activateMemberDto.isAgreeCollectingUsingPersonalInformation();
-//        isAgreeMarketing = activateMemberDto.isAgreeMarketing();
         recommendLocation = activateMemberDto.recommendLocation();
         status = MemberStatus.ACTIVE;
     }
@@ -69,9 +59,6 @@ public class Member {
         this.password = null;
         this.profileImage = null;
         this.role = null;
-        this.isAgreeTermsUse = null;
-        this.isAgreeCollectingUsingPersonalInformation = null;
-        this.isAgreeMarketing = null;
 
         this.signUpType = null;
         this.recommendLocation = null;
