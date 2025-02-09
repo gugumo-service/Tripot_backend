@@ -44,13 +44,14 @@ public class JwtUtil {
 
     public String createJwt(LoginCreateJwtDto loginCreateJwtDto, String category) {
 
-        Date requestDate = Timestamp.valueOf(loginCreateJwtDto.requestTimeMs());;
+        Date requestDate = Timestamp.valueOf(loginCreateJwtDto.requestTimeMs());
         Date expireDate = Timestamp.valueOf(loginCreateJwtDto.requestTimeMs());
+
 
         if(category.equals("access")){
             expireDate=Timestamp.valueOf(loginCreateJwtDto.requestTimeMs().plusMinutes(1));
         } else if (category.equals("refresh")) {
-            expireDate=Timestamp.valueOf(loginCreateJwtDto.requestTimeMs().plusMonths(6));
+            expireDate = Timestamp.valueOf(loginCreateJwtDto.requestTimeMs().plusMonths(6));
         }
 
         return Jwts.builder()

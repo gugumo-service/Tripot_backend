@@ -88,7 +88,7 @@ public interface QnaAdminApi {
                                     )))
             })
     public CommonResponse<PageCustom<QnaAdminDto>> findQna(@PageableDefault(size = 15, page = 1) Pageable pageable,
-                                                                 @RequestParam(required = false, value = "q") String q);
+                                                           @RequestParam(required = false, value = "q") String q);
 
 
     @Operation(summary = "Q&A 세부 조회", description = "Q&A 세부 내용을 조회합니다.",

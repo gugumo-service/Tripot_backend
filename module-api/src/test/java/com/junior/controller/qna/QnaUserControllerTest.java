@@ -1,26 +1,17 @@
 package com.junior.controller.qna;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.junior.config.SecurityConfig;
+import com.junior.controller.BaseControllerTest;
 import com.junior.dto.qna.QnaUserDto;
-import com.junior.security.JwtUtil;
+import com.junior.exception.StatusCode;
 import com.junior.security.WithMockCustomUser;
-import com.junior.security.exceptionhandler.CustomAuthenticationEntryPoint;
 import com.junior.service.qna.QnaUserService;
-import com.junior.service.security.UserDetailsServiceImpl;
-import com.junior.util.RedisUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.SliceImpl;
-import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDateTime;
@@ -34,37 +25,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @WebMvcTest(QnaUserController.class)
-@MockBean(JpaMetamodelMappingContext.class)     //JPA 관련 빈들을 mock으로 등록
-@Import(SecurityConfig.class)
-class QnaUserControllerTest {
+class QnaUserControllerTest extends BaseControllerTest {
 
-    @MockBean
-    private RedisUtil redisUtil;
-
-    @MockBean
-    private JwtUtil jwtUtil;
-
-    @MockBean
-    private UserDetailsServiceImpl userDetailsService;
-
-    @MockBean
-    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @MockBean
     private QnaUserService qnaUserService;
 
-    @InjectMocks
-    private QnaUserController qnaUserController;
-
 
     @Test
-    @DisplayName("사용자 Q&A 조회 응답이 반환되어야 함")
+    @DisplayName("사용자 Q&A 조회 - 응답이 반환되어야 함")
     @WithMockCustomUser
     void findQna() throws Exception {
 
@@ -93,8 +62,8 @@ class QnaUserControllerTest {
         //then
         actions
                 .andDo(print())
-                .andExpect(jsonPath("$.customCode").value("Q&A-SUCCESS-004"))
-                .andExpect(jsonPath("$.customMessage").value("Q&A 조회 성공"))
+                .andExpect(jsonPath("$.customCode").value(StatusCode.QNA_FIND_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.QNA_FIND_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data.pageable.pageNumber").value(0))
                 .andExpect(jsonPath("$.data.pageable.pageSize").value(5))

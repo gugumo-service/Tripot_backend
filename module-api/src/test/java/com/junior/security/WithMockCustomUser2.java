@@ -16,13 +16,21 @@ import java.lang.annotation.Target;
 public @interface WithMockCustomUser2 {
 
     long id() default 4L;
+
     String nickname() default "테스트사용자닉네임2";
+
     String username() default "테스트사용자유저네임2";
+
     MemberRole role() default MemberRole.USER;
+
     SignUpType signUpType() default SignUpType.KAKAO;
+
     String profileImage() default "s3.com/testProfile";
+
     String recommendLocation() default "서울";
+
     MemberStatus status() default MemberStatus.ACTIVE;
-;
+
+    ;
 
 }

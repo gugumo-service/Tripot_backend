@@ -2,6 +2,7 @@ package com.junior.controller.api;
 
 import com.junior.dto.jwt.RefreshTokenDto;
 import com.junior.dto.member.CheckActiveMemberDto;
+import com.junior.dto.oauth2.OAuth2LoginDto;
 import com.junior.response.CommonResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,12 +13,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "OAuth2")
 public interface OAuth2Api {
 
-    @Operation(summary = "소셜 로그인", description = "소셜 로그인을 진행합니다. provider: kakao",
+    @Operation(summary = "소셜 로그인", description = "소셜 로그인을 진행합니다.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "소셜 로그인 성공",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = CommonResponse.class),
@@ -32,7 +32,7 @@ public interface OAuth2Api {
                                                     """
                                     )))
             })
-    public CommonResponse<CheckActiveMemberDto> oauth2Login(HttpServletResponse response, @RequestParam("code") String code, @PathVariable("provider") String provider);
+    public CommonResponse<CheckActiveMemberDto> oauth2Login(HttpServletResponse response, @RequestBody OAuth2LoginDto oAuth2LoginDto, @PathVariable("provider") String provider);
 
 
     @Operation(summary = "로그 아웃", description = "로그 아웃을 진행합니다.",

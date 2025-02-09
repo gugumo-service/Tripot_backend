@@ -39,13 +39,12 @@ public class ReportService {
     @Transactional
     public void save(CreateReportDto createReportDto, UserPrincipal principal) {
 
-        Member member = memberRepository.findById(principal.getMember().getId()).orElseThrow(
-                () -> new NotValidMemberException(StatusCode.INVALID_MEMBER)
-        );
+        Member member = memberRepository.findById(principal.getMember().getId())
+                .orElseThrow(() -> new NotValidMemberException(StatusCode.INVALID_MEMBER));
 
         ReportType reportType;
 
-        try{
+        try {
             reportType = ReportType.valueOf(createReportDto.reportType().toUpperCase());
         } catch (IllegalArgumentException e) {
             throw new ReportException(StatusCode.REPORT_NOT_VALID);
@@ -54,7 +53,7 @@ public class ReportService {
         ReportReason reportReason;
 
 
-        try{
+        try {
             reportReason = ReportReason.nameOf(createReportDto.reportReason());
         } catch (IllegalArgumentException e) {
             throw new ReportException(StatusCode.REPORT_NOT_VALID);
@@ -65,7 +64,7 @@ public class ReportService {
         if (reportType.equals(ReportType.STORY)) {
 
             Story story = storyRepository.findById(createReportDto.reportContentId())
-                    .orElseThrow(()->new StoryNotFoundException(StatusCode.STORY_NOT_FOUND));
+                    .orElseThrow(() -> new StoryNotFoundException(StatusCode.STORY_NOT_FOUND));
 
             if (story.getMember().equals(member)) {
                 throw new ReportException(StatusCode.REPORT_EQUALS_AUTHOR);
@@ -103,9 +102,6 @@ public class ReportService {
         } else {
             throw new ReportException(StatusCode.REPORT_NOT_VALID);
         }
-
-
-
 
 
         reportRepository.save(report);

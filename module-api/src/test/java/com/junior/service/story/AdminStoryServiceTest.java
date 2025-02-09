@@ -3,7 +3,6 @@ package com.junior.service.story;
 import com.junior.domain.story.Story;
 import com.junior.dto.story.AdminStoryDetailDto;
 import com.junior.dto.story.AdminStoryDto;
-import com.junior.dto.story.ResponseStoryListDto;
 import com.junior.page.PageCustom;
 import com.junior.repository.story.StoryRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -15,19 +14,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.support.PageableExecutionUtils;
 
-
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 
 
 @ExtendWith(MockitoExtension.class)

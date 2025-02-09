@@ -17,10 +17,6 @@ public enum ReportReason {
         this.name = name;
     }
 
-    public String getName() {
-        return this.name;
-    }
-
     public static ReportReason nameOf(String name) {
         for (ReportReason reason : ReportReason.values()) {
             if (reason.getName().equals(name)) {
@@ -28,5 +24,9 @@ public enum ReportReason {
             }
         }
         throw new ReportException(StatusCode.REPORT_NOT_VALID);
+    }
+
+    public String getName() {
+        return this.name;
     }
 }

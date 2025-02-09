@@ -23,6 +23,7 @@ public class LikeCustomRepositoryImpl implements LikeCustomRepository {
                         like.story.eq(story))
                 .fetchOne();
     }
+
     @Override
     public void deleteLikeByStoryAndMember(Member member, Story story) {
 

@@ -2,7 +2,10 @@ package com.junior.repository.story.custom;
 
 import com.junior.domain.member.Member;
 import com.junior.domain.story.Story;
-import com.junior.dto.story.*;
+import com.junior.dto.story.AdminStoryDto;
+import com.junior.dto.story.GeoPointDto;
+import com.junior.dto.story.ResponseStoryCntByCityDto;
+import com.junior.dto.story.ResponseStoryListDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -18,7 +21,8 @@ public interface StoryCustomRepository {
 //    public Slice<ResponseStoryDto> findStoriesByMemberAndCity(Long cursorId, Pageable pageable, String city, Member member);
 
     public Optional<Story> findStoryByIdAndMember(Long storyId, Member member);
-//    public Slice<ResponseStoryDto> findStoriesByMemberAndMapWithPaging(Long cursorId, Pageable pageable, GeoPointDto geoPointLt, GeoPointDto geoPointRb, Member findMember);
+
+    //    public Slice<ResponseStoryDto> findStoriesByMemberAndMapWithPaging(Long cursorId, Pageable pageable, GeoPointDto geoPointLt, GeoPointDto geoPointRb, Member findMember);
     public List<ResponseStoryListDto> findStoryByMap(Member findMember, GeoPointDto geoPointLt, GeoPointDto geoPointRb);
 
     public Slice<ResponseStoryListDto> findStoriesByMemberAndCityAndSearch(Long cursorId, Pageable pageable, Member findMember, String city, String search);

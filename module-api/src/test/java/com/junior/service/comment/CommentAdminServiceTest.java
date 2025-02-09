@@ -1,21 +1,17 @@
 package com.junior.service.comment;
 
 import com.junior.domain.member.Member;
-import com.junior.domain.member.MemberRole;
-import com.junior.domain.member.MemberStatus;
-import com.junior.domain.member.SignUpType;
 import com.junior.domain.story.Comment;
 import com.junior.domain.story.Story;
 import com.junior.dto.comment.CommentAdminDto;
 import com.junior.page.PageCustom;
 import com.junior.repository.comment.CommentRepository;
 import com.junior.repository.member.MemberRepository;
+import com.junior.service.BaseServiceTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -29,8 +25,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
-@ExtendWith(MockitoExtension.class)
-class CommentAdminServiceTest {
+
+class CommentAdminServiceTest extends BaseServiceTest {
 
     @Mock
     private MemberRepository memberRepository;
@@ -42,21 +38,12 @@ class CommentAdminServiceTest {
     private CommentAdminService commentAdminService;
 
     @Test
-    @DisplayName("댓글 조회 기능이 정상 동작해야 함")
+    @DisplayName("관리자용 댓글 조회 - 기능이 정상 동작해야 함")
     void findComment() {
 
         //given
 
-        Member member = Member.builder()
-                .id(2L)
-                .nickname("테스트사용자닉네임")
-                .username("테스트사용자유저네임")
-                .role(MemberRole.USER)
-                .signUpType(SignUpType.KAKAO)
-                .profileImage("s3.com/testProfile")
-                .recommendLocation("서울")
-                .status(MemberStatus.ACTIVE)
-                .build();
+        Member member = createActiveTestMember();
 
         List<String> imgUrls = new ArrayList<>();
         imgUrls.add("imgUrl1");
@@ -103,19 +90,11 @@ class CommentAdminServiceTest {
     }
 
     @Test
+    @DisplayName("관리자용 댓글 삭제 - 기능이 정상 동작해야 함")
     public void deleteComment() throws Exception {
         //given
 
-        Member member = Member.builder()
-                .id(2L)
-                .nickname("테스트사용자닉네임")
-                .username("테스트사용자유저네임")
-                .role(MemberRole.USER)
-                .signUpType(SignUpType.KAKAO)
-                .profileImage("s3.com/testProfile")
-                .recommendLocation("서울")
-                .status(MemberStatus.ACTIVE)
-                .build();
+        Member member = createActiveTestMember();
 
         List<String> imgUrls = new ArrayList<>();
         imgUrls.add("imgUrl1");

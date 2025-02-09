@@ -16,13 +16,21 @@ import java.lang.annotation.Target;
 public @interface WithMockCustomAdmin {
 
     long id() default 3L;
+
     String nickname() default "테스트관리자닉네임";
+
     String username() default "테스트관리자유저네임";
+
     MemberRole role() default MemberRole.ADMIN;
+
     SignUpType signUpType() default SignUpType.USERNAME;
+
     String profileImage() default "s3.com/testProfile";
+
     String recommendLocation() default "서울";
+
     MemberStatus status() default MemberStatus.ACTIVE;
+
     ;
 
 }

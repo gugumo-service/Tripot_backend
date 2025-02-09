@@ -2,26 +2,23 @@ package com.junior.service.notice;
 
 import com.junior.domain.admin.Notice;
 import com.junior.domain.member.Member;
-import com.junior.domain.member.MemberRole;
-import com.junior.domain.member.MemberStatus;
-import com.junior.domain.member.SignUpType;
 import com.junior.dto.notice.CreateNoticeDto;
 import com.junior.dto.notice.NoticeAdminDto;
 import com.junior.dto.notice.NoticeDetailDto;
 import com.junior.dto.notice.UpdateNoticeDto;
 import com.junior.exception.NotValidMemberException;
 import com.junior.exception.NoticeException;
+import com.junior.exception.StatusCode;
 import com.junior.page.PageCustom;
-import com.junior.repository.notice.NoticeRepository;
 import com.junior.repository.member.MemberRepository;
+import com.junior.repository.notice.NoticeRepository;
 import com.junior.security.UserPrincipal;
+import com.junior.service.BaseServiceTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -36,8 +33,8 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@ExtendWith(MockitoExtension.class)
-class NoticeAdminServiceTest {
+
+class NoticeAdminServiceTest extends BaseServiceTest {
 
     @Mock
     private MemberRepository memberRepository;
@@ -48,9 +45,10 @@ class NoticeAdminServiceTest {
     @InjectMocks
     private NoticeAdminService noticeAdminService;
 
+
     @Test
-    @DisplayName("공지사항 저장 로직이 정상적으로 실행되어야 함")
-    void saveNotice_success() {
+    @DisplayName("공지사항 저장 - 정상적으로 실행되어야 함")
+    void saveNotice() {
 
         //given
         CreateNoticeDto createNoticeDto = new CreateNoticeDto("title", "content");
@@ -69,8 +67,8 @@ class NoticeAdminServiceTest {
     }
 
     @Test
-    @DisplayName("회원을 찾지 못했을 때 관련 예외처리를 해야 함")
-    void saveNotice_not_valid_member() {
+    @DisplayName("공지사항 저장 - 회원을 찾지 못했을 때 관련 예외처리를 해야 함")
+    void failToSaveNoticeIfMemberNotFound() {
 
         //given
         CreateNoticeDto createNoticeDto = new CreateNoticeDto("title", "content");
@@ -85,12 +83,11 @@ class NoticeAdminServiceTest {
                 .withFailMessage("유효하지 않은 회원");
 
 
-
     }
 
     @Test
-    @DisplayName("공지사항 조회 로직이 정상적으로 실행되어야 함")
-    void findNotice_success(){
+    @DisplayName("공지사항 관리자 조회 - 정상적으로 실행되어야 함")
+    void findNotice() {
 
         //given
 
@@ -126,8 +123,8 @@ class NoticeAdminServiceTest {
     }
 
     @Test
-    @DisplayName("공지사항 세부 조회 로직이 정상적으로 실행되어야 함")
-    void findNoticeDetail_success(){
+    @DisplayName("공지사항 세부 조회 - 정상적으로 실행되어야 함")
+    void findNoticeDetail() {
 
         //given
 
@@ -154,8 +151,8 @@ class NoticeAdminServiceTest {
     }
 
     @Test
-    @DisplayName("공지사항을 찾지 못했을 때 관련 예외처리를 해야 함")
-    void findNoticeDetail_notice_not_found(){
+    @DisplayName("공지사항 세부 조회 - 공지사항을 찾지 못했을 때 관련 예외처리를 해야 함")
+    void failToFindNoticeDetailIfNoticeNotFound() {
 
 
         //given
@@ -169,13 +166,13 @@ class NoticeAdminServiceTest {
         //when, then
         assertThatThrownBy(() -> noticeAdminService.findNoticeDetail(noticeId))
                 .isInstanceOf(NoticeException.class)
-                .hasMessageContaining("해당 공지사항을 찾을 수 없음");
+                .hasMessageContaining(StatusCode.NOTICE_NOT_FOUND.getCustomMessage());
 
     }
 
     @Test
-    @DisplayName("삭제된 공지사항에 대해 관련 예외 처리를 해야 함")
-    void findNoticeDetail_deleted_notice(){
+    @DisplayName("공지사항 세부 조회 - 삭제된 공지사항에 대해 관련 예외 처리를 해야 함")
+    void failToFindNoticeDetailIfFindDeletedNotice() {
 
         //given
 
@@ -188,13 +185,13 @@ class NoticeAdminServiceTest {
         //when, then
         assertThatThrownBy(() -> noticeAdminService.findNoticeDetail(noticeId))
                 .isInstanceOf(NoticeException.class)
-                .hasMessageContaining("해당 공지사항을 찾을 수 없음");
+                .hasMessageContaining(StatusCode.NOTICE_NOT_FOUND.getCustomMessage());
 
     }
 
     @Test
-    @DisplayName("찾을 수 없는 회원에 대해 관련 예외처리를 해야 함")
-    void findNoticeDetail_not_found_member(){
+    @DisplayName("공지사항 세부 조회 - 찾을 수 없는 회원에 대해 관련 예외처리를 해야 함")
+    void failToFindNoticeDetailIfMemberNotFound() {
 
         //given
 
@@ -209,15 +206,13 @@ class NoticeAdminServiceTest {
         //when, then
         assertThatThrownBy(() -> noticeAdminService.findNoticeDetail(noticeId))
                 .isInstanceOf(NotValidMemberException.class)
-                .hasMessageContaining("해당 회원을 찾을 수 없음");
+                .hasMessageContaining(StatusCode.MEMBER_NOT_FOUND.getCustomMessage());
 
     }
 
-
-
     @Test
-    @DisplayName("공지사항 수정 로직이 정상적으로 실행되어야 함")
-    void updateNotice_success() {
+    @DisplayName("공지사항 수정 - 정상적으로 실행되어야 함")
+    void updateNotice() {
 
         //given
         Long updateNoticeId = 1L;
@@ -241,7 +236,7 @@ class NoticeAdminServiceTest {
 
     @Test
     @DisplayName("공지 수정 - 공지사항을 찾지 못했을 때 관련 예외처리를 해야 함")
-    void updateNotice_notice_not_found() {
+    void failToUpdateNoticeIfNoticeNotFound() {
 
         //given
         Long updateNoticeId = 1L;
@@ -251,16 +246,14 @@ class NoticeAdminServiceTest {
         //when, then
         Assertions.assertThatThrownBy(() -> noticeAdminService.updateNotice(updateNoticeId, updateNoticeDto))
                 .isInstanceOf(NoticeException.class)
-                .hasMessageContaining("해당 공지사항을 찾을 수 없음");
-
-
+                .hasMessageContaining(StatusCode.NOTICE_NOT_FOUND.getCustomMessage());
 
 
     }
 
     @Test
-    @DisplayName("공지사항 삭제 로직이 정상적으로 실행되어야 함")
-    void deleteNotice_success() {
+    @DisplayName("공지사항 삭제 - 정상적으로 실행되어야 함")
+    void deleteNotice() {
 
         //given
         Notice notice = createNotice();
@@ -277,7 +270,7 @@ class NoticeAdminServiceTest {
 
     @Test
     @DisplayName("공지 삭제 - 공지사항을 찾지 못했을 때 관련 예외처리를 해야 함")
-    void deleteNotice_notice_not_found() {
+    void failToDeleteNoticeIfNoticeNotFound() {
 
         //given
         Long deleteNoticeId = 1L;
@@ -286,32 +279,9 @@ class NoticeAdminServiceTest {
         //when, then
         Assertions.assertThatThrownBy(() -> noticeAdminService.deleteNotice(deleteNoticeId))
                 .isInstanceOf(NoticeException.class)
-                .hasMessageContaining("해당 공지사항을 찾을 수 없음");
-
-
+                .hasMessageContaining(StatusCode.NOTICE_NOT_FOUND.getCustomMessage());
 
 
     }
 
-    private static Notice createNotice() {
-        Notice notice = Notice.builder()
-                .id(1L)
-                .title("title")
-                .content("content")
-                .build();
-        return notice;
-    }
-
-    Member createActiveTestMember() {
-        return Member.builder()
-                .id(2L)
-                .nickname("테스트사용자닉네임")
-                .username("테스트사용자유저네임")
-                .role(MemberRole.USER)
-                .signUpType(SignUpType.KAKAO)
-                .profileImage("s3.com/testProfile")
-                .recommendLocation("서울")
-                .status(MemberStatus.ACTIVE)
-                .build();
-    }
 }

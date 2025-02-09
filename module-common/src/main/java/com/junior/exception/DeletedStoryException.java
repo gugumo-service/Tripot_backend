@@ -1,9 +1,11 @@
 package com.junior.exception;
 
-public class CommentNotFoundException extends RuntimeException {
+import lombok.Getter;
 
+@Getter
+public class DeletedStoryException extends RuntimeException{
     private StatusCode statusCode;
-    public CommentNotFoundException(StatusCode statusCode) {
+    public DeletedStoryException(StatusCode statusCode) {
         super(statusCode.getCustomMessage());
         this.statusCode = statusCode;
     }

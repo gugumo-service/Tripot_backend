@@ -3,7 +3,7 @@ package com.junior.controller.login;
 import com.junior.controller.api.ReissueApi;
 import com.junior.dto.jwt.RefreshTokenDto;
 import com.junior.response.CommonResponse;
-import com.junior.service.member.ReissueService;
+import com.junior.service.login.ReissueService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
