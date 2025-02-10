@@ -9,6 +9,7 @@ import com.junior.exception.DeletedStoryException;
 import com.junior.exception.PermissionException;
 import com.junior.exception.StatusCode;
 import com.junior.exception.StoryNotFoundException;
+import com.junior.repository.comment.CommentRepository;
 import com.junior.repository.story.LikeRepository;
 import com.junior.repository.story.StoryRepository;
 import com.junior.security.UserPrincipal;
@@ -28,6 +29,8 @@ import java.util.List;
 public class MemberStoryService {
     private final StoryRepository storyRepository;
     private final LikeRepository likeRepository;
+
+    private final CommentRepository commentRepository;
 
     private final NotificationService notificationService;
 
@@ -104,6 +107,8 @@ public class MemberStoryService {
             throw new DeletedStoryException(StatusCode.STORY_DELETED);
         }
 
+        Long commentCntByStoryId = commentRepository.countByStoryIdAndIsDeletedFalse(findStory.getId());
+
         boolean isLikeStory = (findMember != null) && likeRepository.isLikeStory(findMember, findStory);
 
         boolean isAuthor = (findMember != null) && findStory.getMember().getId().equals(findMember.getId());
@@ -115,7 +120,8 @@ public class MemberStoryService {
 
         findStory.increaseViewCnt();
 
-        return ResponseStoryDto.from(findStory, isLikeStory, isAuthor);
+        return ResponseStoryDto.from(findStory, isLikeStory, isAuthor, commentCntByStoryId
+        );
     }
 
     @Transactional
