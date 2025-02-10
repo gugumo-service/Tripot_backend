@@ -20,7 +20,8 @@ public record ResponseStoryDto(
         boolean isAuthor,
         boolean isLikeStory,
         LocalDateTime createDate,
-        List<String> imgUrls
+        List<String> imgUrls,
+        Long commentCnt
 ) {
 
 //    @QueryProjection
@@ -38,7 +39,7 @@ public record ResponseStoryDto(
 //        this.imgUrls = imgUrls;
 //    }
 
-    public static ResponseStoryDto from(Story story, boolean isLikeStory, boolean isAuthor) {
+    public static ResponseStoryDto from(Story story, boolean isLikeStory, boolean isAuthor, long commentCnt) {
         return ResponseStoryDto.builder()
                 .id(story.getId())
                 .title(story.getTitle())
@@ -53,6 +54,7 @@ public record ResponseStoryDto(
                 .imgUrls(story.getImgUrls())
                 .createDate(story.getCreatedDate())
                 .isAuthor(isAuthor)
+                .commentCnt(commentCnt)
                 .build();
     }
 
