@@ -50,16 +50,18 @@ public class OAuth2IntegrationTest extends BaseIntegrationTest {
     @BeforeEach
     void init() {
         Member preactiveTestMember = createPreactiveTestMember();
-        Member activeTestMember = createActiveTestMember("KAKAO 1234");
+        Member activeKakaoTestMember = createActiveTestMember("KAKAO 1234");
+        Member activeAppleTestMember = createActiveTestMember("APPLE 1234");
 
         memberRepository.save(preactiveTestMember);
-        memberRepository.save(activeTestMember);
+        memberRepository.save(activeKakaoTestMember);
+        memberRepository.save(activeAppleTestMember);
 
     }
 
     @Test
-    @DisplayName("소셜 로그인 - 결과가 정상적으로 리턴되어야 함")
-    public void oauth2LoginV2() throws Exception {
+    @DisplayName("소셜 로그인 - 카카오 로그인 결과가 정상적으로 리턴되어야 함")
+    public void oauth2LoginV2UsingKakao() throws Exception {
         //given
         String sampleAccess = "sample_access_token";
         String sampleRefresh = "sample_refresh_token";
@@ -78,6 +80,46 @@ public class OAuth2IntegrationTest extends BaseIntegrationTest {
         //when
         ResultActions actions = mockMvc.perform(
                 post("/api/v2/login/oauth2/{provider}", kakaoProvider)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content)
+        );
+
+        //then
+        actions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.customCode").value(StatusCode.OAUTH2_LOGIN_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.OAUTH2_LOGIN_SUCCESS.getCustomMessage()))
+                .andExpect(jsonPath("$.status").value(true))
+                .andExpect(jsonPath("$.data.nickname").value("테스트사용자닉네임"))
+                .andExpect(jsonPath("$.data.isActivate").value(true));
+
+        verify(redisUtil).setDataExpire(anyString(), anyString(), anyLong());
+
+    }
+
+    @Test
+    @DisplayName("소셜 로그인 - 애플 로그인 결과가 정상적으로 리턴되어야 함")
+    public void oauth2LoginV2UsingApple() throws Exception {
+        //given
+        String sampleAccess = "sample_access_token";
+        String sampleRefresh = "sample_refresh_token";
+        String appleProvider = "apple";
+
+        OAuth2LoginDto oAuth2LoginDto = OAuth2LoginDto.builder()
+                .id(1234L)
+                .nickname("nickname")
+                .build();
+
+        given(jwtUtil.createJwt(any(LoginCreateJwtDto.class), eq("access"))).willReturn(sampleAccess);
+        given(jwtUtil.createJwt(any(LoginCreateJwtDto.class), eq("refresh"))).willReturn(sampleRefresh);
+
+        String content = objectMapper.writeValueAsString(oAuth2LoginDto);
+
+        //when
+        ResultActions actions = mockMvc.perform(
+                post("/api/v2/login/oauth2/{provider}", appleProvider)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content)
