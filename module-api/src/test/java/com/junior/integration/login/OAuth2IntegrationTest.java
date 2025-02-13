@@ -68,7 +68,7 @@ public class OAuth2IntegrationTest extends BaseIntegrationTest {
         String kakaoProvider = "kakao";
 
         OAuth2LoginDto oAuth2LoginDto = OAuth2LoginDto.builder()
-                .id(1234L)
+                .id("1234")
                 .nickname("nickname")
                 .build();
 
@@ -108,7 +108,7 @@ public class OAuth2IntegrationTest extends BaseIntegrationTest {
         String appleProvider = "apple";
 
         OAuth2LoginDto oAuth2LoginDto = OAuth2LoginDto.builder()
-                .id(1234L)
+                .id("1234")
                 .nickname("nickname")
                 .build();
 

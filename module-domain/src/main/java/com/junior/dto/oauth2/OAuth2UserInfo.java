@@ -5,7 +5,7 @@ import lombok.Builder;
 
 @Builder
 public record OAuth2UserInfo(
-        Long id,
+        String id,
         String nickname,
         OAuth2Provider provider
 ) {
