@@ -17,6 +17,9 @@ kakao:
   client-id: ${KAKAO_CLIENT_ID}
   client-secret: ${KAKAO_SECRET_KEY}
 
+apple:
+  client-id: ${APPLE_CLIENT_ID}
+  pk-host: ${APPLE_PK_HOST}
 
 cloud:
   aws:
