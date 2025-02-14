@@ -13,9 +13,10 @@ logging:
   level:
     root: info
 
-kakao:
-  client-id: ${KAKAO_CLIENT_ID}
-  client-secret: ${KAKAO_SECRET_KEY}
+oauth2:
+  apple:
+    client-id: ${APPLE_CLIENT_ID}
+    pk-host: ${APPLE_PK_HOST}
 
 
 cloud:

@@ -10,10 +10,12 @@ import com.junior.dto.member.CheckActiveMemberDto;
 import com.junior.dto.oauth2.OAuth2LoginDto;
 import com.junior.dto.oauth2.OAuth2Provider;
 import com.junior.dto.oauth2.OAuth2UserInfo;
+import com.junior.exception.CustomException;
 import com.junior.exception.JwtErrorException;
 import com.junior.exception.StatusCode;
 import com.junior.repository.member.MemberRepository;
 import com.junior.security.JwtUtil;
+import com.junior.strategy.oauth2.OAuth2MemberStrategy;
 import com.junior.util.RedisUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
@@ -23,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -33,6 +36,7 @@ public class OAuth2Service {
     private final MemberRepository memberRepository;
     private final JwtUtil jwtUtil;
     private final RedisUtil redisUtil;
+    private final List<OAuth2MemberStrategy> oAuth2MemberStrategies;
 
 
     /**
@@ -43,6 +47,7 @@ public class OAuth2Service {
      * @return
      */
     public CheckActiveMemberDto oauth2Login(HttpServletResponse response, OAuth2LoginDto oAuth2LoginDto, OAuth2Provider provider) {
+
 
         OAuth2UserInfo userInfo = generateOAuth2UserInfo(oAuth2LoginDto, provider);
 
@@ -90,11 +95,12 @@ public class OAuth2Service {
 
 
     private OAuth2UserInfo generateOAuth2UserInfo(OAuth2LoginDto oAuth2LoginDto, OAuth2Provider provider) {
-        return OAuth2UserInfo.builder()
-                .id(oAuth2LoginDto.id())
-                .nickname(oAuth2LoginDto.nickname())
-                .provider(provider)
-                .build();
+        //소셜 로그인 전략 설정
+        return oAuth2MemberStrategies.stream()
+                .filter(oAuth2MemberStrategy -> oAuth2MemberStrategy.isTarget(provider))
+                .findAny()
+                .orElseThrow(() -> new CustomException(StatusCode.OAUTH2_LOGIN_FAILURE))
+                .getOAuth2UserInfo(oAuth2LoginDto);
     }
 
 

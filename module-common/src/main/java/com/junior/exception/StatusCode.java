@@ -83,6 +83,7 @@ public enum StatusCode {
 
     // LOGIN 관련 실패 코드
     ADMIN_LOGIN_FAILURE(401, "LOGIN-ERR-001", "오류가 발생했습니다."),
+    OAUTH2_LOGIN_FAILURE(400, "LOGIN-ERR-002", "오류가 발생했습니다."),
 
     // JWT 관련 성공 코드
     REISSUE_SUCCESS(200, "JWT-SUCCESS-001", "JWT 재발급 완료"),

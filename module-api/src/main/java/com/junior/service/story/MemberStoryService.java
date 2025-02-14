@@ -103,7 +103,7 @@ public class MemberStoryService {
         Story findStory = storyRepository.findById(storyId)
                 .orElseThrow(() -> new StoryNotFoundException(StatusCode.STORY_NOT_FOUND));
 
-        if(findStory.getIsDeleted()) {
+        if (findStory.getIsDeleted()) {
             throw new DeletedStoryException(StatusCode.STORY_DELETED);
         }
 
@@ -145,7 +145,7 @@ public class MemberStoryService {
             findStory.increaseLikeCnt();
 
             //좋아요 누른 사람 != 스토리 주인 -> 알림 저장
-            if(!findStory.getMember().getId().equals(findMember.getId()))
+            if (!findStory.getMember().getId().equals(findMember.getId()))
                 notificationService.saveNotification(findStory.getMember(), findMember.getProfileImage(), findStory.getTitle(), findStory.getId(), NotificationType.LIKED);
 
         } else {
