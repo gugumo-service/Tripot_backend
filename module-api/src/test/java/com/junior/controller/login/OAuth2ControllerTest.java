@@ -39,7 +39,7 @@ class OAuth2ControllerTest extends BaseControllerTest {
         //given
         MockHttpServletResponse response = new MockHttpServletResponse();
         OAuth2LoginDto oAuth2LoginDto = OAuth2LoginDto.builder()
-                .id(1234L)
+                .id("1234")
                 .nickname("nickname")
                 .build();
         String kakaoProvider = "kakao";

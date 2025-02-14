@@ -52,7 +52,7 @@ class OAuth2ServiceTest {
         //given
         MockHttpServletResponse response = new MockHttpServletResponse();
         OAuth2LoginDto oAuth2LoginDto = OAuth2LoginDto.builder()
-                .id(1234L)
+                .id("1234")
                 .nickname("sample_nickname")
                 .build();
         OAuth2Provider kakaoProvider = OAuth2Provider.KAKAO;
@@ -87,7 +87,7 @@ class OAuth2ServiceTest {
         //given
         MockHttpServletResponse response = new MockHttpServletResponse();
         OAuth2LoginDto oAuth2LoginDto = OAuth2LoginDto.builder()
-                .id(1234L)
+                .id("1234")
                 .nickname("nickname")
                 .build();
         OAuth2Provider kakaoProvider = OAuth2Provider.KAKAO;
@@ -128,7 +128,7 @@ class OAuth2ServiceTest {
         //given
         MockHttpServletResponse response = new MockHttpServletResponse();
         OAuth2LoginDto oAuth2LoginDto = OAuth2LoginDto.builder()
-                .id(1234L)
+                .id("1234")
                 .nickname("nickname")
                 .build();
         OAuth2Provider kakaoProvider = OAuth2Provider.KAKAO;

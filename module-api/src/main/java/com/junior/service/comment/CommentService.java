@@ -55,14 +55,14 @@ public class CommentService {
             comment.updateParent(parentComment);
 
             // 부모 댓글 작성자 != 자식댓글 작성자 -> 알림 생성
-            if(!parentComment.getMember().getId().equals(findMember.getId()))
+            if (!parentComment.getMember().getId().equals(findMember.getId()))
                 notificationService.saveNotification(parentComment.getMember(), findMember.getProfileImage(), comment.getContent(), findStory.getId(), NotificationType.COMMENT);
         }
 
         commentRepository.save(comment);
 
         // 스토리 작성자 != 댓글 작성자 -> 알림 생성
-        if(!findStory.getMember().getId().equals(findMember.getId()))
+        if (!findStory.getMember().getId().equals(findMember.getId()))
             notificationService.saveNotification(findStory.getMember(), findMember.getProfileImage(), comment.getContent(), findStory.getId(), NotificationType.COMMENT);
     }
 
