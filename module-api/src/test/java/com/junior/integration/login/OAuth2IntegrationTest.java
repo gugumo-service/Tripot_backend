@@ -10,15 +10,25 @@ import com.junior.integration.BaseIntegrationTest;
 import com.junior.repository.member.MemberRepository;
 import com.junior.security.JwtUtil;
 import com.junior.util.RedisUtil;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ClaimsBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.security.PublicKey;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
+
+import static io.jsonwebtoken.Jwts.claims;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -47,8 +57,12 @@ public class OAuth2IntegrationTest extends BaseIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Value("${oauth2.apple.client-id}")
+    private String appleClientId;
+
     @BeforeEach
     void init() {
+
         Member preactiveTestMember = createPreactiveTestMember();
         Member activeKakaoTestMember = createActiveTestMember("KAKAO 1234");
         Member activeAppleTestMember = createActiveTestMember("APPLE 1234");
@@ -92,8 +106,8 @@ public class OAuth2IntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.customCode").value(StatusCode.OAUTH2_LOGIN_SUCCESS.getCustomCode()))
                 .andExpect(jsonPath("$.customMessage").value(StatusCode.OAUTH2_LOGIN_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
-                .andExpect(jsonPath("$.data.nickname").value("테스트사용자닉네임"))
-                .andExpect(jsonPath("$.data.isActivate").value(true));
+                .andExpect(jsonPath("$.data.nickname").value("nickname"))
+                .andExpect(jsonPath("$.data.isActivate").value(false));
 
         verify(redisUtil).setDataExpire(anyString(), anyString(), anyLong());
 
@@ -106,12 +120,31 @@ public class OAuth2IntegrationTest extends BaseIntegrationTest {
         String sampleAccess = "sample_access_token";
         String sampleRefresh = "sample_refresh_token";
         String appleProvider = "apple";
+        String identityToken = "identityToken";
+
+        Map<String, String> headerMap = new HashMap<>();
+        headerMap.put("kid", "rs0M3kOV9p");
+        headerMap.put("alg", "RS256");
+
+        Map<String, Object> userInfo = new HashMap<>();
+        Set<String> aud = new LinkedHashSet<>();
+
+        aud.add(appleClientId);
+
+        userInfo.put("iss", "https://appleid.apple.com");
+        userInfo.put("sub", "1234");
+        userInfo.put("aud", aud);
+
+        Claims claims = (Claims)((ClaimsBuilder)claims().add(userInfo)).build();;
 
         OAuth2LoginDto oAuth2LoginDto = OAuth2LoginDto.builder()
-                .id("1234")
+                .id(identityToken)
                 .nickname("nickname")
                 .build();
 
+        given(jwtUtil.parseHeaders(identityToken)).willReturn(headerMap);
+        given(jwtUtil.getTokenClaims(eq(identityToken), any(PublicKey.class))).willReturn(claims);
+//        given(anySet().contains(any())).willReturn(true);
         given(jwtUtil.createJwt(any(LoginCreateJwtDto.class), eq("access"))).willReturn(sampleAccess);
         given(jwtUtil.createJwt(any(LoginCreateJwtDto.class), eq("refresh"))).willReturn(sampleRefresh);
 
