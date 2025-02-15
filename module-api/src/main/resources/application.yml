@@ -3,10 +3,21 @@ spring:
     name: module-api
   profiles:
     group:
-      "local": "local"
+      local:
+        - api-local
+        - domain-local
+      dev:
+        - api-dev
+        - domain-dev
+      prod:
+        - api-prod
+        - domain-prod
 
 management:
   endpoints:
     web:
       exposure:
         include: health
+
+
+
