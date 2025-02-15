@@ -13,11 +13,11 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 public class ApiExceptionHandler {
 
     @ExceptionHandler(CustomException.class)
-    public CommonResponse handlerCustomException(CustomException e) {
-        return CommonResponse.builder()
-                .customCode(e.getReturnCode())
-                .customMessage(e.getReturnMessage())
-                .build();
+    public ResponseEntity<CommonResponse<Object>> handlerCustomException(CustomException e) {
+        log.warn("CustomException : {}", e.getMessage());
+        StatusCode statusCode = e.getStatusCode();
+        return ResponseEntity.status(statusCode.getHttpCode()).body(CommonResponse.fail(statusCode));
+
     }
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
@@ -68,6 +68,20 @@ public class ApiExceptionHandler {
         log.warn("{} : {}", Thread.currentThread().getStackTrace()[1].getMethodName(), e.getMessage());
 //        final ErrorResponse response = ErrorResponse.of(e.getStatusCode());
 //        return ResponseEntity.status(e.getStatusCode().getHttpCode()).body(response);
+        StatusCode statusCode = e.getStatusCode();
+        return ResponseEntity.status(statusCode.getHttpCode()).body(CommonResponse.fail(statusCode));
+    }
+
+    @ExceptionHandler(StoryNotFoundException.class)
+    protected ResponseEntity<CommonResponse<Object>> storyNotFoundException(StoryNotFoundException e) {
+        log.warn("{} : {}", Thread.currentThread().getStackTrace()[1].getMethodName(), e.getMessage());
+        StatusCode statusCode = e.getStatusCode();
+        return ResponseEntity.status(statusCode.getHttpCode()).body(CommonResponse.fail(statusCode));
+    }
+
+    @ExceptionHandler(DeletedStoryException.class)
+    protected ResponseEntity<CommonResponse<Object>> deletedStoryException(DeletedStoryException e) {
+        log.warn("{} : {}", Thread.currentThread().getStackTrace()[1].getMethodName(), e.getMessage());
         StatusCode statusCode = e.getStatusCode();
         return ResponseEntity.status(statusCode.getHttpCode()).body(CommonResponse.fail(statusCode));
     }

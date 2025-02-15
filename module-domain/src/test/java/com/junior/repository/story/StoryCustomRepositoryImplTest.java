@@ -68,9 +68,6 @@ class StoryCustomRepositoryImplTest {
                 .profileImage("profilePath")
                 .role(MemberRole.USER)
                 .status(MemberStatus.ACTIVE)
-                .isAgreeTermsUse(true)
-                .isAgreeMarketing(true)
-                .isAgreeCollectingUsingPersonalInformation(true)
                 .recommendLocation("DEAJEON")
                 .signUpType(SignUpType.KAKAO)
                 .build();

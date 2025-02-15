@@ -1,9 +1,12 @@
 package com.junior.exception;
 
-public class PermissionException extends RuntimeException {
+import lombok.Getter;
+
+@Getter
+public class DeletedStoryException extends RuntimeException {
     private StatusCode statusCode;
 
-    public PermissionException(StatusCode statusCode) {
+    public DeletedStoryException(StatusCode statusCode) {
         super(statusCode.getCustomMessage());
         this.statusCode = statusCode;
     }

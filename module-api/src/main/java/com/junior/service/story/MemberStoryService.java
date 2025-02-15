@@ -5,9 +5,11 @@ import com.junior.domain.member.Member;
 import com.junior.domain.notification.NotificationType;
 import com.junior.domain.story.Story;
 import com.junior.dto.story.*;
+import com.junior.exception.DeletedStoryException;
 import com.junior.exception.PermissionException;
 import com.junior.exception.StatusCode;
 import com.junior.exception.StoryNotFoundException;
+import com.junior.repository.comment.CommentRepository;
 import com.junior.repository.story.LikeRepository;
 import com.junior.repository.story.StoryRepository;
 import com.junior.security.UserPrincipal;
@@ -28,6 +30,8 @@ public class MemberStoryService {
     private final StoryRepository storyRepository;
     private final LikeRepository likeRepository;
 
+    private final CommentRepository commentRepository;
+
     private final NotificationService notificationService;
 
     @Transactional
@@ -45,7 +49,7 @@ public class MemberStoryService {
 
         Member findMember = userPrincipal.getMember();
 
-        Story findStory = storyRepository.findById(storyId)
+        Story findStory = storyRepository.findByIdAndIsDeletedFalse(storyId)
                 .orElseThrow(() -> new StoryNotFoundException(StatusCode.STORY_NOT_FOUND));
 
         boolean isAuthor = findMember.getId().equals(findStory.getMember().getId());
@@ -96,8 +100,14 @@ public class MemberStoryService {
 
         Member findMember = (userPrincipal != null) ? userPrincipal.getMember() : null;
 
-        Story findStory = storyRepository.findByIdAndIsDeletedFalse(storyId)
+        Story findStory = storyRepository.findById(storyId)
                 .orElseThrow(() -> new StoryNotFoundException(StatusCode.STORY_NOT_FOUND));
+
+        if (findStory.getIsDeleted()) {
+            throw new DeletedStoryException(StatusCode.STORY_DELETED);
+        }
+
+        Long commentCntByStoryId = commentRepository.countByStoryIdAndIsDeletedFalse(findStory.getId());
 
         boolean isLikeStory = (findMember != null) && likeRepository.isLikeStory(findMember, findStory);
 
@@ -110,7 +120,8 @@ public class MemberStoryService {
 
         findStory.increaseViewCnt();
 
-        return ResponseStoryDto.from(findStory, isLikeStory, isAuthor);
+        return ResponseStoryDto.from(findStory, isLikeStory, isAuthor, commentCntByStoryId
+        );
     }
 
     @Transactional
@@ -133,8 +144,10 @@ public class MemberStoryService {
 
             findStory.increaseLikeCnt();
 
-            //알림 저장
-            notificationService.saveNotification(findStory.getMember(), findMember.getProfileImage(), findStory.getTitle(), findStory.getId(), NotificationType.LIKED);
+            //좋아요 누른 사람 != 스토리 주인 -> 알림 저장
+            if (!findStory.getMember().getId().equals(findMember.getId()))
+                notificationService.saveNotification(findStory.getMember(), findMember.getProfileImage(), findStory.getTitle(), findStory.getId(), NotificationType.LIKED);
+
         } else {
             Like findLike = likeRepository.findLikeByMemberAndStory(findMember, findStory);
             likeRepository.delete(findLike);

@@ -47,17 +47,23 @@ public class CommentService {
                 .content(createCommentDto.content())
                 .build();
 
-        // 부모 댓글 추가
+        // 부모 댓글에 자식댓글 추가
         if (createCommentDto.parentCommentId() != -1) {
             Comment parentComment = commentRepository.findById(createCommentDto.parentCommentId())
                     .orElseThrow(() -> new CommentNotFoundException(StatusCode.COMMENT_NOT_FOUND));
 
             comment.updateParent(parentComment);
+
+            // 부모 댓글 작성자 != 자식댓글 작성자 -> 알림 생성
+            if (!parentComment.getMember().getId().equals(findMember.getId()))
+                notificationService.saveNotification(parentComment.getMember(), findMember.getProfileImage(), comment.getContent(), findStory.getId(), NotificationType.COMMENT);
         }
 
         commentRepository.save(comment);
 
-        notificationService.saveNotification(findStory.getMember(), findMember.getProfileImage(), comment.getContent(), findStory.getId(), NotificationType.COMMENT);
+        // 스토리 작성자 != 댓글 작성자 -> 알림 생성
+        if (!findStory.getMember().getId().equals(findMember.getId()))
+            notificationService.saveNotification(findStory.getMember(), findMember.getProfileImage(), comment.getContent(), findStory.getId(), NotificationType.COMMENT);
     }
 
     public Slice<ResponseParentCommentDto> findParentCommentByStoryId(UserPrincipal userPrincipal, Long storyId, Long cursorId, int size) {

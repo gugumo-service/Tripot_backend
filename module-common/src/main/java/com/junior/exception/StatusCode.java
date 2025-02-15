@@ -32,6 +32,7 @@ public enum StatusCode {
     STORY_CREATE_FAIL(500, "STORY-ERR-002", "서버 에러가 발생했습니다."),
     STORY_BAD_REQUEST(500, "STORY-ERR-003", "처음부터 다시 등록해주세요"),
     STORY_NOT_PERMISSION(400, "STORY-ERR-004", "권한이 없는 계정입니다."),
+    STORY_DELETED(400, "STORY-ERR-005", "삭제된 스토리입니다."),
 
     //추천 관련 성공 코드
     RECOMMENDED_CITY_SUCCESS(200, "RECOMMENDED-SUCCESS-001", ""),
@@ -82,6 +83,7 @@ public enum StatusCode {
 
     // LOGIN 관련 실패 코드
     ADMIN_LOGIN_FAILURE(401, "LOGIN-ERR-001", "오류가 발생했습니다."),
+    OAUTH2_LOGIN_FAILURE(400, "LOGIN-ERR-002", "오류가 발생했습니다."),
 
     // JWT 관련 성공 코드
     REISSUE_SUCCESS(200, "JWT-SUCCESS-001", "JWT 재발급 완료"),
