@@ -27,7 +27,7 @@ public class NoticeUserIntegrationTest extends BaseIntegrationTest {
     private NoticeRepository noticeRepository;
 
     @BeforeEach
-    void init() {
+    void init() throws InterruptedException {
         Member preactiveTestMember = createPreactiveTestMember();
         Member activeTestMember = createActiveTestMember();
         Member testAdmin = createAdmin();
@@ -46,6 +46,8 @@ public class NoticeUserIntegrationTest extends BaseIntegrationTest {
                     .build();
 
             noticeRepository.save(notice);
+
+            Thread.sleep(3);
 
         }
 

@@ -32,7 +32,7 @@ public class QnaAdminIntegrationTest extends BaseIntegrationTest {
     private QnaRepository qnaRepository;
 
     @BeforeEach
-    void init() {
+    void init() throws InterruptedException {
         Member preactiveTestMember = createPreactiveTestMember();
         Member activeTestMember = createActiveTestMember();
         Member testAdmin = createAdmin();
@@ -51,6 +51,8 @@ public class QnaAdminIntegrationTest extends BaseIntegrationTest {
                     .build();
 
             qnaRepository.save(qna);
+
+            Thread.sleep(3);
 
         }
 
