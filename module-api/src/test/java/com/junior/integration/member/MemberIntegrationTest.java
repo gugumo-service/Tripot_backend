@@ -1,7 +1,6 @@
 package com.junior.integration.member;
 
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.junior.controller.member.MemberController;
 import com.junior.domain.member.Member;
 import com.junior.domain.member.MemberStatus;
@@ -20,7 +19,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.net.MalformedURLException;
@@ -44,15 +42,11 @@ public class MemberIntegrationTest extends BaseIntegrationTest {
     @Autowired
     private MemberRepository memberRepository;
 
-    @Autowired
-    private ObjectMapper objectMapper;
 
     //aws 테스트는 요금이 발생할 수 있으므로 해당 객체를 mock 처리
     @MockBean
     private AmazonS3Client amazonS3Client;
 
-    @Autowired
-    private MockMvc mockMvc;
 
     @BeforeEach
     void init() throws MalformedURLException {

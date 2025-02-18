@@ -2,21 +2,22 @@ spring:
   application:
     name: module-api
   profiles:
+    include:
+      - api
+      - domain
     group:
-      "local": "local"
+      local:
+        - api-local
+        - domain-local
+      dev:
+        - api-dev
+        - domain-dev
+      prod:
+        - api-prod
+        - domain-prod
 
 management:
   endpoints:
     web:
       exposure:
         include: health
-
-#  config:
-#    import: aws-parameterstore:/config/tripot-prod/
-#
-#aws:
-#  paramstore:
-#    enabled: true
-#    prefix: /config
-#    name: tripot
-#    profile-separator: '-'

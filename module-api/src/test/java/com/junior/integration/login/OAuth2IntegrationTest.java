@@ -4,11 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.junior.controller.member.MemberController;
 import com.junior.domain.member.Member;
 import com.junior.dto.jwt.LoginCreateJwtDto;
+import com.junior.dto.jwt.RefreshTokenDto;
 import com.junior.dto.oauth2.OAuth2LoginDto;
 import com.junior.exception.StatusCode;
 import com.junior.integration.BaseIntegrationTest;
 import com.junior.repository.member.MemberRepository;
 import com.junior.security.JwtUtil;
+import com.junior.security.WithMockCustomUser;
 import com.junior.util.RedisUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ClaimsBuilder;
@@ -29,6 +31,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static io.jsonwebtoken.Jwts.claims;
+import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -135,7 +138,8 @@ public class OAuth2IntegrationTest extends BaseIntegrationTest {
         userInfo.put("sub", "1234");
         userInfo.put("aud", aud);
 
-        Claims claims = (Claims)((ClaimsBuilder)claims().add(userInfo)).build();;
+        Claims claims = (Claims) ((ClaimsBuilder) claims().add(userInfo)).build();
+        ;
 
         OAuth2LoginDto oAuth2LoginDto = OAuth2LoginDto.builder()
                 .id(identityToken)
@@ -169,6 +173,38 @@ public class OAuth2IntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.data.isActivate").value(true));
 
         verify(redisUtil).setDataExpire(anyString(), anyString(), anyLong());
+
+    }
+
+    @Test
+    @DisplayName("로그아웃 - 결과가 정상적으로 리턴되어야 함")
+    @WithMockCustomUser
+    public void logout() throws Exception {
+        //given
+        String sampleRefresh = "Bearer sample_refresh_token";
+
+        RefreshTokenDto refreshTokenDto = new RefreshTokenDto(sampleRefresh);
+        String content = objectMapper.writeValueAsString(refreshTokenDto);
+
+        given(jwtUtil.getCategory(anyString())).willReturn("refresh");
+
+        //when
+        ResultActions actions = mockMvc.perform(
+                post("/api/v1/logout")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content)
+        );
+
+        //then
+        actions
+                .andDo(print())
+                .andExpect(jsonPath("$.customCode").value(StatusCode.LOGOUT.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.LOGOUT.getCustomMessage()))
+                .andExpect(jsonPath("$.status").value(true))
+                .andExpect(jsonPath("$.data").value(nullValue()));
+
+        verify(redisUtil).deleteData("sample_refresh_token");
 
     }
 }
