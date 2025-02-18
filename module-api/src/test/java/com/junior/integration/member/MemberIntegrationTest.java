@@ -1,7 +1,6 @@
 package com.junior.integration.member;
 
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.junior.controller.member.MemberController;
 import com.junior.domain.member.Member;
 import com.junior.domain.member.MemberStatus;
@@ -20,7 +19,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.net.MalformedURLException;

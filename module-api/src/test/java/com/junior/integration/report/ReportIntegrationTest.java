@@ -1,6 +1,5 @@
 package com.junior.integration.report;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.junior.controller.report.ReportController;
 import com.junior.domain.member.Member;
 import com.junior.domain.report.Report;
@@ -24,7 +23,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -51,7 +49,6 @@ public class ReportIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
     private ReportRepository reportRepository;
-
 
 
     @BeforeEach

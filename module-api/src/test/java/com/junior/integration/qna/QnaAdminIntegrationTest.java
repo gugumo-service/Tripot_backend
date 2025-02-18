@@ -1,10 +1,7 @@
 package com.junior.integration.qna;
 
-import com.junior.domain.admin.Notice;
 import com.junior.domain.admin.Qna;
 import com.junior.domain.member.Member;
-import com.junior.dto.notice.CreateNoticeDto;
-import com.junior.dto.notice.UpdateNoticeDto;
 import com.junior.dto.qna.CreateQnaDto;
 import com.junior.dto.qna.UpdateQnaDto;
 import com.junior.exception.StatusCode;

@@ -1,6 +1,5 @@
 package com.junior.integration.qna;
 
-import com.junior.domain.admin.Notice;
 import com.junior.domain.admin.Qna;
 import com.junior.domain.member.Member;
 import com.junior.exception.StatusCode;

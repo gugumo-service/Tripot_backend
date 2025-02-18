@@ -138,7 +138,8 @@ public class OAuth2IntegrationTest extends BaseIntegrationTest {
         userInfo.put("sub", "1234");
         userInfo.put("aud", aud);
 
-        Claims claims = (Claims)((ClaimsBuilder)claims().add(userInfo)).build();;
+        Claims claims = (Claims) ((ClaimsBuilder) claims().add(userInfo)).build();
+        ;
 
         OAuth2LoginDto oAuth2LoginDto = OAuth2LoginDto.builder()
                 .id(identityToken)
