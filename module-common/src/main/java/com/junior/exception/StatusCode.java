@@ -133,6 +133,11 @@ public enum StatusCode {
 
     //버전 관리 관련 성공 코드
     VERSION_CREATE_SUCCESS(201, "VERSION-SUCCESS-001", ""),
+    VERSION_CHECK_SUCCESS(200, "VERSION-SUCCESS-002", ""),
+
+    //버전 관리 관련 실패 코드
+    VERSION_NOT_FOUND(400, "VERSION-ERR-001", "서버 에러가 발생했습니다."),
+
 
     // 공통 예외
     UNKNOWN_ERROR(500, "UNKNOWN-ERROR-001", "서버 에러가 발생했습니다.");

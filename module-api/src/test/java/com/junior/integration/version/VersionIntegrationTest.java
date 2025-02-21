@@ -1,14 +1,16 @@
 package com.junior.integration.version;
 
 import com.junior.domain.member.Member;
-import com.junior.domain.story.Story;
+import com.junior.domain.version.Platform;
 import com.junior.domain.version.Version;
+import com.junior.dto.version.VersionCheckDto;
 import com.junior.dto.version.VersionDto;
 import com.junior.exception.StatusCode;
 import com.junior.integration.BaseIntegrationTest;
 import com.junior.repository.member.MemberRepository;
 import com.junior.repository.version.VersionRepository;
 import com.junior.security.WithMockCustomAdmin;
+import com.junior.security.WithMockCustomUser;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,6 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.hamcrest.Matchers.nullValue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -62,7 +65,7 @@ public class VersionIntegrationTest extends BaseIntegrationTest {
 
         //when
         ResultActions actions = mockMvc.perform(
-                post("/api/v1/version/{platform}", iosPlatform)
+                post("/api/v1/versions/{platform}", iosPlatform)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content)
                         .accept(MediaType.APPLICATION_JSON)
@@ -82,5 +85,113 @@ public class VersionIntegrationTest extends BaseIntegrationTest {
         Assertions.assertThat(newVersion.getVersion()).isEqualTo("1.0.1");
         Assertions.assertThat(newVersion.getForceUpdate()).isTrue();
 
+    }
+
+    @Test
+    @DisplayName("버전 확인 - 사용자 앱 버전이 최신 버전일 경우 업데이트를 요구하지 않음")
+    @WithMockCustomUser
+    void requireUpdateFalseIfUserAppVersionIsLatest() throws Exception {
+
+        //given
+        VersionCheckDto versionCheckDto = VersionCheckDto.builder()
+                .version("1.0.1")
+                .build();
+
+        //ios 1.0.1 버전
+        versionRepository.save(Version.builder().version("1.0.1").forceUpdate(false).platform(Platform.IOS).build());
+
+        String iosPlatform = "ios";
+
+        String content = objectMapper.writeValueAsString(versionCheckDto);
+
+        //when
+        ResultActions actions = mockMvc.perform(
+                get("/api/v1/versions/{platform}", iosPlatform)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content)
+                        .accept(MediaType.APPLICATION_JSON)
+        );
+
+        //then
+        actions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.customCode").value(StatusCode.VERSION_CHECK_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.VERSION_CHECK_SUCCESS.getCustomMessage()))
+                .andExpect(jsonPath("$.status").value(true))
+                .andExpect(jsonPath("$.data.requireUpdate").value(false))
+                .andExpect(jsonPath("$.data.forceUpdate").value(false));
+    }
+
+    @Test
+    @DisplayName("버전 체크 - 최신 버전이 아닐 경우 업데이트를 권장해야 함")
+    @WithMockCustomUser
+    void requireUpdateTrueIfUserAppVersionIsNotLatest() throws Exception {
+
+        //given
+        VersionCheckDto versionCheckDto = VersionCheckDto.builder()
+                .version("1.0.1")
+                .build();
+
+        //ios 1.1.0 버전
+        versionRepository.save(Version.builder().version("1.1.0").forceUpdate(false).platform(Platform.IOS).build());
+
+        String iosPlatform = "ios";
+
+        String content = objectMapper.writeValueAsString(versionCheckDto);
+
+        //when
+        ResultActions actions = mockMvc.perform(
+                get("/api/v1/versions/{platform}", iosPlatform)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content)
+                        .accept(MediaType.APPLICATION_JSON)
+        );
+
+        //then
+        actions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.customCode").value(StatusCode.VERSION_CHECK_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.VERSION_CHECK_SUCCESS.getCustomMessage()))
+                .andExpect(jsonPath("$.status").value(true))
+                .andExpect(jsonPath("$.data.requireUpdate").value(true))
+                .andExpect(jsonPath("$.data.forceUpdate").value(false));
+    }
+
+    @Test
+    @DisplayName("버전 체크 - 최신 버전이 아니면서 강제 업데이트를 진행해야 할 경우 업데이트를 강제해야 함")
+    @WithMockCustomUser
+    void requireUpdateTrueAndForceUpdateTrueIfUserAppVersionIsNotLatestAndLatestVersionRequiresForceUpdate() throws Exception {
+
+        //given
+        VersionCheckDto versionCheckDto = VersionCheckDto.builder()
+                .version("1.0.1")
+                .build();
+
+        //ios 1.0.1 버전
+        versionRepository.save(Version.builder().version("1.1.0").forceUpdate(true).platform(Platform.IOS).build());
+
+        String iosPlatform = "ios";
+
+        String content = objectMapper.writeValueAsString(versionCheckDto);
+
+        //when
+        ResultActions actions = mockMvc.perform(
+                get("/api/v1/versions/{platform}", iosPlatform)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content)
+                        .accept(MediaType.APPLICATION_JSON)
+        );
+
+        //then
+        actions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.customCode").value(StatusCode.VERSION_CHECK_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.VERSION_CHECK_SUCCESS.getCustomMessage()))
+                .andExpect(jsonPath("$.status").value(true))
+                .andExpect(jsonPath("$.data.requireUpdate").value(true))
+                .andExpect(jsonPath("$.data.forceUpdate").value(true));
     }
 }

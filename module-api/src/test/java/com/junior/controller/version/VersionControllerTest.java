@@ -1,6 +1,9 @@
 package com.junior.controller.version;
 
 import com.junior.controller.BaseControllerTest;
+import com.junior.domain.version.Platform;
+import com.junior.dto.version.VersionCheckDto;
+import com.junior.dto.version.VersionCheckResponseDto;
 import com.junior.dto.version.VersionDto;
 import com.junior.exception.StatusCode;
 import com.junior.security.WithMockCustomAdmin;
@@ -13,6 +16,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.hamcrest.Matchers.nullValue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -41,7 +47,7 @@ class VersionControllerTest extends BaseControllerTest {
 
         //when
         ResultActions actions = mockMvc.perform(
-                post("/api/v1/version/{platform}", iosPlatform)
+                post("/api/v1/versions/{platform}", iosPlatform)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content)
                         .accept(MediaType.APPLICATION_JSON)
@@ -55,5 +61,45 @@ class VersionControllerTest extends BaseControllerTest {
                 .andExpect(jsonPath("$.customMessage").value(StatusCode.VERSION_CREATE_SUCCESS.getCustomMessage()))
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.data").value(nullValue()));
+    }
+
+    @Test
+    @DisplayName("버전 체크 - 버전 확인 응답이 정상적으로 반환되어야 함")
+    @WithMockCustomAdmin
+    void checkVersion() throws Exception {
+
+        //given
+        VersionCheckDto versionCheckDto = VersionCheckDto.builder()
+                .version("1.0.1")
+                .build();
+
+        VersionCheckResponseDto versionCheckResponseDto = VersionCheckResponseDto.builder()
+                .requireUpdate(false)
+                .forceUpdate(false)
+                .build();
+
+        given(versionService.checkVersion(any(Platform.class), any(VersionCheckDto.class))).willReturn(versionCheckResponseDto);
+
+        String iosPlatform = "ios";
+
+        String content = objectMapper.writeValueAsString(versionCheckDto);
+
+        //when
+        ResultActions actions = mockMvc.perform(
+                get("/api/v1/versions/{platform}", iosPlatform)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content)
+                        .accept(MediaType.APPLICATION_JSON)
+        );
+
+        //then
+        actions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.customCode").value(StatusCode.VERSION_CHECK_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.VERSION_CHECK_SUCCESS.getCustomMessage()))
+                .andExpect(jsonPath("$.status").value(true))
+                .andExpect(jsonPath("$.data.requireUpdate").value(false))
+                .andExpect(jsonPath("$.data.forceUpdate").value(false));
     }
 }
