@@ -1,0 +1,59 @@
+package com.junior.controller.version;
+
+import com.junior.controller.BaseControllerTest;
+import com.junior.dto.version.VersionDto;
+import com.junior.exception.StatusCode;
+import com.junior.security.WithMockCustomAdmin;
+import com.junior.service.version.VersionService;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultActions;
+
+import static org.hamcrest.Matchers.nullValue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@WebMvcTest(VersionController.class)
+class VersionControllerTest extends BaseControllerTest {
+
+    @MockBean
+    private VersionService versionService;
+
+    @Test
+    @DisplayName("버전 추가 - 버전 추가 응답이 정상적으로 반환되어야 함")
+    @WithMockCustomAdmin
+    void createVersion() throws Exception {
+
+        //given
+        VersionDto versionDto = VersionDto.builder()
+                .version("1.0.1")
+                .forceUpdate(true)
+                .build();
+
+        String iosPlatform = "ios";
+
+        String content = objectMapper.writeValueAsString(versionDto);
+
+        //when
+        ResultActions actions = mockMvc.perform(
+                post("/api/v1/version/{platform}", iosPlatform)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content)
+                        .accept(MediaType.APPLICATION_JSON)
+        );
+
+        //then
+        actions
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.customCode").value(StatusCode.VERSION_CREATE_SUCCESS.getCustomCode()))
+                .andExpect(jsonPath("$.customMessage").value(StatusCode.VERSION_CREATE_SUCCESS.getCustomMessage()))
+                .andExpect(jsonPath("$.status").value(true))
+                .andExpect(jsonPath("$.data").value(nullValue()));
+    }
+}

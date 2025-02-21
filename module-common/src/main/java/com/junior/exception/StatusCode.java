@@ -131,6 +131,9 @@ public enum StatusCode {
     REPORT_EQUALS_AUTHOR(202, "REPORT-ERR-004", "본인 글은 신고가 불가능합니다."),
     REPORT_DUPLICATE(400, "REPORT-ERR-005", "이미 신고된 글 입니다."),
 
+    //버전 관리 관련 성공 코드
+    VERSION_CREATE_SUCCESS(201, "VERSION-SUCCESS-001", ""),
+
     // 공통 예외
     UNKNOWN_ERROR(500, "UNKNOWN-ERROR-001", "서버 에러가 발생했습니다.");
 
