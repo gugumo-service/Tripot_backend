@@ -29,7 +29,7 @@ public class VersionController {
     }
 
     @PreAuthorize("permitAll")
-    @GetMapping("/api/v1/versions/{platform}")
+    @GetMapping("/api/v1/versions/{platform}/check")
     public ResponseEntity<CommonResponse<VersionCheckResponseDto>> checkVersion(@RequestBody VersionCheckDto versionCheckDto, @PathVariable("platform") String platform) {
         return ResponseEntity.status(StatusCode.VERSION_CHECK_SUCCESS.getHttpCode()).body(CommonResponse.success(StatusCode.VERSION_CHECK_SUCCESS, versionService.checkVersion(Platform.valueOf(platform.toUpperCase()), versionCheckDto)));
     }

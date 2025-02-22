@@ -86,7 +86,7 @@ class VersionControllerTest extends BaseControllerTest {
 
         //when
         ResultActions actions = mockMvc.perform(
-                get("/api/v1/versions/{platform}", iosPlatform)
+                get("/api/v1/versions/{platform}/check", iosPlatform)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content)
                         .accept(MediaType.APPLICATION_JSON)

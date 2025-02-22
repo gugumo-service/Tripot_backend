@@ -88,7 +88,7 @@ public class VersionIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("버전 확인 - 사용자 앱 버전이 최신 버전일 경우 업데이트를 요구하지 않음")
+    @DisplayName("버전 체크 - 사용자 앱 버전이 최신 버전일 경우 업데이트를 요구하지 않음")
     @WithMockCustomUser
     void requireUpdateFalseIfUserAppVersionIsLatest() throws Exception {
 
@@ -106,7 +106,7 @@ public class VersionIntegrationTest extends BaseIntegrationTest {
 
         //when
         ResultActions actions = mockMvc.perform(
-                get("/api/v1/versions/{platform}", iosPlatform)
+                get("/api/v1/versions/{platform}/check", iosPlatform)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content)
                         .accept(MediaType.APPLICATION_JSON)
@@ -142,7 +142,7 @@ public class VersionIntegrationTest extends BaseIntegrationTest {
 
         //when
         ResultActions actions = mockMvc.perform(
-                get("/api/v1/versions/{platform}", iosPlatform)
+                get("/api/v1/versions/{platform}/check", iosPlatform)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content)
                         .accept(MediaType.APPLICATION_JSON)
@@ -178,7 +178,7 @@ public class VersionIntegrationTest extends BaseIntegrationTest {
 
         //when
         ResultActions actions = mockMvc.perform(
-                get("/api/v1/versions/{platform}", iosPlatform)
+                get("/api/v1/versions/{platform}/check", iosPlatform)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content)
                         .accept(MediaType.APPLICATION_JSON)
