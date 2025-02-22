@@ -60,15 +60,13 @@ class VersionServiceTest extends BaseServiceTest {
                 .version("1.3.0")
                 .build();
 
-        VersionCheckDto versionCheckDto = VersionCheckDto.builder()
-                .version("1.3.0")
-                .build();
+        String version = "1.3.0";
 
         given(versionRepository.findFirstByPlatformOrderByCreatedDateDesc(any(Platform.class)))
                 .willReturn(Optional.ofNullable(latestVersion));
 
         //when
-        VersionCheckResponseDto versionCheckResponseDto = versionService.checkVersion(Platform.IOS, versionCheckDto);
+        VersionCheckResponseDto versionCheckResponseDto = versionService.checkVersion(Platform.IOS, version);
 
         //then
         assertThat(versionCheckResponseDto.requireUpdate()).isFalse();
@@ -86,15 +84,13 @@ class VersionServiceTest extends BaseServiceTest {
                 .version("1.3.0")
                 .build();
 
-        VersionCheckDto versionCheckDto = VersionCheckDto.builder()
-                .version("1.1.0")
-                .build();
+        String version = "1.1.0";
 
         given(versionRepository.findFirstByPlatformOrderByCreatedDateDesc(any(Platform.class)))
                 .willReturn(Optional.ofNullable(latestVersion));
 
         //when
-        VersionCheckResponseDto versionCheckResponseDto = versionService.checkVersion(Platform.IOS, versionCheckDto);
+        VersionCheckResponseDto versionCheckResponseDto = versionService.checkVersion(Platform.IOS, version);
 
         //then
         assertThat(versionCheckResponseDto.requireUpdate()).isTrue();
@@ -112,15 +108,13 @@ class VersionServiceTest extends BaseServiceTest {
                 .version("1.3.0")
                 .build();
 
-        VersionCheckDto versionCheckDto = VersionCheckDto.builder()
-                .version("1.1.0")
-                .build();
+        String version = "1.1.0";
 
         given(versionRepository.findFirstByPlatformOrderByCreatedDateDesc(any(Platform.class)))
                 .willReturn(Optional.ofNullable(latestVersion));
 
         //when
-        VersionCheckResponseDto versionCheckResponseDto = versionService.checkVersion(Platform.IOS, versionCheckDto);
+        VersionCheckResponseDto versionCheckResponseDto = versionService.checkVersion(Platform.IOS, version);
 
         //then
         assertThat(versionCheckResponseDto.requireUpdate()).isTrue();

@@ -29,7 +29,7 @@ public class VersionService {
         versionRepository.save(version);
     }
 
-    public VersionCheckResponseDto checkVersion(Platform platform, VersionCheckDto versionCheckDto) {
+    public VersionCheckResponseDto checkVersion(Platform platform, String version) {
 
         Version latestVersion = versionRepository.findFirstByPlatformOrderByCreatedDateDesc(platform)
                 .orElseThrow(() -> new CustomException(StatusCode.VERSION_NOT_FOUND));
@@ -37,7 +37,7 @@ public class VersionService {
         boolean forceUpdate = false;
         boolean requireUpdate = false;
 
-        if (versionCheckDto.version().compareTo(latestVersion.getVersion()) < 0) {
+        if (version.compareTo(latestVersion.getVersion()) < 0) {
             requireUpdate = true;
             if (latestVersion.getForceUpdate()) {
                 forceUpdate = true;

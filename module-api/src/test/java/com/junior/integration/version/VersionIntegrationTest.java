@@ -93,22 +93,17 @@ public class VersionIntegrationTest extends BaseIntegrationTest {
     void requireUpdateFalseIfUserAppVersionIsLatest() throws Exception {
 
         //given
-        VersionCheckDto versionCheckDto = VersionCheckDto.builder()
-                .version("1.0.1")
-                .build();
+        String version = "1.0.1";
 
         //ios 1.0.1 버전
         versionRepository.save(Version.builder().version("1.0.1").forceUpdate(false).platform(Platform.IOS).build());
 
         String iosPlatform = "ios";
 
-        String content = objectMapper.writeValueAsString(versionCheckDto);
-
         //when
         ResultActions actions = mockMvc.perform(
                 get("/api/v1/versions/{platform}/check", iosPlatform)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(content)
+                        .queryParam("version", version)
                         .accept(MediaType.APPLICATION_JSON)
         );
 
@@ -129,22 +124,17 @@ public class VersionIntegrationTest extends BaseIntegrationTest {
     void requireUpdateTrueIfUserAppVersionIsNotLatest() throws Exception {
 
         //given
-        VersionCheckDto versionCheckDto = VersionCheckDto.builder()
-                .version("1.0.1")
-                .build();
+        String version = "1.0.1";
 
         //ios 1.1.0 버전
         versionRepository.save(Version.builder().version("1.1.0").forceUpdate(false).platform(Platform.IOS).build());
 
         String iosPlatform = "ios";
 
-        String content = objectMapper.writeValueAsString(versionCheckDto);
-
         //when
         ResultActions actions = mockMvc.perform(
                 get("/api/v1/versions/{platform}/check", iosPlatform)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(content)
+                        .queryParam("version", version)
                         .accept(MediaType.APPLICATION_JSON)
         );
 
@@ -165,25 +155,19 @@ public class VersionIntegrationTest extends BaseIntegrationTest {
     void requireUpdateTrueAndForceUpdateTrueIfUserAppVersionIsNotLatestAndLatestVersionRequiresForceUpdate() throws Exception {
 
         //given
-        VersionCheckDto versionCheckDto = VersionCheckDto.builder()
-                .version("1.0.1")
-                .build();
+        String version = "1.0.1";
 
         //ios 1.0.1 버전
         versionRepository.save(Version.builder().version("1.1.0").forceUpdate(true).platform(Platform.IOS).build());
 
         String iosPlatform = "ios";
 
-        String content = objectMapper.writeValueAsString(versionCheckDto);
-
         //when
         ResultActions actions = mockMvc.perform(
                 get("/api/v1/versions/{platform}/check", iosPlatform)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(content)
+                        .queryParam("version", version)
                         .accept(MediaType.APPLICATION_JSON)
         );
-
         //then
         actions
                 .andDo(print())

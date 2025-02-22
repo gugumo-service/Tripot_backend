@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -69,26 +70,21 @@ class VersionControllerTest extends BaseControllerTest {
     void checkVersion() throws Exception {
 
         //given
-        VersionCheckDto versionCheckDto = VersionCheckDto.builder()
-                .version("1.0.1")
-                .build();
+        String version = "1.0.1";
 
         VersionCheckResponseDto versionCheckResponseDto = VersionCheckResponseDto.builder()
                 .requireUpdate(false)
                 .forceUpdate(false)
                 .build();
 
-        given(versionService.checkVersion(any(Platform.class), any(VersionCheckDto.class))).willReturn(versionCheckResponseDto);
+        given(versionService.checkVersion(any(Platform.class), anyString())).willReturn(versionCheckResponseDto);
 
         String iosPlatform = "ios";
-
-        String content = objectMapper.writeValueAsString(versionCheckDto);
 
         //when
         ResultActions actions = mockMvc.perform(
                 get("/api/v1/versions/{platform}/check", iosPlatform)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(content)
+                        .queryParam("version", version)
                         .accept(MediaType.APPLICATION_JSON)
         );
 
