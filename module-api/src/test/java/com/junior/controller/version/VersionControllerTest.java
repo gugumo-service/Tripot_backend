@@ -7,6 +7,7 @@ import com.junior.dto.version.VersionCheckResponseDto;
 import com.junior.dto.version.VersionDto;
 import com.junior.exception.StatusCode;
 import com.junior.security.WithMockCustomAdmin;
+import com.junior.security.WithMockCustomUser;
 import com.junior.service.version.VersionService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -66,7 +67,6 @@ class VersionControllerTest extends BaseControllerTest {
 
     @Test
     @DisplayName("버전 체크 - 버전 확인 응답이 정상적으로 반환되어야 함")
-    @WithMockCustomAdmin
     void checkVersion() throws Exception {
 
         //given
