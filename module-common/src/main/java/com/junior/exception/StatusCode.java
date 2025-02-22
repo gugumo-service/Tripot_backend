@@ -18,6 +18,9 @@ public enum StatusCode {
     NOTIFICATION_DELETE_SUCCESS(200, "NOTIFICATION-SUCCESS-002", ""),
     NOTIFICATION_NOT_PERMISSION(200, "NOTIFICATION-SUCCESS-003", ""),
 
+    // firebase 토큰 관련 예외
+    FCM_CREATE_SUCCESS(200, "NOTIFICATION-SUCCESS-0001", "토큰 저장 및 갱신 성공"),
+
     // notification 관련 성공 코드
     NOTIFICATION_NOT_FOUND(400, "NOTIFICATION-ERR-001", "서버 에러가 발생했습니다."),
 
