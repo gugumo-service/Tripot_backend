@@ -15,7 +15,7 @@ public class firebaseConfig {
     @PostConstruct
     public void init() throws IOException {
 
-        String path = Paths.get("module-api/src/main/resources/tripot-534cb-firebase-adminsdk-au4ch-b8effba143.json").toAbsolutePath().toString();
+        String path = Paths.get("/home/ubuntu/config/tripot-534cb-firebase-adminsdk-au4ch-b8effba143.json").toAbsolutePath().toString();
         FileInputStream serviceAccount = new FileInputStream(path);
 
         FirebaseOptions options = FirebaseOptions.builder()
