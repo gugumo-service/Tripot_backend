@@ -11,14 +11,17 @@ import com.junior.repository.version.VersionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional(readOnly = true)
 public class VersionService {
 
     private final VersionRepository versionRepository;
 
+    @Transactional
     public void createVersion(VersionDto versionDto, Platform platform) {
         Version version = Version.builder()
                 .platform(platform)
