@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class FcmNotificationToken {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "fcm_token_id")
     private Long id;
 
