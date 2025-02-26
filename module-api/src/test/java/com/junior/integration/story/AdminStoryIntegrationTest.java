@@ -1,6 +1,5 @@
 package com.junior.integration.story;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.junior.domain.member.Member;
 import com.junior.domain.story.Story;
 import com.junior.exception.StatusCode;
@@ -13,7 +12,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,12 +23,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class AdminStoryIntegrationTest extends BaseIntegrationTest {
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
-    private MockMvc mockMvc;
 
     @Autowired
     private MemberRepository memberRepository;
@@ -58,7 +50,7 @@ public class AdminStoryIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("관리자 스토리 페이지 조회 기능이 정상 동작해야함")
+    @DisplayName("관리자 스토리 페이지 조회 - 정상 동작해야함")
     @WithMockCustomAdmin
     void findStory() throws Exception {
 
@@ -88,7 +80,7 @@ public class AdminStoryIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("관리자 스토리 상세조회 기능이 정상 동작해야함")
+    @DisplayName("관리자 스토리 상세조회 - 정상 동작해야함")
     @WithMockCustomAdmin
     void findStoryDetail() throws Exception {
 
@@ -116,7 +108,7 @@ public class AdminStoryIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("관리자 스토리 삭제 기능이 정상 동작해야함")
+    @DisplayName("관리자 스토리 삭제 - 정상 동작해야함")
     @WithMockCustomAdmin
     void deleteStory() throws Exception {
 

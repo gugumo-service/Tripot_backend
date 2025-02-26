@@ -86,6 +86,8 @@ public class SecurityConfig {
                         // public 스토리 리스트 조회
                         .requestMatchers("/api/v1/public/stories/**").permitAll()
 
+                        .requestMatchers("/api/v1/versions/*/check").permitAll()
+
                         //admin 관련 설정
                         .requestMatchers("/api/v1/admin/**").hasRole(MemberRole.ADMIN.name())
                         .requestMatchers("/createTestMember").permitAll()

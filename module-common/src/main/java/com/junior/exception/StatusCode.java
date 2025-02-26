@@ -18,6 +18,9 @@ public enum StatusCode {
     NOTIFICATION_DELETE_SUCCESS(200, "NOTIFICATION-SUCCESS-002", ""),
     NOTIFICATION_NOT_PERMISSION(200, "NOTIFICATION-SUCCESS-003", ""),
 
+    // firebase 토큰 관련 예외
+    FCM_CREATE_SUCCESS(200, "NOTIFICATION-SUCCESS-0001", "토큰 저장 및 갱신 성공"),
+
     // notification 관련 성공 코드
     NOTIFICATION_NOT_FOUND(400, "NOTIFICATION-ERR-001", "서버 에러가 발생했습니다."),
 
@@ -130,6 +133,14 @@ public enum StatusCode {
     REPORT_TYPE_NOT_VALID(400, "REPORT-ERR-003", "서버 에러가 발생했습니다."),
     REPORT_EQUALS_AUTHOR(202, "REPORT-ERR-004", "본인 글은 신고가 불가능합니다."),
     REPORT_DUPLICATE(400, "REPORT-ERR-005", "이미 신고된 글 입니다."),
+
+    //버전 관리 관련 성공 코드
+    VERSION_CREATE_SUCCESS(201, "VERSION-SUCCESS-001", ""),
+    VERSION_CHECK_SUCCESS(200, "VERSION-SUCCESS-002", ""),
+
+    //버전 관리 관련 실패 코드
+    VERSION_NOT_FOUND(400, "VERSION-ERR-001", "서버 에러가 발생했습니다."),
+
 
     // 공통 예외
     UNKNOWN_ERROR(500, "UNKNOWN-ERROR-001", "서버 에러가 발생했습니다.");

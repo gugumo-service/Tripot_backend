@@ -10,6 +10,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/s3")
@@ -24,6 +26,15 @@ public class S3Controller {
         String url = s3Service.saveFile(img);
 
         return CommonResponse.success(StatusCode.S3_UPLOAD_SUCCESS, url);
+    }
+
+    @PostMapping("/news")
+    public CommonResponse<Object> filesUpload(
+        @RequestParam(name = "imgs") List<MultipartFile> images
+    ) {
+        List<String> urls = s3Service.saveFiles(images);
+
+        return CommonResponse.success(StatusCode.S3_UPLOAD_SUCCESS, urls);
     }
 
     @DeleteMapping
