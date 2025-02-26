@@ -3,6 +3,8 @@ package com.junior.aspect;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -24,6 +26,27 @@ public class LogAspect {
     // com.aop.controller 이하 패키지의 모든 클래스 이하 모든 메서드에 적용
     @Pointcut("execution(* com.junior.controller..*.*(..))")
     private void controller() {
+    }
+
+    @Pointcut("execution(* com.junior.service..*.*(..))")
+    private void service() {
+    }
+
+    @Pointcut("execution(* com.junior.repository..*.*(..))")
+    private void repository() {
+    }
+
+    @Around("controller() || service() || repository()")
+    public Object inAndOutLog(ProceedingJoinPoint joinPoint) throws Throwable {
+        String className = joinPoint.getSignature().getDeclaringTypeName();
+        String methodName = joinPoint.getSignature().getName();
+        log.debug("[{}] 메서드 시작: {}", className, methodName);
+
+        Object result = joinPoint.proceed();
+
+        log.debug("[{}] 메서드 종료: {}", className, methodName);
+
+        return result;
     }
 
     @Before("controller()")
