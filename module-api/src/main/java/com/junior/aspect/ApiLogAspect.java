@@ -21,7 +21,7 @@ import java.util.Objects;
 @Aspect
 @Component
 @Slf4j
-public class LogAspect {
+public class ApiLogAspect {
 
     // com.aop.controller 이하 패키지의 모든 클래스 이하 모든 메서드에 적용
     @Pointcut("execution(* com.junior.controller..*.*(..))")
